@@ -1,49 +1,24 @@
 import React, { createContext, useContext, useState } from "react";
+import { message } from "antd";
 
-import { Alert, Slide, Snackbar } from "@mui/material";
-
-const SnackbarContext = createContext(({}) => {});
+const SnackbarContext = createContext(() => {});
 export const useSnackbar = () => useContext(SnackbarContext);
 
-const SlideTransition = React.forwardRef((props, ref) => {
-  return <Slide {...props} direction="left" ref={ref} />;
-});
-
 const SnackbarProvider = ({ children }) => {
-  const [alert, setAlert] = useState({});
   const [open, setOpen] = useState(false);
 
   const showSnackbar = (newAlert) => {
-    setAlert({
-      variant: "filled",
-      severity: "success",
-      ...newAlert,
-    });
+    message.success(newAlert.message, 3.5);
     setOpen(true);
   };
 
-  const handleClose = (_, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const handleClose = () => {
     setOpen(false);
   };
 
   return (
     <SnackbarContext.Provider value={showSnackbar}>
       {children}
-      <Snackbar
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          horizontal: "right",
-          vertical: "bottom",
-        }}
-        TransitionComponent={SlideTransition}
-        autoHideDuration={3500}
-      >
-        <Alert variant="filled" {...alert} onClose={handleClose} />
-      </Snackbar>
     </SnackbarContext.Provider>
   );
 };
