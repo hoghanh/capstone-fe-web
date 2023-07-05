@@ -32,7 +32,7 @@ function SearchBar() {
   return (
     <Layout.Header style={{ background: "#ffffff" }}>
       <Row justify="center" align="middle">
-        <Col flex={1} offset={3}>
+        <Col flex={1} offset={2}>
           <Image
             width={50}
             src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -42,7 +42,7 @@ function SearchBar() {
           />
         </Col>
         <Col
-          flex={2}
+          flex={3}
           style={{ display: "flex", justifyContent: "center" }}
           pull={1}
         >

@@ -81,7 +81,9 @@ function Footer() {
             <Collapse.Panel header={list.title} key={index}>
               <List
                 dataSource={list.items}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
+                renderItem={(item) => (
+                  <List.Item style={{ padding: 5 }}>{item}</List.Item>
+                )}
               />
             </Collapse.Panel>
           ))}
@@ -121,15 +123,18 @@ function Footer() {
   }
 
   return (
-    <Layout.Footer style={{ background: "#013042", color: "#EDF6FF" }}>
+    <Layout.Footer style={{ background: "#00587C", color: "#EDF6FF" }}>
       <Row>
         {data.map((list, index) => (
           <Col flex={1} key={index}>
             <h3 style={{ fontWeight: "bold" }}>{list.title}</h3>
             <List
+              style={{ paddingBottom: 20, marginBottom: 10 }}
               dataSource={list.items}
               renderItem={(item) => (
-                <List.Item style={{ color: "#EDF6FF" }}>{item}</List.Item>
+                <List.Item style={{ color: "#EDF6FF", padding: 2 }}>
+                  {item}
+                </List.Item>
               )}
             />
           </Col>

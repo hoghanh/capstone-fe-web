@@ -1,12 +1,12 @@
 import React from "react";
-import "@fontsource/fira-sans";
-import "./App.css";
-
 import { ConfigProvider } from "antd";
 
 import Header from "./layout/header/Header";
 import Footer from "./layout/footer/Footer";
 import DefaultBanner from "./components/banner/DefaultBanner";
+
+import "@fontsource/montserrat";
+import "./App.css";
 
 const App = () => (
   <ConfigProvider
@@ -18,6 +18,7 @@ const App = () => (
         colorBluishCyan: "#89DBE9",
         colorPaleBlueSky: "#CDF1FD",
         colorAliceBlue: "#EDF6FF",
+        fontFamily: "Montserrat",
       },
     }}
   >
