@@ -108,7 +108,7 @@ function Footer() {
               level={4}
               style={{ margin: 0, marginLeft: "10px" }}
             >
-              Apofoitisi
+              FPT-SEP
             </Typography.Title>
           </Col>
           <Col span={12} style={{ textAlign: "right", marginTop: 10 }}>
@@ -160,7 +160,7 @@ function Footer() {
             level={4}
             style={{ margin: 0, color: "#EDF6FF", marginLeft: "10px" }}
           >
-            Apofoitisi
+            FPT-SEP
           </Typography.Title>
         </Col>
         <Col span={12} style={{ textAlign: "right", marginTop: 10 }}>

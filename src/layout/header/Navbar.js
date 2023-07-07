@@ -2,6 +2,41 @@ import React from "react";
 import { Menu } from "antd";
 
 function Navbar() {
+  const menuItems = [
+    {
+      key: "programming-tech",
+      title: "Lập trình & Công nghệ",
+    },
+    {
+      key: "graphics-design",
+      title: "Thiết kế đồ họa",
+    },
+    {
+      key: "writing-translation",
+      title: "Dịch thuật",
+    },
+    {
+      key: "video-animation",
+      title: "Video & Hoạt hình",
+    },
+    {
+      key: "music-audio",
+      title: "Âm nhạc",
+    },
+    {
+      key: "photography",
+      title: "Nhiếp ảnh",
+    },
+    {
+      key: "digital-marketing",
+      title: "Digital Marketing",
+    },
+    {
+      key: "business",
+      title: "Kinh Doanh",
+    },
+  ];
+
   return (
     <Menu
       mode="horizontal"
@@ -11,16 +46,8 @@ function Navbar() {
         borderTop: "0.25px solid #013042",
         borderBottom: "0.25px solid #013042",
       }}
-    >
-      <Menu.Item key="Programming Tech">Lập trình & Công nghệ</Menu.Item>
-      <Menu.Item key="Graphics Design">Thiết kế đồ họa</Menu.Item>
-      <Menu.Item key="Writing Translation">Dịch thuật</Menu.Item>
-      <Menu.Item key="Video Animation">Video & Hoạt hình</Menu.Item>
-      <Menu.Item key="Music Audio">Âm nhạc</Menu.Item>
-      <Menu.Item key="Photography">Nhiếp ảnh</Menu.Item>
-      <Menu.Item key="Digital Marketing">Digital Marketing</Menu.Item>
-      <Menu.Item key="Business">Kinh Doanh</Menu.Item>
-    </Menu>
+      items={menuItems}
+    />
   );
 }
 

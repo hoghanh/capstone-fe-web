@@ -1,12 +1,9 @@
 import React from "react";
 import { ConfigProvider } from "antd";
-
-import Header from "./layout/header/Header";
-import Footer from "./layout/footer/Footer";
-import DefaultBanner from "./components/banner/DefaultBanner";
-
 import "@fontsource/montserrat";
 import "./App.css";
+import Router from "./routes/router";
+import { BrowserRouter } from "react-router-dom";
 
 const App = () => (
   <ConfigProvider
@@ -18,13 +15,15 @@ const App = () => (
         colorBluishCyan: "#89DBE9",
         colorPaleBlueSky: "#CDF1FD",
         colorAliceBlue: "#EDF6FF",
-        fontFamily: "Montserrat",
+        fontFamily: "Montserrat, sans-serif",
       },
     }}
   >
-    <Header />
-    <DefaultBanner />
-    <Footer />
+    <React.Fragment>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </React.Fragment>
   </ConfigProvider>
 );
 

@@ -1,15 +1,8 @@
-import { Route, Redirect } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import React from "react";
+import { Route } from "react-router-dom";
 
-import authAtom from "../recoil/auth";
-
-const PublicRoute = (props) => {
-  const auth = useRecoilValue(authAtom);
-  if (!auth.email) {
-    return <Route {...props} />;
-  }
-
-  return <Redirect to="/" />;
-};
+const PublicRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} element={<Component />} />
+);
 
 export default PublicRoute;

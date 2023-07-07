@@ -12,7 +12,7 @@ function SearchBar() {
         <Row justify="center" align="middle">
           <Col flex={1}>
             <Typography.Title level={4} style={{ margin: 0 }}>
-              Apofoitisi
+              FPT-SEP
             </Typography.Title>
           </Col>
 
@@ -47,7 +47,7 @@ function SearchBar() {
           pull={1}
         >
           <Typography.Title level={3} style={{ margin: 0 }}>
-            Apofoitisi
+            FPT-SEP
           </Typography.Title>
         </Col>
         <Col flex={8} pull={1}>
