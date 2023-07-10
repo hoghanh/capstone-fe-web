@@ -1,7 +1,7 @@
 import React from "react";
-import { Row, Col, Typography, Button, Grid, Layout } from "antd";
+import { Row, Col, Typography, Button, Grid } from "antd";
 
-const Banner2 = () => {
+const Banner1 = () => {
   const { useBreakpoint } = Grid;
   const { xs } = useBreakpoint();
   if (xs) {
@@ -10,8 +10,7 @@ const Banner2 = () => {
         style={{
           height: 250,
           padding: 10,
-          background:
-            "linear-gradient(to right, #70DBFF, #89DBE9, #CDF1FD, #EDF6FF, #CDF1FD, #89DBE9, #70DBFF)",
+          backgroundColor: "#CDF1FD",
         }}
         align="middle"
         justify="center"
@@ -36,85 +35,84 @@ const Banner2 = () => {
     );
   }
   return (
-    <Layout.Content>
-      <Row
-        style={{
-          height: 300,
-          background:
-            "linear-gradient(to right, #70DBFF, #89DBE9, #CDF1FD, #EDF6FF, #CDF1FD, #89DBE9, #70DBFF)",
-        }}
-        align="middle"
-      >
-        <Col span={9} offset={3}>
-          <Typography.Title style={{ color: "#013042" }}>
-            Tìm freelancer cho
-            <br />
-            dự án của bạn
-          </Typography.Title>
-          <Row
-            justify="space-between"
+    <Row
+      style={{
+        height: 300,
+        margin: 32,
+        borderRadius: 10,
+        backgroundColor: "#CDF1FD",
+      }}
+      align="middle"
+    >
+      <Col span={9} offset={2}>
+        <Typography.Title style={{ color: "#013042" }}>
+          Tìm freelancer cho
+          <br />
+          dự án của bạn
+        </Typography.Title>
+        <Row
+          justify="space-between"
+          style={{
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+          }}
+        >
+          <Typography.Text
+            strong
+            style={{ margin: 0, paddingRight: 10, color: "#013042" }}
+          >
+            Phổ biến:
+          </Typography.Text>
+
+          <Button
             style={{
-              display: "flex",
-              justifyContent: "left",
-              alignItems: "center",
+              borderRadius: 25,
+              border: "1px solid #013042",
+              color: "#013042",
+              marginRight: 10,
+              background: "none",
             }}
           >
-            <Typography.Text
-              strong
-              style={{ margin: 0, paddingRight: 10, color: "#013042" }}
-            >
-              Phổ biến:
-            </Typography.Text>
+            Thiết kế web
+          </Button>
 
-            <Button
-              style={{
-                borderRadius: 25,
-                border: "1px solid #013042",
-                color: "#013042",
-                marginRight: 10,
-                background: "none",
-              }}
-            >
-              Thiết kế web
-            </Button>
-
-            <Button
-              style={{
-                borderRadius: 25,
-                border: "1px solid #013042",
-                color: "#013042",
-                marginRight: 10,
-                background: "none",
-              }}
-            >
-              WordPress
-            </Button>
-            <Button
-              style={{
-                borderRadius: 25,
-                border: "1px solid #013042",
-                color: "#013042",
-                background: "none",
-              }}
-            >
-              Thiết kế logo
-            </Button>
-          </Row>
-        </Col>
-        <Col
-          span={12}
-          style={{
-            backgroundImage: "url('img/happywork.png')",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            width: "100%",
-            height: "100%",
-          }}
-        ></Col>
-      </Row>
-    </Layout.Content>
+          <Button
+            style={{
+              borderRadius: 25,
+              border: "1px solid #013042",
+              color: "#013042",
+              marginRight: 10,
+              background: "none",
+            }}
+          >
+            WordPress
+          </Button>
+          <Button
+            style={{
+              borderRadius: 25,
+              border: "1px solid #013042",
+              color: "#013042",
+              background: "none",
+            }}
+          >
+            Thiết kế logo
+          </Button>
+        </Row>
+      </Col>
+      <Col
+        span={12}
+        style={{
+          backgroundImage: "url('img/happywork.png')",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "100%",
+          height: "100%",
+        }}
+      ></Col>
+    </Row>
   );
 };
 
-export default Banner2;
+export default Banner1;

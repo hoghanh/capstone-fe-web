@@ -27,8 +27,8 @@ const Navbar = () => {
       style={{
         display: "flex",
         justifyContent: "center",
-        borderTop: "0.25px solid #013042",
-        borderBottom: "0.25px solid #013042",
+        borderTop: "0.25px solid #02ADFDE5",
+        borderBottom: "0.25px solid #02ADFDE5",
       }}
     ></Menu>
   );

@@ -59,14 +59,14 @@ function SearchBar() {
           pull={1}
         >
           <Typography.Title level={3} style={{ margin: 0 }}>
-            Explore
+            Khám phá
           </Typography.Title>
         </Col>
         <Col flex={1} pull={1}>
-          <Button>Register</Button>
+          <Button>Đăng kí</Button>
         </Col>
         <Col flex={1} pull={1}>
-          <Button>Login</Button>
+          <Button>Đăng nhập</Button>
         </Col>
       </Row>
     </Layout.Header>
