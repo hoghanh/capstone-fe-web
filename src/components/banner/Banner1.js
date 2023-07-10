@@ -46,7 +46,7 @@ const Banner1 = () => {
       }}
       align="middle"
     >
-      <Col span={9} offset={2}>
+      <Col span={10} offset={2}>
         <Typography.Title style={{ color: "#013042" }}>
           Tìm freelancer cho
           <br />
