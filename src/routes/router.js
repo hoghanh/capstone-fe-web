@@ -7,7 +7,6 @@ const publicRoutes = [
     path: "/",
     component: lazy(() => import("../pages/LandingPage")),
     name: "home",
-    layout: false,
   },
 ];
 

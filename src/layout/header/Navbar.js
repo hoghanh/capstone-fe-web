@@ -1,54 +1,37 @@
 import React from "react";
 import { Menu } from "antd";
 
-function Navbar() {
-  const menuItems = [
-    {
-      key: "programming-tech",
-      title: "Lập trình & Công nghệ",
-    },
-    {
-      key: "graphics-design",
-      title: "Thiết kế đồ họa",
-    },
-    {
-      key: "writing-translation",
-      title: "Dịch thuật",
-    },
-    {
-      key: "video-animation",
-      title: "Video & Hoạt hình",
-    },
-    {
-      key: "music-audio",
-      title: "Âm nhạc",
-    },
-    {
-      key: "photography",
-      title: "Nhiếp ảnh",
-    },
-    {
-      key: "digital-marketing",
-      title: "Digital Marketing",
-    },
-    {
-      key: "business",
-      title: "Kinh Doanh",
-    },
-  ];
+function getItem(key, label) {
+  return {
+    key,
+    label,
+  };
+}
 
+const items = [
+  getItem("Programming Tech", "Lập trình & Công nghệ"),
+  getItem("Graphics Design", "Thiết kế đồ họa"),
+  getItem("Writing Translation", "Dịch thuật"),
+  getItem("Video Animation", "Video & Hoạt hình"),
+  getItem("Music Audio", "Âm nhạc"),
+  getItem("Photography", "Nhiếp ảnh"),
+  getItem("Digital Marketing", "Digital Marketing"),
+  getItem("Business", "Kinh Doanh"),
+];
+
+const Navbar = () => {
   return (
     <Menu
       mode="horizontal"
+      items={items}
       style={{
         display: "flex",
         justifyContent: "center",
         borderTop: "0.25px solid #013042",
         borderBottom: "0.25px solid #013042",
       }}
-      items={menuItems}
-    />
+    ></Menu>
   );
-}
+};
 
 export default Navbar;
