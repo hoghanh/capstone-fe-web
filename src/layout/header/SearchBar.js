@@ -31,8 +31,12 @@ function SearchBar() {
   // Hiển thị giao diện trên màn hình lớn hơn điện thoại
   return (
     <Layout.Header style={{ background: "#ffffff" }}>
-      <Row justify="center" align="middle">
-        <Col flex={1} offset={2}>
+      <Row
+        justify="center"
+        align="middle"
+        style={{ margin: "0 auto", maxWidth: 1400 }}
+      >
+        <Col span={1}>
           <Image
             width={50}
             src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -41,31 +45,27 @@ function SearchBar() {
             preview={false}
           />
         </Col>
-        <Col
-          flex={3}
-          style={{ display: "flex", justifyContent: "center" }}
-          pull={1}
-        >
+        <Col span={3} style={{ display: "flex", justifyContent: "center" }}>
           <Typography.Title level={3} style={{ margin: 0 }}>
             FPT-SEP
           </Typography.Title>
         </Col>
-        <Col flex={8} pull={1}>
-          <Input placeholder="Search..." prefix={<SearchOutlined />} />
+        <Col span={13}>
+          <Input
+            placeholder="Search..."
+            prefix={<SearchOutlined />}
+            style={{ padding: 10 }}
+          />
         </Col>
-        <Col
-          flex={2}
-          style={{ display: "flex", justifyContent: "center" }}
-          pull={1}
-        >
+        <Col span={3} style={{ display: "flex", justifyContent: "center" }}>
           <Typography.Title level={3} style={{ margin: 0 }}>
             Khám phá
           </Typography.Title>
         </Col>
-        <Col flex={1} pull={1}>
+        <Col span={2}>
           <Button>Đăng kí</Button>
         </Col>
-        <Col flex={1} pull={1}>
+        <Col span={2}>
           <Button>Đăng nhập</Button>
         </Col>
       </Row>

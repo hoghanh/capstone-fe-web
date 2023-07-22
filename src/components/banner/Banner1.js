@@ -39,7 +39,7 @@ const Banner1 = () => {
     <Row
       style={{
         height: 300,
-        margin: 32,
+        margin: "32px 0",
         borderRadius: 10,
         background:
           "linear-gradient(to right, #70DBFF, #89DBE9, #CDF1FD, #EDF6FF, #CDF1FD, #89DBE9, #70DBFF)",

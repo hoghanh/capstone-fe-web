@@ -123,8 +123,13 @@ function Footer() {
   }
 
   return (
-    <Layout.Footer style={{ background: "#00587C", color: "#EDF6FF" }}>
-      <Row>
+    <Layout.Footer
+      style={{
+        background: "#00587C",
+        color: "#EDF6FF",
+      }}
+    >
+      <Row style={{ margin: "0 auto", maxWidth: 1400 }}>
         {data.map((list, index) => (
           <Col flex={1} key={index}>
             <h3 style={{ fontWeight: "bold" }}>{list.title}</h3>
@@ -140,7 +145,14 @@ function Footer() {
           </Col>
         ))}
       </Row>
-      <Row justify="space-between" style={{ borderTop: "1px solid #EDF6FF" }}>
+      <Row
+        justify="space-between"
+        style={{
+          borderTop: "1px solid #EDF6FF",
+          margin: "0 auto",
+          maxWidth: 1400,
+        }}
+      >
         <Col
           span={12}
           style={{

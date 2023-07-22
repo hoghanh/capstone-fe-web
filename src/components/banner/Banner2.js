@@ -8,7 +8,7 @@ const data = [
     des: "Tìm dịch vụ phù hợp với mọi mức giá. Không có giá theo giờ, chỉ có giá dựa trên dự án.",
   },
   {
-    title: "Công việc được hoàn thành với chất lượng tốt",
+    title: "Hoàn thành chất lượng tốt",
     des: "Bàn giao dự án của bạn cho freelancer tài năng chỉ trong vài phút, để có được một kết quả lâu dài.",
   },
   {
@@ -17,36 +17,31 @@ const data = [
   },
 ];
 
-const Banner1 = () => {
+const Banner2 = () => {
   const { useBreakpoint } = Grid;
   const { xs } = useBreakpoint();
   if (xs) {
     return (
       <Row
         style={{
-          height: 250,
-          padding: 10,
+          height: 180,
           backgroundColor: "#CDF1FD",
         }}
         align="middle"
         justify="center"
       >
-        <Typography.Title style={{ color: "#013042", textAlign: "center" }}>
-          Tìm freelancer cho
-          <br />
-          dự án của bạn
-        </Typography.Title>
-        <Button
-          style={{
-            borderRadius: 25,
-            border: "1px solid #013042",
-            color: "#013042",
-            marginRight: 10,
-            background: "none",
-          }}
-        >
-          Tìm hiểu ngay
-        </Button>
+        <List
+          itemLayout="horizontal"
+          dataSource={data}
+          renderItem={(item, index) => (
+            <List.Item
+              style={{ borderBlockEnd: "unset", padding: 0, fontSize: 18 }}
+            >
+              <CheckCircleOutlined style={{ marginRight: 10 }} />
+              {item.title}
+            </List.Item>
+          )}
+        />
       </Row>
     );
   }
@@ -54,7 +49,7 @@ const Banner1 = () => {
     <Row
       style={{
         height: 300,
-        margin: 32,
+        margin: "32px 0",
         borderRadius: 10,
         backgroundColor: "#CDF1FD",
       }}
@@ -65,19 +60,19 @@ const Banner1 = () => {
           itemLayout="horizontal"
           dataSource={data}
           renderItem={(item, index) => (
-            <List.Item style={{ borderBlockEnd: "unset", padding: 0 }}>
+            <List.Item
+              style={{ borderBlockEnd: "unset", padding: 0, margin: 5 }}
+            >
               <List.Item.Meta
-                avatar={
-                  <Avatar
-                    size="small"
+                title={
+                  <span
                     style={{
-                      backgroundColor: "#CDF1FD",
-                      color: "#000000",
+                      fontSize: 18,
                     }}
-                    icon={<CheckCircleOutlined />}
-                  />
+                  >
+                    <CheckCircleOutlined /> {item.title}
+                  </span>
                 }
-                title={<span style={{ fontSize: 16 }}>{item.title}</span>}
               />
               {item.des}
             </List.Item>
@@ -99,4 +94,4 @@ const Banner1 = () => {
   );
 };
 
-export default Banner1;
+export default Banner2;

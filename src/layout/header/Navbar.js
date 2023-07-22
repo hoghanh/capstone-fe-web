@@ -9,12 +9,12 @@ function getItem(key, label) {
 }
 
 const items = [
-  getItem("Programming Tech", "Lập trình & Công nghệ"),
-  getItem("Graphics Design", "Thiết kế đồ họa"),
-  getItem("Writing Translation", "Dịch thuật"),
-  getItem("Video Animation", "Video & Hoạt hình"),
-  getItem("Music Audio", "Âm nhạc"),
-  getItem("Photography", "Nhiếp ảnh"),
+  getItem("Programming Tech", "Lập Trình & Công Nghệ"),
+  getItem("Graphics Design", "Thiết Kế Đồ Hoạ"),
+  getItem("Writing Translation", "Dịch Thuật"),
+  getItem("Video Animation", "Video & Hoạt Hình"),
+  getItem("Music Audio", "Âm Nhạc"),
+  getItem("Photography", "Nhiếp Ảnh"),
   getItem("Digital Marketing", "Digital Marketing"),
   getItem("Business", "Kinh Doanh"),
 ];

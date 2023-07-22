@@ -12,3 +12,16 @@ body {
 .ant-layout-footer .ant-list-tem {
   padding: 0 !important;
 }
+
+.swiper-button-next button, .swiper-button-prev button{
+  border: none;
+  box-shadow:  3px 3px 3px rgba(0, 0, 0, 0.25);
+  color: #000;
+}
+
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after,
+.swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after {
+  content: none !important;
+}
