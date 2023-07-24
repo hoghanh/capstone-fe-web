@@ -33,7 +33,10 @@ const JobPopular = () => {
         Công việc được thuê nhiều nhất
       </Typography.Title>
       <Swiper
-        style={{ margin: 30, paddingLeft: 100, paddingRight: 10 }}
+        style={{
+          margin: 30,
+          padding: "0 10px 10px 100px",
+        }}
         modules={[Navigation]}
         navigation={{
           nextEl: ".swiper-button-next",

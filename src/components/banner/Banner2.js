@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Typography, Button, Grid, List, Avatar } from "antd";
+import { Row, Col, Grid, List, Layout } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 
 const data = [
@@ -46,51 +46,53 @@ const Banner2 = () => {
     );
   }
   return (
-    <Row
-      style={{
-        height: 300,
-        margin: "32px 0",
-        borderRadius: 10,
-        backgroundColor: "#CDF1FD",
-      }}
-      align="middle"
-    >
-      <Col span={10} offset={2}>
-        <List
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item, index) => (
-            <List.Item
-              style={{ borderBlockEnd: "unset", padding: 0, margin: 5 }}
-            >
-              <List.Item.Meta
-                title={
-                  <span
-                    style={{
-                      fontSize: 18,
-                    }}
-                  >
-                    <CheckCircleOutlined /> {item.title}
-                  </span>
-                }
-              />
-              {item.des}
-            </List.Item>
-          )}
-        />
-      </Col>
-      <Col
-        span={12}
+    <Layout.Content style={{ backgroundColor: "#CDF1FD" }}>
+      <Row
         style={{
-          backgroundImage: "url('img/happywork.png')",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          width: "100%",
-          height: "100%",
+          height: 350,
+          maxWidth: 1400,
+          margin: "0 auto",
+          padding: 30,
         }}
-      ></Col>
-    </Row>
+        align="middle"
+      >
+        <Col span={12} style={{ padding: 10 }}>
+          <List
+            itemLayout="horizontal"
+            dataSource={data}
+            renderItem={(item, index) => (
+              <List.Item
+                style={{ borderBlockEnd: "unset", padding: 0, margin: 5 }}
+              >
+                <List.Item.Meta
+                  title={
+                    <span
+                      style={{
+                        fontSize: 18,
+                      }}
+                    >
+                      <CheckCircleOutlined /> {item.title}
+                    </span>
+                  }
+                />
+                {item.des}
+              </List.Item>
+            )}
+          />
+        </Col>
+        <Col
+          span={12}
+          style={{
+            backgroundImage: "url('img/freelancer-1.png')",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            width: "100%",
+            height: "100%",
+          }}
+        ></Col>
+      </Row>
+    </Layout.Content>
   );
 };
 

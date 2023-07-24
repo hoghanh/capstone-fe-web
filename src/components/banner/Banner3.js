@@ -19,7 +19,7 @@ const Banner1 = () => {
   };
 
   return (
-    <Layout.Content style={{ height: 300, margin: 32 }}>
+    <Layout.Content style={{ height: 300, maxWidth: 1400, margin: "0 auto" }}>
       <Typography.Title level={3} style={{ fontWeight: 700 }}>
         Bạn cần gì, chúng tôi đều có
       </Typography.Title>
@@ -95,7 +95,7 @@ const Banner1 = () => {
               svg.setAttribute("height", "50");
             }}
           />
-          <Typography style={{ marginTop: 10 }}>Video & Hoạt Hình</Typography>
+          <Typography style={{ marginTop: 10 }}>Nhiếp Ảnh</Typography>
         </Col>
         <Col span={6} style={styles.column}>
           <ReactSVG

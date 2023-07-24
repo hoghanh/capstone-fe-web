@@ -11,12 +11,13 @@ const LandingPage = () => {
   return (
     <>
       <Header />
+      <Banner1 />
       <Layout.Content style={{ maxWidth: 1400, margin: "0 auto" }}>
-        <Banner1 />
         <JobPopular />
-        <Banner2 />
-        <Banner3 />
       </Layout.Content>
+
+      <Banner2 />
+      <Banner3 />
       <Footer />
     </>
   );

@@ -1,12 +1,56 @@
-import React from "react";
-import { Input, Image, Typography, Row, Col, Button, Layout, Grid } from "antd";
+import React, { useState } from "react";
+import {
+  Input,
+  Image,
+  Typography,
+  Row,
+  Col,
+  Button,
+  Layout,
+  Grid,
+  Modal,
+  Divider,
+} from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import GoogleLoginButton from "../../components/button/GoogleLoginButton";
+import Link from "antd/es/typography/Link";
+
 function SearchBar() {
   const { useBreakpoint } = Grid;
   const { xs } = useBreakpoint();
+  const [loading, setLoading] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+
+  const showModalRegister = () => {
+    setOpenRegister(true);
+  };
+  const handleOkRegister = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpenRegister(false);
+    }, 3000);
+  };
+  const handleCancelRegister = () => {
+    setOpenRegister(false);
+  };
+
+  const showModalLogin = () => {
+    setOpenLogin(true);
+  };
+  const handleOkLogin = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpenLogin(false);
+    }, 3000);
+  };
+  const handleCancelLogin = () => {
+    setOpenLogin(false);
+  };
 
   if (xs) {
-    // Hiển thị menu trên điện thoại
     return (
       <Layout.Header style={{ background: "#ffffff" }}>
         <Row justify="center" align="middle">
@@ -28,9 +72,75 @@ function SearchBar() {
     );
   }
 
-  // Hiển thị giao diện trên màn hình lớn hơn điện thoại
   return (
     <Layout.Header style={{ background: "#ffffff" }}>
+      <Modal
+        open={openRegister}
+        title="Title"
+        onOk={handleOkRegister}
+        onCancel={handleCancelRegister}
+        footer={[
+          <Button key="back" onClick={handleCancelRegister}>
+            Return
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={handleOkRegister}
+          >
+            Submit
+          </Button>,
+          <Button
+            key="link"
+            href="https://google.com"
+            type="primary"
+            loading={loading}
+            onClick={handleOkRegister}
+          >
+            Search on Google
+          </Button>,
+        ]}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+      <Modal
+        width={450}
+        open={openLogin}
+        onOk={handleOkLogin}
+        onCancel={handleCancelLogin}
+        footer={
+          <Typography
+            style={{
+              textAlign: "center",
+              paddingTop: 30,
+              paddingBottom: 30,
+            }}
+          >
+            Not a member yet? <Link>Join now</Link>
+          </Typography>
+        }
+        bodyStyle={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          padding: "0 16px 10px 16px",
+          gap: 10,
+        }}
+      >
+        <Typography.Title level={4} style={{ textAlign: "center" }}>
+          Login to FPT-SEP
+        </Typography.Title>
+        <GoogleLoginButton />
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
       <Row
         justify="center"
         align="middle"
@@ -63,10 +173,12 @@ function SearchBar() {
           </Typography.Title>
         </Col>
         <Col span={2}>
-          <Button>Đăng kí</Button>
+          <Button onClick={showModalRegister}>Đăng kí</Button>
         </Col>
         <Col span={2}>
-          <Button>Đăng nhập</Button>
+          <Button type="primary" onClick={showModalLogin}>
+            Đăng nhập
+          </Button>
         </Col>
       </Row>
     </Layout.Header>
