@@ -1,6 +1,8 @@
 import React from "react";
 import { Row, Col, Grid, List, Layout } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import color from "../../styles/color";
+import { home } from "../../styles/homepage";
 
 const data = [
   {
@@ -25,7 +27,7 @@ const Banner2 = () => {
       <Row
         style={{
           height: 180,
-          backgroundColor: "#CDF1FD",
+          backgroundColor: color.colorPaleBlueSky,
         }}
         align="middle"
         justify="center"
@@ -46,31 +48,17 @@ const Banner2 = () => {
     );
   }
   return (
-    <Layout.Content style={{ backgroundColor: "#CDF1FD" }}>
-      <Row
-        style={{
-          height: 350,
-          maxWidth: 1400,
-          margin: "0 auto",
-          padding: 30,
-        }}
-        align="middle"
-      >
+    <Layout.Content style={{ backgroundColor: color.colorPaleBlueSky }}>
+      <Row style={home.banner} align="middle">
         <Col span={12} style={{ padding: 10 }}>
           <List
             itemLayout="horizontal"
             dataSource={data}
             renderItem={(item, index) => (
-              <List.Item
-                style={{ borderBlockEnd: "unset", padding: 0, margin: 5 }}
-              >
+              <List.Item style={home.banner2.des}>
                 <List.Item.Meta
                   title={
-                    <span
-                      style={{
-                        fontSize: 18,
-                      }}
-                    >
+                    <span style={home.banner2.title}>
                       <CheckCircleOutlined /> {item.title}
                     </span>
                   }
@@ -80,17 +68,7 @@ const Banner2 = () => {
             )}
           />
         </Col>
-        <Col
-          span={12}
-          style={{
-            backgroundImage: "url('img/freelancer-1.png')",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            width: "100%",
-            height: "100%",
-          }}
-        ></Col>
+        <Col span={12} style={home.banner2.bannerImg}></Col>
       </Row>
     </Layout.Content>
   );

@@ -1,11 +1,12 @@
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Button, Card, Typography, Row } from "antd";
+import { Button, Card, Typography, Row, Layout } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
+import { home } from "../../styles/homepage";
 
 import "../../App.css";
 
@@ -28,14 +29,15 @@ const JobPopular = () => {
     />
   );
   return (
-    <>
+    <Layout.Content style={{ margin: "30px 0" }}>
       <Typography.Title level={3} style={{ margin: "20px 30px" }}>
         Công việc được thuê nhiều nhất
       </Typography.Title>
       <Swiper
         style={{
           margin: 30,
-          padding: "0 10px 10px 100px",
+          paddingLeft: 100,
+          justifyContent: "center",
         }}
         modules={[Navigation]}
         navigation={{
@@ -49,199 +51,42 @@ const JobPopular = () => {
           ),
         }}
         spaceBetween={30}
-        slidesPerView={4}
+        slidesPerView={5}
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
-        <SwiperSlide>
-          <Card
-            hoverable
-            style={{
-              width: 265,
-            }}
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Card.Meta
-              title="Europe Street beat"
-              description="www.instagram.com"
-            />
-          </Card>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
+        </SwiperSlide>
+        <SwiperSlide style={home.jobpopular.swipper}>
+          <Card hoverable style={home.jobpopular.card}></Card>
         </SwiperSlide>
         <Row>
           <div className="swiper-button-next">
@@ -252,7 +97,7 @@ const JobPopular = () => {
           </div>
         </Row>
       </Swiper>
-    </>
+    </Layout.Content>
   );
 };
 export default JobPopular;

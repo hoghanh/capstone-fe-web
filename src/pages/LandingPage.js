@@ -12,7 +12,7 @@ const LandingPage = () => {
     <>
       <Header />
       <Banner1 />
-      <Layout.Content style={{ maxWidth: 1400, margin: "0 auto" }}>
+      <Layout.Content style={{ maxWidth: 1080, margin: "0 auto" }}>
         <JobPopular />
       </Layout.Content>
 

@@ -1,9 +1,12 @@
 import React from "react";
 import { Row, Col, Typography, Button, Grid, Layout } from "antd";
+import color from "../../styles/color";
+import { home } from "../../styles/homepage";
 
 const Banner1 = () => {
   const { useBreakpoint } = Grid;
   const { xs } = useBreakpoint();
+
   if (xs) {
     return (
       <Row
@@ -16,107 +19,50 @@ const Banner1 = () => {
         align="middle"
         justify="center"
       >
-        <Typography.Title style={{ color: "#013042", textAlign: "center" }}>
+        <Typography.Title
+          style={{ color: color.colorBlueWhale, textAlign: "center" }}
+        >
           Tìm freelancer cho
           <br />
           dự án của bạn
         </Typography.Title>
-        <Button
-          style={{
-            borderRadius: 25,
-            border: "1px solid #013042",
-            color: "#013042",
-            marginRight: 10,
-            background: "none",
-          }}
-        >
-          Tìm hiểu ngay
-        </Button>
+        <Button style={home.banner1.button}>Tìm hiểu ngay</Button>
       </Row>
     );
   }
   return (
     <Layout.Content
       style={{
-        backgroundColor: "#89DBE9",
+        backgroundColor: color.colorBluishCyan,
       }}
     >
-      <Row
-        style={{
-          height: 350,
-          padding: 30,
-          maxWidth: 1400,
-          margin: "0 auto",
-        }}
-        align="middle"
-      >
-        <Col span={10} offset={2}>
-          <Typography.Title style={{ color: "#013042" }}>
+      <Row style={home.banner} align="middle">
+        <Col span={12}>
+          <Typography.Title
+            style={{ color: color.colorBlueWhale, fontSize: 32 }}
+          >
             Tìm freelancer cho
             <br />
             dự án của bạn
           </Typography.Title>
           <Row
-            justify="space-between"
             style={{
               display: "flex",
               justifyContent: "left",
               alignItems: "center",
             }}
           >
-            <Typography.Text
-              strong
-              style={{ margin: 0, paddingRight: 10, color: "#013042" }}
-            >
+            <Typography.Text strong style={home.banner1.subtitle}>
               Phổ biến:
             </Typography.Text>
 
-            <Button
-              style={{
-                borderRadius: 25,
-                border: "1px solid #013042",
-                color: "#013042",
-                marginRight: 10,
-                background: "none",
-              }}
-            >
-              Thiết kế web
-            </Button>
+            <Button style={home.banner1.button}>Thiết kế web</Button>
 
-            <Button
-              style={{
-                borderRadius: 25,
-                border: "1px solid #013042",
-                color: "#013042",
-                marginRight: 10,
-                background: "none",
-              }}
-            >
-              WordPress
-            </Button>
-            <Button
-              style={{
-                borderRadius: 25,
-                border: "1px solid #013042",
-                color: "#013042",
-                background: "none",
-              }}
-            >
-              Thiết kế logo
-            </Button>
+            <Button style={home.banner1.button}>WordPress</Button>
+            <Button style={home.banner1.button}>Thiết kế logo</Button>
           </Row>
         </Col>
-        <Col
-          span={12}
-          style={{
-            backgroundImage: "url('img/Successful-Freelancer.png')",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            width: "100%",
-            height: "100%",
-          }}
-        ></Col>
+        <Col span={12} style={home.banner1.bannerImg}></Col>
       </Row>
     </Layout.Content>
   );

@@ -15,6 +15,7 @@ import {
   InstagramFilled,
   TwitterSquareFilled,
 } from "@ant-design/icons";
+import color from "../../styles/color";
 
 const data = [
   {
@@ -126,10 +127,10 @@ function Footer() {
     <Layout.Footer
       style={{
         background: "#00587C",
-        color: "#EDF6FF",
+        color: color.colorAliceBlue,
       }}
     >
-      <Row style={{ margin: "0 auto", maxWidth: 1400 }}>
+      <Row style={{ margin: "0 auto", maxWidth: 1080 }}>
         {data.map((list, index) => (
           <Col flex={1} key={index}>
             <h3 style={{ fontWeight: "bold" }}>{list.title}</h3>
@@ -137,7 +138,7 @@ function Footer() {
               style={{ paddingBottom: 20, marginBottom: 10 }}
               dataSource={list.items}
               renderItem={(item) => (
-                <List.Item style={{ color: "#EDF6FF", padding: 2 }}>
+                <List.Item style={{ color: color.colorAliceBlue, padding: 2 }}>
                   {item}
                 </List.Item>
               )}
@@ -150,7 +151,7 @@ function Footer() {
         style={{
           borderTop: "1px solid #EDF6FF",
           margin: "0 auto",
-          maxWidth: 1400,
+          maxWidth: 1080,
         }}
       >
         <Col
@@ -170,7 +171,11 @@ function Footer() {
           />
           <Typography.Title
             level={4}
-            style={{ margin: 0, color: "#EDF6FF", marginLeft: "10px" }}
+            style={{
+              margin: 0,
+              color: color.colorAliceBlue,
+              marginLeft: "10px",
+            }}
           >
             FPT-SEP
           </Typography.Title>

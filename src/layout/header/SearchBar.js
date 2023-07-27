@@ -14,6 +14,7 @@ import {
 import { SearchOutlined } from "@ant-design/icons";
 import GoogleLoginButton from "../../components/button/GoogleLoginButton";
 import Link from "antd/es/typography/Link";
+import searchbar from "../../styles/searchbar";
 
 function SearchBar() {
   const { useBreakpoint } = Grid;
@@ -144,7 +145,7 @@ function SearchBar() {
       <Row
         justify="center"
         align="middle"
-        style={{ margin: "0 auto", maxWidth: 1400 }}
+        style={{ margin: "0 auto", maxWidth: 1080 }}
       >
         <Col span={1}>
           <Image
@@ -155,20 +156,20 @@ function SearchBar() {
             preview={false}
           />
         </Col>
-        <Col span={3} style={{ display: "flex", justifyContent: "center" }}>
-          <Typography.Title level={3} style={{ margin: 0 }}>
+        <Col span={3} style={searchbar.text}>
+          <Typography.Title level={4} style={{ margin: 0 }}>
             FPT-SEP
           </Typography.Title>
         </Col>
         <Col span={13}>
           <Input
-            placeholder="Search..."
-            prefix={<SearchOutlined />}
-            style={{ padding: 10 }}
+            placeholder="Tìm kiếm"
+            prefix={<SearchOutlined style={{ color: "#828282" }} />}
+            style={{ padding: 10, borderRadius: 8 }}
           />
         </Col>
-        <Col span={3} style={{ display: "flex", justifyContent: "center" }}>
-          <Typography.Title level={3} style={{ margin: 0 }}>
+        <Col span={3} style={searchbar.text}>
+          <Typography.Title level={4} style={{ margin: 0 }}>
             Khám phá
           </Typography.Title>
         </Col>
