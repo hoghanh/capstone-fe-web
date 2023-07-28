@@ -152,7 +152,7 @@ function SearchBar() {
         }}
       >
         <Image
-          width={50}
+          width={34}
           src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
           alt='Apofoitisi logo'
           preview={false}
