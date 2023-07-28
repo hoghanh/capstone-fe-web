@@ -10,7 +10,6 @@ import { Layout } from 'antd';
 const LandingPage = () => {
   return (
     <>
-      ssss
       <Header />
       <Banner1 />
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
