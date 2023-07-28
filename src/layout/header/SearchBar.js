@@ -9,7 +9,6 @@ import {
   Layout,
   Grid,
   Modal,
-  Divider,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import GoogleLoginButton from "../../components/button/GoogleLoginButton";

@@ -7,7 +7,7 @@ import Banner3 from "../components/banner/Banner3";
 import JobPopular from "../components/carousel/JobPopular";
 import { Layout } from "antd";
 
-const LandingPage = () => {
+const HomePage = () => {
   return (
     <>
       <Header />
@@ -23,4 +23,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default HomePage;
