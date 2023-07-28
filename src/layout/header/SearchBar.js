@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Input,
   Image,
@@ -10,11 +10,11 @@ import {
   Grid,
   Modal,
   Divider,
-} from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import GoogleLoginButton from "../../components/button/GoogleLoginButton";
-import Link from "antd/es/typography/Link";
-import searchbar from "../../styles/searchbar";
+} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import GoogleLoginButton from '../../components/button/GoogleLoginButton';
+import Link from 'antd/es/typography/Link';
+import searchbar from '../../styles/searchbar';
 
 function SearchBar() {
   const { useBreakpoint } = Grid;
@@ -53,8 +53,8 @@ function SearchBar() {
 
   if (xs) {
     return (
-      <Layout.Header style={{ background: "#ffffff" }}>
-        <Row justify="center" align="middle">
+      <Layout.Header style={{ background: '#ffffff' }}>
+        <Row justify='center' align='middle'>
           <Col flex={1}>
             <Typography.Title level={4} style={{ margin: 0 }}>
               FPT-SEP
@@ -63,7 +63,7 @@ function SearchBar() {
 
           <Col flex={1}>
             <Input
-              placeholder="Search... "
+              placeholder='Search... '
               prefix={<SearchOutlined />}
               style={{ width: 150 }}
             />
@@ -74,28 +74,28 @@ function SearchBar() {
   }
 
   return (
-    <Layout.Header style={{ background: "#ffffff" }}>
+    <Layout.Header style={{ background: '#ffffff' }}>
       <Modal
         open={openRegister}
-        title="Title"
+        title='Title'
         onOk={handleOkRegister}
         onCancel={handleCancelRegister}
         footer={[
-          <Button key="back" onClick={handleCancelRegister}>
+          <Button key='back' onClick={handleCancelRegister}>
             Return
           </Button>,
           <Button
-            key="submit"
-            type="primary"
+            key='submit'
+            type='primary'
             loading={loading}
             onClick={handleOkRegister}
           >
             Submit
           </Button>,
           <Button
-            key="link"
-            href="https://google.com"
-            type="primary"
+            key='link'
+            href='https://google.com'
+            type='primary'
             loading={loading}
             onClick={handleOkRegister}
           >
@@ -117,7 +117,7 @@ function SearchBar() {
         footer={
           <Typography
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               paddingTop: 30,
               paddingBottom: 30,
             }}
@@ -126,14 +126,14 @@ function SearchBar() {
           </Typography>
         }
         bodyStyle={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          padding: "0 16px 10px 16px",
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          padding: '0 16px 10px 16px',
           gap: 10,
         }}
       >
-        <Typography.Title level={4} style={{ textAlign: "center" }}>
+        <Typography.Title level={4} style={{ textAlign: 'center' }}>
           Login to FPT-SEP
         </Typography.Title>
         <GoogleLoginButton />
@@ -142,7 +142,38 @@ function SearchBar() {
         <p>Some contents...</p>
         <p>Some contents...</p>
       </Modal>
-      <Row
+      <div
+        style={{
+          maxWidth: 1080,
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Image
+          width={50}
+          src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+          alt='Apofoitisi logo'
+          preview={false}
+        />
+        <Typography.Title level={4} style={{ margin: 0 }}>
+          FPT-SEP
+        </Typography.Title>
+        <Input
+          placeholder='Tìm kiếm'
+          prefix={<SearchOutlined style={{ color: '#828282' }} />}
+          style={{ padding: 10, borderRadius: 8, width: 477 }}
+        />
+        <Typography.Title level={4} style={{ margin: 0 }}>
+          Khám phá
+        </Typography.Title>
+        <Button onClick={showModalRegister}>Đăng kí</Button>
+        <Button type='primary' onClick={showModalLogin}>
+          Đăng nhập
+        </Button>
+      </div>
+      {/* <Row
         justify="center"
         align="middle"
         style={{ margin: "0 auto", maxWidth: 1080 }}
@@ -181,7 +212,7 @@ function SearchBar() {
             Đăng nhập
           </Button>
         </Col>
-      </Row>
+      </Row> */}
     </Layout.Header>
   );
 }
