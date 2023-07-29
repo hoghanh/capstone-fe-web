@@ -9,12 +9,11 @@ import {
   Layout,
   Grid,
   Modal,
-  Divider,
-} from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import GoogleLoginButton from '../../components/button/GoogleLoginButton';
-import Link from 'antd/es/typography/Link';
-import searchbar from '../../styles/searchbar';
+} from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import GoogleLoginButton from "../../components/button/GoogleLoginButton";
+import Link from "antd/es/typography/Link";
+import searchbar from "../../styles/searchbar";
 
 function SearchBar() {
   const { useBreakpoint } = Grid;
