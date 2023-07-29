@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Input,
   Image,
@@ -52,10 +52,10 @@ function SearchBar() {
 
   if (xs) {
     return (
-      <Layout.Header style={{ background: '#ffffff' }}>
+      <Layout.Header style={{ background: "#ffffff" }}>
         <Row justify='center' align='middle'>
           <Col flex={1}>
-            <Typography.Title level={4} style={{ margin: 0 }}>
+            <Typography.Title level={3} style={{ margin: 0 }}>
               FPT-SEP
             </Typography.Title>
           </Col>
@@ -73,7 +73,7 @@ function SearchBar() {
   }
 
   return (
-    <Layout.Header style={{ background: '#ffffff' }}>
+    <Layout.Header style={{ background: "#ffffff" }}>
       <Modal
         open={openRegister}
         title='Title'
@@ -116,7 +116,7 @@ function SearchBar() {
         footer={
           <Typography
             style={{
-              textAlign: 'center',
+              textAlign: "center",
               paddingTop: 30,
               paddingBottom: 30,
             }}
@@ -125,14 +125,14 @@ function SearchBar() {
           </Typography>
         }
         bodyStyle={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          padding: '0 16px 10px 16px',
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          padding: "0 16px 10px 16px",
           gap: 10,
         }}
       >
-        <Typography.Title level={4} style={{ textAlign: 'center' }}>
+        <Typography.Title level={3} style={{ textAlign: "center" }}>
           Login to FPT-SEP
         </Typography.Title>
         <GoogleLoginButton />
@@ -144,10 +144,10 @@ function SearchBar() {
       <div
         style={{
           maxWidth: 1080,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          margin: "0 auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <Image
@@ -156,15 +156,15 @@ function SearchBar() {
           alt='Apofoitisi logo'
           preview={false}
         />
-        <Typography.Title level={4} style={{ margin: 0 }}>
+        <Typography.Title level={3} style={{ margin: 0 }}>
           FPT-SEP
         </Typography.Title>
         <Input
           placeholder='Tìm kiếm'
-          prefix={<SearchOutlined style={{ color: '#828282' }} />}
+          prefix={<SearchOutlined style={{ color: "#828282" }} />}
           style={{ padding: 10, borderRadius: 8, width: 477 }}
         />
-        <Typography.Title level={4} style={{ margin: 0 }}>
+        <Typography.Title level={3} style={{ margin: 0 }}>
           Khám phá
         </Typography.Title>
         <Button onClick={showModalRegister}>Đăng kí</Button>
@@ -172,46 +172,6 @@ function SearchBar() {
           Đăng nhập
         </Button>
       </div>
-      {/* <Row
-        justify="center"
-        align="middle"
-        style={{ margin: "0 auto", maxWidth: 1080 }}
-      >
-        <Col span={1}>
-          <Image
-            width={50}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            alt="Apofoitisi logo"
-            style={{ marginBottom: 10 }}
-            preview={false}
-          />
-        </Col>
-        <Col span={3} style={searchbar.text}>
-          <Typography.Title level={4} style={{ margin: 0 }}>
-            FPT-SEP
-          </Typography.Title>
-        </Col>
-        <Col span={13}>
-          <Input
-            placeholder="Tìm kiếm"
-            prefix={<SearchOutlined style={{ color: "#828282" }} />}
-            style={{ padding: 10, borderRadius: 8 }}
-          />
-        </Col>
-        <Col span={3} style={searchbar.text}>
-          <Typography.Title level={4} style={{ margin: 0 }}>
-            Khám phá
-          </Typography.Title>
-        </Col>
-        <Col span={2}>
-          <Button onClick={showModalRegister}>Đăng kí</Button>
-        </Col>
-        <Col span={2}>
-          <Button type="primary" onClick={showModalLogin}>
-            Đăng nhập
-          </Button>
-        </Col>
-      </Row> */}
     </Layout.Header>
   );
 }
