@@ -71,4 +71,51 @@ export const home = {
     },
     text: { marginTop: 10 },
   },
+  login: {
+    input: {
+      width: "100%",
+      height: 40,
+      padding: 10,
+      borderRadius: 10,
+      borderColor: color.colorBlueWhale,
+    },
+    line: {
+      backgroundColor: color.colorDeactive,
+      height: 1,
+      width: 140,
+    },
+    or: {
+      color: color.colorDeactive,
+      padding: 2,
+      margin: 0,
+    },
+    contain: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 10,
+    },
+    bodyModal: {
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      padding: "0 50px 30px",
+      gap: 10,
+    },
+    footerModal: {
+      textAlign: "center",
+      height: 90,
+      padding: "30px 10px",
+      borderTop: "0.75px solid #013042",
+    },
+    button: {
+      width: "100%",
+      height: 50,
+      display: "flex",
+      padding: 10,
+      justifyContent: "space-around",
+      alignItems: "center",
+      gap: 10,
+    },
+  },
 };

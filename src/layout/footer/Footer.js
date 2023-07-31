@@ -1,21 +1,11 @@
 import React from "react";
-import {
-  List,
-  Row,
-  Col,
-  Layout,
-  Grid,
-  Collapse,
-  Image,
-  Typography,
-} from "antd";
+import { Row, Col, Layout, Image, Typography } from "antd";
 import {
   FacebookFilled,
   LinkedinFilled,
   InstagramFilled,
   TwitterSquareFilled,
 } from "@ant-design/icons";
-import theme from "../../styles/theme";
 import { footer } from "../../styles/footer";
 
 const Footer = () => {
@@ -51,13 +41,13 @@ const Footer = () => {
         </Col>
       </Row>
       <Row style={footer.secondrow}>
-        <Typography.Title level={3} style={{ margin: 0 }}>
+        <Typography.Title level={3}>
           <Image
             width={34}
             src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
             alt='Apofoitisi logo'
             preview={false}
-          />{" "}
+          />
           FPT-SEP
         </Typography.Title>
         <div>
