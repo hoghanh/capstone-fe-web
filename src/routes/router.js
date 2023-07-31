@@ -13,6 +13,11 @@ const publicRoutes = [
     component: lazy(() => import("../pages/JobList")),
     name: "jobs",
   },
+  {
+    path: "/jobDetail",
+    component: lazy(() => import("../pages/JobDetail")),
+    name: "jobDetail",
+  },
 ];
 
 const Router = () => (
