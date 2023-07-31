@@ -5,6 +5,7 @@ import { Breadcrumb, Card, Image, Layout, Select, Typography } from 'antd';
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import './job_list.css';
 import AppBreadcrumb from '../components/AppBreadcrumb';
+import Link from 'antd/es/typography/Link';
 
 const handleChange = (value) => {
   console.log(`selected ${value}`);
@@ -36,8 +37,17 @@ const JobList = () => {
             },
           ]}
         /> */}
-        <Typography.Title level={3}>Logo Design</Typography.Title>
+        <Typography.Title
+          level={3}
+          style={{ padding: '10px 20px', marginBottom: 20 }}
+        >
+          Logo Design
+        </Typography.Title>
         <Card
+          style={{
+            marginBottom: 30,
+            boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
+          }}
           className='card-jobs'
           title={
             <div
@@ -95,8 +105,8 @@ const JobList = () => {
                     label: 'Latest',
                   },
                   {
-                    value: 'Latest',
-                    label: 'Latest',
+                    value: 'Oldest',
+                    label: 'Oldest',
                   },
                   {
                     value: 'Lowest Price',
@@ -123,7 +133,8 @@ const JobList = () => {
             style={{
               display: ' flex',
               alignItems: 'center',
-              margin: '20px 10px 10px 10px',
+              padding: 10,
+              borderBottom: '0.5px solid #000',
             }}
           >
             <div
@@ -148,12 +159,13 @@ const JobList = () => {
                 CÔNG TY CỔ<br></br> PHẦN FOODY
               </Typography.Title>
             </div>
-            <div style={{ width: '100%' }}>
+            <div style={{ padding: 10 }}>
               <div
                 style={{
                   display: ' flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  padding: 10,
                 }}
               >
                 <div>
@@ -179,14 +191,14 @@ const JobList = () => {
                   />
                 </svg>
               </div>
-              <p>
+              <Typography style={{ padding: 10 }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra
                 eget et volutpat dui quis quis. Eu dictum turpis ultrices in.
                 Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
                 Libero lectus venenatis, cursus id pulvinar donec tincidunt
                 tellus justo. Vitae ac aliquam, id sagittis aliquam viverra
-                dolor blandit... more
-              </p>
+                dolor blandit... <Link>more</Link>
+              </Typography>
               <div
                 style={{
                   display: 'flex',
@@ -279,11 +291,6 @@ const JobList = () => {
               </div>
               <div></div>
             </div>
-          </div>
-          <div className='line' /> {/* The line separator */}
-          <div>
-            {/* Additional content here */}
-            <p>Some other content below the line.</p>
           </div>
         </Card>
       </Layout.Content>

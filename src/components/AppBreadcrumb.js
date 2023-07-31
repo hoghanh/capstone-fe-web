@@ -2,7 +2,8 @@ import React, { lazy } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
-import { HomeFilled, RightOutlined } from '@ant-design/icons';
+import { HomeFilled } from '@ant-design/icons';
+import { ReactSVG } from 'react-svg';
 
 const AppBreadcrumb = () => {
   const routes = [
@@ -48,7 +49,19 @@ const AppBreadcrumb = () => {
   const breadcrumbs = getBreadcrumbs(currentLocation);
 
   return (
-    <Breadcrumb className='m-0 ms-2' separator={<RightOutlined />}>
+    <Breadcrumb
+      style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
+      className='m-0 ms-2'
+      separator={
+        <ReactSVG
+          src='./icon/right.svg'
+          beforeInjection={(svg) => {
+            svg.setAttribute('width', '16');
+            svg.setAttribute('height', '6');
+          }}
+        />
+      }
+    >
       <Breadcrumb.Item>
         <Link to='/'>
           <HomeFilled />
