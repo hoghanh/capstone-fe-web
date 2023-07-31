@@ -5,7 +5,7 @@ import Loading from "../components/loading/loading";
 const publicRoutes = [
   {
     path: "/",
-    component: lazy(() => import("../pages/HomePage")),
+    component: lazy(() => import("../pages/Home/HomePage")),
     name: "home",
   },
   {
