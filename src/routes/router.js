@@ -7,6 +7,9 @@ const routes = [
     path: '/',
     component: lazy(() => import('../pages/HomePage')),
     name: 'home',
+    path: "/",
+    component: lazy(() => import("../pages/Home/HomePage")),
+    name: "home",
   },
   {
     path: '/jobs',

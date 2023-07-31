@@ -3,21 +3,17 @@ import {
   Input,
   Image,
   Typography,
-  Row,
-  Col,
   Button,
   Layout,
-  Grid,
   Modal,
+  Checkbox,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import GoogleLoginButton from "../../components/button/GoogleLoginButton";
 import Link from "antd/es/typography/Link";
-import searchbar from "../../styles/searchbar";
+import { home } from "../../styles/homepage";
 
 function SearchBar() {
-  const { useBreakpoint } = Grid;
-  const { xs } = useBreakpoint();
   const [loading, setLoading] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
@@ -50,137 +46,125 @@ function SearchBar() {
     setOpenLogin(false);
   };
 
-  if (xs) {
-    return (
-      <Layout.Header style={{ background: "#ffffff" }}>
-        <Row justify="center" align="middle">
-          <Col flex={1}>
-            <Typography.Title level={4} style={{ margin: 0 }}>
-              FPT-SEP
-            </Typography.Title>
-          </Col>
-
-          <Col flex={1}>
-            <Input
-              placeholder="Search... "
-              prefix={<SearchOutlined />}
-              style={{ width: 150 }}
-            />
-          </Col>
-        </Row>
-      </Layout.Header>
-    );
-  }
+  const handleMove = (type) => {
+    if (type === "register") {
+      setOpenRegister(true);
+      setOpenLogin(false);
+    } else {
+      setOpenLogin(true);
+      setOpenRegister(false);
+    }
+  };
 
   return (
     <Layout.Header style={{ background: "#ffffff" }}>
+      {/* Modal Register */}
       <Modal
+        width={450}
         open={openRegister}
-        title="Title"
+        title={<div style={{ height: 45 }}></div>}
         onOk={handleOkRegister}
         onCancel={handleCancelRegister}
-        footer={[
-          <Button key="back" onClick={handleCancelRegister}>
-            Return
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loading}
-            onClick={handleOkRegister}
-          >
-            Submit
-          </Button>,
-          <Button
-            key="link"
-            href="https://google.com"
-            type="primary"
-            loading={loading}
-            onClick={handleOkRegister}
-          >
-            Search on Google
-          </Button>,
-        ]}
+        footer={
+          <Typography style={home.login.footerModal}>
+            Đã là thành viên?{" "}
+            <Link onClick={() => handleMove("login")}>
+              <b>Đăng nhập</b>
+            </Link>
+          </Typography>
+        }
+        bodyStyle={home.login.bodyModal}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Typography.Title
+          level={3}
+          style={{ textAlign: "center", margin: 0, padding: "15px 10px" }}
+        >
+          Trở thành thành viên FPT-SEP
+        </Typography.Title>
+        <GoogleLoginButton />
+        <div style={home.login.contain}>
+          <div style={home.login.line}></div>
+          <Typography style={home.login.or}>HOẶC</Typography>
+          <div style={home.login.line}></div>
+        </div>
+        <Input placeholder='Email' style={home.login.input} />
+        <Button type='primary' style={home.login.button}>
+          Tiếp tục
+        </Button>
       </Modal>
+
+      {/* Modal login */}
       <Modal
+        title={<div style={{ height: 45 }}></div>}
         width={450}
         open={openLogin}
         onOk={handleOkLogin}
         onCancel={handleCancelLogin}
         footer={
-          <Typography
-            style={{
-              textAlign: "center",
-              paddingTop: 30,
-              paddingBottom: 30,
-            }}
-          >
-            Not a member yet? <Link>Join now</Link>
+          <Typography style={home.login.footerModal}>
+            Chưa phải thành viên?{" "}
+            <Link onClick={() => handleMove("register")}>
+              <b>Tham gia ngay</b>
+            </Link>
           </Typography>
         }
-        bodyStyle={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          padding: "0 16px 10px 16px",
-          gap: 10,
-        }}
+        bodyStyle={home.login.bodyModal}
       >
-        <Typography.Title level={4} style={{ textAlign: "center" }}>
-          Login to FPT-SEP
+        <Typography.Title
+          level={3}
+          style={{ textAlign: "center", margin: 0, padding: "15px 10px" }}
+        >
+          Đăng nhập FPT-SEP
         </Typography.Title>
         <GoogleLoginButton />
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <div style={home.login.contain}>
+          <div style={home.login.line}></div>
+          <Typography style={home.login.or}>HOẶC</Typography>
+          <div style={home.login.line}></div>
+        </div>
+        <Input placeholder='Email' style={home.login.input} />
+        <Input.Password placeholder='Mật khẩu' style={home.login.input} />
+        <div style={home.login.contain}>
+          <Checkbox>Nhớ tài khoản</Checkbox>
+          <Typography>
+            <Link>
+              <b>Quên Mật Khẩu</b>
+            </Link>
+          </Typography>
+        </div>
+        <Button type='primary' style={home.login.button}>
+          Đăng nhập
+        </Button>
       </Modal>
-      <Row
-        justify="center"
-        align="middle"
-        style={{ margin: "0 auto", maxWidth: 1080 }}
+      <div
+        style={{
+          maxWidth: 1080,
+          margin: "0 auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
       >
-        <Col span={1}>
-          <Image
-            width={50}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            alt="Apofoitisi logo"
-            style={{ marginBottom: 10 }}
-            preview={false}
-          />
-        </Col>
-        <Col span={3} style={searchbar.text}>
-          <Typography.Title level={4} style={{ margin: 0 }}>
-            FPT-SEP
-          </Typography.Title>
-        </Col>
-        <Col span={13}>
-          <Input
-            placeholder="Tìm kiếm"
-            prefix={<SearchOutlined style={{ color: "#828282" }} />}
-            style={{ padding: 10, borderRadius: 8 }}
-          />
-        </Col>
-        <Col span={3} style={searchbar.text}>
-          <Typography.Title level={4} style={{ margin: 0 }}>
-            Khám phá
-          </Typography.Title>
-        </Col>
-        <Col span={2}>
-          <Button onClick={showModalRegister}>Đăng kí</Button>
-        </Col>
-        <Col span={2}>
-          <Button type="primary" onClick={showModalLogin}>
-            Đăng nhập
-          </Button>
-        </Col>
-      </Row>
+        <Image
+          width={34}
+          src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+          alt='Apofoitisi logo'
+          preview={false}
+        />
+        <Typography.Title level={3} style={{ margin: 0 }}>
+          FPT-SEP
+        </Typography.Title>
+        <Input
+          placeholder='Tìm kiếm'
+          prefix={<SearchOutlined style={{ color: "#828282" }} />}
+          style={{ padding: 10, borderRadius: 8, width: 477 }}
+        />
+        <Typography.Title level={3} style={{ margin: 0 }}>
+          Khám phá
+        </Typography.Title>
+        <Button onClick={showModalRegister}>Đăng kí</Button>
+        <Button onClick={showModalLogin}>Đăng nhập</Button>
+      </div>
     </Layout.Header>
   );
 }

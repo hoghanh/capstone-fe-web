@@ -1,194 +1,69 @@
 import React from "react";
-import {
-  List,
-  Row,
-  Col,
-  Layout,
-  Grid,
-  Collapse,
-  Image,
-  Typography,
-} from "antd";
+import { Row, Col, Layout, Image, Typography } from "antd";
 import {
   FacebookFilled,
   LinkedinFilled,
   InstagramFilled,
   TwitterSquareFilled,
 } from "@ant-design/icons";
-import color from "../../styles/color";
+import { footer } from "../../styles/footer";
 
-const data = [
-  {
-    title: "Việc làm phổ biến nhất",
-    items: [
-      "Việc phổ biến nhất",
-      "Việc làm web",
-      "Việc lập trình di động",
-      "Việc làm SEO",
-      "Việc marketing online",
-      "Việc dịch thuật",
-      "Việc viết lách",
-      "Việc thiết kế",
-      "Việc quản lý fanpage",
-    ],
-  },
-  {
-    title: "Được thuê nhiều nhất",
-    items: [
-      "Freelancer Marketing online",
-      "Freelancer Làm web",
-      "Freelancer Mobile app",
-      "Freelancer SEO",
-      "Freelancer Thiết kế",
-      "Freelancer thiết kế banner",
-      "Freelancer Viết bài",
-      "Freelancer Dịch thuật",
-      "Freelancer nhập dữ liệu",
-    ],
-  },
-  {
-    title: "Hướng dẫn cho freelancer ",
-    items: [
-      "Hướng dẫn freelancer kiếm tiền",
-      "Hướng dẫn hoàn thiện hồ ",
-      "Hướng dẫn chào giá dự ",
-      "Hướng dẫn nhận thanh toán",
-      "Hướng dẫn xác thực tài kho",
-      "Hướng dẫn liên hệ khách hàng",
-      "Hướng dẫn mua credit",
-    ],
-  },
-  {
-    title: "Câu hỏi thường gặp",
-    items: [
-      "Cách thuê freelancer",
-      "Hướng dẫn đăng việc",
-      "Hướng dẫn xác thực email",
-      "Hướng dẫn chọn freelancer",
-      "Hướng dẫn quản lý dự án",
-      "Hướng dẫn liên hệ freelancer",
-    ],
-  },
-];
-
-function Footer() {
-  const { useBreakpoint } = Grid;
-  const { xs } = useBreakpoint();
-  if (xs) {
-    return (
-      <>
-        <Collapse accordion>
-          {data.map((list, index) => (
-            <Collapse.Panel header={list.title} key={index}>
-              <List
-                dataSource={list.items}
-                renderItem={(item) => (
-                  <List.Item style={{ padding: 5 }}>{item}</List.Item>
-                )}
-              />
-            </Collapse.Panel>
-          ))}
-        </Collapse>
-        <Row justify="space-between" style={{ borderTop: "1px solid #EDF6FF" }}>
-          <Col
-            span={12}
-            style={{
-              display: "flex",
-              justifyContent: "left",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              width={35}
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              alt="Apofoitisi logo"
-              style={{ marginTop: 10 }}
-              preview={false}
-            />
-            <Typography.Title
-              level={4}
-              style={{ margin: 0, marginLeft: "10px" }}
-            >
-              FPT-SEP
-            </Typography.Title>
-          </Col>
-          <Col span={12} style={{ textAlign: "right", marginTop: 10 }}>
-            <FacebookFilled style={{ fontSize: "30px" }} />
-            <LinkedinFilled style={{ fontSize: "30px", marginLeft: 10 }} />
-            <InstagramFilled style={{ fontSize: "30px", marginLeft: 10 }} />
-            <TwitterSquareFilled style={{ fontSize: "30px", marginLeft: 10 }} />
-          </Col>
-        </Row>
-      </>
-    );
-  }
-
+const Footer = () => {
   return (
-    <Layout.Footer
-      style={{
-        background: "#00587C",
-        color: color.colorAliceBlue,
-      }}
-    >
-      <Row style={{ margin: "0 auto", maxWidth: 1080 }}>
-        {data.map((list, index) => (
-          <Col flex={1} key={index}>
-            <h3 style={{ fontWeight: "bold" }}>{list.title}</h3>
-            <List
-              style={{ paddingBottom: 20, marginBottom: 10 }}
-              dataSource={list.items}
-              renderItem={(item) => (
-                <List.Item style={{ color: color.colorAliceBlue, padding: 2 }}>
-                  {item}
-                </List.Item>
-              )}
-            />
-          </Col>
-        ))}
+    <Layout.Footer style={footer}>
+      <Row gutter={[32, 10]} style={footer.firstrow}>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>Về Chúng Tôi</Typography.Text>
+        </Col>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>Hỗ Trợ</Typography.Text>
+        </Col>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>
+            Chính Sách Cookie
+          </Typography.Text>
+        </Col>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>
+            Điều Khoản Dịch Vụ
+          </Typography.Text>
+        </Col>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>Phản Hồi</Typography.Text>
+        </Col>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>
+            Chính Sách Bảo Mật
+          </Typography.Text>
+        </Col>
+        <Col span={6}>
+          <Typography.Text style={footer.text}>Cài Đặt Cookie</Typography.Text>
+        </Col>
       </Row>
-      <Row
-        justify="space-between"
-        style={{
-          borderTop: "1px solid #EDF6FF",
-          margin: "0 auto",
-          maxWidth: 1080,
-        }}
-      >
-        <Col
-          span={12}
-          style={{
-            display: "flex",
-            justifyContent: "left",
-            alignItems: "center",
-          }}
-        >
+      <Row style={footer.secondrow}>
+        <Typography.Title level={3} style={footer.text}>
           <Image
-            width={35}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            alt="Apofoitisi logo"
-            style={{ marginTop: 10 }}
+            width={34}
+            src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            alt='Apofoitisi logo'
             preview={false}
-          />
-          <Typography.Title
-            level={4}
-            style={{
-              margin: 0,
-              color: color.colorAliceBlue,
-              marginLeft: "10px",
-            }}
-          >
-            FPT-SEP
-          </Typography.Title>
-        </Col>
-        <Col span={12} style={{ textAlign: "right", marginTop: 10 }}>
-          <FacebookFilled style={{ fontSize: "30px" }} />
-          <LinkedinFilled style={{ fontSize: "30px", marginLeft: 10 }} />
-          <InstagramFilled style={{ fontSize: "30px", marginLeft: 10 }} />
-          <TwitterSquareFilled style={{ fontSize: "30px", marginLeft: 10 }} />
-        </Col>
+          />{" "}
+          FPT-SEP
+        </Typography.Title>
+        <div style={footer.containIcon}>
+          <FacebookFilled style={footer.icons} />
+          <LinkedinFilled style={footer.icons} />
+          <InstagramFilled style={footer.icons} />
+          <TwitterSquareFilled style={footer.icons} />
+        </div>
       </Row>
+      <div style={footer.name}>
+        <Typography.Text style={footer.name.text}>
+          © 2023 FPT Student-Enterprise Connection Platform.
+        </Typography.Text>
+      </div>
     </Layout.Footer>
   );
-}
+};
 
 export default Footer;

@@ -46,7 +46,7 @@ const JobList = () => {
                 alignItems: 'baseline',
               }}
             >
-              <Typography.Title level={2}>Kết quả hàng đầu</Typography.Title>
+              <Typography.Title level={3}>Kết quả hàng đầu</Typography.Title>
               <Typography.Text
                 style={{
                   color: '#000',

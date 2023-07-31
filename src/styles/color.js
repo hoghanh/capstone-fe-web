@@ -5,6 +5,8 @@ const color = {
   colorBluishCyan: "#89DBE9",
   colorPaleBlueSky: "#CDF1FD",
   colorAliceBlue: "#EDF6FF",
+  colorDeepSeaBlue: "#00587C",
+  colorDeactive: "#828282",
 };
 
 export default color;
