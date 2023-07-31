@@ -5,11 +5,8 @@ import Loading from '../components/loading/loading';
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('../pages/HomePage')),
+    component: lazy(() => import('../pages/Home/HomePage')),
     name: 'home',
-    path: "/",
-    component: lazy(() => import("../pages/Home/HomePage")),
-    name: "home",
   },
   {
     path: '/jobs',

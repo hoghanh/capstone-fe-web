@@ -8,7 +8,7 @@ const AppBreadcrumb = () => {
   const routes = [
     {
       path: '/',
-      component: lazy(() => import('../pages/HomePage')),
+      component: lazy(() => import('../pages/Home/HomePage')),
       name: 'home',
     },
     {
