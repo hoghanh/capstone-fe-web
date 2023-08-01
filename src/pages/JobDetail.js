@@ -5,6 +5,7 @@ import { Breadcrumb, Layout, Row, Col, Typography, Divider } from 'antd';
 import { HomeOutlined, ClockCircleFilled } from '@ant-design/icons';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from '../components/customize/Layout';
 import { BookMarkOutlined, PaperClipOutlined } from '../components/icon/Icon';
+import color from '../styles/color';
 
 const handleChange = (value) => {
   console.log(`selected ${value}`);
@@ -140,10 +141,10 @@ const JobDetail = ({ props }) => {
               </CustomRow>
               <CustomDivider />
               {/* Skill Require */}
-              <CustomRow>
+              <CustomRow gutter={[15, 10]}>
                 <Col span={24}>
                   <Typography.Title
-                    style={{ fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 10px 0' }}
+                    style={{ fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: 0 }}
                   >
                     Yêu cầu kỹ năng
                   </Typography.Title>
@@ -153,7 +154,7 @@ const JobDetail = ({ props }) => {
                     return (
                       <Typography.Text
                         key={item}
-                        style={{ fontWeight: 700, fontSize: 14, padding: 10, backgroundColor: 'lightblue',  }}
+                        style={{ fontWeight: 700, fontSize: 14, padding: '5px 10px', backgroundColor: color.colorBluishCyan  }}
                       >
                         {item}
                       </Typography.Text>
