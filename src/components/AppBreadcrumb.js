@@ -9,7 +9,7 @@ import { ReactSVG } from 'react-svg';
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('../pages/HomePage')),
+    component: lazy(() => import('../pages/Home/HomePage')),
     name: 'home',
     title: <HomeFilled />,
   },
@@ -41,7 +41,7 @@ const AppBreadcrumb = () => {
     const breadcrumbs = [
       {
         path: '/',
-        component: lazy(() => import('../pages/HomePage')),
+        component: lazy(() => import('../pages/Home/HomePage')),
         name: 'Home',
         title: <HomeFilled />,
       },
