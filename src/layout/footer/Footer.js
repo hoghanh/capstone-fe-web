@@ -1,27 +1,17 @@
-import React from "react";
-import {
-  List,
-  Row,
-  Col,
-  Layout,
-  Grid,
-  Collapse,
-  Image,
-  Typography,
-} from "antd";
+import React from 'react';
+import { Row, Col, Layout, Image, Typography } from 'antd';
 import {
   FacebookFilled,
   LinkedinFilled,
   InstagramFilled,
   TwitterSquareFilled,
-} from "@ant-design/icons";
-import theme from "../../styles/theme";
-import { footer } from "../../styles/footer";
+} from '@ant-design/icons';
+import { footer } from '../../styles/footer';
 
 const Footer = () => {
   return (
     <Layout.Footer style={footer}>
-      <Row gutter={[32, 10]} style={footer.firstrow}>
+      <Row style={footer.firstrow}>
         <Col span={6}>
           <Typography.Text style={footer.text}>Về Chúng Tôi</Typography.Text>
         </Col>
@@ -51,22 +41,27 @@ const Footer = () => {
         </Col>
       </Row>
       <Row style={footer.secondrow}>
-        <Typography.Title level={3} style={{ margin: 0 }}>
+        <Typography.Title level={3} style={footer.text}>
           <Image
             width={34}
             src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
             alt='Apofoitisi logo'
             preview={false}
-          />{" "}
-          FPT-SEP
+          />{' '}
+          FPT - SEP
         </Typography.Title>
-        <div>
-          <FacebookFilled style={{ fontSize: 25 }} />
-          <LinkedinFilled style={{ fontSize: "30px" }} />
-          <InstagramFilled style={{ fontSize: "30px" }} />
-          <TwitterSquareFilled style={{ fontSize: "30px" }} />
+        <div style={footer.containIcon}>
+          <FacebookFilled style={footer.icons} />
+          <LinkedinFilled style={footer.icons} />
+          <InstagramFilled style={footer.icons} />
+          <TwitterSquareFilled style={footer.icons} />
         </div>
       </Row>
+      <div style={footer.name}>
+        <Typography.Text style={footer.name.text}>
+          © 2023 FPT Student-Enterprise Connection Platform.
+        </Typography.Text>
+      </div>
     </Layout.Footer>
   );
 };

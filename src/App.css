@@ -1,12 +1,26 @@
-.ant-btn {
+body {
+  margin: 0;
+}
+
+.ant-typography  a {
+  color: #02ADFD
+}
+.ant-btn-primary {
+  color: #FFF;
+  border-radius: 12px;
+  border: 1px solid var(--artyclick-sky-blue, #02ADFD);
+  background: #02ADFD;
+}
+
+.ant-btn-default {
   color: #02ADFD;
   border-radius: 12px;
   border: 1px solid var(--artyclick-sky-blue, #02ADFD);
   background: var(--background, #FFF);
 }
 
-body {
-  margin: 0;
+.ant-modal-content {
+  padding: 0 !important;
 }
 
 .ant-layout-footer .ant-list-tem {
