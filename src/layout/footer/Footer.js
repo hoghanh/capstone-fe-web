@@ -48,7 +48,7 @@ const Footer = () => {
             alt='Apofoitisi logo'
             preview={false}
           />{' '}
-          FPT-SEP
+          FPT - SEP
         </Typography.Title>
         <div style={footer.containIcon}>
           <FacebookFilled style={footer.icons} />
