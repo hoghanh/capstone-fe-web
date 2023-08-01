@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Input,
   Image,
@@ -7,16 +7,19 @@ import {
   Layout,
   Modal,
   Checkbox,
-} from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import GoogleLoginButton from "../../components/button/GoogleLoginButton";
-import Link from "antd/es/typography/Link";
-import { home } from "../../styles/homepage";
+} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import GoogleLoginButton from '../../components/button/GoogleLoginButton';
+import Link from 'antd/es/typography/Link';
+import { home } from '../../styles/homepage';
+import { ReactSVG } from 'react-svg';
 
 function SearchBar() {
   const [loading, setLoading] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+
+  const [logined, setLogined] = useState(false);
 
   const showModalRegister = () => {
     setOpenRegister(true);
@@ -47,7 +50,7 @@ function SearchBar() {
   };
 
   const handleMove = (type) => {
-    if (type === "register") {
+    if (type === 'register') {
       setOpenRegister(true);
       setOpenLogin(false);
     } else {
@@ -57,7 +60,7 @@ function SearchBar() {
   };
 
   return (
-    <Layout.Header style={{ background: "#ffffff" }}>
+    <Layout.Header style={{ background: '#ffffff' }}>
       {/* Modal Register */}
       <Modal
         width={450}
@@ -67,8 +70,8 @@ function SearchBar() {
         onCancel={handleCancelRegister}
         footer={
           <Typography style={home.login.footerModal}>
-            Đã là thành viên?{" "}
-            <Link onClick={() => handleMove("login")}>
+            Đã là thành viên?{' '}
+            <Link onClick={() => handleMove('login')}>
               <b>Đăng nhập</b>
             </Link>
           </Typography>
@@ -77,7 +80,7 @@ function SearchBar() {
       >
         <Typography.Title
           level={3}
-          style={{ textAlign: "center", margin: 0, padding: "15px 10px" }}
+          style={{ textAlign: 'center', margin: 0, padding: '15px 10px' }}
         >
           Trở thành thành viên FPT-SEP
         </Typography.Title>
@@ -88,8 +91,13 @@ function SearchBar() {
           <div style={home.login.line}></div>
         </div>
         <Input placeholder='Email' style={home.login.input} />
+        <Input.Password placeholder='Mật khẩu' style={home.login.input} />
+        <Typography.Text style={home.login.remindText}>
+          8 characters or longer. Combine upper and lowercase letters and
+          numbers.
+        </Typography.Text>
         <Button type='primary' style={home.login.button}>
-          Tiếp tục
+          Đăng Kí
         </Button>
       </Modal>
 
@@ -102,8 +110,8 @@ function SearchBar() {
         onCancel={handleCancelLogin}
         footer={
           <Typography style={home.login.footerModal}>
-            Chưa phải thành viên?{" "}
-            <Link onClick={() => handleMove("register")}>
+            Chưa phải thành viên?{' '}
+            <Link onClick={() => handleMove('register')}>
               <b>Tham gia ngay</b>
             </Link>
           </Typography>
@@ -112,7 +120,7 @@ function SearchBar() {
       >
         <Typography.Title
           level={3}
-          style={{ textAlign: "center", margin: 0, padding: "15px 10px" }}
+          style={{ textAlign: 'center', margin: 0, padding: '15px 10px' }}
         >
           Đăng nhập FPT-SEP
         </Typography.Title>
@@ -133,16 +141,16 @@ function SearchBar() {
           </Typography>
         </div>
         <Button type='primary' style={home.login.button}>
-          Đăng nhập
+          Đăng Nhập
         </Button>
       </Modal>
       <div
         style={{
           maxWidth: 1080,
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
         <Image
@@ -152,18 +160,41 @@ function SearchBar() {
           preview={false}
         />
         <Typography.Title level={3} style={{ margin: 0 }}>
-          FPT-SEP
+          FPT - SEP
         </Typography.Title>
         <Input
           placeholder='Tìm kiếm'
-          prefix={<SearchOutlined style={{ color: "#828282" }} />}
+          prefix={<SearchOutlined style={{ color: '#828282' }} />}
           style={{ padding: 10, borderRadius: 8, width: 477 }}
         />
         <Typography.Title level={3} style={{ margin: 0 }}>
           Khám phá
         </Typography.Title>
-        <Button onClick={showModalRegister}>Đăng kí</Button>
-        <Button onClick={showModalLogin}>Đăng nhập</Button>
+        {logined ? (
+          <>
+            <ReactSVG
+              style={{ height: 40 }}
+              src='./icon/notification.svg'
+              beforeInjection={(svg) => {
+                svg.setAttribute('width', '32');
+                svg.setAttribute('height', '32');
+              }}
+            />
+            <ReactSVG
+              style={{ height: 40 }}
+              src='./icon/user.svg'
+              beforeInjection={(svg) => {
+                svg.setAttribute('width', '32');
+                svg.setAttribute('height', '32');
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Button onClick={showModalRegister}>Đăng kí</Button>
+            <Button onClick={showModalLogin}>Đăng nhập</Button>
+          </>
+        )}
       </div>
     </Layout.Header>
   );
