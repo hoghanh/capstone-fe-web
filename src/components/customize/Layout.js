@@ -4,7 +4,7 @@ import color from '../../styles/color';
 
 const CustomCard = ({ children, ...rest }) => {
   return (
-    <Card style={{ padding: 10, ...rest.style }}>
+    <Card style={{ boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)', padding: 10, ...rest.style }}>
       {children}
     </Card>
   );

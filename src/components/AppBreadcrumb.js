@@ -19,6 +19,13 @@ const routes = [
     name: 'List Jobs',
     title: 'Find Freelance Work',
   },
+
+  {
+    path: '/jobDetail',
+    component: lazy(() => import('../pages/JobDetail')),
+    name: 'Job Detail',
+    title: 'Chi tiết dự án',
+  },
 ];
 
 function itemRender(route, params, routes, paths) {

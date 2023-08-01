@@ -1,184 +1,306 @@
 import React from 'react';
-import Header from '../layout/header/Header';
-import Footer from '../layout/footer/Footer';
-import { Breadcrumb, Layout, Row, Col, Typography, Divider } from 'antd';
+import { Breadcrumb, Layout, Row, Col, Typography, Button } from 'antd';
 import { HomeOutlined, ClockCircleFilled } from '@ant-design/icons';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from '../components/customize/Layout';
-import { BookMarkOutlined, PaperClipOutlined } from '../components/icon/Icon';
+import {
+  AddressCard,
+  BookMarkOutlined,
+  CreditCard,
+  Donate,
+  Envelope,
+  MapMarkerAlt,
+  PaperClipOutlined,
+  PhoneAlt,
+} from '../components/icon/Icon';
 import color from '../styles/color';
-
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
+import AppBreadcrumb from '../components/AppBreadcrumb';
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
+const ArticleRight = () => {
+  return (
+    <Col span={18} style={{ paddingRight: 20 }}>
+      {/* Header Body right  */}
+      <CustomRow>
+        <CustomCol span={11} style={styles.headerRight}>
+          <Typography.Title style={styles.headerTitleRight}>Chi tiết dự án</Typography.Title>
+          <Typography.Text style={styles.headerTextRight}>5 Freelancer đã ứng tuyển</Typography.Text>
+        </CustomCol>
+        <CustomCol
+          span={11}
+          style={{
+            ...styles.headerRight,
+            alignItems: 'flex-end',
+          }}
+        >
+          <Typography.Title style={styles.headerTitleRight}>000.000VND - 000.000VND</Typography.Title>
+          <div>
+            <ClockCircleFilled />
+            <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
+              Thời gian ứng tuyển còn lại 4 ngày
+            </Typography.Text>
+          </div>
+        </CustomCol>
+        <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <BookMarkOutlined />
+        </Col>
+      </CustomRow>
+      <CustomDivider />
+      {/* Description */}
+      <Row>
+        <CustomCol span={24}>
+          <Row gutter={[0, 20]}>
+            <Col span={24}>
+              <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
+                Lorem ipsum dolor sit amet consectetur. Malesuada viverra risus condimentum integer tortor. Tempus
+                cursus risus commodo lorem elit id. Sed et dolor dictum faucibus. Enim tellus et egestas nisi maecenas
+                turpis nunc. Turpis eu fermentum pretium purus sapien purus. Mi sollicitudin lacus mauris eu
+                pellentesque amet iaculis dignissim sit. Neque morbi in nec viverra id integer. Donec id gravida
+                elementum arcu in aliquam nullam nibh sit.
+              </Typography.Text>
+            </Col>
+            <Col span={24}>
+              <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
+                Cursus diam natoque orci pulvinar elit. Suspendisse sit nunc velit mauris interdum laoreet faucibus nunc
+                ut. Diam posuere elementum justo tristique neque at in nisl aliquam. Vitae mi at morbi pretium.
+                Facilisis at egestas facilisis cras. Praesent at dolor lectus vivamus ipsum at platea ut ornare.
+              </Typography.Text>
+            </Col>
+            <Col span={24}>
+              <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
+                Urna molestie lobortis integer adipiscing pretium. Gravida adipiscing elementum ac quam. Porttitor odio
+                viverra convallis egestas sit. Est porttitor mauris commodo parturient pharetra. Mauris sem netus vitae
+                volutpat orci. Malesuada amet mi bibendum nulla in diam. Ipsum odio et dignissim molestie commodo
+                adipiscing feugiat aliquam. Donec facilisis ac viverra in mattis ultrices. Malesuada turpis ultrices
+                lobortis aliquam malesuada. Urna duis sed sit pellentesque facilisi id mauris id. Cursus proin tortor eu
+                vitae pellentesque quam ut et blandit. Pulvinar sed mattis nulla eget ipsum nam facilisi venenatis.
+                Rhoncus massa elementum vitae eget non consectetur nec eget. Feugiat eu ac egestas dui. Cursus purus
+                pulvinar nisl nulla et tristique dictum.
+              </Typography.Text>
+            </Col>
+            <Col span={24}>
+              <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
+                Urna molestie lobortis integer adipiscing pretium. Gravida adipiscing elementum ac quam. Porttitor odio
+                viverra convallis egestas sit. Est porttitor mauris commodo parturient pharetra. Mauris sem netus vitae
+                volutpat orci. Malesuada amet mi bibendum nulla in diam. Ipsum odio et dignissim molestie commodo
+                adipiscing feugiat aliquam. Donec facilisis ac viverra in mattis ultrices. Malesuada turpis ultrices
+                lobortis aliquam malesuada. Urna duis sed sit pellentesque facilisi id mauris id. Cursus proin tortor eu
+                vitae pellentesque quam ut et blandit. Pulvinar sed mattis nulla eget ipsum nam facilisi venenatis.
+                Rhoncus massa elementum vitae eget non consectetur nec eget. Feugiat eu ac egestas dui. Cursus purus
+                pulvinar nisl nulla et tristique dictum.
+              </Typography.Text>
+            </Col>
+          </Row>
+        </CustomCol>
+      </Row>
+      <CustomDivider />
+      {/* Attachment */}
+      <CustomRow>
+        <Col span={24}>
+          <Typography.Title style={styles.titleSection}>
+            Tệp tin đính kèm
+          </Typography.Title>
+        </Col>
+        <CustomCol span={24} style={{ display: 'flex' }}>
+          <PaperClipOutlined />
+          <Typography.Text underline={true} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}>
+            fileAttachName.doc
+          </Typography.Text>
+        </CustomCol>
+      </CustomRow>
+      <CustomDivider />
+      {/* Skill Require */}
+      <CustomRow gutter={[0, 10]}>
+        <Col span={24}>
+          <Typography.Title style={{ fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: 0 }}>
+            Yêu cầu kỹ năng
+          </Typography.Title>
+        </Col>
+        <CustomCol span={24} style={{ display: 'flex', gap: 15, flexDirection: 'row' }}>
+          {Skill.map((item) => {
+            return (
+              <Typography.Text
+                key={item}
+                style={{
+                  fontWeight: 700,
+                  fontSize: 14,
+                  padding: '5px 10px',
+                  backgroundColor: color.colorBluishCyan,
+                  borderRadius: 25,
+                }}
+              >
+                {item}
+              </Typography.Text>
+            );
+          })}
+        </CustomCol>
+      </CustomRow>
+      <Row>
+        <Col span={24}></Col>
+      </Row>
+    </Col>
+  );
+};
+
+const InformationLeft = () => {
+  return (
+    <Col span={6} style={{ paddingLeft: 10, borderLeft: `1px solid ${color.colorBlueWhale}` }}>
+      <Row style={{ justifyContent: 'center' }}>
+        {/* Đăng nhập và phân quyền nếu đăng nhập  */}
+        <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+            style={{
+              fontWeight: 700,
+              fontSize: 16,
+              height: 'auto',
+              padding: '12px 32px',
+              backgroundColor: color.colorBluishCyan,
+              borderRadius: 25,
+              color: color.colorBlueWhale,
+              border: 0,
+            }}
+          >
+            Đăng nhập
+          </Button>
+        </Col>
+
+        <CustomDivider />
+
+        {/* Về khách hàng */}
+
+        <CustomRow gutter={[0, 10]}>
+          <Col span={24}>
+            <Typography.Title
+              style={{
+                fontSize: '18px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                margin: '0 0 0 -10px',
+                paddingBottom: 20,
+              }}
+            >
+              Về khách hàng
+            </Typography.Title>
+          </Col>
+          <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
+            <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Công ty</Typography.Text>
+            <Typography.Title
+              style={{
+                fontSize: 16,
+                fontStyle: 'normal',
+                fontWeight: 700,
+                margin: '0 0 10px 0',
+                textAlign: 'center',
+              }}
+            >
+              CÔNG TY CỔ PHẦN FOODY
+            </Typography.Title>
+          </CustomCol>
+          <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
+            <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Bài viết đã đăng</Typography.Text>
+            <Typography.Title
+              style={{
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                margin: '0 0 10px 0',
+                textAlign: 'center',
+              }}
+            >
+              3 bài viết đã đăng
+            </Typography.Title>
+          </CustomCol>
+        </CustomRow>
+
+        <CustomDivider />
+
+        {/* Xác minh */}
+
+        <CustomRow gutter={[0, 10]}>
+          <Col span={24}>
+            <Typography.Title style={{ fontSize: '18px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 0 -5px' }}>
+              Xác minh
+            </Typography.Title>
+          </Col>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <AddressCard />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+              Đã xác minh danh tính
+            </Typography.Text>
+          </CustomCol>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <Donate />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+              Đã xác minh thanh toán
+            </Typography.Text>
+          </CustomCol>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <Envelope />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+              Đã xác minh địa chỉ email
+            </Typography.Text>
+          </CustomCol>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <CreditCard />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+              Chưa xác minh hình thức thanh toán
+            </Typography.Text>
+          </CustomCol>
+        </CustomRow>
+        <CustomDivider />
+
+        {/* Thông tin sơ bộ */}
+        <CustomRow gutter={[0, 10]}>
+          <Col span={24}>
+            <Typography.Title style={{ fontSize: '18px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 0 -5px' }}>
+              Thông tin sơ bộ
+            </Typography.Title>
+          </Col>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <MapMarkerAlt />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>Địa chỉ</Typography.Text>
+          </CustomCol>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <Envelope />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+              FoodyEmterprise@gmail.com{' '}
+            </Typography.Text>
+          </CustomCol>
+          <CustomCol span={24} style={{ display: 'flex' }}>
+            <PhoneAlt />
+            <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>Số điện thoại </Typography.Text>
+          </CustomCol>
+        </CustomRow>
+      </Row>
+    </Col>
+  );
+};
+
 const JobDetail = ({ props }) => {
-  console.log(props);
   return (
     <>
-      <Header />
       <Layout.Content style={styles.containerBody}>
-        <Breadcrumb
-          style={{ padding: '10px 20px' }}
-          items={[
-            {
-              href: '',
-              title: <HomeOutlined />,
-            },
-            {
-              href: '',
-              title: (
-                <>
-                  {/* <UserOutlined /> */}
-                  <span>Graphics & Design</span>
-                </>
-              ),
-            },
-            {
-              title: 'Logo Design',
-            },
-          ]}
-        />
-        <Typography.Title style={{ padding: '10px 30px', margin: '20px 0', fontSize: 24 }} level={3}>
+        <AppBreadcrumb />
+        <Typography.Title style={styles.titlePost} level={3}>
           Javascript expert with Next.js and React.js expertise
         </Typography.Title>
         <CustomCard>
-          <CustomRow>
-            <Col span={18}>
-              {/* Header Body right  */}
-              <CustomRow>
-                <CustomCol span={11} style={styles.headerRight}>
-                  <Typography.Title style={styles.headerTitleRight}>Project Detail</Typography.Title>
-                  <Typography.Text style={styles.headerTextRight}>5 Freelancer had applied</Typography.Text>
-                </CustomCol>
-                <CustomCol
-                  span={11}
-                  style={{
-                    ...styles.headerRight,
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <Typography.Title style={styles.headerTitleRight}>000.000VND - 000.000VND</Typography.Title>
-                  <div>
-                    <ClockCircleFilled />
-                    <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
-                      Apply time end in 4 days
-                    </Typography.Text>
-                  </div>
-                </CustomCol>
-                <Col span={2} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                  <BookMarkOutlined />
-                </Col>
-              </CustomRow>
-              <CustomDivider />
-              {/* Description */}
-              <Row>
-                <CustomCol span={24}>
-                  <Row gutter={[0, 20]}>
-                    <Col span={24}>
-                      <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-                        Lorem ipsum dolor sit amet consectetur. Malesuada viverra risus condimentum integer tortor.
-                        Tempus cursus risus commodo lorem elit id. Sed et dolor dictum faucibus. Enim tellus et egestas
-                        nisi maecenas turpis nunc. Turpis eu fermentum pretium purus sapien purus. Mi sollicitudin lacus
-                        mauris eu pellentesque amet iaculis dignissim sit. Neque morbi in nec viverra id integer. Donec
-                        id gravida elementum arcu in aliquam nullam nibh sit.
-                      </Typography.Text>
-                    </Col>
-                    <Col span={24}>
-                      <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-                        Cursus diam natoque orci pulvinar elit. Suspendisse sit nunc velit mauris interdum laoreet
-                        faucibus nunc ut. Diam posuere elementum justo tristique neque at in nisl aliquam. Vitae mi at
-                        morbi pretium. Facilisis at egestas facilisis cras. Praesent at dolor lectus vivamus ipsum at
-                        platea ut ornare.
-                      </Typography.Text>
-                    </Col>
-                    <Col span={24}>
-                      <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-                        Urna molestie lobortis integer adipiscing pretium. Gravida adipiscing elementum ac quam.
-                        Porttitor odio viverra convallis egestas sit. Est porttitor mauris commodo parturient pharetra.
-                        Mauris sem netus vitae volutpat orci. Malesuada amet mi bibendum nulla in diam. Ipsum odio et
-                        dignissim molestie commodo adipiscing feugiat aliquam. Donec facilisis ac viverra in mattis
-                        ultrices. Malesuada turpis ultrices lobortis aliquam malesuada. Urna duis sed sit pellentesque
-                        facilisi id mauris id. Cursus proin tortor eu vitae pellentesque quam ut et blandit. Pulvinar
-                        sed mattis nulla eget ipsum nam facilisi venenatis. Rhoncus massa elementum vitae eget non
-                        consectetur nec eget. Feugiat eu ac egestas dui. Cursus purus pulvinar nisl nulla et tristique
-                        dictum.
-                      </Typography.Text>
-                    </Col>
-                    <Col span={24}>
-                      <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-                        Urna molestie lobortis integer adipiscing pretium. Gravida adipiscing elementum ac quam.
-                        Porttitor odio viverra convallis egestas sit. Est porttitor mauris commodo parturient pharetra.
-                        Mauris sem netus vitae volutpat orci. Malesuada amet mi bibendum nulla in diam. Ipsum odio et
-                        dignissim molestie commodo adipiscing feugiat aliquam. Donec facilisis ac viverra in mattis
-                        ultrices. Malesuada turpis ultrices lobortis aliquam malesuada. Urna duis sed sit pellentesque
-                        facilisi id mauris id. Cursus proin tortor eu vitae pellentesque quam ut et blandit. Pulvinar
-                        sed mattis nulla eget ipsum nam facilisi venenatis. Rhoncus massa elementum vitae eget non
-                        consectetur nec eget. Feugiat eu ac egestas dui. Cursus purus pulvinar nisl nulla et tristique
-                        dictum.
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                </CustomCol>
-              </Row>
-              <CustomDivider />
-              {/* Attachment */}
-              <CustomRow>
-                <Col span={24}>
-                  <Typography.Title
-                    style={{ fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 10px 0' }}
-                  >
-                    Tập tin đính kèm
-                  </Typography.Title>
-                </Col>
-                <CustomCol span={24} style={{ display: 'flex' }}>
-                  <PaperClipOutlined />
-                  <Typography.Text underline={true} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}>
-                    fileAttachName.doc
-                  </Typography.Text>
-                </CustomCol>
-              </CustomRow>
-              <CustomDivider />
-              {/* Skill Require */}
-              <CustomRow gutter={[15, 10]}>
-                <Col span={24}>
-                  <Typography.Title
-                    style={{ fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: 0 }}
-                  >
-                    Yêu cầu kỹ năng
-                  </Typography.Title>
-                </Col>
-                <CustomCol span={24} style={{ display: 'flex' }}>
-                  {Skill.map((item) => {
-                    return (
-                      <Typography.Text
-                        key={item}
-                        style={{ fontWeight: 700, fontSize: 14, padding: '5px 10px', backgroundColor: color.colorBluishCyan  }}
-                      >
-                        {item}
-                      </Typography.Text>
-                    );
-                  })}
-                </CustomCol>
-              </CustomRow>
-              <Row>
-                <Col span={24}></Col>
-              </Row>
-            </Col>
-            <Col span={6}>col</Col>
+          <CustomRow gutter={[20, 0]}>
+            <ArticleRight />
+            <InformationLeft />
           </CustomRow>
         </CustomCard>
       </Layout.Content>
-      <Footer />
     </>
   );
 };
 //styles
 const styles = {
+  //Toàn trang
   containerBody: { maxWidth: 1400, margin: '30px 180px 80px' },
+  titlePost: { padding: '10px 30px', margin: '20px 0', fontSize: 24 },
 
-  //Body Right
+  //Article Right
   headerRight: {
     display: 'flex',
     flexDirection: 'column',
@@ -203,11 +325,15 @@ const styles = {
     fontWeight: 400,
   },
 
+  titleSection: { fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 10px 0' },
+
   iconBookmark: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  //Kỹ năng cần thiết
 };
 
 export default JobDetail;
