@@ -2,42 +2,57 @@ import React, { lazy } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
-import { HomeFilled, RightOutlined } from '@ant-design/icons';
+import { HomeFilled } from '@ant-design/icons';
+import { ReactSVG } from 'react-svg';
+
+// const AppBreadcrumb = () => {
+const routes = [
+  {
+    path: '/',
+    component: lazy(() => import('../pages/Home/HomePage')),
+    name: 'home',
+    title: <HomeFilled />,
+  },
+  {
+    path: '/jobs',
+    component: lazy(() => import('../pages/JobList')),
+    name: 'List Jobs',
+    title: 'Find Freelance Work',
+  },
+];
+
+function itemRender(route, params, routes, paths) {
+  const last = routes.indexOf(route) === routes.length - 1;
+  return last ? (
+    <span>{route.title}</span>
+  ) : (
+    <Link to={paths.join('/')}>{route.title}</Link>
+  );
+}
 
 const AppBreadcrumb = () => {
-  const routes = [
-    {
-      path: '/',
-      component: lazy(() => import('../pages/Home/HomePage')),
-      name: 'home',
-    },
-    {
-      path: '/jobs',
-      component: lazy(() => import('../pages/JobList')),
-      name: 'List Jobs',
-    },
-    {
-      path: '/jobs/trung',
-      component: lazy(() => import('../pages/JobList')),
-      name: 'List Jobs',
-    },
-  ];
   const currentLocation = useLocation().pathname;
 
   const getRouteName = (pathname, routes) => {
     const currentRoute = routes.find((route) => route.path === pathname);
-    return currentRoute ? currentRoute.name : false;
+    return currentRoute ? currentRoute.title : false;
   };
-
   const getBreadcrumbs = (location) => {
-    const breadcrumbs = [];
+    const breadcrumbs = [
+      {
+        path: '/',
+        component: lazy(() => import('../pages/Home/HomePage')),
+        name: 'Home',
+        title: <HomeFilled />,
+      },
+    ];
     location.split('/').reduce((prev, curr, index, array) => {
       const currentPathname = `${prev}/${curr}`;
       const routeName = getRouteName(currentPathname, routes);
       routeName &&
         breadcrumbs.push({
           pathname: currentPathname,
-          name: routeName,
+          title: routeName,
           active: index + 1 === array.length ? true : false,
         });
       return currentPathname;
@@ -48,27 +63,20 @@ const AppBreadcrumb = () => {
   const breadcrumbs = getBreadcrumbs(currentLocation);
 
   return (
-    <Breadcrumb className='m-0 ms-2' separator={<RightOutlined />}>
-      <Breadcrumb.Item>
-        <Link to='/'>
-          <HomeFilled />
-        </Link>
-      </Breadcrumb.Item>
-      {breadcrumbs.map((breadcrumb, index) => {
-        return (
-          <Breadcrumb.Item
-            key={index}
-            {...(breadcrumb.active ? { className: 'ant-breadcrumb-link' } : {})}
-          >
-            {breadcrumb.active ? (
-              breadcrumb.name
-            ) : (
-              <Link to={breadcrumb.pathname}>{breadcrumb.name}</Link>
-            )}
-          </Breadcrumb.Item>
-        );
-      })}
-    </Breadcrumb>
+    <Breadcrumb
+      style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
+      itemRender={itemRender}
+      items={breadcrumbs}
+      separator={
+        <ReactSVG
+          src='./icon/right.svg'
+          beforeInjection={(svg) => {
+            svg.setAttribute('width', '16');
+            svg.setAttribute('height', '6');
+          }}
+        />
+      }
+    />
   );
 };
 
