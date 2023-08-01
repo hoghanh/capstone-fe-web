@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Loading from '../components/loading/loading';
+import HeaderFooter from '../layout/defaultLayout/HeaderFooter';
 
 const routes = [
   {
@@ -17,11 +18,13 @@ const routes = [
 
 const Router = () => (
   <Suspense fallback={<Loading />}>
-    <Routes>
-      {routes.map(({ path, component: Component }) => (
-        <Route key={path} path={path} element={<Component />} exact />
-      ))}
-    </Routes>
+    <HeaderFooter>
+      <Routes>
+        {routes.map(({ path, component: Component }) => (
+          <Route key={path} path={path} element={<Component />} exact />
+        ))}
+      </Routes>
+    </HeaderFooter>
   </Suspense>
 );
 

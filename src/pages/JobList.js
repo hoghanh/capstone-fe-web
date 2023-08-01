@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from '../layout/header/Header';
 import Footer from '../layout/footer/Footer';
-import { Breadcrumb, Card, Image, Layout, Select, Typography } from 'antd';
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
+import { Card, Image, Layout, Select, Typography } from 'antd';
 import './job_list.css';
 import AppBreadcrumb from '../components/AppBreadcrumb';
+import Link from 'antd/es/typography/Link';
 
 const handleChange = (value) => {
   console.log(`selected ${value}`);
@@ -16,28 +16,17 @@ const JobList = () => {
       <Header />
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
         <AppBreadcrumb />
-        {/* <Breadcrumb
-          items={[
-            {
-              href: '',
-              title: <HomeOutlined />,
-            },
-            {
-              href: '',
-              title: (
-                <>
-                  <UserOutlined />
-                  <span>Application List</span>
-                </>
-              ),
-            },
-            {
-              title: 'Application',
-            },
-          ]}
-        /> */}
-        <Typography.Title level={3}>Logo Design</Typography.Title>
+        <Typography.Title
+          level={3}
+          style={{ padding: '10px 20px', marginBottom: 20 }}
+        >
+          Logo Design
+        </Typography.Title>
         <Card
+          style={{
+            marginBottom: 30,
+            boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
+          }}
           className='card-jobs'
           title={
             <div
@@ -95,8 +84,8 @@ const JobList = () => {
                     label: 'Latest',
                   },
                   {
-                    value: 'Latest',
-                    label: 'Latest',
+                    value: 'Oldest',
+                    label: 'Oldest',
                   },
                   {
                     value: 'Lowest Price',
@@ -123,7 +112,8 @@ const JobList = () => {
             style={{
               display: ' flex',
               alignItems: 'center',
-              margin: '20px 10px 10px 10px',
+              padding: 10,
+              borderBottom: '0.5px solid #000',
             }}
           >
             <div
@@ -148,12 +138,13 @@ const JobList = () => {
                 CÔNG TY CỔ<br></br> PHẦN FOODY
               </Typography.Title>
             </div>
-            <div style={{ width: '100%' }}>
+            <div style={{ padding: 10 }}>
               <div
                 style={{
                   display: ' flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  padding: 10,
                 }}
               >
                 <div>
@@ -175,18 +166,18 @@ const JobList = () => {
                     d='M5.49352 25.5555L5.51231 25.5905L5.53382 25.624C6.2433 26.7277 7.56456 26.8266 8.47475 26.4868L8.54052 26.4622L8.60221 26.4287L15 22.9545L21.3978 26.4287L21.4245 26.4432L21.4521 26.4561C21.6405 26.544 21.8256 26.6077 22.0338 26.6401C22.2064 26.667 22.3706 26.6667 22.4784 26.6666C22.4858 26.6666 22.4931 26.6666 22.5 26.6666C23.0824 26.6666 23.6536 26.4828 24.0886 26.0768C24.5298 25.665 24.75 25.0988 24.75 24.4999V5.83325C24.75 3.23377 22.6112 1.33325 20 1.33325H10C7.38882 1.33325 5.25 3.23377 5.25 5.83325V24.4999C5.25 24.5065 5.24999 24.5136 5.24997 24.521C5.24977 24.6207 5.24943 24.7895 5.2812 24.9674C5.31996 25.1844 5.39551 25.3725 5.49352 25.5555Z'
                     fill='white'
                     stroke='black'
-                    stroke-width='2'
+                    strokeWidth='2'
                   />
                 </svg>
               </div>
-              <p>
+              <Typography style={{ padding: 10 }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra
                 eget et volutpat dui quis quis. Eu dictum turpis ultrices in.
                 Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
                 Libero lectus venenatis, cursus id pulvinar donec tincidunt
                 tellus justo. Vitae ac aliquam, id sagittis aliquam viverra
-                dolor blandit... more
-              </p>
+                dolor blandit... <Link>more</Link>
+              </Typography>
               <div
                 style={{
                   display: 'flex',
@@ -279,11 +270,6 @@ const JobList = () => {
               </div>
               <div></div>
             </div>
-          </div>
-          <div className='line' /> {/* The line separator */}
-          <div>
-            {/* Additional content here */}
-            <p>Some other content below the line.</p>
           </div>
         </Card>
       </Layout.Content>

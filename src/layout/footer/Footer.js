@@ -1,17 +1,17 @@
-import React from "react";
-import { Row, Col, Layout, Image, Typography } from "antd";
+import React from 'react';
+import { Row, Col, Layout, Image, Typography } from 'antd';
 import {
   FacebookFilled,
   LinkedinFilled,
   InstagramFilled,
   TwitterSquareFilled,
-} from "@ant-design/icons";
-import { footer } from "../../styles/footer";
+} from '@ant-design/icons';
+import { footer } from '../../styles/footer';
 
 const Footer = () => {
   return (
     <Layout.Footer style={footer}>
-      <Row gutter={[32, 10]} style={footer.firstrow}>
+      <Row style={footer.firstrow}>
         <Col span={6}>
           <Typography.Text style={footer.text}>Về Chúng Tôi</Typography.Text>
         </Col>
@@ -47,8 +47,8 @@ const Footer = () => {
             src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
             alt='Apofoitisi logo'
             preview={false}
-          />{" "}
-          FPT-SEP
+          />{' '}
+          FPT - SEP
         </Typography.Title>
         <div style={footer.containIcon}>
           <FacebookFilled style={footer.icons} />
