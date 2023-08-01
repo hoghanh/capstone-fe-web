@@ -4,7 +4,6 @@ import Footer from '../footer/Footer';
 const HeaderFooter = ({ children }) => (
   <>
     <Header />
-
     {children}
     <Footer />
   </>
