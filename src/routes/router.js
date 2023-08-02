@@ -6,26 +6,26 @@ import HeaderFooter from '../layout/defaultLayout/HeaderFooter';
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('../pages/Home/HomePage')),
+    component: lazy(() => import('../pages/home/HomePage')),
     name: 'home',
   },
   {
-    path: "/jobs",
-    component: lazy(() => import("../pages/joblist/JobList")),
-    name: "jobs",
+    path: '/jobs',
+    component: lazy(() => import('../pages/joblist/JobList')),
+    name: 'jobs',
   },
 ];
 
 const breadcrumbroutes = [
   {
-    path: "/jobs",
-    component: lazy(() => import("../pages/joblist/JobList")),
-    name: "jobs",
+    path: '/jobs',
+    component: lazy(() => import('../pages/joblist/JobList')),
+    name: 'jobs',
   },
   {
-    path: "/jobDetail",
-    component: lazy(() => import("../pages/JobDetail")),
-    name: "jobDetail",
+    path: '/jobDetail',
+    component: lazy(() => import('../pages/JobDetail')),
+    name: 'jobDetail',
   },
 ];
 

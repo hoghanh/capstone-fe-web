@@ -9,13 +9,13 @@ import { ReactSVG } from 'react-svg';
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('../pages/Home/HomePage')),
+    component: lazy(() => import('../pages/home/HomePage')),
     name: 'home',
     title: <HomeFilled />,
   },
   {
     path: '/jobs',
-    component: lazy(() => import('../pages/JobList')),
+    component: lazy(() => import('../pages/joblist/JobList')),
     name: 'List Jobs',
     title: 'Find Freelance Work',
   },
@@ -48,7 +48,7 @@ const AppBreadcrumb = () => {
     const breadcrumbs = [
       {
         path: '/',
-        component: lazy(() => import('../pages/Home/HomePage')),
+        component: lazy(() => import('../pages/home/HomePage')),
         name: 'Home',
         title: <HomeFilled />,
       },
