@@ -14,6 +14,7 @@ import {
 } from 'components/icon/Icon';
 import color from 'styles/color';
 import AppBreadcrumb from 'components/AppBreadcrumb';
+import { useToken } from 'antd/es/theme/internal';
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
@@ -22,7 +23,9 @@ const HeaderArticle = () => {
   return (
     <CustomRow>
       <CustomCol span={11} style={styles.headerRight}>
-        <Typography.Title style={styles.headerTitleRight}>Chi tiết dự án</Typography.Title>
+        <Typography.Title level={3} style={styles.headerTitleRight}>
+          Chi tiết dự án
+        </Typography.Title>
         <Typography.Text style={styles.headerTextRight}>5 Freelancer đã ứng tuyển</Typography.Text>
       </CustomCol>
       <CustomCol
@@ -32,7 +35,9 @@ const HeaderArticle = () => {
           alignItems: 'flex-end',
         }}
       >
-        <Typography.Title style={styles.headerTitleRight}>000.000VND - 000.000VND</Typography.Title>
+        <Typography.Title level={3} style={styles.headerTitleRight}>
+          000.000VND - 000.000VND
+        </Typography.Title>
         <div>
           <ClockCircleFilled />
           <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
@@ -104,7 +109,7 @@ const AttachmentArticle = () => {
   return (
     <CustomRow>
       <Col span={24}>
-        <Typography.Title style={styles.titleSection}>Tệp tin đính kèm</Typography.Title>
+        <Typography.Title level={5} style={styles.titleSection}>Tệp tin đính kèm</Typography.Title>
       </Col>
       <CustomCol span={24} style={{ display: 'flex' }}>
         <PaperClipOutlined />
@@ -121,7 +126,7 @@ const SkillArticle = () => {
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
-        <Typography.Title style={{ fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: 0 }}>
+        <Typography.Title level={5} style={{ margin: 0 }}>
           Yêu cầu kỹ năng
         </Typography.Title>
       </Col>
@@ -153,10 +158,9 @@ const AboutCustomer = () => {
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
         <Typography.Title
+          level={4}
           style={{
-            fontSize: '18px',
             fontStyle: 'normal',
-            fontWeight: 700,
             margin: '0 0 0 -10px',
             paddingBottom: 20,
           }}
@@ -167,10 +171,8 @@ const AboutCustomer = () => {
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
         <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Công ty</Typography.Text>
         <Typography.Title
+          level={5}
           style={{
-            fontSize: 16,
-            fontStyle: 'normal',
-            fontWeight: 700,
             margin: '0 0 10px 0',
             textAlign: 'center',
           }}
@@ -181,10 +183,8 @@ const AboutCustomer = () => {
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
         <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Bài viết đã đăng</Typography.Text>
         <Typography.Title
+          level={5}
           style={{
-            fontSize: '16px',
-            fontStyle: 'normal',
-            fontWeight: 700,
             margin: '0 0 10px 0',
             textAlign: 'center',
           }}
@@ -197,11 +197,11 @@ const AboutCustomer = () => {
 };
 
 //Verified Informations
-const VerifiedInformations = () =>{
+const VerifiedInformations = () => {
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
-        <Typography.Title style={{ fontSize: '18px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 0 -5px' }}>
+        <Typography.Title level={5} style={{margin: '0 0 0 -5px' }}>
           Xác minh
         </Typography.Title>
       </Col>
@@ -231,14 +231,14 @@ const VerifiedInformations = () =>{
       </CustomCol>
     </CustomRow>
   );
-}
+};
 
 //Contact Info
-const ContactInfo = () =>{
+const ContactInfo = () => {
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
-        <Typography.Title style={{ fontSize: '18px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 0 -5px' }}>
+        <Typography.Title level={5} style={{ margin: '0 0 0 -5px' }}>
           Thông tin sơ bộ
         </Typography.Title>
       </Col>
@@ -258,7 +258,7 @@ const ContactInfo = () =>{
       </CustomCol>
     </CustomRow>
   );
-}
+};
 
 const ArticleRight = () => {
   return (
@@ -273,7 +273,6 @@ const ArticleRight = () => {
     </Col>
   );
 };
-
 
 const InformationLeft = () => {
   return (
@@ -312,7 +311,7 @@ const JobDetail = ({ props }) => {
     <>
       <Layout.Content style={styles.containerBody}>
         <AppBreadcrumb />
-        <Typography.Title style={styles.titlePost} level={3}>
+        <Typography.Title level={2} style={styles.titlePost}>
           Javascript expert with Next.js and React.js expertise
         </Typography.Title>
         <CustomCard>
@@ -328,8 +327,8 @@ const JobDetail = ({ props }) => {
 //styles
 const styles = {
   //Toàn trang
-  containerBody: { maxWidth: 1400, margin: '30px 180px 80px' },
-  titlePost: { padding: '10px 30px', margin: '20px 0', fontSize: 24 },
+  containerBody: { maxWidth: 1080, margin: '0 auto' },
+  titlePost: { padding: '10px 30px', margin: '20px 0' },
 
   //Article Right
   headerRight: {
@@ -339,11 +338,6 @@ const styles = {
   },
 
   headerTitleRight: {
-    color: '#000',
-    fontFamily: 'Montserrat',
-    fontSize: '20px',
-    fontStyle: 'normal',
-    fontWeight: 700,
     lineHeight: 'normal',
     margin: '0 0 10px 0',
   },
@@ -356,7 +350,7 @@ const styles = {
     fontWeight: 400,
   },
 
-  titleSection: { fontSize: '16px', fontStyle: 'normal', fontWeight: 700, margin: '0 0 10px 0' },
+  titleSection: { margin: '0 0 10px 0' },
 
   iconBookmark: {
     display: 'flex',
@@ -364,7 +358,6 @@ const styles = {
     alignItems: 'center',
   },
 
-  //Kỹ năng cần thiết
 };
 
 export default JobDetail;
