@@ -1,17 +1,25 @@
-import React, { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Loading from '../components/loading/loading';
+import React, { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+import Loading from "../components/loading/loading";
 
 const routes = [
   {
-    path: '/',
-    component: lazy(() => import('../pages/HomePage')),
-    name: 'home',
+    path: "/",
+    component: lazy(() => import("../pages/HomePage")),
+    name: "home",
   },
   {
-    path: '/jobs',
-    component: lazy(() => import('../pages/JobList')),
-    name: 'jobs',
+    path: "/jobs",
+    component: lazy(() => import("../pages/joblist/JobList")),
+    name: "jobs",
+  },
+];
+
+const breadcrumbroutes = [
+  {
+    path: "/jobs",
+    component: lazy(() => import("../pages/joblist/JobList")),
+    name: "jobs",
   },
 ];
 
