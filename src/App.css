@@ -39,3 +39,7 @@ body {
 .swiper-rtl .swiper-button-next:after {
   content: none !important;
 }
+
+:where(.css-dev-only-do-not-override-1651f0q).ant-card .ant-card-body{
+  padding: 0px !important;
+}
