@@ -1,64 +1,44 @@
-import React from "react";
-import { Card, Image, Layout, Select, Typography } from "antd";
-import "./jobList.css";
-import Link from "antd/es/typography/Link";
+import React, { useState } from 'react';
+import { Button, Card, Image, Layout, Select, Typography } from 'antd';
+import Link from 'antd/es/typography/Link';
+import joblist from '../../styles/joblist';
+import { FileTextFilled } from '@ant-design/icons';
 
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
 
 const JobList = () => {
+  // handleDetail = () => {};
   return (
     <>
-      <Layout.Content style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
         <Typography.Title
           level={3}
-          style={{ padding: "10px 20px", marginBottom: 20 }}
+          style={{ padding: '10px 20px', marginBottom: 20 }}
         >
           Logo Design
         </Typography.Title>
         <Card
-          style={{
-            marginBottom: 30,
-            boxShadow: "2px 6px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
+          bodyStyle={{ padding: 'unset' }}
+          style={joblist.card}
           className="card-jobs"
           title={
             <div
               style={{
-                display: "flex",
-                alignItems: "baseline",
+                display: 'flex',
+                alignItems: 'baseline',
               }}
             >
               <Typography.Title level={3}>Kết quả hàng đầu</Typography.Title>
-              <Typography.Text
-                style={{
-                  color: "#000",
-                  fontFamily: "Montserrat",
-                  fontSize: 12,
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "normal",
-                  paddingLeft: 10,
-                }}
-              >
+              <Typography.Text style={joblist.textResult}>
                 1-10 of 200 results
               </Typography.Text>
             </div>
           }
           extra={
             <div>
-              <Typography.Text
-                style={{
-                  color: "#000",
-                  fontFamily: "Montserrat",
-                  fontSize: 14,
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "normal",
-                  paddingRight: 14,
-                }}
-              >
+              <Typography.Text style={joblist.sortbyText}>
                 Sort By:
               </Typography.Text>
               <Select
@@ -67,36 +47,36 @@ const JobList = () => {
                 style={{
                   borderRadius: 8,
                   width: 200,
-                  backgroundColor: "#FFF",
-                  boxShadow: "0px 4px 14px 0px rgba(0, 0, 0, 0.10)",
-                  border: "1px solid #000",
+                  backgroundColor: '#FFF',
+                  boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
+                  border: '1px solid #000',
                 }}
                 bordered={false}
                 onChange={handleChange}
                 options={[
                   {
-                    value: "Latest",
-                    label: "Latest",
+                    value: 'Latest',
+                    label: 'Latest',
                   },
                   {
-                    value: "Oldest",
-                    label: "Oldest",
+                    value: 'Oldest',
+                    label: 'Oldest',
                   },
                   {
-                    value: "Lowest Price",
-                    label: "Lowest Price",
+                    value: 'Lowest Price',
+                    label: 'Lowest Price',
                   },
                   {
-                    value: "Highest Price",
-                    label: "Highest Price",
+                    value: 'Highest Price',
+                    label: 'Highest Price',
                   },
                   {
-                    value: "Most Applications",
-                    label: "Most Applications",
+                    value: 'Most Applications',
+                    label: 'Most Applications',
                   },
                   {
-                    value: "Lest Applications",
-                    label: "Lest Applications",
+                    value: 'Lest Applications',
+                    label: 'Lest Applications',
                   },
                 ]}
               />
@@ -105,18 +85,18 @@ const JobList = () => {
         >
           <div
             style={{
-              display: " flex",
-              alignItems: "center",
+              display: ' flex',
+              alignItems: 'center',
               padding: 10,
-              borderBottom: "0.5px solid #000",
+              borderBottom: '0.5px solid #000',
             }}
           >
             <div
               style={{
-                display: " flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
+                display: ' flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
                 gap: 5,
                 padding: 30,
                 height: 209,
@@ -127,7 +107,7 @@ const JobList = () => {
                 src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                 alt="Apofoitisi logo"
                 preview={false}
-                style={{ borderRadius: "50%" }}
+                style={{ borderRadius: '50%' }}
               />
               <Typography.Title level={4} style={{ width: 144, margin: 0 }}>
                 CÔNG TY CỔ<br></br> PHẦN FOODY
@@ -136,9 +116,9 @@ const JobList = () => {
             <div style={{ padding: 10 }}>
               <div
                 style={{
-                  display: " flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  display: ' flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   padding: 10,
                 }}
               >
@@ -165,105 +145,53 @@ const JobList = () => {
                   />
                 </svg>
               </div>
-              <Typography style={{ padding: 10 }}>
+              <Typography.Paragraph
+                ellipsis={{
+                  rows: 3,
+                  expandable: false,
+                }}
+                style={joblist.des}
+              >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra
                 eget et volutpat dui quis quis. Eu dictum turpis ultrices in.
                 Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
                 Libero lectus venenatis, cursus id pulvinar donec tincidunt
                 tellus justo. Vitae ac aliquam, id sagittis aliquam viverra
-                dolor blandit... <Link>more</Link>
-              </Typography>
+                dolor blandit...
+                <Link href="/jobdetails" target="_blank">
+                  xem thêm
+                </Link>
+              </Typography.Paragraph>
               <div
                 style={{
-                  display: "flex",
-                  padding: "0px 10px",
-                  alignItems: "flex-start",
-                  gap: "15px",
-                  alignSelf: "stretch",
+                  display: 'flex',
+                  padding: '0px 10px',
+                  alignItems: 'flex-start',
+                  gap: '15px',
+                  alignSelf: 'stretch',
                 }}
               >
-                <button
-                  style={{
-                    borderRadius: 25,
-                    background: "var(--bluish-cyan, #89DBE9)",
-                    border: "unset",
-                    padding: "3px 10px",
-                    color: "var(--blue-whale, #013042)",
-                    fontFamily: "Montserrat",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                  }}
-                >
+                <Button type="primary" style={joblist.button}>
                   Javascript
-                </button>
-                <button
-                  style={{
-                    borderRadius: 25,
-                    background: "var(--bluish-cyan, #89DBE9)",
-                    border: "unset",
-                    padding: "3px 10px",
-                    color: "var(--blue-whale, #013042)",
-                    fontFamily: "Montserrat",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                  }}
-                >
+                </Button>
+                <Button type="primary" style={joblist.button}>
                   Html
-                </button>
-                <button
-                  style={{
-                    borderRadius: 25,
-                    background: "var(--bluish-cyan, #89DBE9)",
-                    border: "unset",
-                    padding: "3px 10px",
-                    color: "var(--blue-whale, #013042)",
-                    fontFamily: "Montserrat",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                  }}
-                >
+                </Button>
+                <Button type="primary" style={joblist.button}>
                   CSS
-                </button>
-                <button
-                  style={{
-                    borderRadius: 25,
-                    background: "var(--bluish-cyan, #89DBE9)",
-                    border: "unset",
-                    padding: "3px 10px",
-                    color: "var(--blue-whale, #013042)",
-                    fontFamily: "Montserrat",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                  }}
-                >
+                </Button>
+                <Button type="primary" style={joblist.button}>
                   NextJS
-                </button>
-                <button
-                  style={{
-                    borderRadius: 25,
-                    background: "var(--bluish-cyan, #89DBE9)",
-                    border: "unset",
-                    padding: "3px 10px",
-                    color: "var(--blue-whale, #013042)",
-                    fontFamily: "Montserrat",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                  }}
-                >
+                </Button>
+                <Button type="primary" style={joblist.button}>
                   ReactJS
-                </button>
+                </Button>
               </div>
-              <div></div>
+              <div style={joblist.applied}>
+                <Typography.Title level={5} style={joblist.applied.text}>
+                  4 applied <FileTextFilled />
+                </Typography.Title>
+              </div>
             </div>
           </div>
         </Card>
