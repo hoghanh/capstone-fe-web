@@ -21,7 +21,7 @@ const routes = [
   },
 
   {
-    path: '/jobDetail',
+    path: '/job-detail',
     component: lazy(() => import('../pages/JobDetail/JobDetail')),
     name: 'Job Detail',
     title: 'Chi tiết dự án',
