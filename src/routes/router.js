@@ -6,7 +6,7 @@ import Loading from 'components/loading/loading';
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('pages/Home/HomePage')),
+    component: lazy(() => import('pages/home/HomePage')),
     name: 'home',
   },
   {
@@ -17,7 +17,7 @@ const routes = [
 
   {
     path: "/jobDetail",
-    component: lazy(() => import("pages/JobDetail/JobDetail")),
+    component: lazy(() => import("pages/jobdetail/JobDetail")),
     name: "jobDetail",
   },
 ];
@@ -30,7 +30,7 @@ const breadcrumbroutes = [
   },
   {
     path: "/jobDetail",
-    component: lazy(() => import("pages/JobDetail/JobDetail")),
+    component: lazy(() => import("pages/jobdetail/JobDetail")),
     name: "jobDetail",
   },
 ];
