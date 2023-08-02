@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: '/jobs',
-    component: lazy(() => import('../pages/JobList')),
+    component: lazy(() => import('../pages/joblist/JobList')),
     name: 'List Jobs',
     title: 'Find Freelance Work',
   },

@@ -14,6 +14,12 @@ const routes = [
     component: lazy(() => import("../pages/joblist/JobList")),
     name: "jobs",
   },
+
+  {
+    path: "/jobDetail",
+    component: lazy(() => import("../pages/JobDetail")),
+    name: "jobDetail",
+  },
 ];
 
 const breadcrumbroutes = [
