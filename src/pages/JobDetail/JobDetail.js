@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Row, Col, Typography, Button } from 'antd';
 import { ClockCircleFilled } from '@ant-design/icons';
-import { CustomCard, CustomCol, CustomDivider, CustomRow } from '../components/customize/Layout';
+import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import {
   AddressCard,
   BookMarkOutlined,
@@ -11,9 +11,9 @@ import {
   MapMarkerAlt,
   PaperClipOutlined,
   PhoneAlt,
-} from '../components/icon/Icon';
-import color from '../styles/color';
-import AppBreadcrumb from '../components/AppBreadcrumb';
+} from 'components/icon/Icon';
+import color from 'styles/color';
+import AppBreadcrumb from 'components/AppBreadcrumb';
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 

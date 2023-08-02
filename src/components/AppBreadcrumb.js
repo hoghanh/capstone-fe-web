@@ -22,7 +22,7 @@ const routes = [
 
   {
     path: '/jobDetail',
-    component: lazy(() => import('../pages/JobDetail')),
+    component: lazy(() => import('../pages/JobDetail/JobDetail')),
     name: 'Job Detail',
     title: 'Chi tiết dự án',
   },

@@ -1,23 +1,23 @@
 import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Loading from '../components/loading/loading';
-import HeaderFooter from '../layout/defaultLayout/HeaderFooter';
+import HeaderFooter from 'layout/defaultLayout/HeaderFooter';
+import Loading from 'components/loading/loading';
 
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('../pages/Home/HomePage')),
+    component: lazy(() => import('pages/Home/HomePage')),
     name: 'home',
   },
   {
     path: "/jobs",
-    component: lazy(() => import("../pages/joblist/JobList")),
+    component: lazy(() => import("pages/joblist/JobList")),
     name: "jobs",
   },
 
   {
     path: "/jobDetail",
-    component: lazy(() => import("../pages/JobDetail")),
+    component: lazy(() => import("pages/JobDetail/JobDetail")),
     name: "jobDetail",
   },
 ];
@@ -25,12 +25,12 @@ const routes = [
 const breadcrumbroutes = [
   {
     path: "/jobs",
-    component: lazy(() => import("../pages/joblist/JobList")),
+    component: lazy(() => import("pages/joblist/JobList")),
     name: "jobs",
   },
   {
     path: "/jobDetail",
-    component: lazy(() => import("../pages/JobDetail")),
+    component: lazy(() => import("pages/JobDetail/JobDetail")),
     name: "jobDetail",
   },
 ];
