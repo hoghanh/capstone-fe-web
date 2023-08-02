@@ -5,11 +5,21 @@ body {
 .ant-typography  a {
   color: #02ADFD
 }
+
 .ant-btn-primary {
-  color: #FFF;
-  border-radius: 12px;
-  border: 1px solid var(--artyclick-sky-blue, #02ADFD);
-  background: #02ADFD;
+  color: #013042;
+  border-radius: 25px;
+  border: 1px solid var(--bluish-cyan, #89DBE9);
+  background: var(--bluish-cyan, #89DBE9);
+  font-weight: 700;
+}
+
+.ant-btn-primary:not(:disabled):hover {
+  color: #013042;
+  border-radius: 25px;
+  border: 1px solid var(--bluish-cyan, #89DBE9);
+  background: var(--bluish-cyan, #89DBE9);
+  font-weight: 700;
 }
 
 .ant-btn-default {
