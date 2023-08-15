@@ -60,7 +60,7 @@ function SearchBar() {
   };
 
   return (
-    <Layout.Header style={{ background: '#ffffff' }}>
+    <Layout.Header style={{ background: '#F7F8F9' }}>
       {/* Modal Register */}
       <Modal
         width={450}
