@@ -60,7 +60,7 @@ function SearchBar() {
   };
 
   return (
-    <Layout.Header style={{ background: '#F7F8F9' }}>
+    <Layout.Header style={{ background: '#FFFFFF' }}>
       {/* Modal Register */}
       <Modal
         width={450}
@@ -165,7 +165,11 @@ function SearchBar() {
         <Input
           placeholder='Tìm kiếm'
           prefix={<SearchOutlined style={{ color: '#828282' }} />}
-          style={{ padding: 10, borderRadius: 8, width: 477 }}
+          style={{
+            padding: 10,
+            borderRadius: 8,
+            width: 477,
+          }}
         />
         <Typography.Title level={3} style={{ margin: 0 }}>
           Khám phá

@@ -47,7 +47,7 @@ const JobList = () => {
                 style={{
                   borderRadius: 8,
                   width: 200,
-                  backgroundColor: '#F7F8F9',
+                  backgroundColor: '#FFFFFF',
                   boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
                   border: '1px solid #000',
                 }}

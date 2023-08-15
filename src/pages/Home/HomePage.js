@@ -4,12 +4,13 @@ import Banner2 from './Banner2';
 import Banner3 from './Banner3';
 import JobPopular from './JobPopular';
 import { Layout } from 'antd';
+import theme from '../../styles/theme';
 
 const HomePage = () => {
   return (
     <>
       <Banner1 />
-      <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
+      <Layout.Content style={theme.responseWidth}>
         <JobPopular />
       </Layout.Content>
       <Banner2 />
