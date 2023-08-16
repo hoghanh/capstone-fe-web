@@ -1,6 +1,7 @@
 // CustomCard.js
 import { Card, Col, Divider, Row } from 'antd';
 import color from '../../styles/color';
+import styled, { css } from 'styled-components';
 
 const CustomCard = ({ children, ...rest }) => {
   return (
@@ -34,8 +35,13 @@ const SizeBox = ({ children, ...rest }) => {
   );
 };
 
-const CustomDivider = ({...rest})=>{
-  return <Divider style={{...rest.style, backgroundColor: color.colorBlueWhale, margin: '0 0 10px 0'}}/>
-}
+const CustomDivider = styled(Divider)`
+  background-color: ${color.colorBlueWhale};
+  margin: 0 0 10px 0;
+  ${props => props.$primary && css `
+    margin: 0;
+  `}
+`;
+
 
 export { CustomCard, CustomRow, CustomCol, SizeBox, CustomDivider };
