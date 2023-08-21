@@ -1,9 +1,11 @@
 import { Col, Image, Row, Typography } from 'antd';
 import { ButtonIcon, ButtonPrimary } from 'components/button/GlobalButton';
-import { CustomCard, CustomCol, CustomDivider } from 'components/customize/Layout';
-import { MapMarkerAlt, Pen, Plus } from 'components/icon/Icon';
-import {CheckCircleFilled} from '@ant-design/icons';
+import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
+import { MapMarkerAlt, Pen, Plus, Star } from 'components/icon/Icon';
 import React from 'react';
+import color from 'styles/color';
+
+const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
 // Header section
 const HeaderSection = () => {
@@ -11,7 +13,7 @@ const HeaderSection = () => {
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <Col>
         <Row>
-          <Col style={{ display: 'flex', alignItems: 'center', marginRight: 10, position: 'absolute' }}>
+          <Col style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
             <Image
               width={72}
               src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -19,9 +21,7 @@ const HeaderSection = () => {
               preview={false}
               style={{ borderRadius: '50%' }}
             />
-            <div>
-            {/* <CheckCircleFilled /> */}
-            </div>
+            <div>{/* <CheckCircleFilled /> */}</div>
           </Col>
           <CustomCol>
             <Typography.Title level={2} style={styles.nameUser}>
@@ -41,7 +41,9 @@ const HeaderSection = () => {
       <Col>
         <Row gutter={[20, 0]}>
           <Col>
-            <ButtonPrimary $primary>Nộp CV/Resume</ButtonPrimary>
+            <ButtonPrimary $primary style={{ border: `1px solid ${color.colorDeactivate}` }}>
+              Nộp CV/Resume
+            </ButtonPrimary>
           </Col>
           <Col>
             <ButtonPrimary>Chỉnh sửa thông tin</ButtonPrimary>
@@ -157,8 +159,207 @@ const BodySectionLeft = () => {
 //Body Section Right
 const BodySectionRight = () => {
   return (
-    <Col>
-      <Typography.Text>Hello</Typography.Text>
+    <Col span={16}>
+      <Row>
+        <Col span={24}>
+          <Row>
+            <Col span={24} style={{ padding: 20 }}>
+              <Row align={'middle'}>
+                <Col>
+                  <Typography.Title level={3} style={{ margin: 0, paddingRight: 30 }}>
+                    Software Engineer | Javascript
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <ButtonIcon>
+                    <Pen />
+                  </ButtonIcon>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={24} style={{ padding: 20 }}>
+              <Row align={'middle'} gutter={30}>
+                <Col span={21}>
+                  <Typography.Text>
+                    I’m a developer with experience in building websites for small and medium sized businesses. Whether
+                    you’re trying to win work, list your services or even create a whole online store – I can help! I’m
+                    experienced in HTML and CSS 3, JavaScipt, ReactJS and React Native Regular communication is really
+                    important to me, so let’s keep in touch!
+                  </Typography.Text>
+                </Col>
+                <Col span={3}>
+                  <ButtonIcon>
+                    <Pen />
+                  </ButtonIcon>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Col>
+        <CustomDivider $primary />
+        <Col span={24}>
+          <Row>
+            <Col span={24} style={{ padding: 20 }}>
+              <Row align={'middle'}>
+                <Col>
+                  <Typography.Title level={4} style={{ margin: 0, paddingRight: 30 }}>
+                    Skill
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <ButtonIcon>
+                    <Pen />
+                  </ButtonIcon>
+                </Col>
+              </Row>
+            </Col>
+            <Col span={24} style={{ padding: 20 }}>
+              <Row align={'middle'}>
+                <CustomCol span={24} style={{ display: 'flex', gap: 15, flexDirection: 'row' }}>
+                  {Skill.map((item) => {
+                    return (
+                      <Typography.Text
+                        key={item}
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          padding: '5px 10px',
+                          backgroundColor: color.colorBluishCyan,
+                          borderRadius: 25,
+                        }}
+                      >
+                        {item}
+                      </Typography.Text>
+                    );
+                  })}
+                </CustomCol>
+              </Row>
+            </Col>
+          </Row>
+        </Col>
+        <CustomDivider $primary />
+        <Col span={24}>
+          <Row>
+            <Col span={24} style={{ padding: 20 }}>
+              <Row align={'middle'}>
+                <Col>
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    Work History
+                  </Typography.Title>
+                </Col>
+              </Row>
+            </Col>
+
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]} style={{ paddingRight: 30, paddingLeft: 30 }}>
+                <Col span={24}>
+                  <Typography.Title level={5} style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}>
+                    Javascript expert with Next.js and React.js expertise
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Row gutter={10} align={'middle'}>
+                    <Col style={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+                      <div
+                        style={{ display: 'flex', direction: 'row', alignItems: 'center', padding: 5, marginRight: 5 }}
+                      >
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                      </div>
+                      <Typography.Text style={{ fontSize: 16, marginTop: 2 }}>5.00</Typography.Text>
+                    </Col>
+                    <Col>
+                      <Typography.Text style={{ color: color.colorDeactivate }}>
+                        Jul 8, 2020 - Mar 8, 2023
+                      </Typography.Text>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text style={{ color: color.colorDeactivate, fontStyle: 'italic' }}>
+                    “Great work!”
+                  </Typography.Text>
+                </Col>
+              </CustomRow>
+            </Col>
+            <CustomDivider $primary />
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]} style={{ paddingRight: 30, paddingLeft: 30 }}>
+                <Col span={24}>
+                  <Typography.Title level={5} style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}>
+                    Javascript expert with Next.js and React.js expertise
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Row gutter={10} align={'middle'}>
+                    <Col style={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+                      <div
+                        style={{ display: 'flex', direction: 'row', alignItems: 'center', padding: 5, marginRight: 5 }}
+                      >
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                      </div>
+                      <Typography.Text style={{ fontSize: 16, marginTop: 2 }}>5.00</Typography.Text>
+                    </Col>
+                    <Col>
+                      <Typography.Text style={{ color: color.colorDeactivate }}>
+                        Jul 8, 2020 - Mar 8, 2023
+                      </Typography.Text>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text style={{ color: color.colorDeactivate, fontStyle: 'italic' }}>
+                    “Great work!”
+                  </Typography.Text>
+                </Col>
+              </CustomRow>
+            </Col>
+            <CustomDivider $primary />
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]} style={{ paddingRight: 30, paddingLeft: 30 }}>
+                <Col span={24}>
+                  <Typography.Title level={5} style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}>
+                    Javascript expert with Next.js and React.js expertise
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Row gutter={10} align={'middle'}>
+                    <Col style={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+                      <div
+                        style={{ display: 'flex', direction: 'row', alignItems: 'center', padding: 5, marginRight: 5 }}
+                      >
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                      </div>
+                      <Typography.Text style={{ fontSize: 16, marginTop: 2 }}>5.00</Typography.Text>
+                    </Col>
+                    <Col>
+                      <Typography.Text style={{ color: color.colorDeactivate }}>
+                        Jul 8, 2020 - Mar 8, 2023
+                      </Typography.Text>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text style={{ color: color.colorDeactivate, fontStyle: 'italic' }}>
+                    “Great work!”
+                  </Typography.Text>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     </Col>
   );
 };
@@ -167,8 +368,8 @@ const BodySectionRight = () => {
 const BodySection = () => {
   return (
     <Row>
-      <BodySectionLeft/>
-      <BodySectionRight/>
+      <BodySectionLeft />
+      <BodySectionRight />
     </Row>
   );
 };
@@ -176,7 +377,7 @@ const BodySection = () => {
 const Section1 = () => {
   return (
     <>
-      <CustomCard style={{ padding: 0 }}>
+      <CustomCard style={{ padding: 0, marginBottom: 30 }}>
         {/* Header section */}
         <HeaderSection />
         <CustomDivider $primary />
@@ -186,6 +387,7 @@ const Section1 = () => {
     </>
   );
 };
+
 
 const styles = {
   nameUser: {
