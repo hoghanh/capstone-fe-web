@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
-import {
-  Input,
-  Image,
-  Typography,
-  Button,
-  Layout,
-  Modal,
-  Checkbox,
-} from 'antd';
+import { Input, Image, Typography, Button, Layout } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import GoogleLoginButton from '../../components/button/GoogleLoginButton';
-import Link from 'antd/es/typography/Link';
-import { home } from '../../styles/homepage';
+
 import { ReactSVG } from 'react-svg';
+
+import RegisterModal from './RegisterModal';
+import LoginModal from './LoginModal';
 
 function SearchBar() {
   const [loading, setLoading] = useState(false);
+
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
 
@@ -60,90 +54,23 @@ function SearchBar() {
   };
 
   return (
-    <Layout.Header style={{ background: '#ffffff' }}>
+    <Layout.Header style={{ background: '#FFFFFF' }}>
       {/* Modal Register */}
-      <Modal
-        width={450}
-        open={openRegister}
-        title={<div style={{ height: 45 }}></div>}
-        onOk={handleOkRegister}
+      <RegisterModal
+        visible={openRegister}
         onCancel={handleCancelRegister}
-        footer={
-          <Typography style={home.login.footerModal}>
-            Đã là thành viên?{' '}
-            <Link onClick={() => handleMove('login')}>
-              <b>Đăng nhập</b>
-            </Link>
-          </Typography>
-        }
-        bodyStyle={home.login.bodyModal}
-      >
-        <Typography.Title
-          level={3}
-          style={{ textAlign: 'center', margin: 0, padding: '15px 10px' }}
-        >
-          Trở thành thành viên FPT-SEP
-        </Typography.Title>
-        <GoogleLoginButton />
-        <div style={home.login.contain}>
-          <div style={home.login.line}></div>
-          <Typography style={home.login.or}>HOẶC</Typography>
-          <div style={home.login.line}></div>
-        </div>
-        <Input placeholder='Email' style={home.login.input} />
-        <Input.Password placeholder='Mật khẩu' style={home.login.input} />
-        <Typography.Text style={home.login.remindText}>
-          8 characters or longer. Combine upper and lowercase letters and
-          numbers.
-        </Typography.Text>
-        <Button type='primary' style={home.login.button}>
-          Đăng Kí
-        </Button>
-      </Modal>
+        onOk={handleOkRegister}
+        handleMove={handleMove}
+      />
 
-      {/* Modal login */}
-      <Modal
-        title={<div style={{ height: 45 }}></div>}
-        width={450}
-        open={openLogin}
-        onOk={handleOkLogin}
+      {/* Modal Login */}
+      <LoginModal
+        visible={openLogin}
         onCancel={handleCancelLogin}
-        footer={
-          <Typography style={home.login.footerModal}>
-            Chưa phải thành viên?{' '}
-            <Link onClick={() => handleMove('register')}>
-              <b>Tham gia ngay</b>
-            </Link>
-          </Typography>
-        }
-        bodyStyle={home.login.bodyModal}
-      >
-        <Typography.Title
-          level={3}
-          style={{ textAlign: 'center', margin: 0, padding: '15px 10px' }}
-        >
-          Đăng nhập FPT-SEP
-        </Typography.Title>
-        <GoogleLoginButton />
-        <div style={home.login.contain}>
-          <div style={home.login.line}></div>
-          <Typography style={home.login.or}>HOẶC</Typography>
-          <div style={home.login.line}></div>
-        </div>
-        <Input placeholder='Email' style={home.login.input} />
-        <Input.Password placeholder='Mật khẩu' style={home.login.input} />
-        <div style={home.login.contain}>
-          <Checkbox>Nhớ tài khoản</Checkbox>
-          <Typography>
-            <Link>
-              <b>Quên Mật Khẩu</b>
-            </Link>
-          </Typography>
-        </div>
-        <Button type='primary' style={home.login.button}>
-          Đăng Nhập
-        </Button>
-      </Modal>
+        onOk={handleOkLogin}
+        handleMove={handleMove}
+      />
+
       <div
         style={{
           maxWidth: 1080,
@@ -165,7 +92,11 @@ function SearchBar() {
         <Input
           placeholder='Tìm kiếm'
           prefix={<SearchOutlined style={{ color: '#828282' }} />}
-          style={{ padding: 10, borderRadius: 8, width: 477 }}
+          style={{
+            padding: 10,
+            borderRadius: 8,
+            width: 477,
+          }}
         />
         <Typography.Title level={3} style={{ margin: 0 }}>
           Khám phá

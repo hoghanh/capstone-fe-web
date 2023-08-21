@@ -6,7 +6,7 @@ export const footer = {
   marginTop: 80,
   padding: '30px 0',
   text: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontWeight: 700,
   },
   firstrow: {
@@ -20,14 +20,14 @@ export const footer = {
     borderBottom: '1px solid #EDF6FF',
   },
   containIcon: { display: 'flex', justifyContent: 'center', gap: 10 },
-  icons: { fontSize: 25, color: '#fff' },
+  icons: { fontSize: 25, color: '#FFFFFF' },
   name: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     height: 50,
     text: {
-      color: '#fff',
+      color: '#FFFFFF',
     },
   },
 };

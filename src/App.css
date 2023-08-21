@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background-color: #F7F8F9
 }
 
 .ant-typography  a {
@@ -26,7 +27,7 @@ body {
   color: #02ADFD;
   border-radius: 12px;
   border: 1px solid var(--artyclick-sky-blue, #02ADFD);
-  background: var(--background, #FFF);
+  background: var(--background, #FFFFFF);
 }
 
 .ant-modal-content {
