@@ -169,7 +169,7 @@ const AboutCustomer = () => {
         </Typography.Title>
       </Col>
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Công ty</Typography.Text>
+        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>Công ty</Typography.Text>
         <Typography.Title
           level={5}
           style={{
@@ -181,7 +181,7 @@ const AboutCustomer = () => {
         </Typography.Title>
       </CustomCol>
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Bài viết đã đăng</Typography.Text>
+        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>Bài viết đã đăng</Typography.Text>
         <Typography.Title
           level={5}
           style={{
@@ -324,6 +324,7 @@ const JobDetail = ({ props }) => {
     </>
   );
 };
+
 //styles
 const styles = {
   //Toàn trang
