@@ -1,5 +1,5 @@
 const config = {
-  APP_API_URL: "http://localhost:8080",
+  APP_API_URL: "https://fpt-sep.onrender.com",
   LOCALSTORAGE_TOKEN_NAME: "token",
 };
 
