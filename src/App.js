@@ -17,6 +17,12 @@ const App = () => (
         fontSizeHeading3: 20,
         fontSizeHeading4: 18,
         fontSizeHeading5: 16,
+        // size Screen
+        screenSM: 576,
+        screenMD: 768,
+        screenLG: 992,
+        screenXL: 1200,
+        screenXXL: 1600,
       },
     }}
   >

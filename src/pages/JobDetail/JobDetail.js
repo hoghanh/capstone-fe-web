@@ -17,7 +17,6 @@ import AppBreadcrumb from 'components/AppBreadcrumb';
 import LoginModal from 'layout/header/LoginModal';
 import Section2 from './Section2';
 
-
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
 //Header Article right
@@ -111,7 +110,9 @@ const AttachmentArticle = () => {
   return (
     <CustomRow>
       <Col span={24}>
-        <Typography.Title level={5} style={styles.titleSection}>Tệp tin đính kèm</Typography.Title>
+        <Typography.Title level={5} style={styles.titleSection}>
+          Tệp tin đính kèm
+        </Typography.Title>
       </Col>
       <CustomCol span={24} style={{ display: 'flex' }}>
         <PaperClipOutlined />
@@ -203,7 +204,7 @@ const VerifiedInformations = () => {
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
-        <Typography.Title level={5} style={{margin: '0 0 0 -5px' }}>
+        <Typography.Title level={5} style={{ margin: '0 0 0 -5px' }}>
           Xác minh
         </Typography.Title>
       </Col>
@@ -276,8 +277,7 @@ const ArticleRight = () => {
   );
 };
 
-const InformationLeft = ({showModalLogin}) => {
-
+const InformationLeft = ({ showModalLogin }) => {
   return (
     <Col span={6} style={{ paddingLeft: 10, borderLeft: `1px solid ${color.colorBlueWhale}` }}>
       <Row style={{ justifyContent: 'center' }}>
@@ -309,7 +309,10 @@ const InformationLeft = ({showModalLogin}) => {
             </Col>
             <CustomCol span={24} style={{ display: 'flex' }}>
               <PaperClipOutlined />
-              <Typography.Text underline={false} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}>
+              <Typography.Text
+                underline={false}
+                style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+              >
                 HopDongLamViec.pdf
               </Typography.Text>
             </CustomCol>
@@ -345,25 +348,25 @@ const JobDetail = ({ props }) => {
   };
 
   return (
-      <Layout.Content style={styles.containerBody}>
-        <LoginModal
+    <Layout.Content style={styles.containerBody}>
+      <LoginModal
         visible={openLogin}
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
         // handleMove={handleMove}
       />
-        <AppBreadcrumb />
-        <Typography.Title level={2} style={styles.titlePost}>
-          Javascript expert with Next.js and React.js expertise
-        </Typography.Title>
-        <CustomCard style={{marginBottom: 30}}>
-          <CustomRow gutter={[20, 0]}>
-            <ArticleRight />
-            <InformationLeft showModalLogin={showModalLogin} />
-          </CustomRow>
-        </CustomCard>
-        <Section2/>
-      </Layout.Content>
+      <AppBreadcrumb />
+      <Typography.Title level={2} style={styles.titlePost}>
+        Javascript expert with Next.js and React.js expertise
+      </Typography.Title>
+      <CustomCard style={{ marginBottom: 30 }}>
+        <CustomRow gutter={[20, 0]}>
+          <ArticleRight />
+          <InformationLeft showModalLogin={showModalLogin} />
+        </CustomRow>
+      </CustomCard>
+      <Section2 />
+    </Layout.Content>
   );
 };
 
@@ -371,7 +374,7 @@ const JobDetail = ({ props }) => {
 const styles = {
   //Toàn trang
   containerBody: { maxWidth: 1080, margin: '0 auto' },
-  
+
   titlePost: { padding: '10px 30px', margin: '20px 0' },
 
   //Article Right
@@ -401,7 +404,6 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-
 };
 
 export default JobDetail;
