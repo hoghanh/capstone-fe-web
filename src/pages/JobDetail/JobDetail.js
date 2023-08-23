@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Row, Col, Typography, Button } from 'antd';
 import { ClockCircleFilled } from '@ant-design/icons';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
@@ -14,7 +14,9 @@ import {
 } from 'components/icon/Icon';
 import color from 'styles/color';
 import AppBreadcrumb from 'components/AppBreadcrumb';
-import { useToken } from 'antd/es/theme/internal';
+import LoginModal from 'layout/header/LoginModal';
+import Section2 from './Section2';
+
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
@@ -205,30 +207,30 @@ const VerifiedInformations = () => {
           Xác minh
         </Typography.Title>
       </Col>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      <Col span={24} style={{ display: 'flex' }}>
         <AddressCard />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
           Đã xác minh danh tính
         </Typography.Text>
-      </CustomCol>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      </Col>
+      <Col span={24} style={{ display: 'flex' }}>
         <Donate />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
           Đã xác minh thanh toán
         </Typography.Text>
-      </CustomCol>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      </Col>
+      <Col span={24} style={{ display: 'flex' }}>
         <Envelope />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
           Đã xác minh địa chỉ email
         </Typography.Text>
-      </CustomCol>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      </Col>
+      <Col span={24} style={{ display: 'flex' }}>
         <CreditCard />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
           Chưa xác minh hình thức thanh toán
         </Typography.Text>
-      </CustomCol>
+      </Col>
     </CustomRow>
   );
 };
@@ -242,20 +244,20 @@ const ContactInfo = () => {
           Thông tin sơ bộ
         </Typography.Title>
       </Col>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      <Col span={24} style={{ display: 'flex' }}>
         <MapMarkerAlt />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>Địa chỉ</Typography.Text>
-      </CustomCol>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      </Col>
+      <Col span={24} style={{ display: 'flex' }}>
         <Envelope />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
           FoodyEmterprise@gmail.com{' '}
         </Typography.Text>
-      </CustomCol>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      </Col>
+      <Col span={24} style={{ display: 'flex' }}>
         <PhoneAlt />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>Số điện thoại </Typography.Text>
-      </CustomCol>
+      </Col>
     </CustomRow>
   );
 };
@@ -274,12 +276,13 @@ const ArticleRight = () => {
   );
 };
 
-const InformationLeft = () => {
+const InformationLeft = ({showModalLogin}) => {
+
   return (
     <Col span={6} style={{ paddingLeft: 10, borderLeft: `1px solid ${color.colorBlueWhale}` }}>
       <Row style={{ justifyContent: 'center' }}>
         {/* Đăng nhập và phân quyền nếu đăng nhập  */}
-        <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {/* <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button
             style={{
               fontWeight: 700,
@@ -291,9 +294,26 @@ const InformationLeft = () => {
               color: color.colorBlueWhale,
               border: 0,
             }}
+            onClick={showModalLogin}
           >
             Đăng nhập
           </Button>
+        </Col> */}
+        {/* Sau khi được nhận việc  */}
+        <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Row>
+            <Col span={24}>
+              <Typography.Title level={5} style={styles.titleSection}>
+                Hợp đồng
+              </Typography.Title>
+            </Col>
+            <CustomCol span={24} style={{ display: 'flex' }}>
+              <PaperClipOutlined />
+              <Typography.Text underline={false} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}>
+                HopDongLamViec.pdf
+              </Typography.Text>
+            </CustomCol>
+          </Row>
         </Col>
         <CustomDivider />
         <AboutCustomer />
@@ -307,21 +327,43 @@ const InformationLeft = () => {
 };
 
 const JobDetail = ({ props }) => {
+  const [loading, setLoading] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+
+  const showModalLogin = () => {
+    setOpenLogin(true);
+  };
+  const handleOkLogin = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpenLogin(false);
+    }, 3000);
+  };
+  const handleCancelLogin = () => {
+    setOpenLogin(false);
+  };
+
   return (
-    <>
       <Layout.Content style={styles.containerBody}>
+        <LoginModal
+        visible={openLogin}
+        onCancel={handleCancelLogin}
+        onOk={handleOkLogin}
+        // handleMove={handleMove}
+      />
         <AppBreadcrumb />
         <Typography.Title level={2} style={styles.titlePost}>
           Javascript expert with Next.js and React.js expertise
         </Typography.Title>
-        <CustomCard>
+        <CustomCard style={{marginBottom: 30}}>
           <CustomRow gutter={[20, 0]}>
             <ArticleRight />
-            <InformationLeft />
+            <InformationLeft showModalLogin={showModalLogin} />
           </CustomRow>
         </CustomCard>
+        <Section2/>
       </Layout.Content>
-    </>
   );
 };
 
@@ -329,6 +371,7 @@ const JobDetail = ({ props }) => {
 const styles = {
   //Toàn trang
   containerBody: { maxWidth: 1080, margin: '0 auto' },
+  
   titlePost: { padding: '10px 30px', margin: '20px 0' },
 
   //Article Right

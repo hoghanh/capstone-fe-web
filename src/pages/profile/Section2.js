@@ -5,7 +5,6 @@ import { MapMarkerAlt, Pen, Plus, Star } from 'components/icon/Icon';
 import React from 'react';
 import color from 'styles/color';
 
-const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
 // Header section
 const HeaderSection = () => {
