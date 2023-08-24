@@ -1,8 +1,20 @@
-import { atom } from 'recoil'
+import { atom } from 'recoil';
 
 const authAtom = atom({
-    key: 'authAtom',
-    default: { token: null, userId: '', email: '', name: '', role: '', exp: 0 },
-})
+  key: 'authAtom',
+  default: {
+    token: null,
+    id: '',
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+    image: '',
+    password: '',
+    role: '',
+    currency: '',
+    status: 0,
+  },
+});
 
-export default authAtom
+export default authAtom;
