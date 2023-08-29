@@ -6,6 +6,9 @@ import { ReactSVG } from 'react-svg';
 
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
+import { useAuthActions } from 'recoil/auth';
+import { useRecoilValue } from 'recoil';
+import authAtom from 'recoil/auth/atom';
 
 function SearchBar() {
   const [loading, setLoading] = useState(false);
@@ -13,7 +16,8 @@ function SearchBar() {
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
 
-  const [logined, setLogined] = useState(false);
+  const auth = useRecoilValue(authAtom);
+  const { logout } = useAuthActions();
 
   const showModalRegister = () => {
     setOpenRegister(true);
@@ -51,6 +55,10 @@ function SearchBar() {
       setOpenLogin(true);
       setOpenRegister(false);
     }
+  };
+
+  const logoutHandlder = () => {
+    logout();
   };
 
   return (
@@ -101,7 +109,7 @@ function SearchBar() {
         <Typography.Title level={3} style={{ margin: 0 }}>
           Khám phá
         </Typography.Title>
-        {logined ? (
+        {auth.token !== null ? (
           <>
             <ReactSVG
               style={{ height: 40 }}

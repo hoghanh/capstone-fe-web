@@ -1,23 +1,15 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Typography, Input, Button, Checkbox } from 'antd';
-import queryString from 'query-string';
-import { useLocation } from 'react-router-dom';
+import { message } from 'antd';
 
 import { home } from '../../styles/homepage';
 import GoogleLoginButton from '../../components/button/GoogleLoginButton';
 import Link from 'antd/es/typography/Link';
 import { useAuthActions } from '../../recoil/auth';
 import { post } from 'utils/APICaller';
-import {
-  showErrorMessage,
-  showSuccessMessage,
-} from 'components/message/Message';
 
 function LoginModal({ visible, onCancel, onOk, handleMove }) {
   const [loading, setLoading] = useState(false);
-  const { search } = useLocation();
-  const { token, error } = queryString.parse(search);
   const { login } = useAuthActions();
 
   const [username, setUsername] = useState('');
@@ -43,11 +35,11 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
       .then((res) => {
         onCancel();
         login(res.data.token);
-        showSuccessMessage('Đăng nhập thành công');
+        message.success('Đăng nhập thành công', 4.5);
       })
       .catch((error) => {
         console.log(error);
-        showErrorMessage('Có lỗi xảy ra, vui lòng kiểm tra lại');
+        message.error('Đã xảy ra lỗi', 4.5);
       });
   };
 
@@ -108,7 +100,11 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
             </Link>
           </Typography>
         </div>
-        <Button type='primary' style={home.login.button} onClick={loginBasic}>
+        <Button
+          type='primary'
+          style={home.login.button}
+          onClick={() => loginBasic()}
+        >
           Đăng Nhập
         </Button>
       </Modal>
