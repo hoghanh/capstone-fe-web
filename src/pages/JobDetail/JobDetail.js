@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Layout, Row, Col, Typography, Button } from 'antd';
 import { ClockCircleFilled } from '@ant-design/icons';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
@@ -14,7 +14,7 @@ import {
 } from 'components/icon/Icon';
 import color from 'styles/color';
 import AppBreadcrumb from 'components/AppBreadcrumb';
-import { useToken } from 'antd/es/theme/internal';
+import { get } from 'utils/APICaller';
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
@@ -169,7 +169,7 @@ const AboutCustomer = () => {
         </Typography.Title>
       </Col>
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Công ty</Typography.Text>
+        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>Công ty</Typography.Text>
         <Typography.Title
           level={5}
           style={{
@@ -181,7 +181,7 @@ const AboutCustomer = () => {
         </Typography.Title>
       </CustomCol>
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactive }}>Bài viết đã đăng</Typography.Text>
+        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>Bài viết đã đăng</Typography.Text>
         <Typography.Title
           level={5}
           style={{
@@ -306,7 +306,25 @@ const InformationLeft = () => {
   );
 };
 
-const JobDetail = ({ props }) => {
+const JobDetail = () => {
+
+  const [jobdetail, setJobDetail] = useState('');
+
+  useEffect(() => {
+    fetchJobDetail();
+  }, []);
+
+  const fetchJobDetail = async () => {
+    await get({ endpoint: "/accounts/profile/1" })
+      .then((response) => {
+        const data = response.data;
+        // console.log(data);
+        setJobDetail(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <Layout.Content style={styles.containerBody}>
@@ -324,6 +342,7 @@ const JobDetail = ({ props }) => {
     </>
   );
 };
+
 //styles
 const styles = {
   //Toàn trang
