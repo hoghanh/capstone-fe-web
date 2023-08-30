@@ -9,9 +9,8 @@ import { post } from 'utils/APICaller';
 
 function RegisterModal({ visible, onCancel, onOk, handleMove }) {
   const [loading, setLoading] = useState(false);
-  const [api, contextHolder] = notification.useNotification();
 
-  const [email, setemail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
@@ -25,7 +24,7 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
   };
 
   const emailHandle = (event) => {
-    setemail(event.target.value);
+    setEmail(event.target.value);
   };
   const nameHandle = (event) => {
     setName(event.target.value);
@@ -53,6 +52,10 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
     })
       .then((res) => {
         onCancel();
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setName('');
         notification.success({
           message: 'Đăng ký tài khoản thành công',
         });
@@ -146,18 +149,21 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
       <Input
         placeholder='Email'
         className='Email'
+        value={email}
         style={home.login.input}
         onChange={emailHandle}
       />
       <Input
         placeholder='Tên doanh nghiệp'
         className='FullName'
+        value={name}
         style={home.login.input}
         onChange={nameHandle}
       />
       <Input.Password
         placeholder='Mật khẩu'
         className='Password'
+        value={password}
         style={home.login.input}
         onChange={passwordHandle}
       />
@@ -176,6 +182,7 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
       <Input.Password
         placeholder='Nhập lại mật khẩu'
         className='ConfirmPassword'
+        value={confirmPassword}
         style={home.login.input}
         onChange={confirmPasswordHandle}
       />
