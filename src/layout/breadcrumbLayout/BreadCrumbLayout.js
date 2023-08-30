@@ -1,6 +1,6 @@
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
-import AppBreadcrumb from "../components/AppBreadcrumb";
+import AppBreadcrumb from "components/AppBreadcrumb";
 
 const BreadcrumbLayout = ({ children }) => (
   <>
