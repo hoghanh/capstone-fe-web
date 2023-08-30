@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Typography, Input, Button, Checkbox } from 'antd';
-import { message } from 'antd';
+import { Modal, Typography, Input, Button, Checkbox, notification } from 'antd';
 
 import { home } from '../../styles/homepage';
 import GoogleLoginButton from '../../components/button/GoogleLoginButton';
@@ -12,8 +11,8 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
   const [loading, setLoading] = useState(false);
   const { login } = useAuthActions();
 
-  const [username, setUsername] = useState('');
-  const [password, setpassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleOk = () => {
     setLoading(true);
@@ -24,31 +23,55 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
   };
 
   const loginBasic = (event) => {
-    event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     post({
       endpoint: `/accounts/login`,
       body: {
-        email: username,
+        email: email,
         password: password,
       },
     })
       .then((res) => {
         onCancel();
+        console.log(res);
         login(res.data.token);
-        message.success('Đăng nhập thành công', 4.5);
+        setEmail('');
+        setPassword('');
+        notification.success({
+          message: 'Đăng nhập thành công',
+        });
       })
       .catch((error) => {
-        console.log(error);
-        message.error('Đã xảy ra lỗi', 4.5);
+        notification.error({
+          message: error.response.data.message,
+        });
       });
   };
 
-  const userNameHandle = (event) => {
-    setUsername(event.target.value);
+  const emailHandle = (event) => {
+    setEmail(event.target.value);
   };
 
   const passwordHandle = (event) => {
-    setpassword(event.target.value);
+    setPassword(event.target.value);
+  };
+
+  const validateForm = () => {
+    if (email.trim() === '') {
+      notification.error({ message: 'Vui lòng nhập email.' });
+      return false;
+    }
+
+    if (password.trim() === '') {
+      notification.error({
+        message: 'Vui lòng nhập mật khẩu',
+      });
+      return false;
+    }
+
+    return true;
   };
 
   return (
@@ -84,7 +107,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         <Input
           placeholder='Email'
           style={home.login.input}
-          onChange={userNameHandle}
+          onChange={emailHandle}
         />
         <Input.Password
           placeholder='Mật khẩu'

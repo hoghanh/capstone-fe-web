@@ -10,28 +10,28 @@ const routes = [
     name: 'home',
   },
   {
-    path: "/jobs",
-    component: lazy(() => import("pages/joblist/JobList")),
-    name: "jobs",
+    path: '/jobs',
+    component: lazy(() => import('pages/joblist/JobList')),
+    name: 'jobs',
   },
 
   {
-    path: "/job-detail",
-    component: lazy(() => import("pages/jobdetail/JobDetail")),
-    name: "jobDetail",
+    path: '/job-detail',
+    component: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobDetail',
   },
 ];
 
 const breadcrumbroutes = [
   {
-    path: "/jobs",
-    component: lazy(() => import("pages/joblist/JobList")),
-    name: "jobs",
+    path: '/jobs',
+    component: lazy(() => import('pages/joblist/JobList')),
+    name: 'jobs',
   },
   {
-    path: "/jobDetail",
-    component: lazy(() => import("pages/jobdetail/JobDetail")),
-    name: "jobDetail",
+    path: '/jobDetail',
+    component: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobDetail',
   },
 ];
 

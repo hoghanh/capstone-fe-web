@@ -38,7 +38,7 @@ const useAuthActions = () => {
     if (role === 'user') {
       navigate('/');
     } else {
-      navigate('/admin/');
+      navigate('/client/');
     }
   };
 

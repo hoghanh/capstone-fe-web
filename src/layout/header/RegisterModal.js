@@ -61,7 +61,6 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
         });
       })
       .catch((error) => {
-        console.log(error.response.data.message);
         notification.error({
           message: error.response.data.message,
         });
