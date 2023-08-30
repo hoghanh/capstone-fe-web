@@ -54,3 +54,32 @@ body {
 :where(.css-dev-only-do-not-override-1651f0q).ant-card .ant-card-body{
   padding: 0px !important;
 }
+
+/* job management */
+
+.trackingJobs .ant-card-head{
+  border-bottom: 1px solid #000 !important;
+}
+
+.trackingJobs .ant-tabs-nav-wrap{
+  border-bottom: 'transparent' !important;
+}
+
+
+.trackingJobs .ant-card .ant-card-head{
+  min-height: auto;
+}
+
+.trackingJobs .ant-tabs-nav-list .ant-tabs-tab .ant-tabs-tab-btn{
+  color: #000;
+  font-weight: 700 !important;
+  font-size: 16px;
+}
+
+.trackingJobs .ant-tabs .ant-tabs-ink-bar{
+  background: #000 !important;
+}
+
+.trackingJobs .ant-tabs-tab{
+  padding: 10px !important;
+}
