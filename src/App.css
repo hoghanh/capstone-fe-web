@@ -83,3 +83,9 @@ body {
 .trackingJobs .ant-tabs-tab{
   padding: 10px !important;
 }
+
+/* show more less */
+.content-css .show-more-less-clickable{
+  text-decoration: none;
+  color: #02ADFD;
+}

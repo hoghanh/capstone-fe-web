@@ -1,8 +1,9 @@
-import { Button, Card, Col, Row, Typography } from 'antd';
-import { ButtonPrimary } from 'components/button/GlobalButton';
-import { CustomCard, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { PaperClipOutlined, Star, Trash } from 'components/icon/Icon';
+import { Card, Col, Row, Typography } from 'antd';
+import { ButtonPrimary, ShowMoreText } from 'components/customize/GlobalCustomize';
+import { CustomDivider, CustomRow } from 'components/customize/Layout';
+import { PaperClipOutlined, Trash } from 'components/icon/Icon';
 import React, { useState } from 'react';
+import ReactShowMoreText from 'react-show-more-text';
 import color from 'styles/color';
 
 const tabListNoTitle = [
@@ -21,12 +22,15 @@ const tabListNoTitle = [
 ];
 
 const ContentSent = () => {
+  const executeOnClick = (isExpanded) => {
+    console.log(isExpanded);
+  };
   return (
     <>
       <Row>
         <Col span={24} style={{ padding: 20 }}>
           <Row gutter={[0, 5]}>
-            <Col span={24} style={{ padding: '0 10px' }}>
+            <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row justify={'space-between'}>
                 <Col>
                   <Row gutter={[0, 10]}>
@@ -49,11 +53,29 @@ const ContentSent = () => {
             </Col>
 
             <Col span={24}>
-              <Typography.Text style={{ display: 'flex', margin: 0, padding: '0 10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                viverra dolor blandit... more
+              <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                <ShowMoreText
+                  /* Default options */
+                  lines={2}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  truncatedEndingComponent={'... '}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
+                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
+                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
+                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
+                </ShowMoreText>
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -76,7 +98,7 @@ const ContentSent = () => {
         <CustomDivider />
         <Col span={24} style={{ padding: 20 }}>
           <Row gutter={[0, 5]}>
-            <Col span={24} style={{ padding: '0 10px' }}>
+            <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row justify={'space-between'}>
                 <Col>
                   <Row gutter={[0, 10]}>
@@ -99,11 +121,29 @@ const ContentSent = () => {
             </Col>
 
             <Col span={24}>
-              <Typography.Text style={{ display: 'flex', margin: 0, padding: '0 10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                viverra dolor blandit... more
+              <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                <ShowMoreText
+                  /* Default options */
+                  lines={2}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  truncatedEndingComponent={'... '}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
+                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
+                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
+                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
+                </ShowMoreText>
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -129,12 +169,15 @@ const ContentSent = () => {
 };
 
 const ContentInterviewed = () => {
+  const executeOnClick = (isExpanded) => {
+    console.log(isExpanded);
+  };
   return (
     <>
       <Row>
         <Col span={24} style={{ padding: 20 }}>
           <Row gutter={[0, 5]}>
-            <Col span={24} style={{ padding: '0 10px' }}>
+            <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row gutter={[0, 10]}>
                 <Col span={24}>
                   <Typography.Title level={4} style={{ margin: 0 }}>
@@ -147,11 +190,29 @@ const ContentInterviewed = () => {
               </Row>
             </Col>
             <Col span={24}>
-              <Typography.Text style={{ display: 'flex', margin: 0, padding: '0 10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                viverra dolor blandit... more
+              <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                <ShowMoreText
+                  /* Default options */
+                  lines={2}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  truncatedEndingComponent={'... '}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
+                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
+                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
+                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
+                </ShowMoreText>
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -174,7 +235,7 @@ const ContentInterviewed = () => {
         <CustomDivider />
         <Col span={24} style={{ padding: 20 }}>
           <Row gutter={[0, 5]}>
-            <Col span={24} style={{ padding: '0 10px' }}>
+            <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row gutter={[0, 10]}>
                 <Col span={24}>
                   <Typography.Title level={4} style={{ margin: 0 }}>
@@ -187,11 +248,29 @@ const ContentInterviewed = () => {
               </Row>
             </Col>
             <Col span={24}>
-              <Typography.Text style={{ display: 'flex', margin: 0, padding: '0 10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                viverra dolor blandit... more
+              <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                <ShowMoreText
+                  /* Default options */
+                  lines={2}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  truncatedEndingComponent={'... '}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
+                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
+                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
+                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
+                </ShowMoreText>
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -217,12 +296,15 @@ const ContentInterviewed = () => {
 };
 
 const ContentReject = () => {
+  const executeOnClick = (isExpanded) => {
+    console.log(isExpanded);
+  };
   return (
     <>
       <Row>
         <Col span={24} style={{ padding: 20 }}>
           <Row gutter={[0, 5]}>
-            <Col span={24} style={{ padding: '0 10px' }}>
+            <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row gutter={[0, 10]}>
                 <Col span={24}>
                   <Typography.Title level={4} style={{ margin: 0 }}>
@@ -235,11 +317,29 @@ const ContentReject = () => {
               </Row>
             </Col>
             <Col span={24}>
-              <Typography.Text style={{ display: 'flex', margin: 0, padding: '0 10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                viverra dolor blandit... more
+              <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                <ShowMoreText
+                  /* Default options */
+                  lines={2}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  truncatedEndingComponent={'... '}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
+                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
+                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
+                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
+                </ShowMoreText>
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -262,7 +362,7 @@ const ContentReject = () => {
         <CustomDivider />
         <Col span={24} style={{ padding: 20 }}>
           <Row gutter={[0, 5]}>
-            <Col span={24} style={{ padding: '0 10px' }}>
+            <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row gutter={[0, 10]}>
                 <Col span={24}>
                   <Typography.Title level={4} style={{ margin: 0 }}>
@@ -275,11 +375,29 @@ const ContentReject = () => {
               </Row>
             </Col>
             <Col span={24}>
-              <Typography.Text style={{ display: 'flex', margin: 0, padding: '0 10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                viverra dolor blandit... more
+              <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                <ShowMoreText
+                  /* Default options */
+                  lines={2}
+                  more="Xem thêm"
+                  less="Rút gọn"
+                  className="content-css"
+                  anchorClass="show-more-less-clickable"
+                  onClick={executeOnClick}
+                  expanded={false}
+                  truncatedEndingComponent={'... '}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
+                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
+                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
+                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
+                </ShowMoreText>
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -316,7 +434,7 @@ const Section1 = () => {
     setActiveTabKey2(key);
   };
   return (
-    <CustomCard style={{ padding: 0, marginBottom: 30 }}>
+    <Card style={{ padding: 0, marginBottom: 30 }}>
       <Row gutter={[0, 10]}>
         <Col span={24}>
           <Typography.Title level={3} style={{ margin: '20px 30px 10px' }}>
@@ -332,7 +450,8 @@ const Section1 = () => {
             headStyle={{
               color: color.colorBlack,
               fontWeight: 'bold',
-              padding: '0 30px',
+              paddingLeft: 30,
+              paddingRight: 30,
               margin: '10px 0',
               borderBottom: '0.5px solid #000 !important',
             }}
@@ -344,7 +463,7 @@ const Section1 = () => {
           </Card>
         </Col>
       </Row>
-    </CustomCard>
+    </Card>
   );
 };
 
