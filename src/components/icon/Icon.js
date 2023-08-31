@@ -6,7 +6,7 @@
 
 // Thêm và xuất icons
 
-export const BookMarkOutlined = ({size=30, color="black"}) => {
+export const BookMarkOutlined = ({ size = 30, color = 'black' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -19,7 +19,7 @@ export const BookMarkOutlined = ({size=30, color="black"}) => {
   );
 };
 
-export const PaperClipOutlined = ({size=20, color="#02ADFD"}) => {
+export const PaperClipOutlined = ({ size = 20, color = '#02ADFD' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="paperclip" clipPath="url(#clip0_740_3131)">
@@ -38,7 +38,7 @@ export const PaperClipOutlined = ({size=20, color="#02ADFD"}) => {
   );
 };
 
-export const AddressCard = ({size=20, color="#02ADFD"}) => {
+export const AddressCard = ({ size = 20, color = '#02ADFD' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="address-card" clipPath="url(#clip0_740_3080)">
@@ -57,7 +57,7 @@ export const AddressCard = ({size=20, color="#02ADFD"}) => {
   );
 };
 
-export const Donate = ({size=20, color="#02ADFD"}) => {
+export const Donate = ({ size = 20, color = '#02ADFD' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="donate" clipPath="url(#clip0_740_3084)">
@@ -76,7 +76,7 @@ export const Donate = ({size=20, color="#02ADFD"}) => {
   );
 };
 
-export const Envelope = ({size=20, color="#02ADFD"}) => {
+export const Envelope = ({ size = 20, color = '#02ADFD' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="envelope">
@@ -90,7 +90,7 @@ export const Envelope = ({size=20, color="#02ADFD"}) => {
   );
 };
 
-export const CreditCard = ({size=20, color="#828282"}) => {
+export const CreditCard = ({ size = 20, color = '#828282' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="credit-card" clipPath="url(#clip0_740_3092)">
@@ -109,7 +109,7 @@ export const CreditCard = ({size=20, color="#828282"}) => {
   );
 };
 
-export const MapMarkerAlt = ({size=20, color="#02ADFD"}) => {
+export const MapMarkerAlt = ({ size = 20, color = '#02ADFD' }) => {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="map-marker-alt" clipPath="url(#clip0_740_3098)">
@@ -198,6 +198,36 @@ export const Star = ({ size = 20, color = '#000' }) => {
       <defs>
         <clipPath id="clip0_187_7070">
           <rect width="15" height="15" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+export const File = ({ size = 20, color = '#000' }) => {
+  return (
+    <svg width="50" height="60" viewBox="0 0 50 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M29.1667 15.9375V0H3.125C1.39323 0 0 1.25391 0 2.8125V57.1875C0 58.7461 1.39323 60 3.125 60H46.875C48.6068 60 50 58.7461 50 57.1875V18.75H32.2917C30.5729 18.75 29.1667 17.4844 29.1667 15.9375ZM37.5 43.5938C37.5 44.3672 36.7969 45 35.9375 45H14.0625C13.2031 45 12.5 44.3672 12.5 43.5938V42.6562C12.5 41.8828 13.2031 41.25 14.0625 41.25H35.9375C36.7969 41.25 37.5 41.8828 37.5 42.6562V43.5938ZM37.5 36.0938C37.5 36.8672 36.7969 37.5 35.9375 37.5H14.0625C13.2031 37.5 12.5 36.8672 12.5 36.0938V35.1562C12.5 34.3828 13.2031 33.75 14.0625 33.75H35.9375C36.7969 33.75 37.5 34.3828 37.5 35.1562V36.0938ZM37.5 27.6562V28.5938C37.5 29.3672 36.7969 30 35.9375 30H14.0625C13.2031 30 12.5 29.3672 12.5 28.5938V27.6562C12.5 26.8828 13.2031 26.25 14.0625 26.25H35.9375C36.7969 26.25 37.5 26.8828 37.5 27.6562ZM50 14.2852V15H33.3333V0H34.1276C34.9609 0 35.7552 0.292969 36.3411 0.820312L49.0885 12.3047C49.6745 12.832 50 13.5469 50 14.2852Z"
+        fill={color}
+      />
+    </svg>
+  );
+};
+
+export const Trash = ({ size = 25, color = '#000' }) => {
+  return (
+    <svg width={size} height={size} viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="trash" clipPath="url(#clip0_1168_3628)">
+        <path
+          id="Vector"
+          d="M22.6562 1.56251H16.7969L16.3379 0.649423C16.2407 0.454215 16.0909 0.29001 15.9054 0.175281C15.72 0.0605526 15.5062 -0.00014785 15.2881 8.5609e-06H9.70703C9.48944 -0.000827891 9.27602 0.0596463 9.09121 0.174503C8.90641 0.289359 8.75769 0.453951 8.66211 0.649423L8.20312 1.56251H2.34375C2.13655 1.56251 1.93784 1.64482 1.79132 1.79133C1.64481 1.93784 1.5625 2.13656 1.5625 2.34376L1.5625 3.90626C1.5625 4.11346 1.64481 4.31217 1.79132 4.45869C1.93784 4.6052 2.13655 4.68751 2.34375 4.68751H22.6562C22.8635 4.68751 23.0622 4.6052 23.2087 4.45869C23.3552 4.31217 23.4375 4.11346 23.4375 3.90626V2.34376C23.4375 2.13656 23.3552 1.93784 23.2087 1.79133C23.0622 1.64482 22.8635 1.56251 22.6562 1.56251ZM4.16016 22.8027C4.19742 23.3978 4.46004 23.9562 4.89456 24.3644C5.32908 24.7727 5.90283 24.9999 6.49902 25H18.501C19.0972 24.9999 19.6709 24.7727 20.1054 24.3644C20.54 23.9562 20.8026 23.3978 20.8398 22.8027L21.875 6.25001H3.125L4.16016 22.8027Z"
+          fill="white"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1168_3628">
+          <rect width={size} height={size} fill={color} />
         </clipPath>
       </defs>
     </svg>

@@ -121,5 +121,8 @@ export const home = {
       fontSize: 12,
       color: color.colorDeactive,
     },
+    remindTextError: {
+      fontSize: 12,
+    },
   },
 };

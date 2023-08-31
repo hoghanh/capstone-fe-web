@@ -1,5 +1,5 @@
 import { Col, Image, Row, Typography } from 'antd';
-import { ButtonIcon, ButtonPrimary } from 'components/button/GlobalButton';
+import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { MapMarkerAlt, Pen, Plus, Star } from 'components/icon/Icon';
 import React from 'react';
@@ -8,7 +8,7 @@ import color from 'styles/color';
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
 // Header section
-const HeaderSection = () => {
+const HeaderSection = ({name, address}) => {
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <Col>
@@ -25,14 +25,14 @@ const HeaderSection = () => {
           </Col>
           <CustomCol>
             <Typography.Title level={2} style={styles.nameUser}>
-              Nguyen Van A
+              {name}
             </Typography.Title>
             <Row>
               <Col>
                 <MapMarkerAlt size={16} color={'#656565'} />
               </Col>
               <Col>
-                <Typography.Text style={styles.address}>Ho Chi Minh, FPTU HCM</Typography.Text>
+                <Typography.Text style={styles.address}>{address}</Typography.Text>
               </Col>
             </Row>
           </CustomCol>
@@ -55,18 +55,18 @@ const HeaderSection = () => {
 };
 
 //Body Section Left
-const BodySectionLeft = () => {
+const BodySectionLeft = ({information}) => {
   return (
     <Col span={8} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
       <Row gutter={[0, 10]}>
-        <CustomCol>
-          {/* Left 1 */}
-          <Row gutter={[0, 15]}>
+        <Col>
+          <Row gutter={[0, 10]}>
+            {/* Left 1 */}
             <Col>
               <Row align={'middle'} gutter={30}>
                 <Col>
-                  <Typography.Title level={4} style={{ margin: 0 }}>
-                    Hours per weeks
+                  <Typography.Title level={3} style={{ margin: 0 }}>
+                    Thông tin cá nhân
                   </Typography.Title>
                 </Col>
                 <Col>
@@ -76,81 +76,146 @@ const BodySectionLeft = () => {
                 </Col>
               </Row>
             </Col>
-            <Col>
-              <Typography.Text>More than 30hrs/weeks</Typography.Text>
-            </Col>
+            <CustomCol span={24}>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={30}>
+                    <Col span={24}>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Số điện thoại
+                      </Typography.Title>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text>{information.phone}</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            {/* Left 2 */}
+            <CustomCol span={24}>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={30}>
+                    <Col span={24}>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Địa chỉ
+                      </Typography.Title>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text>{information.address}</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
           </Row>
-        </CustomCol>
-        {/* Left 2 */}
-        <CustomCol>
-          <Row gutter={[0, 15]}>
+        </Col>
+        <Col>
+          <Row gutter={[0, 10]}>
             <Col>
               <Row align={'middle'} gutter={30}>
                 <Col>
-                  <Typography.Title level={4} style={{ margin: 0 }}>
-                    Languages
+                  <Typography.Title level={3} style={{ margin: 0 }}>
+                    Thông tin công việc
                   </Typography.Title>
-                </Col>
-                <Col>
-                  <ButtonIcon>
-                    <Plus />
-                  </ButtonIcon>
-                </Col>
-                <Col>
-                  <ButtonIcon>
-                    <Pen />
-                  </ButtonIcon>
                 </Col>
               </Row>
             </Col>
-            <Col>
-              <Typography.Text>
-                <Typography.Text strong style={{ marginRight: 20 }}>
-                  English:
-                </Typography.Text>
-                Conversational
-              </Typography.Text>
-            </Col>
-            <Col>
-              <Typography.Text>
-                <Typography.Text strong style={{ marginRight: 20 }}>
-                  Japanese:
-                </Typography.Text>
-                Conversational
-              </Typography.Text>
-            </Col>
-          </Row>
-        </CustomCol>
-        {/* Left 3 */}
-        <CustomCol>
-          <Row gutter={[0, 15]}>
-            <Col>
-              <Row align={'middle'} gutter={30}>
+            <CustomCol>
+              {/* Left 1 */}
+              <Row gutter={[0, 15]}>
                 <Col>
-                  <Typography.Title level={4} style={{ margin: 0 }}>
-                    Education
-                  </Typography.Title>
+                  <Row align={'middle'} gutter={30}>
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Thời gian làm mỗi tuần
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <ButtonIcon>
+                        <Pen />
+                      </ButtonIcon>
+                    </Col>
+                  </Row>
                 </Col>
                 <Col>
-                  <ButtonIcon>
-                    <Plus />
-                  </ButtonIcon>
-                </Col>
-                <Col>
-                  <ButtonIcon>
-                    <Pen />
-                  </ButtonIcon>
+                  <Typography.Text>More than 30hrs/weeks</Typography.Text>
                 </Col>
               </Row>
-            </Col>
-            <Col>
-              <Typography.Text strong style={{ display: 'block', marginBottom: 10 }}>
-                FPT University
-              </Typography.Text>
-              <Typography.Text>Computer Software Engineering · (2019 - 2023)</Typography.Text>
-            </Col>
+            </CustomCol>
+            {/* Left 2 */}
+            <CustomCol>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={30}>
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Ngôn ngữ
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <ButtonIcon>
+                        <Plus />
+                      </ButtonIcon>
+                    </Col>
+                    <Col>
+                      <ButtonIcon>
+                        <Pen />
+                      </ButtonIcon>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col>
+                  <Typography.Text>
+                    <Typography.Text strong style={{ marginRight: 20 }}>
+                      English:
+                    </Typography.Text>
+                    Conversational
+                  </Typography.Text>
+                </Col>
+                <Col>
+                  <Typography.Text>
+                    <Typography.Text strong style={{ marginRight: 20 }}>
+                      Japanese:
+                    </Typography.Text>
+                    Conversational
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            {/* Left 3 */}
+            <CustomCol>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={30}>
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Giáo dục
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <ButtonIcon>
+                        <Plus />
+                      </ButtonIcon>
+                    </Col>
+                    <Col>
+                      <ButtonIcon>
+                        <Pen />
+                      </ButtonIcon>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col>
+                  <Typography.Text strong style={{ display: 'block', marginBottom: 10 }}>
+                    FPT University
+                  </Typography.Text>
+                  <Typography.Text>Computer Software Engineering · (2019 - 2023)</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
           </Row>
-        </CustomCol>
+        </Col>
       </Row>
     </Col>
   );
@@ -203,7 +268,7 @@ const BodySectionRight = () => {
               <Row align={'middle'}>
                 <Col>
                   <Typography.Title level={4} style={{ margin: 0, paddingRight: 30 }}>
-                    Skill
+                    Kỹ năng
                   </Typography.Title>
                 </Col>
                 <Col>
@@ -244,7 +309,7 @@ const BodySectionRight = () => {
               <Row align={'middle'}>
                 <Col>
                   <Typography.Title level={4} style={{ margin: 0 }}>
-                    Work History
+                    Dự án từng làm 
                   </Typography.Title>
                 </Col>
               </Row>
@@ -365,29 +430,30 @@ const BodySectionRight = () => {
 };
 
 //Body Section
-const BodySection = () => {
+const BodySection = ({information}) => {
   return (
     <Row>
-      <BodySectionLeft />
-      <BodySectionRight />
+      <BodySectionLeft information={information} />
+      <BodySectionRight information={information} />
     </Row>
   );
 };
 
-const Section1 = () => {
+const Section1 = (props) => {
+  // console.log(props.information)
+  
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 30 }}>
         {/* Header section */}
-        <HeaderSection />
+        <HeaderSection name={props.information.name} address={props.information.address} />
         <CustomDivider $primary />
         {/* Body Section */}
-        <BodySection />
+        <BodySection information={props.information} />
       </CustomCard>
     </>
   );
 };
-
 
 const styles = {
   nameUser: {

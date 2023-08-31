@@ -8,6 +8,8 @@ const color = {
   colorDeepSeaBlue: "#00587C",
   colorDeactivate: "#828282",
   colorWhite: "#FFFFFF",
+  colorBlack: "#000",
+  colorLightGray: '#FAFAFA'
 };
 
 export default color;

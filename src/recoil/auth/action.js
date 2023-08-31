@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import LocalStorageUtils from "../../utils/LocalStorageUtils";
-import authAtom from "./atom";
-import jwtDecode from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import LocalStorageUtils from '../../utils/LocalStorageUtils';
+import authAtom from './atom';
+import jwtDecode from 'jwt-decode';
 
 const useAuthActions = () => {
   const navigate = useNavigate();
@@ -10,26 +10,48 @@ const useAuthActions = () => {
 
   const login = (token) => {
     LocalStorageUtils.setUser(token);
-    const { userId, email, name, exp, role } = jwtDecode(token);
-    setAuth({ userId, email, name, exp, role, token });
-    if (role === "user") {
-      navigate("/");
+    const {
+      id,
+      name,
+      phone,
+      email,
+      address,
+      image,
+      password,
+      role,
+      currency,
+      status,
+    } = jwtDecode(token).result;
+
+    setAuth({
+      id,
+      name,
+      phone,
+      email,
+      address,
+      image,
+      password,
+      role,
+      currency,
+      status,
+    });
+    if (role === 'user') {
+      navigate('/');
     } else {
-      navigate("/admin/manage/events");
+      navigate('/client/');
     }
   };
 
   const autoLogin = () => {
     const token = LocalStorageUtils.getToken();
     const user = LocalStorageUtils.getUser();
-    if (user && typeof user === "object") {
+    if (user && typeof user === 'object') {
       const expireTime = user.exp * 1000 + Date.now();
       if (user?.exp && expireTime > Date.now()) {
         setAuth({
-          userId: user.userId,
+          id: user.id,
           email: user.email,
           name: user.name,
-          exp: user.exp,
           token,
           role: user.role,
         });
@@ -38,12 +60,11 @@ const useAuthActions = () => {
       }
     } else {
       setAuth({
-        userId: "",
+        id: '',
         token: null,
-        email: "",
-        name: "",
-        role: "",
-        exp: 0,
+        email: '',
+        name: '',
+        role: '',
       });
     }
   };
@@ -51,14 +72,17 @@ const useAuthActions = () => {
   const logout = () => {
     LocalStorageUtils.deleteUser();
     setAuth({
-      userId: "",
       token: null,
-      email: "",
-      name: "",
-      organization: "",
-      image: "",
-      role: "",
-      exp: 0,
+      id: '',
+      name: '',
+      phone: '',
+      email: '',
+      address: '',
+      image: '',
+      password: '',
+      role: '',
+      currency: '',
+      status: 0,
     });
   };
 
