@@ -6,20 +6,20 @@ import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { notification } from 'antd';
 
-const App = () => {
+function App() {
   const [api, contextHolder] = notification.useNotification();
   return (
     <AntProvider>
-      <React.Fragment>
-        <RecoilRoot>
+      <RecoilRoot>
+        <React.Fragment>
           <BrowserRouter>
             {contextHolder}
             <Router />
           </BrowserRouter>
-        </RecoilRoot>
-      </React.Fragment>
+        </React.Fragment>
+      </RecoilRoot>
     </AntProvider>
   );
-};
+}
 
 export default App;
