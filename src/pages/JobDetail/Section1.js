@@ -10,7 +10,6 @@ import css from './jobDetail.module.css';
 import './jobDetail.module.css';
 import { ButtonPrimary } from 'components/customize/GlobalCustomize';
 
-
 const Skill = [
   {
     title: 'Javascript',
@@ -112,7 +111,7 @@ const HeaderArticle = () => {
                 </Col>
               </Row>
             </CustomCol>
-            <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '10px 0px' }}>
               <BookMarkOutlined />
             </Col>
           </CustomRow>

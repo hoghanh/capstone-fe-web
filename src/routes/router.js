@@ -54,12 +54,7 @@ const breadcrumbroutes = [
     component: lazy(() => import('pages/jobdetail/JobDetail')),
     name: 'jobDetail',
   },
-
-  
   {
-    path: "/profile",
-    component: lazy(() => import("pages/profile/Profile")),
-    name: "profile",
     path: '/profile',
     element: lazy(() => import('pages/profile/Profile')),
     name: 'profile',
