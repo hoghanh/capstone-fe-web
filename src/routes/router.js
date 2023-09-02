@@ -1,24 +1,26 @@
 import React, { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import HeaderFooter from 'layout/defaultLayout/HeaderFooter';
-import Loading from 'components/loading/loading';
+import PublicRoute from './PublicRoute';
+import PrivateRoute from './PrivateRoute';
+import { Spin } from 'antd';
 
 const routes = [
   {
     path: '/',
-    component: lazy(() => import('pages/home/HomePage')),
+    element: lazy(() => import('pages/home/HomePage')),
     name: 'home',
   },
   {
     path: '/jobs',
-    component: lazy(() => import('pages/joblist/JobList')),
+    element: lazy(() => import('pages/joblist/JobList')),
     name: 'jobs',
   },
 
   {
-    path: "/job-detail",
-    component: lazy(() => import("pages/jobdetail/JobDetail")),
-    name: "jobdetail",
+    path: '/job-detail',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
   },
 
   {
@@ -58,28 +60,36 @@ const breadcrumbroutes = [
     path: "/profile",
     component: lazy(() => import("pages/profile/Profile")),
     name: "profile",
+    path: '/profile',
+    element: lazy(() => import('pages/profile/Profile')),
+    name: 'profile',
+    role: ['client', 'admin', 'user'],
   },
 
   {
-    path: "/job-management",
-    component: lazy(() => import("pages/jobmanagement/JobManagement")),
-    name: "jobmanagement",
+    path: '/job-management',
+    element: lazy(() => import('pages/jobmanagement/JobManagement')),
+    name: 'jobmanagement',
+    role: ['client'],
   },
-
-  {
-    path: "/proposals",
-    component: lazy(() => import("pages/proposals/Proposals")),
-    name: "proposals",
-  },
-
 ];
 
 const Router = () => (
-  <Suspense fallback={<Loading />}>
+  <Suspense fallback={<Spin />}>
     <HeaderFooter>
       <Routes>
-        {routes.map(({ path, component: Component }) => (
-          <Route key={path} path={path} element={<Component />} exact />
+        {routes.map(({ path, element, name, role }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              role ? (
+                <PrivateRoute element={element} allowedRoles={role} />
+              ) : (
+                <PublicRoute element={element} />
+              )
+            }
+          />
         ))}
       </Routes>
     </HeaderFooter>
