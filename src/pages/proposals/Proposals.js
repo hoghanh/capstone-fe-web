@@ -1,12 +1,11 @@
 import {  Layout } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Section1 from './Section1'
 
 
 
 
 const Proposals = () => {
-  
   return (
     <>
     <Layout.Content style={styles.container}>

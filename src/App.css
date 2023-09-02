@@ -84,8 +84,11 @@ body {
   padding: 10px !important;
 }
 
-/* show more less */
-.content-css .show-more-less-clickable{
-  text-decoration: none;
-  color: #02ADFD;
+.skillArticle .ant-list .ant-row {
+  flex-flow: nowrap !important;
+  margin-block-end: 10px !important;
 }
+
+
+
+
