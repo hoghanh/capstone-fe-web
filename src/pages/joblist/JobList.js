@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Card, Image, Layout, Select, Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
-import joblist from '../../styles/joblist';
+import joblist from 'styles/joblist';
 import { FileTextFilled } from '@ant-design/icons';
+import { get } from 'utils/APICaller';
 
 const handleChange = (value) => {
   console.log(`selected ${value}`);

@@ -4,29 +4,8 @@ import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
-
-// const AppBreadcrumb = () => {
-const routes = [
-  {
-    path: '/',
-    component: lazy(() => import('../pages/home/HomePage')),
-    name: 'home',
-    title: <HomeFilled />,
-  },
-  {
-    path: '/jobs',
-    component: lazy(() => import('../pages/joblist/JobList')),
-    name: 'List Jobs',
-    title: 'Find Freelance Work',
-  },
-
-  {
-    path: '/jobDetail',
-    component: lazy(() => import('../pages/jobdetail/JobDetail')),
-    name: 'Job Detail',
-    title: 'Chi tiết dự án',
-  },
-];
+import { routes } from 'routes/router';
+import theme from 'styles/theme';
 
 function itemRender(route, params, routes, paths) {
   const last = routes.indexOf(route) === routes.length - 1;
@@ -48,7 +27,7 @@ const AppBreadcrumb = () => {
     const breadcrumbs = [
       {
         path: '/',
-        component: lazy(() => import('../pages/home/HomePage')),
+        element: lazy(() => import('../pages/home/HomePage')),
         name: 'Home',
         title: <HomeFilled />,
       },
@@ -70,20 +49,22 @@ const AppBreadcrumb = () => {
   const breadcrumbs = getBreadcrumbs(currentLocation);
 
   return (
-    <Breadcrumb
-      style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
-      itemRender={itemRender}
-      items={breadcrumbs}
-      separator={
-        <ReactSVG
-          src='./icon/right.svg'
-          beforeInjection={(svg) => {
-            svg.setAttribute('width', '16');
-            svg.setAttribute('height', '6');
-          }}
-        />
-      }
-    />
+    <div style={theme.responseWidth}>
+      <Breadcrumb
+        style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
+        itemRender={itemRender}
+        items={breadcrumbs}
+        separator={
+          <ReactSVG
+            src='./icon/right.svg'
+            beforeInjection={(svg) => {
+              svg.setAttribute('width', '16');
+              svg.setAttribute('height', '6');
+            }}
+          />
+        }
+      />
+    </div>
   );
 };
 
