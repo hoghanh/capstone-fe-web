@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Button } from 'antd';
 import color from 'styles/color';
-import ReactShowMoreText from 'react-show-more-text';
 
 const ButtonPrimary = styled(Button)`
   font-weight: 700;
@@ -32,6 +31,4 @@ const ButtonIcon = styled(Button)`
   border: 1px solid ${color.colorWhite};
 `;
 
-const ShowMoreText = styled(ReactShowMoreText)``
-
-export { ButtonPrimary, ButtonIcon, ShowMoreText };
+export { ButtonPrimary, ButtonIcon };

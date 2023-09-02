@@ -1,9 +1,8 @@
 import { Card, Col, Row, Typography } from 'antd';
-import { ButtonPrimary, ShowMoreText } from 'components/customize/GlobalCustomize';
+import { ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomDivider, CustomRow } from 'components/customize/Layout';
 import { PaperClipOutlined, Trash } from 'components/icon/Icon';
 import React, { useState } from 'react';
-import ReactShowMoreText from 'react-show-more-text';
 import color from 'styles/color';
 
 const tabListNoTitle = [
@@ -22,9 +21,6 @@ const tabListNoTitle = [
 ];
 
 const ContentSent = () => {
-  const executeOnClick = (isExpanded) => {
-    console.log(isExpanded);
-  };
   return (
     <>
       <Row>
@@ -54,28 +50,16 @@ const ContentSent = () => {
 
             <Col span={24}>
               <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                <ShowMoreText
-                  /* Default options */
-                  lines={2}
-                  more="Xem thêm"
-                  less="Rút gọn"
-                  className="content-css"
-                  anchorClass="show-more-less-clickable"
-                  onClick={executeOnClick}
-                  expanded={false}
-                  truncatedEndingComponent={'... '}
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
-                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
-                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
-                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
-                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
-                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
-                </ShowMoreText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat
+                dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
+                Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis
+                aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                aliquam, id sagittis aliquam viverra dolor blandit.
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -122,28 +106,16 @@ const ContentSent = () => {
 
             <Col span={24}>
               <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                <ShowMoreText
-                  /* Default options */
-                  lines={2}
-                  more="Xem thêm"
-                  less="Rút gọn"
-                  className="content-css"
-                  anchorClass="show-more-less-clickable"
-                  onClick={executeOnClick}
-                  expanded={false}
-                  truncatedEndingComponent={'... '}
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
-                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
-                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
-                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
-                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
-                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
-                </ShowMoreText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat
+                dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
+                Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis
+                aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                aliquam, id sagittis aliquam viverra dolor blandit.
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -169,9 +141,6 @@ const ContentSent = () => {
 };
 
 const ContentInterviewed = () => {
-  const executeOnClick = (isExpanded) => {
-    console.log(isExpanded);
-  };
   return (
     <>
       <Row>
@@ -191,28 +160,16 @@ const ContentInterviewed = () => {
             </Col>
             <Col span={24}>
               <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                <ShowMoreText
-                  /* Default options */
-                  lines={2}
-                  more="Xem thêm"
-                  less="Rút gọn"
-                  className="content-css"
-                  anchorClass="show-more-less-clickable"
-                  onClick={executeOnClick}
-                  expanded={false}
-                  truncatedEndingComponent={'... '}
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
-                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
-                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
-                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
-                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
-                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
-                </ShowMoreText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat
+                dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
+                Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis
+                aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                aliquam, id sagittis aliquam viverra dolor blandit.
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -249,28 +206,16 @@ const ContentInterviewed = () => {
             </Col>
             <Col span={24}>
               <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                <ShowMoreText
-                  /* Default options */
-                  lines={2}
-                  more="Xem thêm"
-                  less="Rút gọn"
-                  className="content-css"
-                  anchorClass="show-more-less-clickable"
-                  onClick={executeOnClick}
-                  expanded={false}
-                  truncatedEndingComponent={'... '}
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
-                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
-                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
-                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
-                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
-                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
-                </ShowMoreText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat
+                dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
+                Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis
+                aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                aliquam, id sagittis aliquam viverra dolor blandit.
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -296,9 +241,6 @@ const ContentInterviewed = () => {
 };
 
 const ContentReject = () => {
-  const executeOnClick = (isExpanded) => {
-    console.log(isExpanded);
-  };
   return (
     <>
       <Row>
@@ -318,28 +260,16 @@ const ContentReject = () => {
             </Col>
             <Col span={24}>
               <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                <ShowMoreText
-                  /* Default options */
-                  lines={2}
-                  more="Xem thêm"
-                  less="Rút gọn"
-                  className="content-css"
-                  anchorClass="show-more-less-clickable"
-                  onClick={executeOnClick}
-                  expanded={false}
-                  truncatedEndingComponent={'... '}
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
-                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
-                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
-                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
-                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
-                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
-                </ShowMoreText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat
+                dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
+                Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis
+                aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                aliquam, id sagittis aliquam viverra dolor blandit.
               </Typography.Text>
             </Col>
             <Col span={24}>
@@ -376,28 +306,16 @@ const ContentReject = () => {
             </Col>
             <Col span={24}>
               <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                <ShowMoreText
-                  /* Default options */
-                  lines={2}
-                  more="Xem thêm"
-                  less="Rút gọn"
-                  className="content-css"
-                  anchorClass="show-more-less-clickable"
-                  onClick={executeOnClick}
-                  expanded={false}
-                  truncatedEndingComponent={'... '}
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
-                  dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
-                  venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
-                  viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
-                  volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
-                  dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
-                  aliquam, id sagittis aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Viverra eget et volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget
-                  lobortis mauris maecenas dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt
-                  tellus justo. Vitae ac aliquam, id sagittis aliquam viverra dolor blandit.
-                </ShowMoreText>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat dui quis quis. Eu
+                dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis. Libero lectus
+                venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis aliquam
+                viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et volutpat
+                dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas dapibus duis.
+                Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac aliquam, id sagittis
+                aliquam viverra dolor blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra eget et
+                volutpat dui quis quis. Eu dictum turpis ultrices in. Ullamcorper nam eget lobortis mauris maecenas
+                dapibus duis. Libero lectus venenatis, cursus id pulvinar donec tincidunt tellus justo. Vitae ac
+                aliquam, id sagittis aliquam viverra dolor blandit.
               </Typography.Text>
             </Col>
             <Col span={24}>

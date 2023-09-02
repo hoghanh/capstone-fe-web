@@ -1,5 +1,5 @@
 import { Col, Row, Typography } from 'antd';
-import { ButtonPrimary } from 'components/button/GlobalButton';
+import { ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import {  PaperClipOutlined } from 'components/icon/Icon';
 import React from 'react';
