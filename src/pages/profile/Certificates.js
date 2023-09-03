@@ -1,5 +1,5 @@
 import { Col, Image, Row, Typography } from 'antd';
-import { ButtonIcon, ButtonPrimary } from 'components/button/GlobalButton';
+import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { MapMarkerAlt, Pen, Plus, Star } from 'components/icon/Icon';
 import React from 'react';
@@ -78,7 +78,7 @@ const BodySection = () => {
   );
 };
 
-const Section2 = () => {
+const Certificates = () => {
   return (
     <>
       <CustomCard style={{ padding: 0 }}>
@@ -103,4 +103,4 @@ const styles = {
   },
 };
 
-export default Section2;
+export default Certificates;
