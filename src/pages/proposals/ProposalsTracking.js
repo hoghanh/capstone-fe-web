@@ -8,15 +8,15 @@ import color from 'styles/color';
 const tabListNoTitle = [
   {
     key: 'Sent',
-    label: 'Được gửi đi',
+    label: 'Đã gửi đi',
   },
   {
     key: 'Interviewed',
-    label: 'Được phỏng vấn',
+    label: 'Phỏng vấn',
   },
   {
     key: 'Reject',
-    label: 'Bị từ chối',
+    label: 'Từ chối',
   },
 ];
 
@@ -346,7 +346,7 @@ const contentListNoTitle = {
   Reject: <ContentReject />,
 };
 
-const Section1 = () => {
+const ProposalsTracking = () => {
   const [activeTabKey2, setActiveTabKey2] = useState('Sent');
   const onTab2Change = (key) => {
     setActiveTabKey2(key);
@@ -385,4 +385,4 @@ const Section1 = () => {
   );
 };
 
-export default Section1;
+export default ProposalsTracking;

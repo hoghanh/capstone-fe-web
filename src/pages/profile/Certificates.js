@@ -78,7 +78,7 @@ const BodySection = () => {
   );
 };
 
-const Section2 = () => {
+const Certificates = () => {
   return (
     <>
       <CustomCard style={{ padding: 0 }}>
@@ -103,4 +103,4 @@ const styles = {
   },
 };
 
-export default Section2;
+export default Certificates;

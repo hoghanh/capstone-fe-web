@@ -1,8 +1,8 @@
 import {  Layout } from 'antd'
 import React, { useEffect, useState } from 'react'
-import Section1 from './Section1'
-import Section2 from './Section2'
 import { get } from 'utils/APICaller';
+import Overview from './Overview';
+import Certificates from './Certificates';
 
 
 
@@ -29,8 +29,8 @@ const Profile = () => {
   return (
     <>
     <Layout.Content style={styles.container}>
-      <Section1 information={information}/>
-      <Section2/>
+      <Overview information={information}/>
+      <Certificates/>
     </Layout.Content>
   </>
   )
