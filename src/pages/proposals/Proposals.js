@@ -1,6 +1,6 @@
 import {  Layout } from 'antd'
 import React from 'react'
-import Section1 from './Section1'
+import ProposalsTracking from './ProposalsTracking'
 
 
 
@@ -9,7 +9,7 @@ const Proposals = () => {
   return (
     <>
     <Layout.Content style={styles.container}>
-      <Section1/>
+      <ProposalsTracking/>
     </Layout.Content>
   </>
   )

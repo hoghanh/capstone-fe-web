@@ -104,7 +104,7 @@ const BodySection = () => {
   );
 };
 
-const Section2 = () => {
+const Proposal = () => {
   return (
     <>
       <CustomCard style={{ padding: 20 }}>
@@ -133,4 +133,4 @@ const styles = {
 };
 
 
-export default Section2;
+export default Proposal;

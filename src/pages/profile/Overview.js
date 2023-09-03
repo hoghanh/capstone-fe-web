@@ -439,7 +439,7 @@ const BodySection = ({information}) => {
   );
 };
 
-const Section1 = (props) => {
+const Overview = (props) => {
   // console.log(props.information)
   
   return (
@@ -468,4 +468,4 @@ const styles = {
   },
 };
 
-export default Section1;
+export default Overview;

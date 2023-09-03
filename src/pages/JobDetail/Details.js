@@ -1,6 +1,5 @@
 import { ClockCircleFilled, PaperClipOutlined } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
-import AppBreadcrumb from 'components/AppBreadcrumb';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { AddressCard, BookMarkOutlined, CreditCard, Donate, Envelope, MapMarkerAlt, PhoneAlt } from 'components/icon/Icon';
 import LoginModal from 'layout/header/LoginModal';
@@ -424,7 +423,7 @@ const InformationResponsive = ({ showModalLogin }) => {
     );
   };
 
-const Section1 = () => {
+const Details = () => {
   const [, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
 
@@ -450,7 +449,6 @@ const Section1 = () => {
         onOk={handleOkLogin}
         // handleMove={handleMove}
       />
-      <AppBreadcrumb />
       <Typography.Title level={2} style={styles.titlePost}>
         Javascript expert with Next.js and React.js expertise
       </Typography.Title>
@@ -506,4 +504,4 @@ const styles = {
   },
 };
 
-export default Section1;
+export default Details;
