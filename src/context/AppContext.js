@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
   const [categoriesNavbar, setCategoriesNavbar] = useState([]);
 
   useEffect(() => {
-    get({ endpoint: `/Category/all` })
+    get({ endpoint: `/Category` })
       .then((res) => {
         // setCategories(res.data);
         setItem(res.data);
