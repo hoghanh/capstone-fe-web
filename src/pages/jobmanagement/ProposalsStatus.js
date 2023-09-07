@@ -15,7 +15,7 @@ const HeaderSection = () => {
         </Typography.Title>
       </CustomCol>
       <CustomCol>
-        <Typography.Title level={3} style={{ color: color.colorPrimary, margin: 0 }}>
+        <Typography.Title level={3} style={{ color: color.colorPrimary, margin: 0  }}>
           Coi chi tiết
         </Typography.Title>
       </CustomCol>
@@ -67,7 +67,7 @@ const BodySection = () => {
   );
 };
 
-const Section2 = () => {
+const ProposalsStatus = () => {
   return (
     <>
       <CustomCard style={{ padding: 0 }}>
@@ -92,4 +92,4 @@ const styles = {
   },
 };
 
-export default Section2;
+export default ProposalsStatus;

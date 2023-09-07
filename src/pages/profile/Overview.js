@@ -1,38 +1,610 @@
-import { Col, Image, Row, Typography } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Col, Image, Input, InputNumber, Radio, Row, Select, Typography } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import { ModalPrimary } from 'components/Modal/Modal';
+// import confirm from 'antd/es/modal/confirm';
 import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { MapMarkerAlt, Pen, Plus, Star } from 'components/icon/Icon';
-import React from 'react';
+import { Checking, Flag, MapMarkerAlt, Pen, Plus, SearchOutlined, Star, Trash } from 'components/icon/Icon';
+import React, { useState } from 'react';
 import color from 'styles/color';
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
+const options = [];
+for (let i = 0; i < Skill.length; i++) {
+  console.log(i)
+  const value = i.toString(36) + i;
+  options.push({
+    label: `${value}`,
+    value,
+  });
+}
+
+const EditPersonalInformation = () => {
+  //Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary
+        title={'Chỉnh sửa thông tin'}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Số điện thoại</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <InputNumber style={{ width: '40%' }} prefix={<Flag />} placeholder="0123456789" controls={false} />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Địa chỉ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Địa chỉ" />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const EditWorkingTime = () => {
+  //Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [value, setValue] = useState(1);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onChange = (e) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+  };
+
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary title={'Khả dụng'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Title level={4} style={{margin: 0}}>Thời gian làm mỗi tuần</Typography.Title>
+              </Col>
+              <Col span={24}>
+                <Typography.Text>Biết cường độ làm việc có thể giúp bạn tìm được công việc phù hợp.</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Typography.Title level={5}  style={{margin: 0}}>Tôi có thể bỏ ra</Typography.Title>
+              </Col>
+              <Col span={24}>
+                <Row>
+                  <Radio.Group onChange={onChange} value={value}>
+                    <Col span={24} style={{padding: 5}}>
+                      <Radio value={1}>Nhiều hơn 30h / tuần</Radio>
+                    </Col>
+                    <Col span={24} style={{padding: 5}}>
+                      <Radio value={2}>Ít hơn 30h / tuần</Radio>
+                    </Col>
+                    <Col span={24} style={{padding: 5}}>
+                      <Radio value={3}>Có mặt khi yêu cầu</Radio>
+                    </Col>
+                    <Col span={24} style={{padding: 5}}>
+                      <Radio value={4}>Không có giới hạn</Radio>
+                    </Col>
+                  </Radio.Group>
+                </Row>
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const AddLanguage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Plus />
+      </ButtonIcon>
+      <ModalPrimary
+        title={'Thêm ngôn ngữ'}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={12}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Ngôn ngữ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input className='searchInput' addonBefore={<SearchOutlined />} placeholder="Tìm kiếm ngôn ngữ" />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={12}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Trình độ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Select
+                  defaultValue="2"
+                  style={{ width: 120 }}
+                  onChange={handleChange}
+                  suffixIcon={<DownOutlined /> }
+                  placement='bottomLeft'
+                  options={[
+                    { value: '1', label: 'Cơ Bản' },
+                    { value: '2', label: 'Giao tiếp' },
+                    { value: '3', label: 'Thông thạo' },
+                    { value: '4', label: 'Tự nhiên' },
+                  ]}
+                />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const EditLanguages = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary
+        title={'Chỉnh sửa ngôn ngữ'}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={12}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Ngôn ngữ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Tìm kiếm ngôn ngữ" />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={10}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Trình độ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Select
+                  defaultValue="2"
+                  style={{ width: 120 }}
+                  onChange={handleChange}
+                  suffixIcon={<DownOutlined />}
+                  placement="bottomLeft"
+                  options={[
+                    { value: '1', label: 'Cơ Bản' },
+                    { value: '2', label: 'Giao tiếp' },
+                    { value: '3', label: 'Thông thạo' },
+                    { value: '4', label: 'Tự nhiên' },
+                  ]}
+                />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col offset={2}>
+            
+          </Col>
+          <Col span={12}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Ngôn ngữ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Tìm kiếm ngôn ngữ" />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={10}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Trình độ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Select
+                  defaultValue="2"
+                  style={{ width: 120 }}
+                  onChange={handleChange}
+                  suffixIcon={<DownOutlined />}
+                  placement="bottomLeft"
+                  options={[
+                    { value: '1', label: 'Cơ Bản' },
+                    { value: '2', label: 'Giao tiếp' },
+                    { value: '3', label: 'Thông thạo' },
+                    { value: '4', label: 'Tự nhiên' },
+                  ]}
+                />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={2} style={{display: 'flex', justifyContent: 'flex-end', alignItems:'center'}}>
+            <ButtonIcon style={{ backgroundColor: color.colorWhite , border: `1px solid ${color.colorDeactivate}` }}>
+              <Trash color={'#eb4335'} />
+            </ButtonIcon>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const AddEducation = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <>
+      <ButtonIcon>
+        <Plus />
+      </ButtonIcon>
+      <ModalPrimary
+        title={'Chỉnh sửa thông tin'}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Số điện thoại</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <InputNumber style={{ width: '40%' }} prefix={<Flag />} placeholder="0123456789" controls={false} />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Địa chỉ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Địa chỉ" />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const EditEducations = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <>
+      <ButtonIcon>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary
+        title={'Chỉnh sửa thông tin'}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Số điện thoại</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <InputNumber style={{ width: '40%' }} prefix={<Flag />} placeholder="0123456789" controls={false} />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Địa chỉ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Địa chỉ" />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const EditIntroduction= () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const onChange = (e) => {
+    console.log('Change:', e.target.value);
+  };
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary title={'Giới thiệu'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Title level={4} style={{ margin: 0 }}>
+                  Chuyên môn
+                </Typography.Title>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Software Engineer | Javascript" />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Title level={4} style={{ margin: 0 }}>
+                  Mô tả bản thân
+                </Typography.Title>
+              </Col>
+              <Col span={24}>
+                <TextArea
+                  className='introText'
+                  showCount
+                  allowClear={true}
+                  maxLength={1000}
+                  style={{
+                    height: 120,
+                    resize: 'none',
+                  }}
+                  onChange={onChange}
+                  placeholder="textarea"
+                />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const EditSkills= () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const [value, setValue] = useState(['Javascript', 'Html', 'NextJS', 'ReactJS']);
+  const selectProps = {
+    mode: 'multiple',
+    style: {
+      width: '100%',
+    },
+    value,
+    options,
+    onChange: (newValue) => {
+      setValue(newValue);
+    },
+    placeholder: 'Thêm kỹ năng của bạn...',
+    maxTagCount: 'responsive',
+  };
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary title={'Kỹ năng chuyên môn'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Hãy nhập những kỹ năng bạn có để được đề xuất công việc phù hợp nhất.</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Select className='skillSelect' suffixIcon={<></>} {...selectProps} />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const EditCertifications= () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <>
+      <ButtonIcon>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary
+        title={'Chỉnh sửa thông tin'}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Số điện thoại</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <InputNumber style={{ width: '40%' }} prefix={<Flag />} placeholder="0123456789" controls={false} />
+              </Col>
+            </CustomRow>
+          </Col>
+          <Col span={24}>
+            <CustomRow gutter={[0, 10]}>
+              <Col span={24}>
+                <Typography.Text>Địa chỉ</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input placeholder="Địa chỉ" />
+              </Col>
+            </CustomRow>
+          </Col>
+        </Row>
+      </ModalPrimary>
+    </>
+  );
+};
+
 // Header section
-const HeaderSection = ({name, address}) => {
+const HeaderSection = () => {
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <Col>
         <Row>
-          <Col style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+          <Col style={{ display: 'flex', alignItems: 'center', marginRight: 10, position: 'relative' }}>
             <Image
               width={72}
               src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               alt="Apofoitisi logo"
-              preview={false}
+              preview={true}
               style={{ borderRadius: '50%' }}
             />
-            <div>{/* <CheckCircleFilled /> */}</div>
+            <div style={{ position: 'absolute', right: 2, bottom: 2 }}>
+              <Checking />
+            </div>
           </Col>
           <CustomCol>
-            <Typography.Title level={2} style={styles.nameUser}>
-              {name}
-            </Typography.Title>
+            <Row gutter={10}>
+              <Col>
+                <Typography.Title level={2} style={styles.nameUser}>
+                  Nguyen Van A
+                </Typography.Title>
+              </Col>
+              <Col>
+                <ButtonIcon>
+                  <Pen />
+                </ButtonIcon>
+              </Col>
+            </Row>
             <Row>
               <Col>
                 <MapMarkerAlt size={16} color={'#656565'} />
               </Col>
               <Col>
-                <Typography.Text style={styles.address}>{address}</Typography.Text>
+                <Typography.Text style={styles.address}>TP. Hồ Chí Minh, Việt Nam</Typography.Text>
               </Col>
             </Row>
           </CustomCol>
@@ -55,13 +627,12 @@ const HeaderSection = ({name, address}) => {
 };
 
 //Body Section Left
-const BodySectionLeft = ({information}) => {
+const BodySectionLeft = () => {
   return (
     <Col span={8} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
       <Row gutter={[0, 10]}>
         <Col>
           <Row gutter={[0, 10]}>
-            {/* Left 1 */}
             <Col>
               <Row align={'middle'} gutter={30}>
                 <Col>
@@ -70,9 +641,7 @@ const BodySectionLeft = ({information}) => {
                   </Typography.Title>
                 </Col>
                 <Col>
-                  <ButtonIcon>
-                    <Pen />
-                  </ButtonIcon>
+                  <EditPersonalInformation />
                 </Col>
               </Row>
             </Col>
@@ -88,11 +657,10 @@ const BodySectionLeft = ({information}) => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>{information.phone}</Typography.Text>
+                  <Typography.Text>0865644162</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
-            {/* Left 2 */}
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
@@ -105,7 +673,7 @@ const BodySectionLeft = ({information}) => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>{information.address}</Typography.Text>
+                  <Typography.Text>45 Tân Lập, phường Đông Hòa, thành phố Dĩ An, tỉnh Bình Dương</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -123,7 +691,6 @@ const BodySectionLeft = ({information}) => {
               </Row>
             </Col>
             <CustomCol>
-              {/* Left 1 */}
               <Row gutter={[0, 15]}>
                 <Col>
                   <Row align={'middle'} gutter={30}>
@@ -133,9 +700,7 @@ const BodySectionLeft = ({information}) => {
                       </Typography.Title>
                     </Col>
                     <Col>
-                      <ButtonIcon>
-                        <Pen />
-                      </ButtonIcon>
+                      <EditWorkingTime />
                     </Col>
                   </Row>
                 </Col>
@@ -144,7 +709,6 @@ const BodySectionLeft = ({information}) => {
                 </Col>
               </Row>
             </CustomCol>
-            {/* Left 2 */}
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
@@ -155,14 +719,10 @@ const BodySectionLeft = ({information}) => {
                       </Typography.Title>
                     </Col>
                     <Col>
-                      <ButtonIcon>
-                        <Plus />
-                      </ButtonIcon>
+                      <AddLanguage/>
                     </Col>
                     <Col>
-                      <ButtonIcon>
-                        <Pen />
-                      </ButtonIcon>
+                      <EditLanguages/>
                     </Col>
                   </Row>
                 </Col>
@@ -236,28 +796,17 @@ const BodySectionRight = () => {
                   </Typography.Title>
                 </Col>
                 <Col>
-                  <ButtonIcon>
-                    <Pen />
-                  </ButtonIcon>
+                  <EditIntroduction/>
                 </Col>
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
-              <Row align={'middle'} gutter={30}>
-                <Col span={21}>
-                  <Typography.Text>
-                    I’m a developer with experience in building websites for small and medium sized businesses. Whether
-                    you’re trying to win work, list your services or even create a whole online store – I can help! I’m
-                    experienced in HTML and CSS 3, JavaScipt, ReactJS and React Native Regular communication is really
-                    important to me, so let’s keep in touch!
-                  </Typography.Text>
-                </Col>
-                <Col span={3}>
-                  <ButtonIcon>
-                    <Pen />
-                  </ButtonIcon>
-                </Col>
-              </Row>
+              <Typography.Text>
+                I’m a developer with experience in building websites for small and medium sized businesses. Whether
+                you’re trying to win work, list your services or even create a whole online store – I can help! I’m
+                experienced in HTML and CSS 3, JavaScipt, ReactJS and React Native Regular communication is really
+                important to me, so let’s keep in touch!
+              </Typography.Text>
             </Col>
           </Row>
         </Col>
@@ -272,9 +821,7 @@ const BodySectionRight = () => {
                   </Typography.Title>
                 </Col>
                 <Col>
-                  <ButtonIcon>
-                    <Pen />
-                  </ButtonIcon>
+                  <EditSkills/>
                 </Col>
               </Row>
             </Col>
@@ -309,7 +856,7 @@ const BodySectionRight = () => {
               <Row align={'middle'}>
                 <Col>
                   <Typography.Title level={4} style={{ margin: 0 }}>
-                    Dự án từng làm 
+                    Dự án từng làm
                   </Typography.Title>
                 </Col>
               </Row>
@@ -430,7 +977,7 @@ const BodySectionRight = () => {
 };
 
 //Body Section
-const BodySection = ({information}) => {
+const BodySection = ({ information }) => {
   return (
     <Row>
       <BodySectionLeft information={information} />
@@ -441,7 +988,7 @@ const BodySection = ({information}) => {
 
 const Overview = (props) => {
   // console.log(props.information)
-  
+
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 30 }}>
