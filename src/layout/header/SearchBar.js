@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Input,
   Image,
@@ -11,7 +11,6 @@ import {
   Menu,
 } from 'antd';
 import { SearchOutlined, MenuOutlined } from '@ant-design/icons';
-
 import { ReactSVG } from 'react-svg';
 
 import RegisterModal from './RegisterModal';
@@ -19,16 +18,22 @@ import LoginModal from './LoginModal';
 import { useAuthActions } from 'recoil/auth';
 import { useRecoilValue } from 'recoil';
 import authAtom from 'recoil/auth/atom';
-import navbar from 'styles/navbar';
+import { AppContext } from 'context/AppContext';
 
 function SearchBar() {
   const { useBreakpoint } = Grid;
   const { sm, md, lg } = useBreakpoint();
 
   const [loading, setLoading] = useState(false);
+  const { categoriesNavbar } = useContext(AppContext);
 
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
 
   const auth = useRecoilValue(authAtom);
   const { logout } = useAuthActions();
@@ -105,10 +110,23 @@ function SearchBar() {
           margin: '0 auto',
         }}
       >
-        <Col xs={2} sm={2} md={2} lg={1} xl={0}>
-          <MenuOutlined width={30} />
+        <Col xs={6} sm={2} md={2} lg={1} xl={0}>
+          <div>
+            <MenuOutlined onClick={toggleCollapsed} />
+            <Menu
+              mode='inline'
+              inlineCollapsed={collapsed}
+              items={categoriesNavbar}
+              style={{
+                position: 'absolute',
+                width: 300,
+                zIndex: 100,
+                display: collapsed ? 'none' : '',
+              }}
+            />
+          </div>
         </Col>
-        <Col xs={2} offset={sm ? 0 : 4} sm={2} md={1} lg={1} xl={1}>
+        <Col xs={2} sm={2} md={1} lg={1} xl={1}>
           <Image
             width={34}
             src='/icon/logo.svg'
