@@ -83,3 +83,12 @@ body {
 .trackingJobs .ant-tabs-tab{
   padding: 10px !important;
 }
+
+.skillArticle .ant-list .ant-row {
+  flex-flow: nowrap !important;
+  margin-block-end: 10px !important;
+}
+
+
+
+

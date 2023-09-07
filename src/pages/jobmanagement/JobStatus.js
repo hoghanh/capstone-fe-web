@@ -354,7 +354,7 @@ const contentListNoTitle = {
   Accomplished: <ContentAccomplished/>,
 };
 
-const Section1 = () => {
+const JobStatus = () => {
   const [activeTabKey2, setActiveTabKey2] = useState('Processing');
   const onTab2Change = (key) => {
     setActiveTabKey2(key);
@@ -392,4 +392,4 @@ const Section1 = () => {
   );
 };
 
-export default Section1;
+export default JobStatus;
