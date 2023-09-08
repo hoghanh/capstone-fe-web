@@ -14,6 +14,7 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   //   const [categories, setCategories] = useState([]);
   const [categoriesNavbar, setCategoriesNavbar] = useState([]);
+  const [informationUser, setInformationUser] = useState('');
 
   useEffect(() => {
     get({ endpoint: `/Category` })
@@ -24,6 +25,8 @@ export const AppProvider = ({ children }) => {
       .catch((error) => {
         console.log(error);
       });
+
+      fetchProfile();
   }, []);
 
   function setItem(categories) {
@@ -40,11 +43,24 @@ export const AppProvider = ({ children }) => {
     });
     setCategoriesNavbar(items);
   }
+  
+  // get profile
+  const fetchProfile = async () => {
+    await get({ endpoint: "/accounts/profile/8" })
+      .then((response) => {
+        const data = response.data;
+        setInformationUser(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <AppContext.Provider
       value={{
         categoriesNavbar,
+        informationUser
       }}
     >
       {children}

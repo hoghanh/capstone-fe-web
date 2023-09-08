@@ -6,14 +6,14 @@ import { ModalPrimary } from 'components/Modal/Modal';
 import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { Checking, Flag, MapMarkerAlt, Pen, Plus, SearchOutlined, Star, Trash } from 'components/icon/Icon';
-import React, { useState } from 'react';
+import { AppContext } from 'context/AppContext';
+import React, { useContext, useState } from 'react';
 import color from 'styles/color';
 
 const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
 
 const options = [];
 for (let i = 0; i < Skill.length; i++) {
-  console.log(i)
   const value = i.toString(36) + i;
   options.push({
     label: `${value}`,
@@ -570,6 +570,11 @@ const EditCertifications= () => {
 
 // Header section
 const HeaderSection = () => {
+
+  const { informationUser } = useContext(AppContext);
+
+  console.log('informations', informationUser)
+
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <Col>
@@ -577,7 +582,7 @@ const HeaderSection = () => {
           <Col style={{ display: 'flex', alignItems: 'center', marginRight: 10, position: 'relative' }}>
             <Image
               width={72}
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              src= {informationUser.image}
               alt="Apofoitisi logo"
               preview={true}
               style={{ borderRadius: '50%' }}
@@ -590,7 +595,7 @@ const HeaderSection = () => {
             <Row gutter={10}>
               <Col>
                 <Typography.Title level={2} style={styles.nameUser}>
-                  Nguyen Van A
+                  {informationUser.name}
                 </Typography.Title>
               </Col>
               <Col>
@@ -628,6 +633,8 @@ const HeaderSection = () => {
 
 //Body Section Left
 const BodySectionLeft = () => {
+  const { informationUser } = useContext(AppContext);
+
   return (
     <Col span={8} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
       <Row gutter={[0, 10]}>
@@ -657,7 +664,7 @@ const BodySectionLeft = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>0865644162</Typography.Text>
+                  <Typography.Text style={{letterSpacing: 1}}>{informationUser.phone}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -673,7 +680,7 @@ const BodySectionLeft = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>45 Tân Lập, phường Đông Hòa, thành phố Dĩ An, tỉnh Bình Dương</Typography.Text>
+                  <Typography.Text>{informationUser.address}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -986,17 +993,16 @@ const BodySection = ({ information }) => {
   );
 };
 
-const Overview = (props) => {
-  // console.log(props.information)
+const Overview = () => {
 
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 30 }}>
         {/* Header section */}
-        <HeaderSection name={props.information.name} address={props.information.address} />
+        <HeaderSection/>
         <CustomDivider $primary />
         {/* Body Section */}
-        <BodySection information={props.information} />
+        <BodySection />
       </CustomCard>
     </>
   );
