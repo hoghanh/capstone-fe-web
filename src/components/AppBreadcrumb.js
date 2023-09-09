@@ -4,6 +4,7 @@ import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
+import theme from 'styles/theme';
 
 // const AppBreadcrumb = () => {
 const routes = [
@@ -22,7 +23,7 @@ const routes = [
 
   {
     path: '/jobDetail',
-    component: lazy(() => import('../pages/Jobdetail/JobDetail')),
+    component: lazy(() => import('../pages/jobdetail/JobDetail')),
     name: 'Job Detail',
     title: 'Chi tiết dự án',
   },

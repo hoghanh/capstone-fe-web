@@ -2,7 +2,6 @@ import React, { lazy, Suspense } from 'react';
 import { Spin } from 'antd';
 import { Route, Routes } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
-
 import AdminLayout from 'layout/defaultLayout/AdminLayout';
 import UserLayout from 'layout/defaultLayout/UserLayout';
 import BreadcrumbAdmin from 'layout/breadcrumbLayout/BreadCrumbAdmin';
@@ -35,12 +34,6 @@ export const routes = [
   },
 
   {
-    path: "/job-detail",
-    component: lazy(() => import("pages/Jobdetail/JobDetail")),
-    name: "jobDetail",
-  },
-
-  {
     path: "/profile",
     component: lazy(() => import("pages/profile/Profile")),
     name: "jobDetail",
@@ -56,7 +49,7 @@ const breadcrumbroutes = [
   },
   {
     path: "/jobDetail",
-    component: lazy(() => import("pages/Jobdetail/JobDetail")),
+    component: lazy(() => import("pages/jobdetail/JobDetail")),
     name: "jobDetail",
   },
 ];
