@@ -48,7 +48,7 @@ const AppBreadcrumb = () => {
     const breadcrumbs = [
       {
         path: '/',
-        component: lazy(() => import('../pages/home/HomePage')),
+        element: lazy(() => import('../pages/home/HomePage')),
         name: 'Home',
         title: <HomeFilled />,
       },
@@ -70,20 +70,22 @@ const AppBreadcrumb = () => {
   const breadcrumbs = getBreadcrumbs(currentLocation);
 
   return (
-    <Breadcrumb
-      style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
-      itemRender={itemRender}
-      items={breadcrumbs}
-      separator={
-        <ReactSVG
-          src='./icon/right.svg'
-          beforeInjection={(svg) => {
-            svg.setAttribute('width', '16');
-            svg.setAttribute('height', '6');
-          }}
-        />
-      }
-    />
+    <div style={theme.responseWidth}>
+      <Breadcrumb
+        style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
+        itemRender={itemRender}
+        items={breadcrumbs}
+        separator={
+          <ReactSVG
+            src='./icon/right.svg'
+            beforeInjection={(svg) => {
+              svg.setAttribute('width', '16');
+              svg.setAttribute('height', '6');
+            }}
+          />
+        }
+      />
+    </div>
   );
 };
 

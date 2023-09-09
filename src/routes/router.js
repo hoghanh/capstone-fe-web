@@ -1,18 +1,37 @@
 import React, { lazy, Suspense } from 'react';
+import { Spin } from 'antd';
 import { Route, Routes } from 'react-router-dom';
-import HeaderFooter from 'layout/defaultLayout/HeaderFooter';
-import Loading from 'components/loading/loading';
+import { HomeFilled } from '@ant-design/icons';
 
-const routes = [
+import AdminLayout from 'layout/defaultLayout/AdminLayout';
+import UserLayout from 'layout/defaultLayout/UserLayout';
+import BreadcrumbAdmin from 'layout/breadcrumbLayout/BreadCrumbAdmin';
+import BreadcrumbUser from 'layout/breadcrumbLayout/BreadCrumbUser';
+import PublicRoute from './PublicRoute';
+import PrivateRoute from './PrivateRoute';
+import { useRecoilValue } from 'recoil';
+import authAtom from 'recoil/auth/atom';
+
+export const routes = [
   {
     path: '/',
-    component: lazy(() => import('pages/home/HomePage')),
+    element: lazy(() => import('pages/home/HomePage')),
     name: 'home',
+    title: <HomeFilled />,
   },
   {
-    path: "/jobs",
-    component: lazy(() => import("pages/joblist/JobList")),
-    name: "jobs",
+    path: '/jobs',
+    element: lazy(() => import('pages/joblist/JobList')),
+    name: 'jobs',
+    layout: 'breadcrumb',
+    title: 'Tìm công việc freelance',
+  },
+  {
+    path: '/job-detail',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
+    layout: 'breadcrumb',
+    title: 'Chi tiết dự án',
   },
 
   {
@@ -42,16 +61,43 @@ const breadcrumbroutes = [
   },
 ];
 
-const Router = () => (
-  <Suspense fallback={<Loading />}>
-    <HeaderFooter>
+const Router = () => {
+  const auth = useRecoilValue(authAtom);
+  return (
+    <Suspense fallback={<Spin />}>
       <Routes>
-        {routes.map(({ path, component: Component }) => (
-          <Route key={path} path={path} element={<Component />} exact />
+        {routes.map(({ path, element, name, role, layout }) => (
+          <Route
+            key={path}
+            element={
+              auth.role === 'client' || auth.role === 'admin' ? (
+                layout === 'breadcrumb' ? (
+                  <BreadcrumbAdmin />
+                ) : (
+                  <AdminLayout />
+                )
+              ) : layout === 'breadcrumb' ? (
+                <BreadcrumbUser />
+              ) : (
+                <UserLayout />
+              )
+            }
+          >
+            <Route
+              path={path}
+              element={
+                role ? (
+                  <PrivateRoute element={element} allowedRoles={role} />
+                ) : (
+                  <PublicRoute element={element} />
+                )
+              }
+            />
+          </Route>
         ))}
       </Routes>
-    </HeaderFooter>
-  </Suspense>
-);
+    </Suspense>
+  );
+};
 
 export default Router;
