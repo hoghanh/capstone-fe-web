@@ -45,7 +45,7 @@ export const routes = [
     path: '/profile',
     element: lazy(() => import('pages/profile/Profile')),
     name: 'profile',
-    role: ['user'],
+    // role: ['user'],
   },
   {
     path: '/client',
@@ -63,7 +63,14 @@ export const routes = [
     path: '/job-management',
     element: lazy(() => import('pages/jobmanagement/JobManagement')),
     name: 'jobmanagement',
-    role: ['client'],
+    // role: ['client'],
+  },
+  
+  {
+    path: '/proposals',
+    element: lazy(() => import('pages/proposals/Proposals')),
+    name: 'jobmanagement',
+    // role: ['client'],
   },
 ];
 

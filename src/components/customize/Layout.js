@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components';
 const CustomCard = styled(Card)`
   box-shadow: 2px 6px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 10px;
+  border-radius: 20px;
 `;
 
 const CustomRow = styled(Row)`

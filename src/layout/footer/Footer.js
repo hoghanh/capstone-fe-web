@@ -44,10 +44,11 @@ const Footer = () => {
         <Typography.Title level={3} style={footer.text}>
           <Image
             width={34}
-            src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+            src='/icon/logo-white.svg'
             alt='Apofoitisi logo'
             preview={false}
-          />{' '}
+          />
+          {'  '}
           FPT - SEP
         </Typography.Title>
         <div style={footer.containIcon}>

@@ -5,6 +5,7 @@ import Router from './routes/router';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { notification } from 'antd';
+import { AppProvider } from 'context/AppContext';
 
 function App() {
   const [api, contextHolder] = notification.useNotification();
@@ -12,10 +13,12 @@ function App() {
     <AntProvider>
       <RecoilRoot>
         <React.Fragment>
-          <BrowserRouter>
-            {contextHolder}
-            <Router />
-          </BrowserRouter>
+          <AppProvider>
+            <BrowserRouter>
+              {contextHolder}
+              <Router />
+            </BrowserRouter>
+          </AppProvider>
         </React.Fragment>
       </RecoilRoot>
     </AntProvider>
