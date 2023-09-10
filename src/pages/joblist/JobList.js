@@ -9,7 +9,7 @@ import {
   notification,
   Pagination,
 } from 'antd';
-import Link from 'antd/es/typography/Link';
+import { Link } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { FileTextFilled } from '@ant-design/icons';
 import { get } from 'utils/APICaller';
@@ -68,8 +68,6 @@ const JobList = () => {
       });
   }
 
-  console.log(jobList);
-
   const onChange = (pageNumber) => {
     setPage(pageNumber);
   };
@@ -98,12 +96,6 @@ const JobList = () => {
   return (
     <>
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
-        <Typography.Title
-          level={3}
-          style={{ padding: '10px 20px', marginBottom: 20 }}
-        >
-          Logo Design
-        </Typography.Title>
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
@@ -237,7 +229,7 @@ const JobList = () => {
                     />
                   </svg>
                 </div>
-                <Link href='/jobdetails' target='_blank'>
+                <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                   <Typography.Paragraph
                     ellipsis={{
                       rows: 3,

@@ -56,7 +56,7 @@ const AppBreadcrumb = () => {
         items={breadcrumbs}
         separator={
           <ReactSVG
-            src='./icon/right.svg'
+            src='/icon/right.svg'
             beforeInjection={(svg) => {
               svg.setAttribute('width', '16');
               svg.setAttribute('height', '6');

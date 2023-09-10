@@ -27,7 +27,14 @@ export const routes = [
     title: 'Tìm công việc freelance',
   },
   {
-    path: '/job-detail',
+    path: '/jobs',
+    element: lazy(() => import('pages/joblist/JobList')),
+    name: 'jobs',
+    layout: 'breadcrumb',
+    title: 'Tìm công việc freelance',
+  },
+  {
+    path: '/jobs/job-detail/:id',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
     name: 'jobdetail',
     layout: 'breadcrumb',
