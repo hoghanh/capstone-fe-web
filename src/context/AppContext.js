@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { get } from 'utils/APICaller';
+import { Link } from 'react-router-dom';
 
 function getItem(key, label, children) {
   return {
@@ -32,7 +33,12 @@ export const AppProvider = ({ children }) => {
     categories?.map((category) => {
       category.subCategories?.forEach((subCategory) => {
         itemChildren.push(
-          getItem('subCate_' + subCategory.id, subCategory.name)
+          getItem(
+            'subCate_' + subCategory.id,
+            <Link to={`/jobs/${subCategory.id}/${subCategory.name}`}>
+              {subCategory.name}
+            </Link>
+          )
         );
       });
       items.push(getItem('cate_' + category.id, category.name, itemChildren));

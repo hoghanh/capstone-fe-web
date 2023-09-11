@@ -27,18 +27,23 @@ export const routes = [
     title: 'Tìm công việc freelance',
   },
   {
-    path: '/jobs',
+    path: '/jobs/:subCateId?/:subCateName?',
     element: lazy(() => import('pages/joblist/JobList')),
     name: 'jobs',
     layout: 'breadcrumb',
-    title: 'Tìm công việc freelance',
   },
   {
-    path: '/jobs/job-detail/:id',
+    path: '/jobs/job-detail',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
+  },
+  {
+    path: '/jobs/job-detail/:id?',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
+    layout: 'breadcrumb',
   },
 
   {
@@ -48,15 +53,10 @@ export const routes = [
     // role: ['user'],
   },
   {
-    path: '/client',
-    children: [
-      {
-        path: '/profile',
-        element: lazy(() => import('pages/profile/Profile')),
-        name: 'profile',
-        role: ['client'],
-      },
-    ],
+    path: '/client/profile',
+    element: lazy(() => import('pages/profile/Profile')),
+    name: 'profile',
+    role: ['client'],
   },
 
   {
@@ -65,7 +65,7 @@ export const routes = [
     name: 'jobmanagement',
     // role: ['client'],
   },
-  
+
   {
     path: '/proposals',
     element: lazy(() => import('pages/proposals/Proposals')),
@@ -76,6 +76,7 @@ export const routes = [
 
 const Router = () => {
   const auth = useRecoilValue(authAtom);
+
   return (
     <Suspense fallback={<Spin />}>
       <Routes>

@@ -9,9 +9,10 @@ import {
   notification,
   Pagination,
 } from 'antd';
-import { Link } from 'react-router-dom';
-import joblist from 'styles/joblist';
+import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
+
+import joblist from 'styles/joblist';
 import { get } from 'utils/APICaller';
 
 const CalculateDaysLeft = (endDate) => {
@@ -51,9 +52,11 @@ const JobList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [sortOption, setSortOption] = useState('Latest');
 
+  const { subCateName } = useParams();
+
   useEffect(() => {
     changePage(page);
-  }, [page]);
+  }, [page, subCateName]);
 
   function changePage(page) {
     get({ endpoint: `/job?limit=${limit}&page=${page}` })
@@ -96,6 +99,15 @@ const JobList = () => {
   return (
     <>
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
+        {subCateName && (
+          <Typography.Title
+            level={3}
+            style={{ padding: '10px 20px', marginBottom: 20 }}
+          >
+            {subCateName}
+          </Typography.Title>
+        )}
+
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
