@@ -13,36 +13,9 @@ import Link from 'antd/es/typography/Link';
 import joblist from 'styles/joblist';
 import { FileTextFilled } from '@ant-design/icons';
 import { get } from 'utils/APICaller';
+import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 
-const CalculateDaysLeft = (endDate) => {
-  const currentDate = new Date();
 
-  endDate = new Date(endDate);
-  let remainTime;
-  let output;
-
-  if (endDate >= currentDate) {
-    const timeDifference = endDate.getTime() - currentDate.getTime();
-    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-    const hoursDifference = Math.floor(
-      (timeDifference % (1000 * 3600 * 24)) / (1000 * 3600)
-    );
-
-    remainTime = {
-      days: daysDifference - 1,
-      hours: hoursDifference,
-    };
-  }
-
-  if (remainTime?.days) {
-    output = remainTime.days + ' ngày ' + remainTime.hours + ' giờ còn lại';
-  } else if (remainTime?.hours) {
-    output = remainTime.hours + ' giờ còn lại';
-  } else {
-    output = 'Quá hạn';
-  }
-  return output;
-};
 
 const JobList = () => {
   const [limit, setLimit] = useState(10);
@@ -218,8 +191,7 @@ const JobList = () => {
                       {job.title}
                     </Typography.Title>
                     <Typography.Text level={4}>
-                      Lương thoả thuận: {job.lowestIncome} - {job.highestIncome}
-                      VND / {CalculateDaysLeft(job.proposalSubmitDeadline)}
+                      Lương thoả thuận: {FormatVND(job.lowestIncome)} - {FormatVND(job.highestIncome)} / {CalculateDaysLeft(job.proposalSubmitDeadline)}
                     </Typography.Text>
                   </div>
                   <svg

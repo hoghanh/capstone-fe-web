@@ -8,7 +8,7 @@ import color from 'styles/color';
 import css from './jobDetail.module.css';
 import './jobDetail.module.css';
 import { ButtonPrimary } from 'components/customize/GlobalCustomize';
-import { formatVND } from 'components/formatter/formatCurrency';
+import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 
 const Skill = [
   {
@@ -50,7 +50,7 @@ const Skill = [
 ];
 
 //Header Article right
-const HeaderArticle = ({lowestIncome, highestIncome}) => {
+const HeaderArticle = ({lowestIncome, highestIncome, proposalSubmitDeadline}) => {
   return (
     <>
       <Row>
@@ -70,12 +70,12 @@ const HeaderArticle = ({lowestIncome, highestIncome}) => {
               }}
             >
               <Typography.Title level={4} style={styles.headerTitleRight}>
-                {formatVND(lowestIncome)} - {formatVND(highestIncome)}
+                {FormatVND(lowestIncome)} - {FormatVND(highestIncome)}
               </Typography.Title>
               <div>
                 <ClockCircleFilled />
                 <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
-                  Thời gian ứng tuyển còn lại 4 ngày
+                  {CalculateDaysLeft(proposalSubmitDeadline)}
                 </Typography.Text>
               </div>
             </CustomCol>
@@ -122,14 +122,14 @@ const HeaderArticle = ({lowestIncome, highestIncome}) => {
 };
 
 //Description
-const DescriptionsArticle = () => {
+const DescriptionsArticle = ({description}) => {
   return (
     <Row>
       <CustomCol span={24}>
         <Row gutter={[0, 20]}>
           <Col span={24}>
             <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-              
+              {description}
             </Typography.Text>
           </Col>
     
@@ -304,7 +304,7 @@ const ContactInfo = () => {
 const ArticleLeft = ({jobDetail}) => {
   return (
     <Col md={{span: 18}} xs={{span: 24}}  style={{ paddingRight: 20 }}>
-      <HeaderArticle lowestIncome={jobDetail.lowestIncome} highestIncome={jobDetail.highestIncome} />
+      <HeaderArticle lowestIncome={jobDetail.lowestIncome} highestIncome={jobDetail.highestIncome} proposalSubmitDeadline={jobDetail.proposalSubmitDeadline} />
       <CustomDivider />
       <DescriptionsArticle  description={(jobDetail.description)}/>
       <CustomDivider />
