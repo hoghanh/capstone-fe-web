@@ -2,7 +2,6 @@ import React, { lazy, Suspense } from 'react';
 import { Spin } from 'antd';
 import { Route, Routes } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
-
 import AdminLayout from 'layout/defaultLayout/AdminLayout';
 import UserLayout from 'layout/defaultLayout/UserLayout';
 import BreadcrumbAdmin from 'layout/breadcrumbLayout/BreadCrumbAdmin';
@@ -52,6 +51,9 @@ export const routes = [
     ],
   },
 
+];
+
+const breadcrumbroutes = [
   {
     path: '/job-management',
     element: lazy(() => import('pages/jobmanagement/JobManagement')),
