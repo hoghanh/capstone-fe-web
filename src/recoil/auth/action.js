@@ -35,7 +35,7 @@ const useAuthActions = () => {
       currency,
       status,
     });
-    if (role === 'user') {
+    if (role === 'freelancer') {
       navigate('/');
     } else {
       navigate('/client/');

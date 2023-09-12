@@ -8,9 +8,11 @@ import {
   Typography,
   notification,
   Pagination,
+  Grid,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
+import { ReactSVG } from 'react-svg';
 
 import joblist from 'styles/joblist';
 import { get } from 'utils/APICaller';
@@ -46,6 +48,9 @@ const CalculateDaysLeft = (endDate) => {
 };
 
 const JobList = () => {
+  const { useBreakpoint } = Grid;
+  const { sm, md, lg, xl } = useBreakpoint();
+
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [jobList, setJobList] = useState([]);
@@ -119,15 +124,26 @@ const JobList = () => {
                 alignItems: 'baseline',
               }}
             >
-              <Typography.Title level={3}>Kết quả hàng đầu</Typography.Title>
+              <Typography.Title level={md ? 3 : 5}>
+                Kết quả hàng đầu
+              </Typography.Title>
               <Typography.Text style={joblist.textResult}>
-                1-10 of 200 kết quả
+                {md ? '1-10 of 200 kết quả' : ''}
               </Typography.Text>
             </div>
           }
           extra={
             <div>
-              <Typography.Text style={joblist.sortbyText}>
+              <Typography.Text
+                style={{
+                  display: md ? '' : 'none',
+                  fontSize: 14,
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
+                  paddingRight: 14,
+                }}
+              >
                 Sắp xếp theo
               </Typography.Text>
               <Select
@@ -135,7 +151,7 @@ const JobList = () => {
                 size='large'
                 style={{
                   borderRadius: 8,
-                  width: 200,
+                  width: md ? 200 : 150,
                   backgroundColor: '#FFFFFF',
                   boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
                   border: '1px solid #000',
@@ -185,7 +201,7 @@ const JobList = () => {
             >
               <div
                 style={{
-                  display: ' flex',
+                  display: md ? 'flex' : 'none',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexDirection: 'column',
@@ -208,7 +224,7 @@ const JobList = () => {
                   {job.clients?.accounts?.name.toUpperCase()}
                 </Typography.Title>
               </div>
-              <div style={{ padding: 10, width: '100%' }}>
+              <div style={{ padding: 10 }}>
                 <div
                   style={{
                     display: ' flex',
@@ -218,7 +234,7 @@ const JobList = () => {
                   }}
                 >
                   <div>
-                    <Typography.Title style={{ margin: 0 }} level={4}>
+                    <Typography.Title style={{ margin: 0 }} level={md ? 4 : 5}>
                       {job.title}
                     </Typography.Title>
                     <Typography.Text level={4}>
@@ -226,20 +242,14 @@ const JobList = () => {
                       VND / {CalculateDaysLeft(job.proposalSubmitDeadline)}
                     </Typography.Text>
                   </div>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='30'
-                    height='28'
-                    viewBox='0 0 30 28'
-                    fill='none'
-                  >
-                    <path
-                      d='M5.49352 25.5555L5.51231 25.5905L5.53382 25.624C6.2433 26.7277 7.56456 26.8266 8.47475 26.4868L8.54052 26.4622L8.60221 26.4287L15 22.9545L21.3978 26.4287L21.4245 26.4432L21.4521 26.4561C21.6405 26.544 21.8256 26.6077 22.0338 26.6401C22.2064 26.667 22.3706 26.6667 22.4784 26.6666C22.4858 26.6666 22.4931 26.6666 22.5 26.6666C23.0824 26.6666 23.6536 26.4828 24.0886 26.0768C24.5298 25.665 24.75 25.0988 24.75 24.4999V5.83325C24.75 3.23377 22.6112 1.33325 20 1.33325H10C7.38882 1.33325 5.25 3.23377 5.25 5.83325V24.4999C5.25 24.5065 5.24999 24.5136 5.24997 24.521C5.24977 24.6207 5.24943 24.7895 5.2812 24.9674C5.31996 25.1844 5.39551 25.3725 5.49352 25.5555Z'
-                      fill='white'
-                      stroke='black'
-                      strokeWidth='2'
-                    />
-                  </svg>
+                  <ReactSVG
+                    style={{ alignItems: 'flex-start', display: 'flex' }}
+                    src='/icon/bookmark.svg'
+                    beforeInjection={(svg) => {
+                      svg.setAttribute('width', '28');
+                      svg.setAttribute('height', '29');
+                    }}
+                  />
                 </div>
                 <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                   <Typography.Paragraph
@@ -259,23 +269,18 @@ const JobList = () => {
                     alignItems: 'flex-start',
                     gap: '15px',
                     alignSelf: 'stretch',
+                    overflowY: 'auto',
                   }}
                 >
-                  <Button type='primary' style={joblist.button}>
-                    Javascript
-                  </Button>
-                  <Button type='primary' style={joblist.button}>
-                    Html
-                  </Button>
-                  <Button type='primary' style={joblist.button}>
-                    CSS
-                  </Button>
-                  <Button type='primary' style={joblist.button}>
-                    NextJS
-                  </Button>
-                  <Button type='primary' style={joblist.button}>
-                    ReactJS
-                  </Button>
+                  {job.skills?.map((skill) => (
+                    <Button
+                      type='primary'
+                      style={joblist.button}
+                      key={skill.id}
+                    >
+                      {skill.name}
+                    </Button>
+                  ))}
                 </div>
                 <div style={joblist.applied}>
                   <Typography.Title level={5} style={joblist.applied.text}>
