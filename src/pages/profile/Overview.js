@@ -1,5 +1,5 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Col, Image, Input, InputNumber, Radio, Row, Select, Typography } from 'antd';
+import { Col, Image, Input, InputNumber, List, Radio, Row, Select, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ModalPrimary } from 'components/Modal/Modal';
 // import confirm from 'antd/es/modal/confirm';
@@ -9,8 +9,46 @@ import { Checking, Flag, MapMarkerAlt, Pen, Plus, SearchOutlined, Star, Trash } 
 import { AppContext } from 'context/AppContext';
 import React, { useContext, useState } from 'react';
 import color from 'styles/color';
+import css from './profile.module.css'
 
-const Skill = ['Javascript', 'Html', 'NextJS', 'ReactJS'];
+const Skill = [
+  {
+    title: 'Javascript',
+  },
+  {
+    title: 'Html',
+  },
+  {
+    title: 'NextJS',
+  },
+  {
+    title: 'ReactJS',
+  },
+  {
+    title: 'Javascript',
+  },
+  {
+    title: 'Html',
+  },
+  {
+    title: 'NextJS',
+  },
+  {
+    title: 'ReactJS',
+  },
+  {
+    title: 'Javascript',
+  },
+  {
+    title: 'Html',
+  },
+  {
+    title: 'NextJS',
+  },
+  {
+    title: 'ReactJS',
+  },
+];
 
 const options = [];
 for (let i = 0; i < Skill.length; i++) {
@@ -615,15 +653,12 @@ const HeaderSection = () => {
           </CustomCol>
         </Row>
       </Col>
-      <Col>
+      <Col className={css.btnSubmitCV}>
         <Row gutter={[20, 0]}>
           <Col>
             <ButtonPrimary $primary style={{ border: `1px solid ${color.colorDeactivate}` }}>
               Nộp CV/Resume
             </ButtonPrimary>
-          </Col>
-          <Col>
-            <ButtonPrimary>Chỉnh sửa thông tin</ButtonPrimary>
           </Col>
         </Row>
       </Col>
@@ -636,12 +671,12 @@ const BodySectionLeft = () => {
   const { informationUser } = useContext(AppContext);
 
   return (
-    <Col span={8} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
+    <Col span={0} sm={{span: 8}} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
       <Row gutter={[0, 10]}>
         <Col>
           <Row gutter={[0, 10]}>
             <Col>
-              <Row align={'middle'} gutter={30}>
+              <Row align={'middle'} gutter={[30, 10]}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0 }}>
                     Thông tin cá nhân
@@ -655,7 +690,7 @@ const BodySectionLeft = () => {
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={30}>
+                  <Row align={'middle'} gutter={[30, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Số điện thoại
@@ -671,7 +706,7 @@ const BodySectionLeft = () => {
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={30}>
+                  <Row align={'middle'} gutter={[30, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Địa chỉ
@@ -689,7 +724,7 @@ const BodySectionLeft = () => {
         <Col>
           <Row gutter={[0, 10]}>
             <Col>
-              <Row align={'middle'} gutter={30}>
+              <Row align={'middle'} gutter={[30, 10]}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0 }}>
                     Thông tin công việc
@@ -700,7 +735,7 @@ const BodySectionLeft = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={30}>
+                  <Row align={'middle'} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Thời gian làm mỗi tuần
@@ -719,7 +754,7 @@ const BodySectionLeft = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={30}>
+                  <Row align={'middle'} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Ngôn ngữ
@@ -736,17 +771,17 @@ const BodySectionLeft = () => {
                 <Col>
                   <Typography.Text>
                     <Typography.Text strong style={{ marginRight: 20 }}>
-                      English:
+                      Tiếng Anh:
                     </Typography.Text>
-                    Conversational
+                    Giao tiếp
                   </Typography.Text>
                 </Col>
                 <Col>
                   <Typography.Text>
                     <Typography.Text strong style={{ marginRight: 20 }}>
-                      Japanese:
+                      Tiếng Nhật:
                     </Typography.Text>
-                    Conversational
+                    Giao tiếp
                   </Typography.Text>
                 </Col>
               </Row>
@@ -755,7 +790,7 @@ const BodySectionLeft = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={30}>
+                  <Row align={'middle'} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Giáo dục
@@ -788,10 +823,159 @@ const BodySectionLeft = () => {
   );
 };
 
+//Body Section Left Responsive
+const BodySectionLeftResponsive = () => {
+  const { informationUser } = useContext(AppContext);
+
+  return (
+    <Col span={24} sm={{span: 0}} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
+      <Row gutter={[0, 10]}>
+        <Col>
+          <Row gutter={[0, 10]}>
+            <Col>
+              <Row align={'middle'} gutter={[30, 10]}>
+                <Col>
+                  <Typography.Title level={3} style={{ margin: 0 }}>
+                    Thông tin cá nhân
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <EditPersonalInformation />
+                </Col>
+              </Row>
+            </Col>
+            <CustomCol span={24}>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col span={24}>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Số điện thoại
+                      </Typography.Title>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text style={{letterSpacing: 1}}>{informationUser.phone}</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            <CustomCol span={24}>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col span={24}>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Địa chỉ
+                      </Typography.Title>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text>{informationUser.address}</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+          </Row>
+        </Col>
+        <Col>
+          <Row gutter={[0, 10]}>
+            <Col>
+              <Row align={'middle'} gutter={[30, 10]}>
+                <Col>
+                  <Typography.Title level={3} style={{ margin: 0 }}>
+                    Thông tin công việc
+                  </Typography.Title>
+                </Col>
+              </Row>
+            </Col>
+            <CustomCol>
+              <Row gutter={[0, 15]}>
+                <Col span={24}>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Thời gian làm mỗi tuần
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <EditWorkingTime />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text>More than 30hrs/weeks</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            <CustomCol>
+              <Row gutter={[0, 15]}>
+                <Col span={24}>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Ngôn ngữ
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <AddLanguage/>
+                    </Col>
+                    <Col>
+                      <EditLanguages/>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text>
+                    <Typography.Text strong style={{ marginRight: 20 }}>
+                      Tiếng Anh:
+                    </Typography.Text>
+                    Giao tiếp
+                  </Typography.Text>
+                </Col>
+                <Col>
+                  <Typography.Text>
+                    <Typography.Text strong style={{ marginRight: 20 }}>
+                      Tiếng Nhật:
+                    </Typography.Text>
+                    Giao tiếp
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            {/* Left 3 */}
+            <CustomCol>
+              <Row gutter={[0, 15]}>
+                <Col span={24}>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                       Chuyên ngành
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <ButtonIcon>
+                        <Plus />
+                      </ButtonIcon>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text>Kỹ thuật phần mềm · (2019 - 2023)</Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+          </Row>
+        </Col>
+      </Row>
+    </Col>
+  );
+};
+
 //Body Section Right
 const BodySectionRight = () => {
   return (
-    <Col span={16}>
+    <Col span={24} sm={{span: 16}}>
       <Row>
         <Col span={24}>
           <Row>
@@ -803,7 +987,7 @@ const BodySectionRight = () => {
                   </Typography.Title>
                 </Col>
                 <Col>
-                  <EditIntroduction/>
+                  <EditIntroduction />
                 </Col>
               </Row>
             </Col>
@@ -828,17 +1012,21 @@ const BodySectionRight = () => {
                   </Typography.Title>
                 </Col>
                 <Col>
-                  <EditSkills/>
+                  <EditSkills />
                 </Col>
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
-              <Row align={'middle'}>
-                <CustomCol span={24} style={{ display: 'flex', gap: 15, flexDirection: 'row' }}>
-                  {Skill.map((item) => {
-                    return (
-                      <Typography.Text
-                        key={item}
+              <Row className="skillArticle" gutter={[0, 10]}>
+                <CustomCol span={24}>
+                  <List
+                    style={{ overflowX: 'auto' }}
+                    grid={{
+                      gutter: 15,
+                    }}
+                    dataSource={Skill}
+                    renderItem={(item, index) => (
+                      <List.Item
                         style={{
                           fontWeight: 700,
                           fontSize: 14,
@@ -847,10 +1035,10 @@ const BodySectionRight = () => {
                           borderRadius: 25,
                         }}
                       >
-                        {item}
-                      </Typography.Text>
-                    );
-                  })}
+                        {item.title}
+                      </List.Item>
+                    )}
+                  />
                 </CustomCol>
               </Row>
             </Col>
@@ -1003,6 +1191,10 @@ const Overview = () => {
         <CustomDivider $primary />
         {/* Body Section */}
         <BodySection />
+      </CustomCard>
+
+      <CustomCard style={{ padding: 0, marginBottom: 30 }}>
+        <BodySectionLeftResponsive/>
       </CustomCard>
     </>
   );

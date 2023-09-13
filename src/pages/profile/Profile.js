@@ -10,7 +10,7 @@ const Profile = () => {
 
   return (
     <>
-    <Layout.Content style={styles.container}>
+    <Layout.Content className={'containerBody'} style={styles.containerBody}>
       <Overview/>
       <Certificates/>
     </Layout.Content>
@@ -19,7 +19,7 @@ const Profile = () => {
 }
 
 const styles = {
-  container:  { maxWidth: 1080, margin: '40px auto 0', },
+  containerBody:  { maxWidth: 1080, margin: '40px auto 0', },
 }
 
 
