@@ -28,7 +28,7 @@ const ContentSent = () => {
           <Row gutter={[0, 5]}>
             <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row justify={'space-between'}>
-                <Col>
+                <Col span={22}>
                   <Row gutter={[0, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
@@ -40,9 +40,9 @@ const ContentSent = () => {
                     </Col>
                   </Row>
                 </Col>
-                <Col>
+                <Col span={2}>
                   <ButtonPrimary style={{ backgroundColor: 'red', width: 45, height: 45, padding: 10 }}>
-                    <Trash />
+                    <Trash color={color.colorWhite} />
                   </ButtonPrimary>
                 </Col>
               </Row>
@@ -84,7 +84,7 @@ const ContentSent = () => {
           <Row gutter={[0, 5]}>
             <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
               <Row justify={'space-between'}>
-                <Col>
+                <Col span={22}>
                   <Row gutter={[0, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
@@ -96,9 +96,9 @@ const ContentSent = () => {
                     </Col>
                   </Row>
                 </Col>
-                <Col>
+                <Col span={2}>
                   <ButtonPrimary style={{ backgroundColor: 'red', width: 45, height: 45, padding: 10 }}>
-                    <Trash />
+                    <Trash color={color.colorWhite} />
                   </ButtonPrimary>
                 </Col>
               </Row>

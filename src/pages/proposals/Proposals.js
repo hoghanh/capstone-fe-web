@@ -8,7 +8,7 @@ import ProposalsTracking from './ProposalsTracking'
 const Proposals = () => {
   return (
     <>
-    <Layout.Content style={styles.container}>
+    <Layout.Content className={'containerBody'} style={styles.containerBody}>
       <ProposalsTracking/>
     </Layout.Content>
   </>
@@ -16,7 +16,7 @@ const Proposals = () => {
 }
 
 const styles = {
-  container:  { maxWidth: 1080, margin: '40px auto 0', },
+  containerBody:  { maxWidth: 1080, margin: '40px auto 0', },
 }
 
 
