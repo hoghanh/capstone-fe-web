@@ -7,6 +7,10 @@ body {
   color: #02ADFD
 }
 
+.ant-menu a {
+  color: #013042
+}
+
 .ant-btn-primary {
   color: #013042;
   border-radius: 25px;

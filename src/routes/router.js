@@ -26,11 +26,23 @@ export const routes = [
     title: 'Tìm công việc freelance',
   },
   {
-    path: '/job-detail',
+    path: '/jobs/:subCateId?/:subCateName?',
+    element: lazy(() => import('pages/joblist/JobList')),
+    name: 'jobs',
+    layout: 'breadcrumb',
+  },
+  {
+    path: '/jobs/job-detail',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
+  },
+  {
+    path: '/jobs/job-detail/:id?',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
+    layout: 'breadcrumb',
   },
 
   {
@@ -40,15 +52,10 @@ export const routes = [
     // role: ['user'],
   },
   {
-    path: '/client',
-    children: [
-      {
-        path: '/profile',
-        element: lazy(() => import('pages/profile/Profile')),
-        name: 'profile',
-        role: ['client'],
-      },
-    ],
+    path: '/client/profile',
+    element: lazy(() => import('pages/profile/Profile')),
+    name: 'profile',
+    role: ['client'],
   },
 
 ];
@@ -60,7 +67,7 @@ const breadcrumbroutes = [
     name: 'jobmanagement',
     // role: ['client'],
   },
-  
+
   {
     path: '/proposals',
     element: lazy(() => import('pages/proposals/Proposals')),
@@ -71,6 +78,7 @@ const breadcrumbroutes = [
 
 const Router = () => {
   const auth = useRecoilValue(authAtom);
+
   return (
     <Suspense fallback={<Spin />}>
       <Routes>
