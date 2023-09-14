@@ -11,7 +11,11 @@ import {
   Grid,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import { FileTextFilled } from '@ant-design/icons';
+import {
+  FileTextFilled,
+  DownOutlined,
+  MenuUnfoldOutlined,
+} from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 
 import joblist from 'styles/joblist';
@@ -56,6 +60,7 @@ const JobList = () => {
   const [jobList, setJobList] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [sortOption, setSortOption] = useState('Latest');
+  const [openSelect, setOpenSelect] = useState();
 
   const { subCateId, subCateName } = useParams();
 
@@ -161,46 +166,56 @@ const JobList = () => {
               >
                 Sắp xếp theo
               </Typography.Text>
-              <Select
-                placeholder=''
-                size='large'
-                style={{
-                  borderRadius: 8,
-                  width: md ? 200 : 150,
-                  backgroundColor: '#FFFFFF',
-                  boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
-                  border: '1px solid #000',
-                }}
-                bordered={false}
-                onChange={handleChange}
-                defaultValue='Latest'
-                options={[
-                  {
-                    value: 'Latest',
-                    label: 'Mới Nhất',
-                  },
-                  {
-                    value: 'Oldest',
-                    label: 'Cũ Nhất',
-                  },
-                  {
-                    value: 'Lowest Price',
-                    label: 'Giá Thấp',
-                  },
-                  {
-                    value: 'Highest Price',
-                    label: 'Giá Cao',
-                  },
-                  {
-                    value: 'Most Applications',
-                    label: 'Nhiều Lượt Đăng Ký',
-                  },
-                  {
-                    value: 'Lest Applications',
-                    label: 'Ít Lượt Đăng Ký',
-                  },
-                ]}
-              />
+              <>
+                <Select
+                  placeholder=''
+                  size='large'
+                  style={{
+                    borderRadius: 8,
+                    width: md ? 200 : 150,
+                    backgroundColor: '#FFFFFF',
+                    boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
+                    border: '1px solid #000',
+                    visibility: md ? '' : 'hidden',
+                  }}
+                  bordered={false}
+                  onChange={handleChange}
+                  defaultValue='Latest'
+                  open={openSelect}
+                  onClick={() => setOpenSelect(!openSelect)}
+                  options={[
+                    {
+                      value: 'Latest',
+                      label: 'Mới Nhất',
+                    },
+                    {
+                      value: 'Oldest',
+                      label: 'Cũ Nhất',
+                    },
+                    {
+                      value: 'Lowest Price',
+                      label: 'Giá Thấp',
+                    },
+                    {
+                      value: 'Highest Price',
+                      label: 'Giá Cao',
+                    },
+                    {
+                      value: 'Most Applications',
+                      label: 'Nhiều Lượt Đăng Ký',
+                    },
+                    {
+                      value: 'Lest Applications',
+                      label: 'Ít Lượt Đăng Ký',
+                    },
+                  ]}
+                />
+                {md ? null : (
+                  <MenuUnfoldOutlined
+                    onClick={() => setOpenSelect(!openSelect)}
+                  />
+                )}
+              </>
             </div>
           }
         >
