@@ -239,13 +239,14 @@ const JobList = () => {
                   {job.clients?.accounts?.name.toUpperCase()}
                 </Typography.Title>
               </div>
-              <div style={{ padding: 10 }}>
+              <div style={{ padding: 10, overflow: 'auto' }}>
                 <div
                   style={{
                     display: ' flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: 10,
+                    gap: 15,
                   }}
                 >
                   <div>
@@ -258,7 +259,10 @@ const JobList = () => {
                     </Typography.Text>
                   </div>
                   <ReactSVG
-                    style={{ alignItems: 'flex-start', display: 'flex' }}
+                    style={{
+                      alignSelf: md ? ' ' : 'flex-start',
+                      display: 'flex',
+                    }}
                     src='/icon/bookmark.svg'
                     beforeInjection={(svg) => {
                       svg.setAttribute('width', '28');
@@ -284,7 +288,7 @@ const JobList = () => {
                     alignItems: 'flex-start',
                     gap: '15px',
                     alignSelf: 'stretch',
-                    overflowY: 'auto',
+                    overflow: 'auto',
                   }}
                 >
                   {job.skills?.map((skill) => (
