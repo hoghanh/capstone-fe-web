@@ -1,51 +1,53 @@
-import jwt_decode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 
-import { LOCALSTORAGE_TOKEN_NAME } from "../config";
+import { TOKEN } from '../config';
 
 class LocalStorageUtils {
   getItem(key) {
-    if (typeof localStorage !== "undefined") {
+    if (typeof localStorage !== 'undefined') {
       let item = localStorage.getItem(key);
       if (!item) {
         this.setItem(key);
         return localStorage.getItem(key);
       }
-      return JSON.parse(item || "{}");
+      return JSON.parse(item || '{}');
     }
     return undefined;
   }
 
-  setItem(key, value = "") {
-    if (typeof localStorage !== "undefined" && value !== "") {
+  setItem(key, value = '') {
+    if (typeof localStorage !== 'undefined' && value !== '') {
       localStorage.setItem(key, JSON.stringify(value));
     }
   }
 
   removeItem(key) {
-    if (typeof localStorage !== "undefined") {
+    if (typeof localStorage !== 'undefined') {
       localStorage.removeItem(key);
     }
   }
 
   clear() {
-    if (typeof localStorage !== "undefined") {
+    if (typeof localStorage !== 'undefined') {
       localStorage.clear();
     }
   }
 
   setUser(token) {
-    if (typeof localStorage !== "undefined") {
-      this.setItem(LOCALSTORAGE_TOKEN_NAME, token);
+    if (typeof localStorage !== 'undefined') {
+      this.setItem(TOKEN, token);
     }
     return undefined;
   }
 
   getUser() {
-    if (typeof localStorage !== "undefined") {
-      const token = this.getItem(LOCALSTORAGE_TOKEN_NAME);
+    if (typeof localStorage !== 'undefined') {
+      const token = this.getItem(TOKEN);
       try {
-        if (token) return jwt_decode(token);
-        else return token;
+        if (token) return jwtDecode(token.result);
+        else {
+          return token;
+        }
       } catch (error) {
         return token;
       }
@@ -54,12 +56,13 @@ class LocalStorageUtils {
   }
 
   deleteUser() {
-    this.removeItem(LOCALSTORAGE_TOKEN_NAME);
+    this.removeItem(TOKEN);
   }
 
   getToken() {
-    return this.getItem(LOCALSTORAGE_TOKEN_NAME);
+    return this.getItem(TOKEN);
   }
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default new LocalStorageUtils();

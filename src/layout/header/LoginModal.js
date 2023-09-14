@@ -4,15 +4,16 @@ import { Modal, Typography, Input, Button, Checkbox, notification } from 'antd';
 import { home } from '../../styles/homepage';
 import GoogleLoginButton from '../../components/button/GoogleLoginButton';
 import Link from 'antd/es/typography/Link';
-import { useAuthActions } from '../../recoil/auth';
+import useAuthActions from 'recoil/action';
 import { post } from 'utils/APICaller';
 
 function LoginModal({ visible, onCancel, onOk, handleMove }) {
   const [loading, setLoading] = useState(false);
-  const { login } = useAuthActions();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { login } = useAuthActions();
 
   const handleOk = () => {
     setLoading(true);
@@ -35,7 +36,6 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
     })
       .then((res) => {
         onCancel();
-        console.log(res);
         login(res.data.token);
         setEmail('');
         setPassword('');

@@ -1,7 +1,13 @@
+// recoilAtoms.js
 import { atom } from 'recoil';
 
-const authAtom = atom({
-  key: 'authAtom',
+export const categoriesNavbarState = atom({
+  key: 'categoriesNavbarState',
+  default: [],
+});
+
+export const authState = atom({
+  key: 'auth',
   default: {
     token: null,
     id: '',
@@ -14,7 +20,6 @@ const authAtom = atom({
     role: '',
     currency: '',
     status: 0,
+    exp: 0,
   },
 });
-
-export default authAtom;
