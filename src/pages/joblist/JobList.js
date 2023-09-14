@@ -57,23 +57,38 @@ const JobList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [sortOption, setSortOption] = useState('Latest');
 
-  const { subCateName } = useParams();
+  const { subCateId, subCateName } = useParams();
 
   useEffect(() => {
     changePage(page);
-  }, [page, subCateName]);
+  }, [page, subCateId, subCateName]);
 
   function changePage(page) {
-    get({ endpoint: `/job?limit=${limit}&page=${page}` })
-      .then((res) => {
-        setJobList(res.data.jobs);
-        setTotalItems(res.data.pagination.totalItems);
+    if (subCateId) {
+      get({
+        endpoint: `/job/subCategory/${subCateId}?limit=${limit}&page=${page}`,
       })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
+        .then((res) => {
+          setJobList(res.data.jobs);
+          setTotalItems(res.data.pagination.totalItems);
+        })
+        .catch((error) => {
+          notification.error({
+            message: error.response.data.message,
+          });
         });
-      });
+    } else {
+      get({ endpoint: `/job?limit=${limit}&page=${page}` })
+        .then((res) => {
+          setJobList(res.data.jobs);
+          setTotalItems(res.data.pagination.totalItems);
+        })
+        .catch((error) => {
+          notification.error({
+            message: error.response.data.message,
+          });
+        });
+    }
   }
 
   const onChange = (pageNumber) => {
