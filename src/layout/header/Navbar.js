@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Menu, Row, Col } from 'antd';
-import navbar from '../../styles/navbar';
+import navbar from 'styles/navbar';
 import { AppContext } from 'context/AppContext';
 
 const Navbar = () => {

@@ -9,9 +9,10 @@ import {
   notification,
   Pagination,
 } from 'antd';
-import Link from 'antd/es/typography/Link';
-import joblist from 'styles/joblist';
+import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
+
+import joblist from 'styles/joblist';
 import { get } from 'utils/APICaller';
 import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 
@@ -24,9 +25,11 @@ const JobList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [sortOption, setSortOption] = useState('Latest');
 
+  const { subCateName } = useParams();
+
   useEffect(() => {
     changePage(page);
-  }, [page]);
+  }, [page, subCateName]);
 
   function changePage(page) {
     get({ endpoint: `/job?limit=${limit}&page=${page}` })
@@ -40,8 +43,6 @@ const JobList = () => {
         });
       });
   }
-
-  console.log(jobList);
 
   const onChange = (pageNumber) => {
     setPage(pageNumber);
@@ -71,12 +72,15 @@ const JobList = () => {
   return (
     <>
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
-        <Typography.Title
-          level={3}
-          style={{ padding: '10px 20px', marginBottom: 20 }}
-        >
-          Logo Design
-        </Typography.Title>
+        {subCateName && (
+          <Typography.Title
+            level={3}
+            style={{ padding: '10px 20px', marginBottom: 20 }}
+          >
+            {subCateName}
+          </Typography.Title>
+        )}
+
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
@@ -209,7 +213,7 @@ const JobList = () => {
                     />
                   </svg>
                 </div>
-                <Link href='/jobdetails' target='_blank'>
+                <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                   <Typography.Paragraph
                     ellipsis={{
                       rows: 3,
