@@ -5,7 +5,6 @@ import { authState } from './atom';
 import jwtDecode from 'jwt-decode';
 
 const useAuthActions = () => {
-  const navigate = useNavigate();
   const setAuth = useSetRecoilState(authState);
 
   const login = (token) => {
@@ -36,11 +35,6 @@ const useAuthActions = () => {
       status,
       exp: 120,
     });
-    if (role === 'freelancer') {
-      navigate('/');
-    } else {
-      navigate('/client/');
-    }
   };
 
   const autoLogin = () => {
@@ -50,12 +44,12 @@ const useAuthActions = () => {
       const expireTime = 120 * 10000 + Date.now();
       if (user?.exp && expireTime > Date.now()) {
         setAuth({
-          id: user.id,
-          email: user.email,
-          name: user.name,
+          id: user.result.id,
+          email: user.result.email,
+          name: user.result.name,
           token,
-          role: user.role,
-          exp: 120,
+          role: user.result.role,
+          exp: user.exp,
         });
       } else {
         logout();

@@ -44,7 +44,7 @@ class LocalStorageUtils {
     if (typeof localStorage !== 'undefined') {
       const token = this.getItem(TOKEN);
       try {
-        if (token) return jwtDecode(token.result);
+        if (token) return jwtDecode(token);
         else {
           return token;
         }

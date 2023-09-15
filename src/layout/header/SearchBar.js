@@ -49,7 +49,6 @@ function SearchBar() {
   const [loading, setLoading] = useState(false);
   const categoriesNavbar = useRecoilValue(categoriesNavbarState);
   const auth = useRecoilValue(authState);
-  console.log(auth);
   const { logout } = useAuthActions();
 
   const [openRegister, setOpenRegister] = useState(false);
