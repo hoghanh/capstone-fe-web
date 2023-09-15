@@ -1,13 +1,15 @@
-import { ClockCircleFilled, PaperClipOutlined } from '@ant-design/icons';
+import { ClockCircleFilled } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { AddressCard, BookMarkOutlined, CreditCard, Donate, Envelope, MapMarkerAlt, PhoneAlt } from 'components/icon/Icon';
+import { AddressCard, BookMarkOutlined, CreditCard, Donate, Envelope, MapMarkerAlt, PhoneAlt, PaperClipOutlined } from 'components/icon/Icon';
 import LoginModal from 'layout/header/LoginModal';
 import React, { useState } from 'react';
 import color from 'styles/color';
 import css from './jobDetail.module.css';
 import './jobDetail.module.css';
 import { ButtonPrimary } from 'components/customize/GlobalCustomize';
+import { useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 const Skill = [
   {
@@ -349,14 +351,19 @@ const ArticleLeft = () => {
 };
 
 const InformationRight = ({ showModalLogin }) => {
+  
+  const auth = useRecoilValue(authState)
   return (
     <Col md={{span: 6}} xs={{span: 0}} style={{ paddingLeft: 10, borderLeft: `1px solid ${color.colorBlueWhale}` }}>
       <Row style={{ justifyContent: 'center' }}>
         {/* Đăng nhập và phân quyền nếu đăng nhập  */}
         <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <ButtonPrimary onClick={showModalLogin}>
+          {auth.email? <ButtonPrimary onClick={showModalLogin}>
+            Gửi proposal
+          </ButtonPrimary> : <ButtonPrimary onClick={showModalLogin}>
             Đăng nhập
-          </ButtonPrimary>
+          </ButtonPrimary>}
+          
         </Col>
         {/* Sau khi được nhận việc  */}
         {/* <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
