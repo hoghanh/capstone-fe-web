@@ -1,13 +1,14 @@
-import { ClockCircleFilled, PaperClipOutlined } from '@ant-design/icons';
+import { ClockCircleFilled } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { AddressCard, BookMarkOutlined, CreditCard, Donate, Envelope, MapMarkerAlt, PhoneAlt } from 'components/icon/Icon';
+import { AddressCard, BookMarkOutlined, CreditCard, Donate, Envelope, MapMarkerAlt, PaperClipOutlined, PhoneAlt } from 'components/icon/Icon';
 import LoginModal from 'layout/header/LoginModal';
 import React, { useState } from 'react';
 import color from 'styles/color';
 import css from './jobDetail.module.css';
 import './jobDetail.module.css';
 import { ButtonPrimary } from 'components/customize/GlobalCustomize';
+import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 
 const Skill = [
   {
@@ -49,7 +50,7 @@ const Skill = [
 ];
 
 //Header Article right
-const HeaderArticle = () => {
+const HeaderArticle = ({lowestIncome, highestIncome, proposalSubmitDeadline}) => {
   return (
     <>
       <Row>
@@ -69,12 +70,12 @@ const HeaderArticle = () => {
               }}
             >
               <Typography.Title level={4} style={styles.headerTitleRight}>
-                000.000VND - 000.000VND
+                {FormatVND(lowestIncome)} - {FormatVND(highestIncome)}
               </Typography.Title>
               <div>
                 <ClockCircleFilled />
                 <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
-                  Thời gian ứng tuyển còn lại 4 ngày
+                  {CalculateDaysLeft(proposalSubmitDeadline)}
                 </Typography.Text>
               </div>
             </CustomCol>
@@ -121,51 +122,17 @@ const HeaderArticle = () => {
 };
 
 //Description
-const DescriptionsArticle = () => {
+const DescriptionsArticle = ({description}) => {
   return (
     <Row>
       <CustomCol span={24}>
         <Row gutter={[0, 20]}>
           <Col span={24}>
             <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-              Lorem ipsum dolor sit amet consectetur. Malesuada viverra risus condimentum integer tortor. Tempus cursus
-              risus commodo lorem elit id. Sed et dolor dictum faucibus. Enim tellus et egestas nisi maecenas turpis
-              nunc. Turpis eu fermentum pretium purus sapien purus. Mi sollicitudin lacus mauris eu pellentesque amet
-              iaculis dignissim sit. Neque morbi in nec viverra id integer. Donec id gravida elementum arcu in aliquam
-              nullam nibh sit.
+              {description}
             </Typography.Text>
           </Col>
-          <Col span={24}>
-            <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-              Cursus diam natoque orci pulvinar elit. Suspendisse sit nunc velit mauris interdum laoreet faucibus nunc
-              ut. Diam posuere elementum justo tristique neque at in nisl aliquam. Vitae mi at morbi pretium. Facilisis
-              at egestas facilisis cras. Praesent at dolor lectus vivamus ipsum at platea ut ornare.
-            </Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-              Urna molestie lobortis integer adipiscing pretium. Gravida adipiscing elementum ac quam. Porttitor odio
-              viverra convallis egestas sit. Est porttitor mauris commodo parturient pharetra. Mauris sem netus vitae
-              volutpat orci. Malesuada amet mi bibendum nulla in diam. Ipsum odio et dignissim molestie commodo
-              adipiscing feugiat aliquam. Donec facilisis ac viverra in mattis ultrices. Malesuada turpis ultrices
-              lobortis aliquam malesuada. Urna duis sed sit pellentesque facilisi id mauris id. Cursus proin tortor eu
-              vitae pellentesque quam ut et blandit. Pulvinar sed mattis nulla eget ipsum nam facilisi venenatis.
-              Rhoncus massa elementum vitae eget non consectetur nec eget. Feugiat eu ac egestas dui. Cursus purus
-              pulvinar nisl nulla et tristique dictum.
-            </Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-              Urna molestie lobortis integer adipiscing pretium. Gravida adipiscing elementum ac quam. Porttitor odio
-              viverra convallis egestas sit. Est porttitor mauris commodo parturient pharetra. Mauris sem netus vitae
-              volutpat orci. Malesuada amet mi bibendum nulla in diam. Ipsum odio et dignissim molestie commodo
-              adipiscing feugiat aliquam. Donec facilisis ac viverra in mattis ultrices. Malesuada turpis ultrices
-              lobortis aliquam malesuada. Urna duis sed sit pellentesque facilisi id mauris id. Cursus proin tortor eu
-              vitae pellentesque quam ut et blandit. Pulvinar sed mattis nulla eget ipsum nam facilisi venenatis.
-              Rhoncus massa elementum vitae eget non consectetur nec eget. Feugiat eu ac egestas dui. Cursus purus
-              pulvinar nisl nulla et tristique dictum.
-            </Typography.Text>
-          </Col>
+    
         </Row>
       </CustomCol>
     </Row>
@@ -183,7 +150,7 @@ const AttachmentArticle = () => {
       </Col>
       <CustomCol span={24} style={{ display: 'flex' }}>
         <PaperClipOutlined />
-        <Typography.Text underline={true} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}>
+        <Typography.Text  underline={true} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}>
           fileAttachName.doc
         </Typography.Text>
       </CustomCol>
@@ -334,12 +301,12 @@ const ContactInfo = () => {
   );
 };
 
-const ArticleLeft = () => {
+const ArticleLeft = ({jobDetail}) => {
   return (
     <Col md={{span: 18}} xs={{span: 24}}  style={{ paddingRight: 20 }}>
-      <HeaderArticle />
+      <HeaderArticle lowestIncome={jobDetail.lowestIncome} highestIncome={jobDetail.highestIncome} proposalSubmitDeadline={jobDetail.proposalSubmitDeadline} />
       <CustomDivider />
-      <DescriptionsArticle />
+      <DescriptionsArticle  description={(jobDetail.description)}/>
       <CustomDivider />
       <AttachmentArticle />
       <CustomDivider />
@@ -423,7 +390,7 @@ const InformationResponsive = ({ showModalLogin }) => {
     );
   };
 
-const Details = () => {
+const Details = ({jobDetail}) => {
   const [, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
 
@@ -450,11 +417,11 @@ const Details = () => {
         // handleMove={handleMove}
       />
       <Typography.Title level={2} style={styles.titlePost}>
-        Javascript expert with Next.js and React.js expertise
+        {jobDetail.title}
       </Typography.Title>
       <CustomCard style={{ marginBottom: 30 }}>
         <CustomRow gutter={[20, 0]}>
-          <ArticleLeft />
+          <ArticleLeft jobDetail={jobDetail} />
           <InformationRight showModalLogin={showModalLogin} />
         </CustomRow>
       </CustomCard>
@@ -464,10 +431,6 @@ const Details = () => {
       <div className={css.buttonLogin} style={{ margin: '20px 0', display: 'none', justifyContent: 'flex-end', alignItems: 'center' }}>
         <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
       </div>
-
-
-  
-  
     </>
   );
 };
