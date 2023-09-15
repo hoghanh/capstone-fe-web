@@ -57,23 +57,12 @@ export const routes = [
     name: 'profile',
     // role: ['client'],
   },
-
-];
-
-const breadcrumbroutes = [
   {
-    path: '/client/job-management',
-    element: lazy(() => import('pages/jobmanagement/JobManagement')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
-
-  {
-    path: '/proposals',
-    element: lazy(() => import('pages/proposals/Proposals')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
+      path: '/proposals',
+      element: lazy(() => import('pages/proposals/Proposals')),
+      name: 'jobmanagement',
+      // role: ['client'],
+    },
 ];
 
 const Router = () => {
