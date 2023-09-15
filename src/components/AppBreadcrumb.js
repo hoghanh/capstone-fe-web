@@ -4,8 +4,8 @@ import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
-import { routes } from 'routes/router';
 import theme from 'styles/theme';
+import { routes } from 'routes/router';
 
 function itemRender(route, params, routes, paths) {
   const last = routes.indexOf(route) === routes.length - 1;
