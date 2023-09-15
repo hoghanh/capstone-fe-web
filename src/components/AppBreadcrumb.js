@@ -5,29 +5,7 @@ import { Link } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import theme from 'styles/theme';
-
-// const AppBreadcrumb = () => {
-const routes = [
-  {
-    path: '/',
-    component: lazy(() => import('../pages/home/HomePage')),
-    name: 'home',
-    title: <HomeFilled />,
-  },
-  {
-    path: '/jobs',
-    component: lazy(() => import('../pages/joblist/JobList')),
-    name: 'List Jobs',
-    title: 'Find Freelance Work',
-  },
-
-  {
-    path: '/jobDetail',
-    component: lazy(() => import('../pages/jobdetail/JobDetail')),
-    name: 'Job Detail',
-    title: 'Chi tiết dự án',
-  },
-];
+import { routes } from 'routes/router';
 
 function itemRender(route, params, routes, paths) {
   const last = routes.indexOf(route) === routes.length - 1;
