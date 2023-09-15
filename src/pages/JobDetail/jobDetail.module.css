@@ -1,29 +1,6 @@
-.skillSlider {
-    width: auto !important;
-}
-
-::-webkit-scrollbar {
-    height: 5px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
 
 /* Đối với màn hình có độ rộng <= 1200px */
 @media (max-width: 1200px) {
-    .containerBody {
-        max-width: none !important;
-        margin: 0px 30px !important;
-    }
 }
 
 /* Đối với màn hình có độ rộng <= 992px */
@@ -50,7 +27,5 @@
 
 /* Đối với màn hình có độ rộng < 576px */
 @media (max-width: 575.98px) {
-    .containerBody {
-        margin: 0px !important;
-    }
 }
+

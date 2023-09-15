@@ -1,45 +1,39 @@
-import {  Layout } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Layout } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { get } from 'utils/APICaller';
 import Overview from './Overview';
 import Certificates from './Certificates';
-
-
+import { useRecoilState } from 'recoil';
+import { profileState } from 'recoil/atom';
 
 const Profile = () => {
-  const [information, setInformation] = useState('');
-
+  const [informationUser, setInformationUser] = useRecoilState(profileState);
   useEffect(() => {
     fetchProfile();
   }, []);
-
   const fetchProfile = async () => {
-    await get({ endpoint: "/accounts/profile/1" })
+    await get({ endpoint: '/accounts/profile/8' })
       .then((response) => {
         const data = response.data;
-        // console.log(data);
-        setInformation(data);
+        setInformationUser(data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  
+  console.log(informationUser);
   return (
     <>
-    <Layout.Content style={styles.container}>
-      <Overview information={information}/>
-      <Certificates/>
-    </Layout.Content>
-  </>
-  )
-}
+      <Layout.Content className={'containerBody'} style={styles.containerBody}>
+        <Overview />
+        <Certificates />
+      </Layout.Content>
+    </>
+  );
+};
 
 const styles = {
-  container:  { maxWidth: 1080, margin: '40px auto 0', },
-}
+  containerBody: { maxWidth: 1080, margin: '40px auto 0' },
+};
 
-
-
-export default Profile
+export default Profile;

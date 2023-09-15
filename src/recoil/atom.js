@@ -6,6 +6,24 @@ export const categoriesNavbarState = atom({
   default: [],
 });
 
+export const profileState = atom({
+  key: 'profileState',
+  default: {
+    id: '',
+    name: '',
+    phone:'',
+    email:'',
+    address: '',
+    image: '',
+    password: '',
+    role: '',
+    currency: 0,
+    status: 0,
+    createdAt: '',
+    updatedAt: ''
+  }
+});
+
 export const authState = atom({
   key: 'auth',
   default: {
