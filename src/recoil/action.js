@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import LocalStorageUtils from '../utils/LocalStorageUtils';
 import { authState } from './atom';

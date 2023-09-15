@@ -59,6 +59,29 @@ body {
   padding: 0px !important;
 }
 
+/* Scroll */
+
+.skillSlider {
+  width: auto !important;
+}
+
+::-webkit-scrollbar {
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
 /* job management */
 
 .trackingJobs .ant-card-head{
@@ -93,6 +116,156 @@ body {
   margin-block-end: 10px !important;
 }
 
+/* Modal primary */
+
+.modalPrimary{
+  width: 690px !important;
+}
+
+.modalPrimary .ant-modal-header{
+  padding: 15px;
+  margin: 0;
+}
+
+.modalPrimary .ant-modal-title{
+  font-size: 20px !important;
+}
+
+.modalPrimary .ant-modal-body{
+  padding: 0 15px 20px;
+}
+
+.modalPrimary .ant-modal-footer{
+  padding: 20px 10px;
+  margin: 0;
+}
+
+.modalPrimary .ant-modal-footer .ant-btn-primary{
+  font-weight: 700;
+  font-size: 16px;
+  height: auto;
+  padding: 12px 32px;
+  border-radius: 25px;
+  border: none;
+  box-shadow: none;
+}
+
+.modalPrimary .ant-modal-footer .ant-btn-default{
+  background-color: white;
+  font-weight: 700;
+  font-size: 16px;
+  height: auto;
+  padding: 12px 32px;
+  border-radius: 25px;
+  border: none;
+  box-shadow: none;
+}
+
+.modalPrimary .ant-input,
+.modalPrimary .ant-input-number-affix-wrapper,
+.modalPrimary .ant-select-selector,
+.modalPrimary .searchInput .ant-input-group-addon {
+  height: 45px !important;
+  border-radius: 8px !important;
+  border: 0.25px solid #000 !important;
+  background: #FFF !important;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
+  align-items: center;
+}
+
+.modalPrimary .searchInput{
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
+}
+
+.modalPrimary .ant-select .ant-select-selector{
+  border: none!important;
+}
+
+.modalPrimary .searchInput .ant-input-wrapper .ant-input-group-addon{
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-right: none !important;
+  box-shadow: none !important;
+  padding-right: 0;
+}
+
+.modalPrimary .searchInput .ant-input-wrapper .ant-input{
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  box-shadow: none !important;
+  border-left: none !important;
+}
+
+.modalPrimary .introText{
+  border-radius: 8px !important;
+  border: 0.25px solid #000 !important;
+  background: #FFF !important;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
+}
+
+.modalPrimary .introText .ant-input{
+  border: none!important;
+  box-shadow: none !important;
+}
+
+.modalPrimary .ant-input-number-prefix{
+  padding-right: 8px;
+}
+
+.modalPrimary .ant-input-number-input-wrap, .modalPrimary .ant-input-number-input{
+  height: 100%;
+}
+
+.modalPrimary .ant-select{
+  width: 100% !important;
+}
+
+.modalPrimary .skillSelect .ant-select-selector {
+  border-radius: 10px !important; 
+  border: 0.5px solid #000 !important;
+  height: 48px !important;
+}
+
+.modalPrimary .skillSelect .ant-select-selector .ant-select-selection-overflow{
+  gap: 10px;
+}
+
+.modalPrimary .skillSelect .ant-select-selector .ant-select-selection-overflow .ant-select-selection-item {
+  display: flex;
+  padding: 5px 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 25px;
+  background: var(--Alice-Blue, #EDF6FF);
+}
 
 
 
+/* responsive */
+
+
+@media (max-width: 1200px) {
+  .containerBody {
+      max-width: none !important;
+      margin-left: 30px !important;
+      margin-right: 30px !important;
+  }
+}
+
+/* Đối với màn hình có độ rộng < 768px */
+@media (max-width: 767.98px) {
+  .containerBody {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}
+
+
+/* Đối với màn hình có độ rộng < 576px */
+@media (max-width: 575.98px) {
+  .containerBody {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}

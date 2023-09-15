@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from 'antd';
-import css from './jobDetail.module.css';
 import Details from './Details';
 import Proposal from './Proposal';
 import { get } from 'utils/APICaller';
@@ -24,7 +23,7 @@ const JobDetail = () => {
   };
 
   return (
-    <Layout.Content className={css.containerBody} style={styles.containerBody}>
+    <Layout.Content className={'containerBody'} style={styles.containerBody}>
       <Details jobDetail={jobDetail} />
       <Proposal />
     </Layout.Content>

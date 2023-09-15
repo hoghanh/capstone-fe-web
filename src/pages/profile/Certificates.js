@@ -1,10 +1,9 @@
 import { Col, Image, Row, Typography } from 'antd';
-import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
+import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { MapMarkerAlt, Pen, Plus, Star } from 'components/icon/Icon';
+import { Plus } from 'components/icon/Icon';
 import React from 'react';
-import color from 'styles/color';
-
+import css from './profile.module.css';
 
 // Header section
 const HeaderSection = () => {
@@ -21,7 +20,7 @@ const HeaderSection = () => {
       </Col>
       <Col>
         <ButtonIcon>
-            <Plus/>
+          <Plus />
         </ButtonIcon>
       </Col>
     </Row>
@@ -33,14 +32,16 @@ const BodySection = () => {
   return (
     <Row style={{ marginRight: 30, marginLeft: 30 }}>
       <Col span={24}>
-        <Row style={{padding: '20px 30px'}}>
-          <Col>
-            <Image src="img/certificate-1.png"></Image>
+        <Row className={css.certificate} style={{ padding: '20px 30px' }} align={'middle'}>
+          <Col span={0} sm={{span: 4}} style={{ paddingRight: 20 }}>
+            <Image src="img/certificate-1.png" preview={false}></Image>
           </Col>
-          <Col style={{paddingLeft: 20}}>
-            <CustomRow gutter={[0, 10]}>
+          <Col span={24} sm={{span: 20}}>
+            <CustomRow>
               <Col span={24}>
-                <Typography.Title level={3} style={{margin: 0}}>UX (User Experience) Capstone</Typography.Title>
+                <Typography.Title level={3} style={{ margin: 0 }}>
+                  UX (User Experience) Capstone
+                </Typography.Title>
               </Col>
               <Col span={24}>
                 <Typography.Text>Provider: Coursera and University of Michigan</Typography.Text>
@@ -54,14 +55,16 @@ const BodySection = () => {
       </Col>
       <CustomDivider $primary />
       <Col span={24}>
-        <Row style={{padding: '20px 30px'}}>
-          <Col>
-            <Image src="img/certificate-1.png"></Image>
+        <Row className={css.certificate} style={{ padding: '20px 30px' }} align={'middle'}>
+          <Col span={0} sm={{span: 4}} style={{ paddingRight: 20 }}>
+            <Image src="img/certificate-1.png" preview={false}></Image>
           </Col>
-          <Col style={{paddingLeft: 20}}>
-            <CustomRow gutter={[0, 10]}>
+          <Col span={24} sm={{span: 20}}>
+            <CustomRow>
               <Col span={24}>
-                <Typography.Title level={3} style={{margin: 0}}>UX (User Experience) Capstone</Typography.Title>
+                <Typography.Title level={3} style={{ margin: 0 }}>
+                  UX (User Experience) Capstone
+                </Typography.Title>
               </Col>
               <Col span={24}>
                 <Typography.Text>Provider: Coursera and University of Michigan</Typography.Text>
