@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import LocalStorageUtils from '../../utils/LocalStorageUtils';
-import authAtom from './atom';
+import LocalStorageUtils from '../utils/LocalStorageUtils';
+import { authState } from './atom';
 import jwtDecode from 'jwt-decode';
 
 const useAuthActions = () => {
-  const navigate = useNavigate();
-  const setAuth = useSetRecoilState(authAtom);
+  const setAuth = useSetRecoilState(authState);
 
   const login = (token) => {
     LocalStorageUtils.setUser(token);
@@ -34,26 +33,23 @@ const useAuthActions = () => {
       role,
       currency,
       status,
+      exp: 120,
     });
-    if (role === 'user') {
-      navigate('/');
-    } else {
-      navigate('/client/');
-    }
   };
 
   const autoLogin = () => {
     const token = LocalStorageUtils.getToken();
     const user = LocalStorageUtils.getUser();
     if (user && typeof user === 'object') {
-      const expireTime = user.exp * 1000 + Date.now();
+      const expireTime = 120 * 10000 + Date.now();
       if (user?.exp && expireTime > Date.now()) {
         setAuth({
-          id: user.id,
-          email: user.email,
-          name: user.name,
+          id: user.result.id,
+          email: user.result.email,
+          name: user.result.name,
           token,
-          role: user.role,
+          role: user.result.role,
+          exp: user.exp,
         });
       } else {
         logout();
@@ -65,6 +61,7 @@ const useAuthActions = () => {
         email: '',
         name: '',
         role: '',
+        exp: 0,
       });
     }
   };
@@ -83,6 +80,7 @@ const useAuthActions = () => {
       role: '',
       currency: '',
       status: 0,
+      exp: 0,
     });
   };
 

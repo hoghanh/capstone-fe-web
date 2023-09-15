@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Input,
   Image,
@@ -9,23 +9,47 @@ import {
   Col,
   Grid,
   Menu,
+  Dropdown,
 } from 'antd';
-import { SearchOutlined, MenuOutlined } from '@ant-design/icons';
+import {
+  SearchOutlined,
+  MenuOutlined,
+  SettingFilled,
+  LogoutOutlined,
+} from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
+import { useRecoilValue } from 'recoil';
 
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
-import { useAuthActions } from 'recoil/auth';
-import { useRecoilValue } from 'recoil';
-import authAtom from 'recoil/auth/atom';
-import { AppContext } from 'context/AppContext';
+import useAuthActions from 'recoil/action';
+import { categoriesNavbarState, authState } from 'recoil/atom';
+
+const items = [
+  {
+    key: '1',
+    label: 'Quản lý công việc',
+  },
+  {
+    key: '2',
+    label: 'Cài Đặt',
+    icon: <SettingFilled />,
+  },
+  {
+    key: '3',
+    label: 'Đăng Xuất',
+    icon: <LogoutOutlined />,
+  },
+];
 
 function SearchBar() {
   const { useBreakpoint } = Grid;
-  const { sm, md, lg } = useBreakpoint();
+  const { md, lg } = useBreakpoint();
 
   const [loading, setLoading] = useState(false);
-  const { categoriesNavbar } = useContext(AppContext);
+  const categoriesNavbar = useRecoilValue(categoriesNavbarState);
+  const auth = useRecoilValue(authState);
+  const { logout } = useAuthActions();
 
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
@@ -34,9 +58,6 @@ function SearchBar() {
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
-
-  const auth = useRecoilValue(authAtom);
-  const { logout } = useAuthActions();
 
   const showModalRegister = () => {
     setOpenRegister(true);
@@ -76,12 +97,10 @@ function SearchBar() {
     }
   };
 
-  useEffect(() => {
-    console.log('change');
-  }, [auth.token]);
-
-  const logoutHandlder = () => {
-    logout();
+  const onClick = ({ key }) => {
+    if (key === '3') {
+      logout();
+    }
   };
 
   return (
@@ -165,14 +184,18 @@ function SearchBar() {
               />
             </Col>
             <Col xs={7} sm={5} md={4} lg={4} xl={3}>
-              <ReactSVG
-                style={{ height: 40 }}
-                src='/icon/user.svg'
-                beforeInjection={(svg) => {
-                  svg.setAttribute('width', '32');
-                  svg.setAttribute('height', '32');
-                }}
-              />
+              <Dropdown menu={{ items, onClick }}>
+                <div>
+                  <ReactSVG
+                    style={{ height: 40 }}
+                    src='/icon/user.svg'
+                    beforeInjection={(svg) => {
+                      svg.setAttribute('width', '32');
+                      svg.setAttribute('height', '32');
+                    }}
+                  />
+                </div>
+              </Dropdown>
             </Col>
           </>
         ) : (

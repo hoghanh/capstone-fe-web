@@ -1,27 +1,24 @@
-import React from 'react';
-import AntProvider from 'config/AntProvider';
-import './App.css';
-import Router from './routes/router';
+import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
-import { notification } from 'antd';
-import { AppProvider } from 'context/AppContext';
+
+import Router from './routes/router';
+import './App.css';
+import useAuthActions from 'recoil/action';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 function App() {
-  const [api, contextHolder] = notification.useNotification();
+  const { autoLogin } = useAuthActions();
+  const token = LocalStorageUtils.getToken;
+  useEffect(() => {
+    autoLogin();
+  }, [token]);
+
   return (
-    <AntProvider>
-      <RecoilRoot>
-        <React.Fragment>
-          <AppProvider>
-            <BrowserRouter>
-              {contextHolder}
-              <Router />
-            </BrowserRouter>
-          </AppProvider>
-        </React.Fragment>
-      </RecoilRoot>
-    </AntProvider>
+    <React.Fragment>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </React.Fragment>
   );
 }
 
