@@ -3,16 +3,20 @@ import { Layout } from 'antd';
 import Details from './Details';
 import Proposal from './Proposal';
 import { get } from 'utils/APICaller';
+import { useRecoilState } from 'recoil';
+import { jobDetailState } from 'recoil/atom';
+import { useParams } from 'react-router-dom';
 
 const JobDetail = () => {
-  const [jobDetail, setJobDetail] = useState('');
-
+  const [jobDetail, setJobDetail] = useRecoilState(jobDetailState);
+  let { id } = useParams();
   useEffect(() => {
     getJobDetail();
   }, [])
   
+  console.log(id)
   const getJobDetail = async () => {
-    await get({ endpoint: "/job/detail/3" })
+    await get({ endpoint: `/job/detail/${id}` })
       .then((response) => {
         const data = response.data;
         setJobDetail(data);
@@ -24,7 +28,7 @@ const JobDetail = () => {
 
   return (
     <Layout.Content className={'containerBody'} style={styles.containerBody}>
-      <Details jobDetail={jobDetail} />
+      <Details />
       <Proposal />
     </Layout.Content>
   );
