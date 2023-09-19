@@ -1173,11 +1173,11 @@ const BodySectionRight = () => {
 };
 
 //Body Section
-const BodySection = ({ information }) => {
+const BodySection = () => {
   return (
     <Row>
-      <BodySectionLeft information={information} />
-      <BodySectionRight information={information} />
+      <BodySectionLeft />
+      <BodySectionRight />
     </Row>
   );
 };

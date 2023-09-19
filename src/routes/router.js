@@ -53,7 +53,7 @@ export const routes = [
   },
   {
     path: '/client/profile',
-    element: lazy(() => import('pages/profile/Profile')),
+    element: lazy(() => import('pages/profileclient/ProfileClient')),
     name: 'profile',
     // role: ['client'],
   },
