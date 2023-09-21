@@ -24,6 +24,16 @@ import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState } from 'recoil/atom';
+import { GoogleLogout } from 'react-google-login';
+import { CLIENTID } from 'config';
+
+const onSuccess = () => {
+  console.log('Logout success');
+};
+
+const onFail = () => {
+  console.log('Fail');
+};
 
 const items = [
   {
@@ -37,7 +47,18 @@ const items = [
   },
   {
     key: '3',
-    label: 'Đăng Xuất',
+    label: (
+      <GoogleLogout
+        clientId={CLIENTID}
+        onLogoutSuccess={onSuccess}
+        onFailure={onFail}
+        render={(renderProps) => (
+          <Typography.Text onClick={renderProps.onClick}>
+            Đăng xuất
+          </Typography.Text>
+        )}
+      ></GoogleLogout>
+    ),
     icon: <LogoutOutlined />,
   },
 ];

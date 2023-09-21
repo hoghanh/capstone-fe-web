@@ -32,7 +32,7 @@ const useAuthActions = () => {
       role,
       currency,
       status,
-      exp: 120,
+      exp: jwtDecode(token).exp,
     });
   };
 
@@ -40,7 +40,7 @@ const useAuthActions = () => {
     const token = LocalStorageUtils.getToken();
     const user = LocalStorageUtils.getUser();
     if (user && typeof user === 'object') {
-      const expireTime = 120 * 10000 + Date.now();
+      const expireTime = user.exp * 1000 + Date.now();
       if (user?.exp && expireTime > Date.now()) {
         setAuth({
           id: user.result.id,

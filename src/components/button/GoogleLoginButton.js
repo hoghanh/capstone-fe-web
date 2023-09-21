@@ -9,7 +9,7 @@ import color from 'styles/color';
 import { post } from 'utils/APICaller';
 import useAuthActions from 'recoil/action';
 
-const GoogleLoginButton = () => {
+const GoogleLoginButton = ({ onLogin }) => {
   const { login } = useAuthActions();
   useEffect(() => {
     function start() {
@@ -26,28 +26,33 @@ const GoogleLoginButton = () => {
     const allowedDomain = '@fpt.edu.vn';
 
     if (res.profileObj.email.endsWith(allowedDomain)) {
-      post({
-        endpoint: `/accounts/google/login`,
-        body: {
-          email: res.profileObj.email,
-          image: res.profileObj.ImageUrl,
-          name: res.profileObj.name,
-          googleId: res.profileObj.googleId,
-        },
-      })
-        .then((res) => {
-          login(res.data.token);
-          notification.success({ message: 'Đăng nhập thành công' });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      requestLogin(res.profileObj);
+      onLogin();
     } else {
       notification.error({
         message: 'Email của bạn không được phép đăng nhập',
       });
     }
   };
+
+  function requestLogin(data) {
+    post({
+      endpoint: `/accounts/google/login`,
+      body: {
+        email: data.email,
+        image: data.ImageUrl,
+        name: data.name,
+        googleId: data.googleId,
+      },
+    })
+      .then((response) => {
+        login(response.data.token);
+        notification.success({ message: response.data.message });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const onFailure = (res) => {
     notification.error({
