@@ -7,7 +7,7 @@ export const home = {
     maxWidth: 1080,
     margin: '0 auto',
   },
-  banner1: {
+  topbanner: {
     subtitle: {
       margin: 0,
       paddingRight: 10,
@@ -43,7 +43,10 @@ export const home = {
     },
   },
 
-  banner2: {
+  promotebanner: {
+    padding: 30,
+    maxWidth: 1080,
+    margin: '0 auto',
     bannerImg: {
       backgroundImage: "url('img/freelancer-1.png')",
       backgroundSize: 'contain',
@@ -51,6 +54,7 @@ export const home = {
       backgroundRepeat: 'no-repeat',
       width: '100%',
       height: '100%',
+      minHeight: '220px',
     },
     title: {
       fontSize: 18,
@@ -120,6 +124,9 @@ export const home = {
     remindText: {
       fontSize: 12,
       color: color.colorDeactive,
+    },
+    remindTextError: {
+      fontSize: 12,
     },
   },
 };

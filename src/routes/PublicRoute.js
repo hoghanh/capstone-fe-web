@@ -1,8 +1,7 @@
-import React from "react";
-import { Route } from "react-router-dom";
+import React from 'react';
 
-const PublicRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} element={<Component />} />
-);
+const PublicRoute = ({ element: Element }) => {
+  return <Element />;
+};
 
 export default PublicRoute;

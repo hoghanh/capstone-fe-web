@@ -1,0 +1,13 @@
+/* Đối với màn hình có độ rộng < 576px */
+@media (max-width: 575.98px) {
+    .certificate{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+/* Đối với màn hình có độ rộng < 618px */
+@media (max-width: 618px) {
+    .btnSubmitCV{
+        padding-top: 10px;
+    }
+}

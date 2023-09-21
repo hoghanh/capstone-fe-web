@@ -5,21 +5,80 @@ import {
   Typography,
   Button,
   Layout,
-  Modal,
-  Checkbox,
+  Row,
+  Col,
+  Grid,
+  Menu,
+  Dropdown,
 } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import GoogleLoginButton from '../../components/button/GoogleLoginButton';
-import Link from 'antd/es/typography/Link';
-import { home } from '../../styles/homepage';
+import {
+  SearchOutlined,
+  MenuOutlined,
+  SettingFilled,
+  LogoutOutlined,
+} from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
+import { useRecoilValue } from 'recoil';
+
+import RegisterModal from './RegisterModal';
+import LoginModal from './LoginModal';
+import useAuthActions from 'recoil/action';
+import { categoriesNavbarState, authState } from 'recoil/atom';
+import { GoogleLogout } from 'react-google-login';
+import { CLIENTID } from 'config';
+
+const onSuccess = () => {
+  console.log('Logout success');
+};
+
+const onFail = () => {
+  console.log('Fail');
+};
+
+const items = [
+  {
+    key: '1',
+    label: 'Quản lý công việc',
+  },
+  {
+    key: '2',
+    label: 'Cài Đặt',
+    icon: <SettingFilled />,
+  },
+  {
+    key: '3',
+    label: (
+      <GoogleLogout
+        clientId={CLIENTID}
+        onLogoutSuccess={onSuccess}
+        onFailure={onFail}
+        render={(renderProps) => (
+          <Typography.Text onClick={renderProps.onClick}>
+            Đăng xuất
+          </Typography.Text>
+        )}
+      ></GoogleLogout>
+    ),
+    icon: <LogoutOutlined />,
+  },
+];
 
 function SearchBar() {
+  const { useBreakpoint } = Grid;
+  const { md, lg } = useBreakpoint();
+
   const [loading, setLoading] = useState(false);
+  const categoriesNavbar = useRecoilValue(categoriesNavbarState);
+  const auth = useRecoilValue(authState);
+  const { logout } = useAuthActions();
+
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
-  const [logined, setLogined] = useState(false);
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
 
   const showModalRegister = () => {
     setOpenRegister(true);
@@ -59,143 +118,118 @@ function SearchBar() {
     }
   };
 
-  return (
-    <Layout.Header style={{ background: '#ffffff' }}>
-      {/* Modal Register */}
-      <Modal
-        width={450}
-        open={openRegister}
-        title={<div style={{ height: 45 }}></div>}
-        onOk={handleOkRegister}
-        onCancel={handleCancelRegister}
-        footer={
-          <Typography style={home.login.footerModal}>
-            Đã là thành viên?{' '}
-            <Link onClick={() => handleMove('login')}>
-              <b>Đăng nhập</b>
-            </Link>
-          </Typography>
-        }
-        bodyStyle={home.login.bodyModal}
-      >
-        <Typography.Title
-          level={3}
-          style={{ textAlign: 'center', margin: 0, padding: '15px 10px' }}
-        >
-          Trở thành thành viên FPT-SEP
-        </Typography.Title>
-        <GoogleLoginButton />
-        <div style={home.login.contain}>
-          <div style={home.login.line}></div>
-          <Typography style={home.login.or}>HOẶC</Typography>
-          <div style={home.login.line}></div>
-        </div>
-        <Input placeholder='Email' style={home.login.input} />
-        <Input.Password placeholder='Mật khẩu' style={home.login.input} />
-        <Typography.Text style={home.login.remindText}>
-          8 characters or longer. Combine upper and lowercase letters and
-          numbers.
-        </Typography.Text>
-        <Button type='primary' style={home.login.button}>
-          Đăng Kí
-        </Button>
-      </Modal>
+  const onClick = ({ key }) => {
+    if (key === '3') {
+      logout();
+    }
+  };
 
-      {/* Modal login */}
-      <Modal
-        title={<div style={{ height: 45 }}></div>}
-        width={450}
-        open={openLogin}
-        onOk={handleOkLogin}
+  return (
+    <Layout.Header style={{ background: '#FFFFFF', padding: '0 20px' }}>
+      {/* Modal Register */}
+      <RegisterModal
+        visible={openRegister}
+        onCancel={handleCancelRegister}
+        onOk={handleOkRegister}
+        handleMove={handleMove}
+      />
+
+      {/* Modal Login */}
+      <LoginModal
+        visible={openLogin}
         onCancel={handleCancelLogin}
-        footer={
-          <Typography style={home.login.footerModal}>
-            Chưa phải thành viên?{' '}
-            <Link onClick={() => handleMove('register')}>
-              <b>Tham gia ngay</b>
-            </Link>
-          </Typography>
-        }
-        bodyStyle={home.login.bodyModal}
-      >
-        <Typography.Title
-          level={3}
-          style={{ textAlign: 'center', margin: 0, padding: '15px 10px' }}
-        >
-          Đăng nhập FPT-SEP
-        </Typography.Title>
-        <GoogleLoginButton />
-        <div style={home.login.contain}>
-          <div style={home.login.line}></div>
-          <Typography style={home.login.or}>HOẶC</Typography>
-          <div style={home.login.line}></div>
-        </div>
-        <Input placeholder='Email' style={home.login.input} />
-        <Input.Password placeholder='Mật khẩu' style={home.login.input} />
-        <div style={home.login.contain}>
-          <Checkbox>Nhớ tài khoản</Checkbox>
-          <Typography>
-            <Link>
-              <b>Quên Mật Khẩu</b>
-            </Link>
-          </Typography>
-        </div>
-        <Button type='primary' style={home.login.button}>
-          Đăng Nhập
-        </Button>
-      </Modal>
-      <div
+        onOk={handleOkLogin}
+        handleMove={handleMove}
+      />
+
+      <Row
+        align='middle'
+        justify='space-between'
         style={{
           maxWidth: 1080,
           margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
         }}
       >
-        <Image
-          width={34}
-          src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-          alt='Apofoitisi logo'
-          preview={false}
-        />
-        <Typography.Title level={3} style={{ margin: 0 }}>
-          FPT - SEP
-        </Typography.Title>
-        <Input
-          placeholder='Tìm kiếm'
-          prefix={<SearchOutlined style={{ color: '#828282' }} />}
-          style={{ padding: 10, borderRadius: 8, width: 477 }}
-        />
-        <Typography.Title level={3} style={{ margin: 0 }}>
-          Khám phá
-        </Typography.Title>
-        {logined ? (
+        <Col xs={6} sm={2} md={2} lg={1} xl={0}>
+          <div>
+            <MenuOutlined onClick={toggleCollapsed} />
+            <Menu
+              mode='inline'
+              inlineCollapsed={collapsed}
+              items={categoriesNavbar}
+              style={{
+                position: 'absolute',
+                width: 300,
+                zIndex: 100,
+                display: collapsed ? 'none' : '',
+              }}
+            />
+          </div>
+        </Col>
+        <Col xs={2} sm={2} md={1} lg={1} xl={1}>
+          <Image
+            width={34}
+            src='/icon/logo.svg'
+            alt='Apofoitisi logo'
+            preview={false}
+          />
+        </Col>
+        <Col xs={5} sm={3} md={2} lg={2} xl={4}>
+          <Typography.Title level={3} style={{ margin: 0 }}>
+            SEP
+          </Typography.Title>
+        </Col>
+
+        <Col xs={0} sm={12} md={11} lg={13} xl={13}>
+          <Input
+            placeholder='Tìm kiếm'
+            prefix={<SearchOutlined style={{ color: '#828282' }} />}
+            style={{
+              padding: 10,
+              borderRadius: 8,
+              width: lg ? 477 : md ? 325 : 250,
+            }}
+          />
+        </Col>
+
+        {auth.email ? (
           <>
-            <ReactSVG
-              style={{ height: 40 }}
-              src='./icon/notification.svg'
-              beforeInjection={(svg) => {
-                svg.setAttribute('width', '32');
-                svg.setAttribute('height', '32');
-              }}
-            />
-            <ReactSVG
-              style={{ height: 40 }}
-              src='./icon/user.svg'
-              beforeInjection={(svg) => {
-                svg.setAttribute('width', '32');
-                svg.setAttribute('height', '32');
-              }}
-            />
+            <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+              <ReactSVG
+                style={{ height: 40 }}
+                src='/icon/notification.svg'
+                beforeInjection={(svg) => {
+                  svg.setAttribute('width', '32');
+                  svg.setAttribute('height', '32');
+                }}
+              />
+            </Col>
+            <Col xs={7} sm={5} md={4} lg={4} xl={3}>
+              <Dropdown menu={{ items, onClick }}>
+                <div>
+                  <ReactSVG
+                    style={{ height: 40 }}
+                    src='/icon/user.svg'
+                    beforeInjection={(svg) => {
+                      svg.setAttribute('width', '32');
+                      svg.setAttribute('height', '32');
+                    }}
+                  />
+                </div>
+              </Dropdown>
+            </Col>
           </>
         ) : (
           <>
-            <Button onClick={showModalRegister}>Đăng kí</Button>
-            <Button onClick={showModalLogin}>Đăng nhập</Button>
+            <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+              <Button onClick={showModalRegister}>Đăng kí</Button>
+            </Col>
+            <Col xs={7} sm={5} md={4} lg={4} xl={3}>
+              <Button onClick={showModalLogin}>Đăng nhập</Button>
+            </Col>
           </>
         )}
-      </div>
+      </Row>
     </Layout.Header>
   );
 }

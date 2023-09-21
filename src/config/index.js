@@ -1,6 +1,8 @@
 const config = {
-  APP_API_URL: "http://localhost:8080",
-  LOCALSTORAGE_TOKEN_NAME: "token",
+  FPTSEP: 'https://fpt-sep.onrender.com',
+  TOKEN: 'token',
+  CLIENTID:
+    '673221908635-es5j9jeudmcsgg7d3navnhcvknsdm3s7.apps.googleusercontent.com',
 };
 
-export const { APP_API_URL, LOCALSTORAGE_TOKEN_NAME } = config;
+export const { FPTSEP, TOKEN, CLIENTID } = config;
