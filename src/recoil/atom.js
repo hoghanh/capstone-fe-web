@@ -66,6 +66,18 @@ const clients =  {
   updateAt: '',
 }
 
+const proposals = {
+  id: '',
+  description: '',
+  fileAttach: '',
+  sendDate: '',
+  status: '',
+  createdAt: '',
+  updatedAt: '',
+  freelancerId: '',
+  jobId: '',
+};
+
 
 export const jobDetailState = atom({
   key: 'jobDetailState',
@@ -84,6 +96,7 @@ export const jobDetailState = atom({
     clientId: 0,
     clients: clients,
     skills: skills,
+    proposals: proposals,
   },
 });
 
@@ -105,9 +118,6 @@ export const freelancerState = atom({
     accounts: accounts,
   },
 });
-
-
-
 
 
 export const authState = atom({
