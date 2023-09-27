@@ -11,12 +11,7 @@ import {
   Menu,
   Dropdown,
 } from 'antd';
-import {
-  SearchOutlined,
-  MenuOutlined,
-  SettingFilled,
-  LogoutOutlined,
-} from '@ant-design/icons';
+import { SearchOutlined, MenuOutlined, SettingFilled } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { useRecoilValue } from 'recoil';
 
@@ -26,6 +21,7 @@ import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState } from 'recoil/atom';
 import { GoogleLogout } from 'react-google-login';
 import { CLIENTID } from 'config';
+import { Logout } from 'components/icon/Icon';
 
 const onSuccess = () => {
   console.log('Logout success');
@@ -59,7 +55,7 @@ const items = [
         )}
       ></GoogleLogout>
     ),
-    icon: <LogoutOutlined />,
+    icon: <Logout size={14} />,
   },
 ];
 
@@ -67,7 +63,6 @@ function SearchBar() {
   const { useBreakpoint } = Grid;
   const { md, lg } = useBreakpoint();
 
-  const [loading, setLoading] = useState(false);
   const categoriesNavbar = useRecoilValue(categoriesNavbarState);
   const auth = useRecoilValue(authState);
   const { logout } = useAuthActions();
@@ -84,9 +79,7 @@ function SearchBar() {
     setOpenRegister(true);
   };
   const handleOkRegister = () => {
-    setLoading(true);
     setTimeout(() => {
-      setLoading(false);
       setOpenRegister(false);
     }, 3000);
   };
@@ -98,9 +91,7 @@ function SearchBar() {
     setOpenLogin(true);
   };
   const handleOkLogin = () => {
-    setLoading(true);
     setTimeout(() => {
-      setLoading(false);
       setOpenLogin(false);
     }, 3000);
   };

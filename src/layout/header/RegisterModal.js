@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Typography, Input, Button, message } from 'antd';
+import { Modal, Typography, Input, Button } from 'antd';
 import { notification } from 'antd';
 
 import { home } from 'styles/homepage';
@@ -8,17 +8,13 @@ import Link from 'antd/es/typography/Link';
 import { post } from 'utils/APICaller';
 
 function RegisterModal({ visible, onCancel, onOk, handleMove }) {
-  const [loading, setLoading] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
 
   const handleOk = () => {
-    setLoading(true);
     setTimeout(() => {
-      setLoading(false);
       onOk();
     }, 3000);
   };
