@@ -21,7 +21,7 @@ import './jobDetail.module.css';
 import { ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 import { useRecoilValue } from 'recoil';
-import { authState, jobDetailState } from 'recoil/atom';
+import { authState, freelancerState, jobDetailState } from 'recoil/atom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import TextArea from 'antd/es/input/TextArea';
 import { post } from 'utils/APICaller';
@@ -32,7 +32,7 @@ const { Dragger } = Upload;
 
 const SubmitProposal = () => {
 
-  const auth = useRecoilValue(authState);
+  const freelancer = useRecoilValue(freelancerState);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,7 +48,7 @@ const SubmitProposal = () => {
         fileAttach: '123',
         description: description,
         sendDate: '2023-08-28T11:00:00.000Z',
-        freelancerId: 9,
+        freelancerId: freelancer.id,
         jobId: 2,
       },
     })
