@@ -24,11 +24,12 @@ import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState } from 'recoil/atom';
+import { Link } from 'react-router-dom';
 
 const items = [
   {
     key: '1',
-    label: 'Quản lý công việc',
+    label: <Link to="/proposals">Quản lý công việc</Link>,
   },
   {
     key: '2',

@@ -1,5 +1,5 @@
 import { ClockCircleFilled, InboxOutlined } from '@ant-design/icons';
-import { Col, List, Row, Typography,  message, Upload } from 'antd';
+import { Col, List, Row, Typography,  message, Upload, Form, Skeleton, notification } from 'antd';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import {
   AddressCard,
@@ -24,76 +24,54 @@ import { useRecoilValue } from 'recoil';
 import { authState, jobDetailState } from 'recoil/atom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import TextArea from 'antd/es/input/TextArea';
+import { post } from 'utils/APICaller';
 
 const { Dragger } = Upload;
-const props = {
-  name: 'file',
-  multiple: true,
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log('Dropped files', e.dataTransfer.files);
-  },
-};
 
-const Skill = [
-  {
-    title: 'Javascript',
-  },
-  {
-    title: 'Html',
-  },
-  {
-    title: 'NextJS',
-  },
-  {
-    title: 'ReactJS',
-  },
-  {
-    title: 'Javascript',
-  },
-  {
-    title: 'Html',
-  },
-  {
-    title: 'NextJS',
-  },
-  {
-    title: 'ReactJS',
-  },
-  {
-    title: 'Javascript',
-  },
-  {
-    title: 'Html',
-  },
-  {
-    title: 'NextJS',
-  },
-  {
-    title: 'ReactJS',
-  },
-];
 
 
 const SubmitProposal = () => {
-  //Modal
+
+  const auth = useRecoilValue(authState);
+  const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
+
+  const createProposal = (values) => {
+    const{description, dragger} = values;
+    post({
+      endpoint: `/proposal/create`,
+      body: {
+        fileAttach: '123',
+        description: description,
+        sendDate: '2023-08-28T11:00:00.000Z',
+        freelancerId: 9,
+        jobId: 2,
+      },
+    })
+      .then((res) => {
+        notification.success({
+          message: 'Ứng tuyển thành công',
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
   const handleOk = () => {
-    setIsModalOpen(false);
+    form.validateFields().then((values) => {
+      console.log('Received values:', values);
+      // Gửi dữ liệu đi ở đây
+      createProposal(values);
+      setIsModalOpen(false);
+    }).catch(error => {
+      console.error('Validation failed:', error);
+    });
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -101,6 +79,34 @@ const SubmitProposal = () => {
 
   const onChange = (e) => {
     console.log('Change:', e.target.value);
+  };
+
+  const normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return [e.file];
+  };
+  
+  const props = {
+    name: 'file',
+    multiple: true,
+    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log('Dropped files', e.dataTransfer.files);
+    },
   };
 
   return (
@@ -114,48 +120,73 @@ const SubmitProposal = () => {
         onCancel={handleCancel}
         okText={'Gửi đi'}
       >
-        <Row gutter={[0, 10]}>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Title level={5} style={{ margin: 0 }}>
-                  Mô tả mong muốn
-                </Typography.Title>
-              </Col>
-              <Col span={24}>
-                <TextArea
-                  className="introText"
-                  showCount
-                  allowClear={true}
-                  maxLength={1000}
-                  style={{
-                    height: 120,
-                    resize: 'none',
-                  }}
-                  onChange={onChange}
-                  placeholder="textarea"
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Title level={5} style={{ margin: 0 }}>
-                  CV/Resume đính kèm (PDF)
-                </Typography.Title>
-              </Col>
-              <Col span={24}>
-                <Dragger {...props}>
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">Drag or upload file</p>
-                </Dragger>
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
+        <Form form={form} name="submitProposal" initialValues={{ remember: true }}>
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={5} style={{ margin: 0 }}>
+                    Mô tả mong muốn
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="description"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Xin không để trường nhập trống!',
+                      },
+                    ]}
+                  >
+                    <TextArea
+                      className="introText"
+                      showCount
+                      allowClear={true}
+                      maxLength={1000}
+                      style={{
+                        minHeight: 120,
+                        resize: 'none',
+                      }}
+                      onChange={onChange}
+                      placeholder="textarea"
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={5} style={{ margin: 0 }}>
+                    CV/Resume đính kèm (PDF)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="dragger"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                    noStyle
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: 'Hãy thêm file của bạn vào!',
+                    //   },
+                    // ]}
+                  >
+                    <Dragger {...props} name="files" action="/upload.do">
+                      <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                      </p>
+                      <p className="ant-upload-text">Kéo hoặc chọn tệp</p>
+                    </Dragger>
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
       </ModalPrimary>
     </>
   );
@@ -211,17 +242,19 @@ const HeaderArticle = () => {
                 </Col>
                 <Col span={24}>
                   <Typography.Title level={4} style={styles.headerTitleRight}>
-                    000.000VND - 000.000VND
+                    {FormatVND(jobDetail.lowestIncome)} - {FormatVND(jobDetail.highestIncome)}
                   </Typography.Title>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text style={styles.headerTextRight}>5 Freelancer đã ứng tuyển</Typography.Text>
+                  <Typography.Text style={styles.headerTextRight}>
+                    {jobDetail.applied} Freelancer đã ứng tuyển
+                  </Typography.Text>
                 </Col>{' '}
                 <Col span={24}>
                   <div>
                     <ClockCircleFilled />
                     <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
-                      Thời gian ứng tuyển còn lại 4 ngày
+                      {CalculateDaysLeft(jobDetail.proposalSubmitDeadline)}
                     </Typography.Text>
                   </div>
                 </Col>
@@ -276,7 +309,55 @@ const AttachmentArticle = () => {
 
 //Skill
 const SkillArticle = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
+  // console.log(jobDetail.skills);
+  const Skill = [
+    {
+      title: 'Javascript',
+    },
+    {
+      title: 'Html',
+    },
+    {
+      title: 'NextJS',
+    },
+    {
+      title: 'ReactJS',
+    },
+    {
+      title: 'Javascript',
+    },
+    {
+      title: 'Html',
+    },
+    {
+      title: 'NextJS',
+    },
+    {
+      title: 'ReactJS',
+    },
+    {
+      title: 'Javascript',
+    },
+    {
+      title: 'Html',
+    },
+    {
+      title: 'NextJS',
+    },
+    {
+      title: 'ReactJS',
+    },
+  ];
+
+  const SkeletonSkills = () => {
+    const skeletonButtons = Array.from({ length: 5 }, (_, index) => (
+      <Skeleton.Button key={index} active shape={'round'} />
+    ));
   
+    return <div style={{display: 'flex', gap: 15}} >{skeletonButtons}</div>;
+  };
+
   return (
     <CustomRow className="skillArticle" gutter={[0, 10]}>
       <Col span={24}>
@@ -285,26 +366,32 @@ const SkillArticle = () => {
         </Typography.Title>
       </Col>
       <CustomCol span={24}>
-        <List
-          style={{ overflowX: 'auto' }}
-          grid={{
-            gutter: 15,
-          }}
-          dataSource={Skill}
-          renderItem={(item, index) => (
-            <List.Item
-              style={{
-                fontWeight: 700,
-                fontSize: 14,
-                padding: '5px 10px',
-                backgroundColor: color.colorBluishCyan,
-                borderRadius: 25,
-              }}
-            >
-              {item.title}
-            </List.Item>
-          )}
-        />
+        {jobDetail.skills.id !== '' ? (
+          <List
+            style={{ overflowX: 'auto' }}
+            grid={{
+              gutter: 15,
+            }}
+            dataSource={jobDetail.skills}
+            renderItem={(item, index) => (
+              <List.Item
+                key={index}
+                style={{
+                  fontWeight: 700,
+                  fontSize: 14,
+                  padding: '5px 10px',
+                  backgroundColor: color.colorBluishCyan,
+                  borderRadius: 25,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {item.name}
+              </List.Item>
+            )}
+          />
+        ) : (
+          <SkeletonSkills/>
+        )}
       </CustomCol>
     </CustomRow>
   );
@@ -312,6 +399,7 @@ const SkillArticle = () => {
 
 //About customer
 const AboutCustomer = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
@@ -336,7 +424,7 @@ const AboutCustomer = () => {
             textAlign: 'center',
           }}
         >
-          CÔNG TY CỔ PHẦN FOODY
+          {jobDetail.clients.accounts.name.toUpperCase()}
         </Typography.Title>
       </CustomCol>
       <CustomCol span={24} style={{ display: 'flex', gap: 10, flexDirection: 'column' }}>
@@ -395,6 +483,7 @@ const VerifiedInformations = () => {
 
 //Contact Info
 const ContactInfo = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
@@ -404,17 +493,21 @@ const ContactInfo = () => {
       </Col>
       <Col span={24} style={{ display: 'flex' }}>
         <MapMarkerAlt />
-        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>Địa chỉ</Typography.Text>
+        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+          {jobDetail.clients.accounts.address != null ? jobDetail.clients.accounts.address : 'Chưa xác minh'}
+        </Typography.Text>
       </Col>
       <Col span={24} style={{ display: 'flex' }}>
         <Envelope />
         <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
-          FoodyEmterprise@gmail.com{' '}
+          {jobDetail.clients.accounts.email != null ? jobDetail.clients.accounts.email : 'Chưa xác minh'}
         </Typography.Text>
       </Col>
       <Col span={24} style={{ display: 'flex' }}>
         <PhoneAlt />
-        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>Số điện thoại </Typography.Text>
+        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
+          {jobDetail.clients.accounts.phone != null ? jobDetail.clients.accounts.phone : 'Chưa xác minh'}
+        </Typography.Text>
       </Col>
     </CustomRow>
   );
@@ -470,8 +563,8 @@ const InformationRight = ({ showModalLogin }) => {
         </Col> */}
         <CustomDivider />
         <AboutCustomer />
-        <CustomDivider />
-        <VerifiedInformations />
+        {/* <CustomDivider />
+        <VerifiedInformations /> */}
         <CustomDivider />
         <ContactInfo />
       </Row>
@@ -515,8 +608,8 @@ const InformationResponsive = ({ showModalLogin }) => {
               </Col> */}
         {/* <CustomDivider /> */}
         <AboutCustomer />
-        <CustomDivider />
-        <VerifiedInformations />
+        {/* <CustomDivider />
+        <VerifiedInformations /> */}
         <CustomDivider />
         <ContactInfo />
       </Row>
@@ -533,7 +626,7 @@ const Details = () => {
     setOpenLogin(true);
   };
   const handleOkLogin = () => {
-    setLoading(true);
+    setLoading(false);
     setTimeout(() => {
       setLoading(false);
       setOpenLogin(false);
