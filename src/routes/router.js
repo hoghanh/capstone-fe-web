@@ -60,6 +60,7 @@ export const routes = [
     path: '/client/profile',
     element: lazy(() => import('pages/profile/ClientProfile')),
     name: 'profile',
+    title: 'Hồ sơ cá nhân',
     // role: ['client'],
   },
   {

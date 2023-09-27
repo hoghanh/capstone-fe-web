@@ -3,6 +3,9 @@ body {
   background-color: #F7F8F9
 }
 
+#root > div > .ant-breadcrumb {
+  padding: 10px 20px; margin:  20px 0 30px 0 }
+
 .ant-typography  a {
   color: #02ADFD
 }

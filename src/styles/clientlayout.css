@@ -333,12 +333,6 @@
   transition: 0.2s;
 }
 
-.layout-dashboard .ant-breadcrumb > span .ant-breadcrumb-link a {
-  color: #8c8c8c;
-}
-.layout-dashboard .ant-breadcrumb > span:last-child .ant-breadcrumb-link {
-  color: #141414;
-}
 .layout-dashboard .ant-page-header-heading {
   margin-top: 0;
 }

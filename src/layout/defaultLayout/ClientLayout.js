@@ -15,16 +15,14 @@ function ClientLayout({ children }) {
   pathname = pathname.replace('/', '');
 
   return (
-    <Layout className={`layout-dashboard layout-profile`}>
+    <Layout className={`layout-dashboard profile`}>
       <Layout.Sider
         breakpoint='lg'
         collapsedWidth='0'
         onCollapse={(collapsed, type) => {
           console.log(collapsed, type);
         }}
-        trigger={null}
         width={250}
-        theme='light'
         className={`sider-primary ant-layout-sider-primary ${
           sidenavType === '#fff' ? 'active-route' : ''
         }`}
