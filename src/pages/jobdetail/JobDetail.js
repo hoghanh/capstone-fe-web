@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from 'antd';
 import Details from './Details';
-import Proposal from './Proposal';
 import { get } from 'utils/APICaller';
-import { useRecoilState } from 'recoil';
-import { jobDetailState } from 'recoil/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { authState, freelancerState, jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
 
 const JobDetail = () => {
   const [jobDetail, setJobDetail] = useRecoilState(jobDetailState);
+  const [freelancer, setFreelancer] = useState(freelancerState);
+  const auth = useRecoilValue(authState);
+  // console.log(jobDetail.skills);
   let { id } = useParams();
   useEffect(() => {
     getJobDetail();
-  }, [])
-  
-  console.log(id)
+    getFreelancer();
+  }, []);
+
   const getJobDetail = async () => {
     await get({ endpoint: `/job/detail/${id}` })
       .then((response) => {
@@ -26,10 +28,20 @@ const JobDetail = () => {
       });
   };
 
+  const getFreelancer = async () => {
+    await get({ endpoint: `/freelancer/profile/${auth.id}` })
+      .then((response) => {
+        const data = response.data;
+        setFreelancer(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Layout.Content className={'containerBody'} style={styles.containerBody}>
       <Details />
-      <Proposal />
     </Layout.Content>
   );
 };

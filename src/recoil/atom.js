@@ -24,6 +24,61 @@ export const profileState = atom({
   }
 });
 
+const accounts = {
+  id: 0,
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  image: '',
+  password: '',
+  role: '',
+  currency: 0,
+  status: true,
+  createdAt: '',
+  updatedAt: '',
+}
+
+const jobskill = {
+  jobSkillId: 0,
+  createdAt: '',
+  updatedAt: '',
+  jobId: 0,
+  skillId: 0,
+};
+
+const skills = {
+  id: '',
+  name: '',
+  description: '',
+  jobskill: jobskill,
+};
+
+const clients =  {
+  accountId: 0,
+  accounts: accounts,
+  companyWebsite: '',
+  id: 0,
+  status: '',
+  taxCode: null,
+  applied: 0,
+  createAt: '',
+  updateAt: '',
+}
+
+const proposals = {
+  id: '',
+  description: '',
+  fileAttach: '',
+  sendDate: '',
+  status: '',
+  createdAt: '',
+  updatedAt: '',
+  freelancerId: '',
+  jobId: '',
+};
+
+
 export const jobDetailState = atom({
   key: 'jobDetailState',
   default: {
@@ -38,9 +93,32 @@ export const jobDetailState = atom({
     status: '',
     createdAt: '',
     updatedAt: '',
-    clientId: 0
-  }
+    clientId: 0,
+    clients: clients,
+    skills: skills,
+    proposals: proposals,
+  },
 });
+
+export const freelancerState = atom({
+  key: 'freelancerState',
+  default: {
+    id: '',
+    status: '',
+    cvFile: '',
+    hoursPerWeek: '',
+    languages: '',
+    education: '',
+    introduction: '',
+    major: '',
+    title: '',
+    createdAt: '',
+    updatedAt: '',
+    accountId: '',
+    accounts: accounts,
+  },
+});
+
 
 export const authState = atom({
   key: 'auth',

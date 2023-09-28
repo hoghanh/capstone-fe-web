@@ -139,7 +139,7 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
       >
         Trở thành thành viên FPT-SEP
       </Typography.Title>
-      <GoogleLoginButton />
+      <GoogleLoginButton onLogin={() => onCancel()} />
       <div style={home.login.contain}>
         <div style={home.login.line}></div>
         <Typography style={home.login.or}>HOẶC</Typography>

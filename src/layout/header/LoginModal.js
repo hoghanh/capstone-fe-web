@@ -98,7 +98,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         >
           Đăng nhập FPT-SEP
         </Typography.Title>
-        <GoogleLoginButton />
+        <GoogleLoginButton onLogin={() => onCancel()} />
         <div style={home.login.contain}>
           <div style={home.login.line}></div>
           <Typography style={home.login.or}>HOẶC</Typography>
