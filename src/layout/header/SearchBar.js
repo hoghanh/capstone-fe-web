@@ -22,6 +22,7 @@ import { categoriesNavbarState, authState } from 'recoil/atom';
 import { GoogleLogout } from 'react-google-login';
 import { CLIENTID } from 'config';
 import { Logout } from 'components/icon/Icon';
+import { Link } from 'react-router-dom';
 
 const onSuccess = () => {
   console.log('Logout success');
@@ -34,7 +35,7 @@ const onFail = () => {
 const items = [
   {
     key: '1',
-    label: 'Quản lý công việc',
+    label: <Link to="/proposals">Quản lý công việc</Link>,
   },
   {
     key: '2',

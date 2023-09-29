@@ -64,11 +64,18 @@ export const routes = [
     // role: ['client'],
   },
   {
-    path: '/proposals',
-    element: lazy(() => import('pages/proposals/Proposals')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
+      path: '/proposals',
+      element: lazy(() => import('pages/proposals/Proposals')),
+      name: 'proposals',
+      // role: ['client'],
+    },
+
+    {
+      path: '/job-management',
+      element: lazy(() => import('pages/jobmanagement/JobManagement')),
+      name: 'jobmanagement',
+      // role: ['client'],
+    },
 ];
 
 const Router = () => {
