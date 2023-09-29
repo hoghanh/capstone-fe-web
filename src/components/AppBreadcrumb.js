@@ -51,7 +51,6 @@ const AppBreadcrumb = () => {
   return (
     <div style={theme.responseWidth}>
       <Breadcrumb
-        style={{ padding: '10px 20px', margin: ' 20px 0 30px 0' }}
         itemRender={itemRender}
         items={breadcrumbs}
         separator={

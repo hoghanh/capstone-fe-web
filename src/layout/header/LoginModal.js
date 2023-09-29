@@ -8,17 +8,13 @@ import useAuthActions from 'recoil/action';
 import { post } from 'utils/APICaller';
 
 function LoginModal({ visible, onCancel, onOk, handleMove }) {
-  const [loading, setLoading] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { login } = useAuthActions();
 
   const handleOk = () => {
-    setLoading(true);
     setTimeout(() => {
-      setLoading(false);
       onOk();
     }, 3000);
   };
