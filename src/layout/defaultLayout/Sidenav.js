@@ -7,78 +7,97 @@ import {
   Timer,
   User,
 } from 'components/icon/Icon';
-import { Link } from 'react-router-dom';
-
-const items = [
-  {
-    key: 'dashboard-client',
-    label: (
-      <Link to='/client/dashboard'>
-        <span className='icon'>
-          <Dashboard />
-        </span>
-        <span className='label'>Bảng điều khiển</span>
-      </Link>
-    ),
-  },
-  {
-    key: 'list-jobs-client',
-    label: (
-      <Link to='/client/jobs'>
-        <span className='icon'>
-          <List />
-        </span>
-        <span className='label'>Bài viết</span>
-      </Link>
-    ),
-  },
-  {
-    key: 'jobs-list-client',
-    label: (
-      <Link to='/client/jobs'>
-        <span className='icon'>
-          <Documents />
-        </span>
-        <span className='label'>Đề xuất</span>
-      </Link>
-    ),
-  },
-  {
-    key: 'meeting-schedule-client',
-    label: (
-      <Link to='/client/schedule'>
-        <span className='icon'>
-          <Timer />
-        </span>
-        <span className='label'>Lịch phỏng vấn</span>
-      </Link>
-    ),
-  },
-  {
-    key: 'billing-client',
-    label: (
-      <Link to='/client/billing'>
-        <span className='icon'>
-          <Billing />
-        </span>
-        <span className='label'>Hoá đơn</span>
-      </Link>
-    ),
-  },
-  {
-    key: 'profile-client',
-    label: (
-      <Link to='/client/profile'>
-        <span className='icon'>
-          <User />
-        </span>
-        <span className='label'>Hồ sơ</span>
-      </Link>
-    ),
-  },
-];
+import { Link, useLocation } from 'react-router-dom';
 
 function Sidenav({ color }) {
+  const { pathname } = useLocation();
+  const page = pathname.replace('/', '');
+  const items = [
+    {
+      key: 'dashboard-client',
+      label: (
+        <Link
+          to='/client/dashboard'
+          className={page === 'client/dashboard' ? 'active' : ''}
+        >
+          <span className='icon'>
+            <Dashboard />
+          </span>
+          <span className='label'>Bảng điều khiển</span>
+        </Link>
+      ),
+    },
+    {
+      key: 'list-jobs-client',
+      label: (
+        <Link
+          to='/client/jobs'
+          className={page === 'client/jobs' ? 'active' : ''}
+        >
+          <span className='icon'>
+            <List />
+          </span>
+          <span className='label'>Bài viết</span>
+        </Link>
+      ),
+    },
+    {
+      key: 'list-proposal-client',
+      label: (
+        <Link
+          to='/client/proposal'
+          className={page === 'client/proposal' ? 'active' : ''}
+        >
+          <span className='icon'>
+            <Documents />
+          </span>
+          <span className='label'>Đề xuất</span>
+        </Link>
+      ),
+    },
+    {
+      key: 'meeting-schedule-client',
+      label: (
+        <Link
+          to='/client/schedule'
+          className={page === 'client/billing' ? 'active' : ''}
+        >
+          <span className='icon'>
+            <Timer />
+          </span>
+          <span className='label'>Lịch phỏng vấn</span>
+        </Link>
+      ),
+    },
+    {
+      key: 'billing-client',
+      label: (
+        <Link
+          to='/client/billing'
+          className={page === 'client/billing' ? 'active' : ''}
+        >
+          <span className='icon'>
+            <Billing />
+          </span>
+          <span className='label'>Hoá đơn</span>
+        </Link>
+      ),
+    },
+    {
+      key: 'profile-client',
+      label: (
+        <Link
+          to='/client/profile'
+          className={page === 'client/profile' ? 'active' : ''}
+        >
+          <span className='icon'>
+            <User />
+          </span>
+          <span className='label'>Hồ sơ</span>
+        </Link>
+      ),
+    },
+  ];
   return (
     <>
       <Typography.Title level={4} style={{ textAlign: 'center' }}>
