@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Typography, notification } from 'antd';
 import { ReactSVG } from 'react-svg';
 import GoogleLogin from 'react-google-login';
-import { gapi } from 'gapi-script';
 
 import { CLIENTID } from 'config';
 import color from 'styles/color';
@@ -11,16 +10,6 @@ import useAuthActions from 'recoil/action';
 
 const GoogleLoginButton = ({ onLogin }) => {
   const { login } = useAuthActions();
-  useEffect(() => {
-    function start() {
-      gapi.auth2.init({
-        client_id: CLIENTID,
-        scope: '',
-      });
-    }
-
-    gapi.load('client:auth2', start);
-  });
 
   const onSuccess = (res) => {
     const allowedDomain = '@fpt.edu.vn';
