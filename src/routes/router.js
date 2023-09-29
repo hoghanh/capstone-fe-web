@@ -2,9 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { Spin } from 'antd';
 import { Route, Routes } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
-import AdminLayout from 'layout/defaultLayout/AdminLayout';
 import UserLayout from 'layout/defaultLayout/UserLayout';
-import BreadcrumbAdmin from 'layout/breadcrumbLayout/BreadCrumbAdmin';
+import ClientLayout from 'layout/defaultLayout/ClientLayout';
 import BreadcrumbUser from 'layout/breadcrumbLayout/BreadCrumbUser';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
@@ -52,24 +51,31 @@ export const routes = [
     // role: ['user'],
   },
   {
+    path: '/client',
+    element: lazy(() => import('layout/defaultLayout/ClientLayout')),
+    name: 'client',
+    role: ['client'],
+  },
+  {
     path: '/client/profile',
-    element: lazy(() => import('pages/profile/Profile')),
+    element: lazy(() => import('pages/profile/ClientProfile')),
     name: 'profile',
+    title: 'Hồ sơ cá nhân',
     // role: ['client'],
   },
   {
-      path: '/proposals',
-      element: lazy(() => import('pages/proposals/Proposals')),
-      name: 'proposals',
-      // role: ['client'],
-    },
+    path: '/proposals',
+    element: lazy(() => import('pages/proposals/Proposals')),
+    name: 'proposals',
+    // role: ['client'],
+  },
 
-    {
-      path: '/job-management',
-      element: lazy(() => import('pages/jobmanagement/JobManagement')),
-      name: 'jobmanagement',
-      // role: ['client'],
-    },
+  {
+    path: '/job-management',
+    element: lazy(() => import('pages/jobmanagement/JobManagement')),
+    name: 'jobmanagement',
+    // role: ['client'],
+  },
 ];
 
 const Router = () => {
@@ -83,12 +89,8 @@ const Router = () => {
             key={path}
             path={path}
             element={
-              auth.role === 'client' || auth.role === 'admin' ? (
-                layout === 'breadcrumb' ? (
-                  <BreadcrumbAdmin />
-                ) : (
-                  <AdminLayout />
-                )
+              auth.role === 'client' ? (
+                <ClientLayout />
               ) : layout === 'breadcrumb' ? (
                 <BreadcrumbUser />
               ) : (
