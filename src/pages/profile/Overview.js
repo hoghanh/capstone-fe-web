@@ -6,10 +6,11 @@ import { ModalPrimary } from 'components/Modal/Modal';
 import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { Checking, Flag, MapMarkerAlt, Pen, Plus, SearchOutlined, Star, Trash } from 'components/icon/Icon';
-import { AppContext } from 'context/AppContext';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import color from 'styles/color';
 import css from './profile.module.css'
+import { useRecoilValue } from 'recoil';
+import { profileState } from 'recoil/atom';
 
 const Skill = [
   {
@@ -609,7 +610,7 @@ const EditCertifications= () => {
 // Header section
 const HeaderSection = () => {
 
-  const { informationUser } = useContext(AppContext);
+  const informationUser = useRecoilValue(profileState)
 
   console.log('informations', informationUser)
 
@@ -668,7 +669,7 @@ const HeaderSection = () => {
 
 //Body Section Left
 const BodySectionLeft = () => {
-  const { informationUser } = useContext(AppContext);
+  const informationUser = useRecoilValue(profileState)
 
   return (
     <Col span={0} sm={{span: 8}} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
@@ -825,7 +826,7 @@ const BodySectionLeft = () => {
 
 //Body Section Left Responsive
 const BodySectionLeftResponsive = () => {
-  const { informationUser } = useContext(AppContext);
+  const informationUser = useRecoilValue(profileState)
 
   return (
     <Col span={24} sm={{span: 0}} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>

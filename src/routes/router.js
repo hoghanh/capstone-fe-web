@@ -9,7 +9,7 @@ import BreadcrumbUser from 'layout/breadcrumbLayout/BreadCrumbUser';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import { useRecoilValue } from 'recoil';
-import authAtom from 'recoil/auth/atom';
+import { authState } from 'recoil/atom';
 
 export const routes = [
   {
@@ -26,11 +26,23 @@ export const routes = [
     title: 'Tìm công việc freelance',
   },
   {
-    path: '/job-detail',
+    path: '/jobs/:subCateId/:subCateName',
+    element: lazy(() => import('pages/joblist/JobList')),
+    name: 'jobs',
+    layout: 'breadcrumb',
+  },
+  {
+    path: '/jobs/job-detail',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
+  },
+  {
+    path: '/jobs/job-detail/:id',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
+    layout: 'breadcrumb',
   },
 
   {
@@ -40,57 +52,36 @@ export const routes = [
     // role: ['user'],
   },
   {
-    path: '/client',
-    children: [
-      {
-        path: '/profile',
-        element: lazy(() => import('pages/profile/Profile')),
-        name: 'profile',
-        role: ['client'],
-      },
-    ],
-  },
-
-  {
-    path: '/job-management',
-    element: lazy(() => import('pages/jobmanagement/JobManagement')),
-    name: 'jobmanagement',
+    path: '/client/profile',
+    element: lazy(() => import('pages/profile/Profile')),
+    name: 'profile',
     // role: ['client'],
   },
-
   {
-    path: '/proposals',
-    element: lazy(() => import('pages/proposals/Proposals')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
+      path: '/proposals',
+      element: lazy(() => import('pages/proposals/Proposals')),
+      name: 'proposals',
+      // role: ['client'],
+    },
 
-];
-
-const breadcrumbroutes = [
-  {
-    path: '/job-management',
-    element: lazy(() => import('pages/jobmanagement/JobManagement')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
-  
-  {
-    path: '/proposals',
-    element: lazy(() => import('pages/proposals/Proposals')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
+    {
+      path: '/job-management',
+      element: lazy(() => import('pages/jobmanagement/JobManagement')),
+      name: 'jobmanagement',
+      // role: ['client'],
+    },
 ];
 
 const Router = () => {
-  const auth = useRecoilValue(authAtom);
+  const auth = useRecoilValue(authState);
+
   return (
     <Suspense fallback={<Spin />}>
       <Routes>
         {routes.map(({ path, element, name, role, layout }) => (
           <Route
             key={path}
+            path={path}
             element={
               auth.role === 'client' || auth.role === 'admin' ? (
                 layout === 'breadcrumb' ? (
@@ -104,6 +95,7 @@ const Router = () => {
                 <UserLayout />
               )
             }
+            exact
           >
             <Route
               path={path}
@@ -114,6 +106,7 @@ const Router = () => {
                   <PublicRoute element={element} />
                 )
               }
+              exact
             />
           </Route>
         ))}
