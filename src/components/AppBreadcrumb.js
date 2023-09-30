@@ -12,7 +12,7 @@ function itemRender(route, params, routes, paths) {
   return last ? (
     <span>{route.title}</span>
   ) : (
-    <Link to={paths.join('/')}>{route.title}</Link>
+    <Link to={route.path}>{route.title}</Link>
   );
 }
 
@@ -23,6 +23,7 @@ const AppBreadcrumb = () => {
     const currentRoute = routes.find((route) => route.path === pathname);
     return currentRoute ? currentRoute.title : false;
   };
+
   const getBreadcrumbs = (location) => {
     const breadcrumbs = [
       {
@@ -37,7 +38,7 @@ const AppBreadcrumb = () => {
       const routeName = getRouteName(currentPathname, routes);
       routeName &&
         breadcrumbs.push({
-          pathname: currentPathname,
+          path: currentPathname,
           title: routeName,
           active: index + 1 === array.length ? true : false,
         });
