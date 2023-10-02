@@ -184,7 +184,7 @@ const BodySectionLeft = () => {
             </CustomCol>
             <CustomCol>
               <Row gutter={[0, 15]}>
-                <Col>
+                <Col span={24}>
                   <Row align={'middle'} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
@@ -194,7 +194,7 @@ const BodySectionLeft = () => {
   
                   </Row>
                 </Col>
-                <Col>
+                <Col span={24}>
                   <Typography.Text>
                     <Typography.Text strong style={{ marginRight: 20 }}>
                       Tiếng Anh:
@@ -202,7 +202,7 @@ const BodySectionLeft = () => {
                     Giao tiếp
                   </Typography.Text>
                 </Col>
-                <Col>
+                <Col span={24}>
                   <Typography.Text>
                     <Typography.Text strong style={{ marginRight: 20 }}>
                       Tiếng Nhật:
