@@ -87,13 +87,10 @@ body {
 
 /* job management */
 
-.trackingJobs .ant-card-head{
+.trackingJobs .ant-card-head, .trackingJobs .ant-tabs-nav-wrap{
   border-bottom: 1px solid #000 !important;
 }
 
-.trackingJobs .ant-tabs-nav-wrap{
-  border-bottom: 'transparent' !important;
-}
 
 
 .trackingJobs .ant-card .ant-card-head{
