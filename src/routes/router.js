@@ -76,6 +76,14 @@ export const routes = [
     name: 'jobmanagement',
     // role: ['client'],
   },
+  {
+    path: '/client/proposals/freelancer-profile',
+    element: lazy(() => import('pages/profile/Client/FreelancerProfile')),
+    name: 'freelancerProfile',
+    title: 'Hồ sơ ứng cử viên',
+    // role: ['client'],
+
+  },
 ];
 
 const Router = () => {

@@ -119,6 +119,21 @@ export const freelancerState = atom({
   },
 });
 
+export const clientProfile = atom({
+  key: 'clientProfile',
+  default: {
+    id: '',
+    status: '',
+    taxCode: '',
+    companyWebsite: '',
+    currency: '',
+    createdAt: '',
+    updatedAt: '',
+    accountId: '',
+    accounts: accounts,
+  },
+});
+
 
 export const authState = atom({
   key: 'auth',
