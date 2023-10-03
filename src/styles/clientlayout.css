@@ -576,6 +576,10 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   color: #fff;
 }
 
+.layout-dashboard .ant-breadcrumb {
+  padding: 10px 7px;
+}
+
 .layout-profile .ant-layout-header {
   margin: 10px 20px;
 }

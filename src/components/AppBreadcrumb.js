@@ -25,14 +25,15 @@ const AppBreadcrumb = () => {
   };
 
   const getBreadcrumbs = (location) => {
-    const breadcrumbs = [
-      {
+    const breadcrumbs = [];
+    if (!location.includes('/client')) {
+      breadcrumbs.push({
         path: '/',
         element: lazy(() => import('../pages/home/HomePage')),
         name: 'Home',
         title: <HomeFilled />,
-      },
-    ];
+      });
+    }
     location.split('/').reduce((prev, curr, index, array) => {
       const currentPathname = `${prev}/${curr}`;
       const routeName = getRouteName(currentPathname, routes);

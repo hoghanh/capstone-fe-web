@@ -51,9 +51,11 @@ export const routes = [
     // role: ['user'],
   },
   {
+    //để tạm thời
     path: '/client',
     element: lazy(() => import('layout/defaultLayout/ClientLayout')),
     name: 'client',
+    title: <HomeFilled />,
     role: ['client'],
   },
   {
