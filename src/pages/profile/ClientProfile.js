@@ -1,7 +1,13 @@
 import { Row, Col, Card, Descriptions, Avatar, Typography } from 'antd';
 import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import { Pen } from 'components/icon/Icon';
+import { useRecoilState } from 'recoil';
+import { clientProfile } from 'recoil/atom';
+
 function ClientProfile() {
+  const informationUser = useRecoilState(clientProfile);
+  console.log(informationUser);
+
   return (
     <>
       <div
@@ -23,10 +29,10 @@ function ClientProfile() {
                 <Avatar
                   size={74}
                   shape='square'
-                  src='https://images.unsplash.com/photo-1651488829517-95af02975dd5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'
+                  src={informationUser[0]?.accounts.image}
                 />
                 <Typography.Title level={3} style={{ marginLeft: 10 }}>
-                  Company
+                  {informationUser[0]?.accounts.name}
                 </Typography.Title>
               </Avatar.Group>
             </Col>
@@ -57,20 +63,19 @@ function ClientProfile() {
             <hr className='my-25' />
             <Descriptions column={1}>
               <Descriptions.Item label='Email'>
-                sarahjacob@mail.com
+                {informationUser[0]?.accounts.email}
               </Descriptions.Item>
               <Descriptions.Item label='Số điện thoại'>
-                01231234123
+                {informationUser[0]?.accounts.phone}
               </Descriptions.Item>
               <Descriptions.Item label='Website'>
-                foody.com.vn
+                {informationUser[0]?.companyWebsite}
               </Descriptions.Item>
               <Descriptions.Item label='Địa chỉ'>
-                Lầu G, Tòa nhà Jabes 1, số 34 đường Cống Quỳnh, Phường Phạm Ngũ
-                Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam
+                {informationUser[0]?.accounts.address}
               </Descriptions.Item>
               <Descriptions.Item label='Mã số thuế'>
-                091287349186247
+                {informationUser[0]?.taxCode}
               </Descriptions.Item>
             </Descriptions>
           </Card>
