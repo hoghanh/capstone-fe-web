@@ -1,14 +1,21 @@
-import { useEffect, useState } from 'react';
-import { Row, Col, Input, Drawer, Button } from 'antd';
+import { useEffect } from 'react';
+import { Row, Col, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { Logout, Toggler } from 'components/icon/Icon';
 import useAuthActions from 'recoil/action';
 import AppBreadcrumb from 'components/AppBreadcrumb';
+import { useNavigate } from 'react-router-dom';
 
 function ClientHeader({ name, subName, onPress }) {
   useEffect(() => window.scrollTo(0, 0));
+  const navigate = useNavigate();
+
   const { logout } = useAuthActions();
+  function handleLogout() {
+    logout();
+    navigate('/');
+  }
 
   return (
     <>
@@ -18,7 +25,7 @@ function ClientHeader({ name, subName, onPress }) {
         </Col>
 
         <Col span={24} md={18} className='header-control'>
-          <div onClick={() => logout()}>
+          <div onClick={() => handleLogout()}>
             <Logout size={24} />
           </div>
 
