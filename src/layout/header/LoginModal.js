@@ -7,15 +7,17 @@ import Link from 'antd/es/typography/Link';
 import useAuthActions from 'recoil/action';
 import { get, post } from 'utils/APICaller';
 import { useSetRecoilState } from 'recoil';
-import { profileState } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
+import { useNavigate } from 'react-router-dom';
 
 function LoginModal({ visible, onCancel, onOk, handleMove }) {
-  const setInformationUser = useSetRecoilState(profileState);
+  const navigate = useNavigate();
+  const setInformationUser = useSetRecoilState(clientProfile);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   function fetchProfile(id) {
-    get({ endpoint: `/accounts/profile/${id}` })
+    get({ endpoint: `/client/profile/${id}` })
       .then((response) => {
         const data = response.data;
         setInformationUser(data);
@@ -50,6 +52,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         setEmail('');
         setPassword('');
         fetchProfile(res.data.account.id);
+        navigate('/client/profile');
 
         notification.success({
           message: 'Đăng nhập thành công',

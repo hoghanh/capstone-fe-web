@@ -2,10 +2,10 @@ import { Row, Col, Card, Descriptions, Avatar, Typography } from 'antd';
 import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import { Pen } from 'components/icon/Icon';
 import { useRecoilState } from 'recoil';
-import { profileState } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 
 function ClientProfile() {
-  const informationUser = useRecoilState(profileState);
+  const informationUser = useRecoilState(clientProfile);
   console.log(informationUser);
 
   return (
@@ -29,10 +29,10 @@ function ClientProfile() {
                 <Avatar
                   size={74}
                   shape='square'
-                  src={informationUser[0]?.image}
+                  src={informationUser[0]?.accounts.image}
                 />
                 <Typography.Title level={3} style={{ marginLeft: 10 }}>
-                  Company
+                  {informationUser[0]?.accounts.name}
                 </Typography.Title>
               </Avatar.Group>
             </Col>
@@ -63,19 +63,19 @@ function ClientProfile() {
             <hr className='my-25' />
             <Descriptions column={1}>
               <Descriptions.Item label='Email'>
-                {informationUser[0]?.email}
+                {informationUser[0]?.accounts.email}
               </Descriptions.Item>
               <Descriptions.Item label='Số điện thoại'>
-                {informationUser[0]?.phone}
+                {informationUser[0]?.accounts.phone}
               </Descriptions.Item>
               <Descriptions.Item label='Website'>
-                {informationUser[0]?.website}
+                {informationUser[0]?.companyWebsite}
               </Descriptions.Item>
               <Descriptions.Item label='Địa chỉ'>
-                {informationUser[0]?.address}
+                {informationUser[0]?.accounts.address}
               </Descriptions.Item>
               <Descriptions.Item label='Mã số thuế'>
-                {informationUser[0]?.mst}
+                {informationUser[0]?.taxCode}
               </Descriptions.Item>
             </Descriptions>
           </Card>
