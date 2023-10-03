@@ -129,7 +129,7 @@
   .active,
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu .active {
   background-color: #fff;
-  box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
+  box-shadow: 0 20px 27px rgb(0 0 0 0.05);
   font-weight: 600;
 }
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item a,
@@ -179,7 +179,7 @@
   width: 32px;
   height: 32px;
   background-color: #fff;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 12%);
+  box-shadow: 0 4px 6px rgb(0 0 0  0.12);
   border-radius: 6px;
   justify-content: center;
   align-items: center;
@@ -261,7 +261,7 @@
   color: #141414;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
+  box-shadow: 0 20px 27px rgb(0 0 0 0.05);
   margin-bottom: 8px;
 }
 
@@ -275,7 +275,7 @@
   display: inline-flex;
   width: 32px;
   height: 32px;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 12%);
+  box-shadow: 0 4px 6px rgb(0 0 0 0.12);
   border-radius: 6px;
   justify-content: center;
   align-items: center;
@@ -544,7 +544,7 @@ span.ismobile {
   height: 300px;
   margin-top: -137.8px;
   border-radius: 12px;
-  box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
+  box-shadow: 0 20px 27px rgb(0 0 0 0.05);
   background-size: cover;
   background-position: 50%;
 }
@@ -593,7 +593,7 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
 }
 
 .card-profile-head .ant-card-head .ant-avatar {
-  box-shadow: 0 5px 10px rgb(0 0 0 / 12%);
+  box-shadow: 0 5px 10px rgb(0 0 0 0.12);
   border-radius: 8px;
   margin: 0;
 }
