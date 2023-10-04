@@ -1,14 +1,26 @@
 import { Row, Col, Card, Descriptions, Avatar, Typography } from 'antd';
 import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import { Pen } from 'components/icon/Icon';
-import { useRecoilState } from 'recoil';
+import Loading from 'components/loading/loading';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { clientProfile } from 'recoil/atom';
 
 function ClientProfile() {
-  const informationUser = useRecoilState(clientProfile);
-  console.log(informationUser);
+  const informationUser = useRecoilValue(clientProfile);
 
-  return (
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (informationUser.id !== 0) {
+      setIsLoading(false);
+    }
+  }, [informationUser]);
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <div
         className='profile-nav-bg'
@@ -29,10 +41,10 @@ function ClientProfile() {
                 <Avatar
                   size={74}
                   shape='square'
-                  src={informationUser[0]?.accounts.image}
+                  src={informationUser?.accounts.image}
                 />
                 <Typography.Title level={3} style={{ marginLeft: 10 }}>
-                  {informationUser[0]?.accounts.name}
+                  {informationUser?.accounts.name}
                 </Typography.Title>
               </Avatar.Group>
             </Col>
@@ -54,28 +66,23 @@ function ClientProfile() {
             bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
             style={{ padding: 20 }}
           >
-            <p className='text-dark'>
-              Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer
-              is no. If two equally difficult paths, choose the one more painful
-              in the short term (pain avoidance is creating an illusion of
-              equality).{' '}
-            </p>
+            <p className='text-dark'>{informationUser?.introduction}</p>
             <hr className='my-25' />
             <Descriptions column={1}>
               <Descriptions.Item label='Email'>
-                {informationUser[0]?.accounts.email}
+                {informationUser?.accounts.email}
               </Descriptions.Item>
               <Descriptions.Item label='Số điện thoại'>
-                {informationUser[0]?.accounts.phone}
+                {informationUser?.accounts.phone}
               </Descriptions.Item>
               <Descriptions.Item label='Website'>
-                {informationUser[0]?.companyWebsite}
+                {informationUser?.companyWebsite}
               </Descriptions.Item>
               <Descriptions.Item label='Địa chỉ'>
-                {informationUser[0]?.accounts.address}
+                {informationUser?.accounts.address}
               </Descriptions.Item>
               <Descriptions.Item label='Mã số thuế'>
-                {informationUser[0]?.taxCode}
+                {informationUser?.taxCode}
               </Descriptions.Item>
             </Descriptions>
           </Card>

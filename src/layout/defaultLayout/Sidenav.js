@@ -31,8 +31,8 @@ function Sidenav({ color }) {
       key: 'list-jobs-client',
       label: (
         <Link
-          to='/client/jobs'
-          className={page === 'client/jobs' ? 'active' : ''}
+          to='/client/jobs-management'
+          className={page === 'client/jobs-management' ? 'active' : ''}
         >
           <span className='icon'>
             <List />
@@ -47,7 +47,9 @@ function Sidenav({ color }) {
         <Link
           // to='/client/proposal'
           to='/client/proposals/freelancer-profile'
-          className={page === 'client/proposals/freelancer-profile' ? 'active' : ''}
+          className={
+            page === 'client/proposals/freelancer-profile' ? 'active' : ''
+          }
         >
           <span className='icon'>
             <Documents />

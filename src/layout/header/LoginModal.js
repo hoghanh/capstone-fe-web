@@ -21,6 +21,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
       .then((response) => {
         const data = response.data;
         setInformationUser(data);
+        navigate('/client/profile');
       })
       .catch((error) => {
         console.log(error);
@@ -52,7 +53,6 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         setEmail('');
         setPassword('');
         fetchProfile(res.data.account.id);
-        navigate('/client/profile');
 
         notification.success({
           message: 'Đăng nhập thành công',
