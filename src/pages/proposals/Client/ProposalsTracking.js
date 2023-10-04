@@ -1,29 +1,32 @@
-import { Card, Col, Input, Row, Typography, DatePicker } from 'antd';
-import { CustomDivider, CustomRow } from 'components/customize/Layout';
-import { PaperClipOutlined } from 'components/icon/Icon';
+import { Card, Col, Input, Row, Typography, DatePicker, Image } from 'antd';
+import { CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
+import { PaperClipOutlined, Pen } from 'components/icon/Icon';
 import React, { useState } from 'react';
 import color from 'styles/color';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { proposalListState, valueSearchState } from 'recoil/atom';
+import { profileState, proposalListState, valueSearchState } from 'recoil/atom';
+import { ButtonPrimary } from 'components/customize/GlobalCustomize';
+import { Link } from 'react-router-dom';
 
 const tabListNoTitle = [
   {
     key: 'Sent',
-    label: 'Đã gửi',
+    label: 'Phù hợp với công việc',
   },
   {
     key: 'Approved',
-    label: 'Đã nhận',
+    label: 'Đã gửi đi',
   },
   {
     key: 'Declined',
-    label: 'Từ chối',
+    label: 'Phỏng vấn',
   },
 ];
 
 const TabSent = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
+  const informationUser = useRecoilValue(profileState);
   return (
     <>
       <Row>
@@ -39,6 +42,47 @@ const TabSent = () => {
                 <>
                   <Col key={index} span={24} style={{ padding: 20 }}>
                     <Row gutter={[0, 5]}>
+                      <Col span={24}>
+                        <Row justify={'space-between'}>
+                          <Col>
+                            <Row align={'middle'}>
+                              <Col
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  marginRight: 10,
+                                  position: 'relative',
+                                  paddingLeft: 10,
+                                  paddingRight: 10,
+                                }}
+                              >
+                                <Image
+                                  width={72}
+                                  src={informationUser.image}
+                                  alt="Apofoitisi logo"
+                                  preview={true}
+                                  style={{ borderRadius: '50%' }}
+                                />
+                              </Col>
+                              <CustomCol>
+                                <Row gutter={10}>
+                                  <Col>
+                                    <Link to="/client/proposals/freelancer-profile">
+                                      <Typography.Title level={4} style={{ margin: 0 }}>
+                                        Nguyen Van A
+                                      </Typography.Title>
+                                    </Link>
+                                  </Col>
+                                </Row>
+                              </CustomCol>
+                            </Row>
+                          </Col>
+                          <Col>
+                            <ButtonPrimary style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}>Gửi lời mời</ButtonPrimary>
+                          </Col>
+                        </Row>
+                      </Col>
+
                       <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
                         <Row justify={'space-between'}>
                           <Col>
@@ -90,6 +134,7 @@ const TabSent = () => {
 const TabDeclined = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
+  const informationUser = useRecoilValue(profileState);
 
   return (
     <>
@@ -106,6 +151,58 @@ const TabDeclined = () => {
                 <>
                   <Col key={index} span={24} style={{ padding: 20 }}>
                     <Row gutter={[0, 5]}>
+                      <Col span={24}>
+                        <Row justify={'space-between'}>
+                          <Col>
+                            <Row align={'middle'}>
+                              <Col
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  marginRight: 10,
+                                  position: 'relative',
+                                  paddingLeft: 10,
+                                  paddingRight: 10,
+                                }}
+                              >
+                                <Image
+                                  width={72}
+                                  src={informationUser.image}
+                                  alt="Apofoitisi logo"
+                                  preview={true}
+                                  style={{ borderRadius: '50%' }}
+                                />
+                              </Col>
+                              <CustomCol>
+                                <Row gutter={10}>
+                                  <Col>
+                                    <Typography.Title level={4} style={{ margin: 0 }}>
+                                      Nguyen Van A
+                                    </Typography.Title>
+                                  </Col>
+                                </Row>
+                              </CustomCol>
+                            </Row>
+                          </Col>
+                          <Col>
+                            <Row gutter={[10, 10]}>
+                              <Col>
+                                <ButtonPrimary $info style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}>
+                                  Sửa thời gian phỏng vấn
+                                </ButtonPrimary>
+                              </Col>
+                              <Col>
+                                <ButtonPrimary $warning style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}>
+                                  Từ chối
+                                </ButtonPrimary>
+                              </Col>
+                              <Col>
+                                <ButtonPrimary style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}>Bắt đầu làm</ButtonPrimary>
+                              </Col>
+                            </Row>
+                          </Col>
+                        </Row>
+                      </Col>
                       <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
                         <Row justify={'space-between'}>
                           <Col>
@@ -157,7 +254,7 @@ const TabDeclined = () => {
 const TabApproved = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
-
+  const informationUser = useRecoilValue(profileState);
   return (
     <>
       <Row>
@@ -173,6 +270,53 @@ const TabApproved = () => {
                 <>
                   <Col key={index} span={24} style={{ padding: 20 }}>
                     <Row gutter={[0, 5]}>
+                      <Col span={24}>
+                        <Row justify={'space-between'}>
+                          <Col>
+                            <Row align={'middle'}>
+                              <Col
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  marginRight: 10,
+                                  position: 'relative',
+                                  paddingLeft: 10,
+                                  paddingRight: 10,
+                                }}
+                              >
+                                <Image
+                                  width={72}
+                                  src={informationUser.image}
+                                  alt="Apofoitisi logo"
+                                  preview={true}
+                                  style={{ borderRadius: '50%' }}
+                                />
+                              </Col>
+                              <CustomCol>
+                                <Row gutter={10}>
+                                  <Col>
+                                    <Typography.Title level={4} style={{ margin: 0 }}>
+                                      Nguyen Van A
+                                    </Typography.Title>
+                                  </Col>
+                                </Row>
+                              </CustomCol>
+                            </Row>
+                          </Col>
+                          <Col>
+                            <Row gutter={[10, 10]}>
+                              <Col>
+                                <ButtonPrimary $warning style={{ padding: '10px 20px' }}>
+                                  Từ chối
+                                </ButtonPrimary>
+                              </Col>
+                              <Col>
+                                <ButtonPrimary style={{ padding: '10px 20px' }}>Bắt đầu làm</ButtonPrimary>
+                              </Col>
+                            </Row>
+                          </Col>
+                        </Row>
+                      </Col>
                       <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
                         <Row justify={'space-between'}>
                           <Col>
@@ -182,15 +326,6 @@ const TabApproved = () => {
                                   {proposal.jobs.title}
                                 </Typography.Title>
                               </Col>
-                              <Col span={24}>
-                                <Typography.Text style={{ margin: 0 }}>Lương: 400.000VND</Typography.Text>
-                              </Col>
-                              <Col span={24}>
-                                <Typography.Text style={{ margin: 0, paddingRight: 15 }}>
-                                  Ngày bắt đầu: 23/7/2023
-                                </Typography.Text>
-                                <Typography.Text style={{ margin: 0 }}>Ngày kết thúc: 24/7/2023</Typography.Text>
-                              </Col>
                             </Row>
                           </Col>
                         </Row>
@@ -198,16 +333,16 @@ const TabApproved = () => {
 
                       <Col span={24}>
                         <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                          {proposal.description}
+                          {/* {proposal.description} */}
+                          Lorem ipsum dolor sit amet consectetur. Aliquet convallis in cras quis aliquam. Gravida ipsum
+                          bibendum pretium nulla vitae cursus leo. Facilisis aliquam neque magna interdum vitae.
+                          Porttitor non sit nulla non nunc mattis porttitor fermentum. Eu proin elementum massa in
+                          bibendum. Sed pharetra eget sit nibh id orci nulla eros. Pellentesque orci orci quam senectus
+                          ac venenatis tortor sed. Augue.
                         </Typography.Text>
                       </Col>
                       <Col span={24}>
                         <CustomRow align={'middle'}>
-                          <Col>
-                            <Typography.Title level={5} style={{ margin: 0, paddingRight: 10 }}>
-                              Hợp đồng
-                            </Typography.Title>
-                          </Col>
                           <Col>
                             <PaperClipOutlined />
                           </Col>

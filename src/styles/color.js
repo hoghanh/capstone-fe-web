@@ -9,7 +9,9 @@ const color = {
   colorDeactivate: "#828282",
   colorWhite: "#FFFFFF",
   colorBlack: "#000",
-  colorLightGray: '#FAFAFA'
+  colorLightGray: '#FAFAFA',
+  colorWarning: '#EB4335',
+  colorInfo: '#DEE0E2',
 };
 
 export default color;
