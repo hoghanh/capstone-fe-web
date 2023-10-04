@@ -6,6 +6,16 @@ export const categoriesNavbarState = atom({
   default: [],
 });
 
+export const proposalListState = atom({
+  key: 'proposalListState',
+  default: [],
+});
+
+export const valueSearchState = atom({
+  key: 'valueSearchState',
+  default: [],
+});
+
 export const profileState = atom({
   key: 'profileState',
   default: {
