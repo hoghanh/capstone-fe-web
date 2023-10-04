@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import color from 'styles/color';
 import css from './profile.module.css'
 import { useRecoilValue } from 'recoil';
-import { profileState } from 'recoil/atom';
+import { freelancerState, profileState } from 'recoil/atom';
 
 const Skill = [
   {
@@ -347,7 +347,7 @@ const EditLanguages = () => {
   );
 };
 
-const AddEducation = () => {
+const EditMajor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -360,11 +360,11 @@ const AddEducation = () => {
   };
   return (
     <>
-      <ButtonIcon>
+      <ButtonIcon onClick={showModal}>
         <Plus />
       </ButtonIcon>
       <ModalPrimary
-        title={'Chỉnh sửa thông tin'}
+        title={'Chuyên ngành'}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
@@ -374,20 +374,7 @@ const AddEducation = () => {
           <Col span={24}>
             <CustomRow gutter={[0, 10]}>
               <Col span={24}>
-                <Typography.Text>Số điện thoại</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <InputNumber style={{ width: '40%' }} prefix={<Flag />} placeholder="0123456789" controls={false} />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Địa chỉ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input placeholder="Địa chỉ" />
+                <Input style={{ width: '100%' }} placeholder="Nhập chuyên ngành của bạn tại đây ..." />
               </Col>
             </CustomRow>
           </Col>
@@ -397,55 +384,6 @@ const AddEducation = () => {
   );
 };
 
-const EditEducations = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  return (
-    <>
-      <ButtonIcon>
-        <Pen />
-      </ButtonIcon>
-      <ModalPrimary
-        title={'Chỉnh sửa thông tin'}
-        open={isModalOpen}
-        bodyStyle={{ paddingTop: 20 }}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Row gutter={[0, 10]}>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Số điện thoại</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <InputNumber style={{ width: '40%' }} prefix={<Flag />} placeholder="0123456789" controls={false} />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Địa chỉ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input placeholder="Địa chỉ" />
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
-      </ModalPrimary>
-    </>
-  );
-};
 
 const EditIntroduction= () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -557,7 +495,7 @@ const EditSkills= () => {
   );
 };
 
-const EditCertifications= () => {
+const AddCertifications= () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -612,8 +550,6 @@ const HeaderSection = () => {
 
   const informationUser = useRecoilValue(profileState)
 
-  console.log('informations', informationUser)
-
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <Col>
@@ -636,11 +572,6 @@ const HeaderSection = () => {
                 <Typography.Title level={2} style={styles.nameUser}>
                   {informationUser.name}
                 </Typography.Title>
-              </Col>
-              <Col>
-                <ButtonIcon>
-                  <Pen />
-                </ButtonIcon>
               </Col>
             </Row>
             <Row>
@@ -669,7 +600,7 @@ const HeaderSection = () => {
 
 //Body Section Left
 const BodySectionLeft = () => {
-  const informationUser = useRecoilValue(profileState)
+  const informationUser = useRecoilValue(freelancerState)
 
   return (
     <Col span={0} sm={{span: 8}} style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}>
@@ -700,7 +631,7 @@ const BodySectionLeft = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text style={{letterSpacing: 1}}>{informationUser.phone}</Typography.Text>
+                  <Typography.Text style={{letterSpacing: 1}}> {informationUser.accounts.phone != null ? informationUser.accounts.phone : 'Chưa có thông tin'}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -716,7 +647,7 @@ const BodySectionLeft = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>{informationUser.address}</Typography.Text>
+                  <Typography.Text>{informationUser.accounts.address != null ? informationUser.accounts.address : 'Chưa có thông tin'}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -748,7 +679,7 @@ const BodySectionLeft = () => {
                   </Row>
                 </Col>
                 <Col>
-                  <Typography.Text>More than 30hrs/weeks</Typography.Text>
+                  <Typography.Text>{informationUser.hoursPerWeek != null ? informationUser.hoursPerWeek : 'Chưa có thông tin'}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -794,26 +725,16 @@ const BodySectionLeft = () => {
                   <Row align={'middle'} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
-                        Giáo dục
+                        Chuyên ngành
                       </Typography.Title>
                     </Col>
                     <Col>
-                      <ButtonIcon>
-                        <Plus />
-                      </ButtonIcon>
-                    </Col>
-                    <Col>
-                      <ButtonIcon>
-                        <Pen />
-                      </ButtonIcon>
+                      <EditMajor/>
                     </Col>
                   </Row>
                 </Col>
                 <Col>
-                  <Typography.Text strong style={{ display: 'block', marginBottom: 10 }}>
-                    FPT University
-                  </Typography.Text>
-                  <Typography.Text>Computer Software Engineering · (2019 - 2023)</Typography.Text>
+                  <Typography.Text>{informationUser.major != null ? informationUser.major : 'Chưa có thông tin'}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -975,8 +896,9 @@ const BodySectionLeftResponsive = () => {
 
 //Body Section Right
 const BodySectionRight = () => {
+  const informationUser = useRecoilValue(freelancerState)
   return (
-    <Col span={24} sm={{span: 16}}>
+    <Col span={24} sm={{ span: 16 }}>
       <Row>
         <Col span={24}>
           <Row>
@@ -984,7 +906,7 @@ const BodySectionRight = () => {
               <Row align={'middle'}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0, paddingRight: 30 }}>
-                    Software Engineer | Javascript
+                    Giới thiệu
                   </Typography.Title>
                 </Col>
                 <Col>
@@ -994,10 +916,7 @@ const BodySectionRight = () => {
             </Col>
             <Col span={24} style={{ padding: 20 }}>
               <Typography.Text>
-                I’m a developer with experience in building websites for small and medium sized businesses. Whether
-                you’re trying to win work, list your services or even create a whole online store – I can help! I’m
-                experienced in HTML and CSS 3, JavaScipt, ReactJS and React Native Regular communication is really
-                important to me, so let’s keep in touch!
+                {informationUser.introduction != null ? informationUser.introduction : 'Chưa có thông tin'}
               </Typography.Text>
             </Col>
           </Row>
@@ -1057,7 +976,6 @@ const BodySectionRight = () => {
                 </Col>
               </Row>
             </Col>
-
             <Col span={24}>
               <CustomRow gutter={[0, 10]} style={{ paddingRight: 30, paddingLeft: 30 }}>
                 <Col span={24}>
@@ -1067,29 +985,12 @@ const BodySectionRight = () => {
                 </Col>
                 <Col span={24}>
                   <Row gutter={10} align={'middle'}>
-                    <Col style={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
-                      <div
-                        style={{ display: 'flex', direction: 'row', alignItems: 'center', padding: 5, marginRight: 5 }}
-                      >
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                      </div>
-                      <Typography.Text style={{ fontSize: 16, marginTop: 2 }}>5.00</Typography.Text>
-                    </Col>
                     <Col>
                       <Typography.Text style={{ color: color.colorDeactivate }}>
                         Jul 8, 2020 - Mar 8, 2023
                       </Typography.Text>
                     </Col>
                   </Row>
-                </Col>
-                <Col span={24}>
-                  <Typography.Text style={{ color: color.colorDeactivate, fontStyle: 'italic' }}>
-                    “Great work!”
-                  </Typography.Text>
                 </Col>
               </CustomRow>
             </Col>
@@ -1103,29 +1004,12 @@ const BodySectionRight = () => {
                 </Col>
                 <Col span={24}>
                   <Row gutter={10} align={'middle'}>
-                    <Col style={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
-                      <div
-                        style={{ display: 'flex', direction: 'row', alignItems: 'center', padding: 5, marginRight: 5 }}
-                      >
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                      </div>
-                      <Typography.Text style={{ fontSize: 16, marginTop: 2 }}>5.00</Typography.Text>
-                    </Col>
                     <Col>
                       <Typography.Text style={{ color: color.colorDeactivate }}>
                         Jul 8, 2020 - Mar 8, 2023
                       </Typography.Text>
                     </Col>
                   </Row>
-                </Col>
-                <Col span={24}>
-                  <Typography.Text style={{ color: color.colorDeactivate, fontStyle: 'italic' }}>
-                    “Great work!”
-                  </Typography.Text>
                 </Col>
               </CustomRow>
             </Col>
@@ -1139,29 +1023,12 @@ const BodySectionRight = () => {
                 </Col>
                 <Col span={24}>
                   <Row gutter={10} align={'middle'}>
-                    <Col style={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
-                      <div
-                        style={{ display: 'flex', direction: 'row', alignItems: 'center', padding: 5, marginRight: 5 }}
-                      >
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                      </div>
-                      <Typography.Text style={{ fontSize: 16, marginTop: 2 }}>5.00</Typography.Text>
-                    </Col>
                     <Col>
                       <Typography.Text style={{ color: color.colorDeactivate }}>
                         Jul 8, 2020 - Mar 8, 2023
                       </Typography.Text>
                     </Col>
                   </Row>
-                </Col>
-                <Col span={24}>
-                  <Typography.Text style={{ color: color.colorDeactivate, fontStyle: 'italic' }}>
-                    “Great work!”
-                  </Typography.Text>
                 </Col>
               </CustomRow>
             </Col>
