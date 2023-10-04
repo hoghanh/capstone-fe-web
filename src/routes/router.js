@@ -84,6 +84,13 @@ export const routes = [
     // role: ['client'],
 
   },
+  {
+    path: '/client/proposals',
+    element: lazy(() => import('pages/proposals/Client/Proposals')),
+    name: 'proposals',
+    title: 'Danh sách ứng tuyển',
+    // role: ['client'],
+  },
 ];
 
 const Router = () => {

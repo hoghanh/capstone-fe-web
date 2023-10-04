@@ -46,8 +46,8 @@ function Sidenav({ color }) {
       label: (
         <Link
           // to='/client/proposal'
-          to='/client/proposals/freelancer-profile'
-          className={page === 'client/proposals/freelancer-profile' ? 'active' : ''}
+          to='/client/proposals'
+          className={page === 'client/proposals' || '/client/proposals/freelancer-profile' ? 'active' : ''}
         >
           <span className='icon'>
             <Documents />
