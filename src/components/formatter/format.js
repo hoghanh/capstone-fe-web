@@ -32,3 +32,11 @@ export const CalculateDaysLeft = (endDate) => {
   }
   return output;
 }
+
+
+export const FormatPhone = (value) => {
+  if (value.startsWith('0')) {
+    return value;
+  }
+  return `0${value}`;
+}

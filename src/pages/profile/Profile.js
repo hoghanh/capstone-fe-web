@@ -10,11 +10,13 @@ const Profile = () => {
   const [informationUser, setInformationUser] = useRecoilState(profileState);
   const [freelancer, setFreelancer] = useRecoilState(freelancerState);
   const auth = useRecoilValue(authState);
+  
   useEffect(() => {
     fetchProfile();
     getFreelancer();
   }, []);
-  console.log(freelancer);
+
+
   const fetchProfile = async () => {
     await get({ endpoint: `/accounts/profile/${auth.id}` })
       .then((response) => {
@@ -25,6 +27,7 @@ const Profile = () => {
         console.log(error);
       });
   };
+
   const getFreelancer = async () => {
     await get({ endpoint: `/freelancer/profile/${auth.id}` })
       .then((response) => {

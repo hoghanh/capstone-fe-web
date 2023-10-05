@@ -1,5 +1,5 @@
 // recoilAtoms.js
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const categoriesNavbarState = atom({
   key: 'categoriesNavbarState',
@@ -110,6 +110,8 @@ export const jobDetailState = atom({
   },
 });
 
+
+
 export const freelancerState = atom({
   key: 'freelancerState',
   default: {
@@ -129,6 +131,32 @@ export const freelancerState = atom({
   },
 });
 
+// export const getFreelancer = selector({
+//   key: "getFreelancer",
+//   get: ({ get }) => {
+//     const account = get(freelancerState);
+//     return {
+//       phone: account.accounts.phone,
+//       address: account.accounts.address,
+//     };
+//   },
+// });
+
+const clientAccounts = {
+  id: 0,
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  image: '',
+  password: '',
+  role: '',
+  currency: 0,
+  status: true,
+  createdAt: '',
+  updatedAt: '',
+}
+
 export const clientProfile = atom({
   key: 'clientProfile',
   default: {
@@ -140,7 +168,7 @@ export const clientProfile = atom({
     createdAt: '',
     updatedAt: '',
     accountId: '',
-    accounts: accounts,
+    accounts: clientAccounts,
   },
 });
 
