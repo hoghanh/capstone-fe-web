@@ -702,6 +702,121 @@ const EditSkills = () => {
   );
 };
 
+const EditNameAvatar = () => {
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        const {name, image} = values;
+        post({
+          endpoint: `/freelancer/nameImage/${informationUser.id}`,
+          body: {
+            name,
+            image,
+          },
+        })
+          .then((res) => {
+            setInformationUser({
+              ...informationUser,
+              accounts: {
+                ...informationUser.accounts,
+                name,
+                image,
+              },
+            });
+            notification.success({
+              message: 'Cập nhật thành công!',
+            });
+          })
+          .catch((error) => {
+            notification.error({
+              message: error.response.data.message,
+            });
+          });
+
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Validation failed:', error);
+      });
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Pen />
+      </ButtonIcon>
+      <ModalPrimary title={'Thông tin cơ bản'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Form
+          form={form}
+          name="submitProposal"
+          initialValues={{
+            remember: true,
+            name: informationUser.accounts.name,
+            image: informationUser.accounts.image,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    Họ và tên
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Không được để trống ô này!',
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Nguyen Van A" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    Avatar
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="image"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Không được để trống ô này!',
+                      },
+                    ]}
+                  >
+                    <Input placeholder="URL" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
+    </>
+  );
+};
+
+
 const AddCertifications = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -763,13 +878,13 @@ const HeaderSection = () => {
           <Col style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
             <Image
               width={72}
-              src={informationUser.image}
+              src={informationUser.accounts.image}
               alt="Apofoitisi logo"
               preview={true}
               style={{ borderRadius: '50%' }}
             />
           </Col>
-          <CustomCol>
+          <CustomCol style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
             <Row gutter={10}>
               <Col>
                 <Typography.Title level={2} style={styles.nameUser}>
@@ -780,8 +895,13 @@ const HeaderSection = () => {
                   )}
                 </Typography.Title>
               </Col>
+              <Col >
+            <EditNameAvatar />
+          </Col>
             </Row>
           </CustomCol>
+
+        
         </Row>
       </Col>
       <Col className={css.btnSubmitCV}>
