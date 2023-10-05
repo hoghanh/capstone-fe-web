@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import joblist from 'styles/joblist';
-import { get } from 'utils/APICaller';
+import { get, remove } from 'utils/APICaller';
 import {
   CalculateDaysLeft,
   FormatVND,
@@ -128,7 +128,11 @@ const ClientJobManagement = () => {
               />
             </div>
           }
-          extra={<Button type='primary'>Đăng bài</Button>}
+          extra={
+            <Link to={`/client/post-job`}>
+              <Button type='primary'>Đăng bài</Button>{' '}
+            </Link>
+          }
         >
           {isLoading && <Loading />}
           {filteredJobList?.map((job) => (
