@@ -36,7 +36,7 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
-  },
+  }, 
   {
     path: '/jobs/job-detail/:id',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
@@ -62,7 +62,7 @@ export const routes = [
     element: lazy(() => import('pages/profile/ClientProfile')),
     name: 'profile',
     title: 'Hồ sơ cá nhân',
-    // role: ['client'],
+    role: ['client'],
   },
   {
     path: '/client/jobs-management',
@@ -108,7 +108,7 @@ export const routes = [
     path: '/proposals',
     element: lazy(() => import('pages/proposals/Proposals')),
     name: 'proposals',
-    // role: ['client'],
+    // role: ['freelancer'],s
   },
 
   {
@@ -122,6 +122,13 @@ export const routes = [
     element: lazy(() => import('pages/profile/Client/FreelancerProfile')),
     name: 'freelancerProfile',
     title: 'Hồ sơ ứng cử viên',
+    // role: ['client'],
+  },
+  {
+    path: '/client/proposals',
+    element: lazy(() => import('pages/proposals/Client/Proposals')),
+    name: 'proposals',
+    title: 'Danh sách ứng tuyển',
     // role: ['client'],
   },
 ];
