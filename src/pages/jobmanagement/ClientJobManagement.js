@@ -12,7 +12,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import joblist from 'styles/joblist';
-import { get, remove } from 'utils/APICaller';
+import { get, post, remove } from 'utils/APICaller';
 import {
   CalculateDaysLeft,
   FormatVND,
@@ -35,7 +35,7 @@ const tabList = [
   },
 ];
 
-const items = [
+const hiringItems = [
   {
     key: 'edit',
     label: 'Chỉnh sửa',
@@ -51,13 +51,29 @@ const items = [
   },
 ];
 
+const closingItems = [
+  {
+    key: 'edit',
+    label: 'Chỉnh sửa',
+  },
+  {
+    key: 'open',
+    label: 'Gia hạn bài viết',
+  },
+  {
+    key: 'delete',
+    label: 'Xoá',
+    danger: true,
+  },
+];
+
 const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
   const { sm, md, lg, xl } = useBreakpoint();
 
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTabKey, setActiveTabKey] = useState('hiring');
+  const [activeTabKey, setActiveTabKey] = useState('');
   const [filteredJobList, setFilteredJobList] = useState(jobList);
 
   const profileUser = LocalStorageUtils.getItem('profile');
@@ -71,6 +87,7 @@ const ClientJobManagement = () => {
   useEffect(() => {
     setIsLoading(true);
     getJobList();
+    setActiveTabKey('hiring');
   }, []);
 
   useEffect(() => {
@@ -113,12 +130,30 @@ const ClientJobManagement = () => {
     if (checkAction.includes('delete')) {
       const itemId = checkAction.replace('delete_', '');
       removeItem(itemId);
-    } else if (checkAction.includes('closing')) {
+    } else if (checkAction.includes('close')) {
+      const itemId = checkAction.replace('close_', '');
+      closeItem(itemId);
     } else if (checkAction.includes('edit')) {
       const itemId = checkAction.replace('edit_', '');
       navigate(`edit-job/${itemId}`);
     }
   };
+
+  function closeItem(id) {
+    post({ endpoint: `/job/close/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Đã đóng bài viết thành công',
+        });
+        getJobList();
+        setActiveTabKey('closing');
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Xảy ra lỗi trong quá trình',
+        });
+      });
+  }
 
   function removeItem(id) {
     remove({ endpoint: `/job/detail/${id}` })
@@ -126,7 +161,6 @@ const ClientJobManagement = () => {
         notification.success({
           message: 'Xoá bài viết thành công',
         });
-        getJobList();
       })
       .catch((error) => {
         notification.error({
@@ -198,10 +232,16 @@ const ClientJobManagement = () => {
                 </div>
                 <Dropdown
                   menu={{
-                    items: items.map((item) => ({
-                      ...item,
-                      key: item.key + '_' + job.id.toString(),
-                    })),
+                    items:
+                      activeTabKey === 'hiring'
+                        ? hiringItems.map((item) => ({
+                            ...item,
+                            key: item.key + '_' + job.id.toString(),
+                          }))
+                        : closingItems.map((item) => ({
+                            ...item,
+                            key: item.key + '_' + job.id.toString(),
+                          })),
                     onClick,
                   }}
                 >
