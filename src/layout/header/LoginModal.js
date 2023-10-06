@@ -15,12 +15,14 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
   const setInformationUser = useSetRecoilState(clientProfile);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { saveProfile } = useAuthActions();
 
   function fetchProfile(id) {
     get({ endpoint: `/client/profile/${id}` })
       .then((response) => {
         const data = response.data;
         setInformationUser(data);
+        saveProfile(data);
         navigate('/client/profile');
       })
       .catch((error) => {

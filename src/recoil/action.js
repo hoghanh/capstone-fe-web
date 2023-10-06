@@ -67,6 +67,7 @@ const useAuthActions = () => {
 
   const logout = () => {
     LocalStorageUtils.deleteUser();
+    LocalStorageUtils.removeItem('profile');
     setAuth({
       token: null,
       id: '',
@@ -82,11 +83,15 @@ const useAuthActions = () => {
       exp: 0,
     });
   };
+  const saveProfile = (data) => {
+    LocalStorageUtils.setItem('profile', data);
+  };
 
   return {
     login,
     autoLogin,
     logout,
+    saveProfile,
   };
 };
 

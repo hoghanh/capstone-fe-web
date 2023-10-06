@@ -65,17 +65,30 @@ export const routes = [
     // role: ['client'],
   },
   {
-    path: '/client/post-job',
-    element: lazy(() => import('pages/job/PostJob')),
-    name: 'post-job',
-    title: 'Đăng bài',
-    // role: ['client'],
-  },
-  {
     path: '/client/jobs-management',
     element: lazy(() => import('pages/jobmanagement/ClientJobManagement')),
     name: 'job-post-managment',
     title: 'Bài viết',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/post-job',
+    element: lazy(() => import('pages/job/PostJob')),
+    name: 'post-job',
+    title: 'Đăng bài viết',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/edit-job',
+    element: lazy(() => import('pages/job/EditJob')),
+    name: 'edit-job',
+    title: 'Chỉnh sửa bài viết',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/edit-job/:id',
+    element: lazy(() => import('pages/job/EditJob')),
+    name: 'edit-job',
     // role: ['client'],
   },
   {

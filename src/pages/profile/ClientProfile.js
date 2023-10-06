@@ -3,20 +3,22 @@ import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import { Pen } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { clientProfile } from 'recoil/atom';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 function ClientProfile() {
-  const informationUser = useRecoilValue(clientProfile);
-
+  const [informationUser, setInformationUser] = useRecoilState(clientProfile);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
     if (informationUser.id !== 0) {
       setIsLoading(false);
+    } else {
+      setInformationUser(LocalStorageUtils.getItem('profile'));
     }
-  }, [informationUser]);
+  }, [informationUser, setInformationUser]);
 
   return isLoading ? (
     <Loading />

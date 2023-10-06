@@ -6,6 +6,10 @@ body {
 #root > div > .ant-breadcrumb {
   padding: 10px 20px; margin:  20px 0 30px 0 }
 
+.ant-breadcrumb > ol {
+  min-width: 360px
+}
+
 .ant-typography  a {
   color: #02ADFD
 }
@@ -30,12 +34,26 @@ body {
   font-weight: 700;
 }
 
+
 .ant-btn-default {
   color: #02ADFD;
   border-radius: 12px;
   border: 1px solid var(--artyclick-sky-blue, #02ADFD);
   background: var(--background, #FFFFFF);
 }
+
+.ant-btn-primary.ant-btn-lg {
+  color: #013042;
+  border-radius: 25px;
+  font-weight: 700;
+}
+
+.ant-btn-primary.ant-btn-lg:not(:disabled):hover {
+  color: #013042;
+  border-radius: 25px;
+  font-weight: 700;
+}
+
 
 .ant-modal-content {
   padding: 0 !important;

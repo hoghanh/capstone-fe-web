@@ -11,11 +11,7 @@ import {
   Grid,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import {
-  FileTextFilled,
-  DownOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
+import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 
 import joblist from 'styles/joblist';

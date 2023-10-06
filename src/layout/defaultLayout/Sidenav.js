@@ -33,7 +33,8 @@ function Sidenav({ color }) {
         <Link
           to='/client/jobs-management'
           className={
-            page === 'client/jobs-management' || 'client/jobs-management/'
+            page === 'client/jobs-management' ||
+            page === 'client/jobs-management/post-job'
               ? 'active'
               : ''
           }

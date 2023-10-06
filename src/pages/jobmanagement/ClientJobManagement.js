@@ -7,9 +7,8 @@ import {
   notification,
   Grid,
   Dropdown,
-  Alert,
 } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import joblist from 'styles/joblist';
@@ -23,6 +22,7 @@ import Loading from 'components/loading/loading';
 import { useRecoilValue } from 'recoil';
 import { clientProfile } from 'recoil/atom';
 import { File } from 'components/icon/Icon';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const tabList = [
   {
@@ -54,27 +54,32 @@ const items = [
 const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
   const { sm, md, lg, xl } = useBreakpoint();
+
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const clientInformation = useRecoilValue(clientProfile);
   const [activeTabKey, setActiveTabKey] = useState('hiring');
   const [filteredJobList, setFilteredJobList] = useState(jobList);
 
+  const profileUser = LocalStorageUtils.getItem('profile');
+
+  const navigate = useNavigate();
+
   const onTabChange = (key) => {
-    console.log(key);
     setActiveTabKey(key);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getJobList();
   }, []);
 
   useEffect(() => {
+    const currentTime = new Date().getTime();
     const filtered = jobList.filter((job) => {
       if (activeTabKey === 'hiring') {
-        return job.status === true;
+        return new Date(job.proposalSubmitDeadline).getTime() > currentTime;
       } else if (activeTabKey === 'closing') {
-        return job.status === false;
+        return new Date(job.proposalSubmitDeadline).getTime() <= currentTime;
       }
       return true;
     });
@@ -83,13 +88,15 @@ const ClientJobManagement = () => {
   }, [isLoading, activeTabKey]);
 
   function getJobList() {
-    setIsLoading(true);
     get({
-      endpoint: `/job/client/${clientInformation.id}`,
+      endpoint: `/job/client/${profileUser.id}`,
     })
       .then((res) => {
-        console.log(res.data);
-        setJobList(res.data);
+        const filtered = res.data.filter((job) => {
+          return job.status === true;
+        });
+        setJobList(filtered);
+        setFilteredJobList(filtered);
         setTimeout(() => {
           setIsLoading(false);
         }, [500]);
@@ -102,10 +109,31 @@ const ClientJobManagement = () => {
   }
 
   const onClick = ({ key }) => {
-    console.log(key);
-    if (key === 'delete') {
+    const checkAction = key.toString();
+    if (checkAction.includes('delete')) {
+      const itemId = checkAction.replace('delete_', '');
+      removeItem(itemId);
+    } else if (checkAction.includes('closing')) {
+    } else if (checkAction.includes('edit')) {
+      const itemId = checkAction.replace('edit_', '');
+      navigate(`edit-job/${itemId}`);
     }
   };
+
+  function removeItem(id) {
+    remove({ endpoint: `/job/detail/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Xoá bài viết thành công',
+        });
+        getJobList();
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Có lỗi xảy ra trong quá trình xoá',
+        });
+      });
+  }
 
   return (
     <>
@@ -129,8 +157,10 @@ const ClientJobManagement = () => {
             </div>
           }
           extra={
-            <Link to={`/client/post-job`}>
-              <Button type='primary'>Đăng bài</Button>{' '}
+            <Link to={`/client/jobs-management/post-job`}>
+              <Button type='primary' size='large'>
+                Đăng bài
+              </Button>{' '}
             </Link>
           }
         >
@@ -166,7 +196,15 @@ const ClientJobManagement = () => {
                     {FormatVND(job.highestIncome)}
                   </Typography.Text>
                 </div>
-                <Dropdown menu={{ items, onClick }}>
+                <Dropdown
+                  menu={{
+                    items: items.map((item) => ({
+                      ...item,
+                      key: item.key + '_' + job.id.toString(),
+                    })),
+                    onClick,
+                  }}
+                >
                   <EllipsisOutlined />
                 </Dropdown>
               </div>

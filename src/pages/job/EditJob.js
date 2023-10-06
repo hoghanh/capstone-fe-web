@@ -11,14 +11,20 @@ import {
   Select,
   Typography,
   Upload,
+  notification,
 } from 'antd';
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import joblist from 'styles/joblist';
+import { remove } from 'utils/APICaller';
 
-const PostJob = () => {
+const EditJob = () => {
   const { useBreakpoint } = Grid;
   const { sm, md, lg, xl } = useBreakpoint();
   const [remainingCharacters, setRemainingCharacters] = useState(5000);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [form] = Form.useForm();
 
@@ -42,6 +48,22 @@ const PostJob = () => {
     setRemainingCharacters(remainingChars);
   };
 
+  function removeItem() {
+    console.log(id);
+    remove({ endpoint: `/job/detail/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Xoá bài viết thành công',
+        });
+        navigate('/client/jobs-management');
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Có lỗi xảy ra trong quá trình xoá',
+        });
+      });
+  }
+
   return (
     <>
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
@@ -53,7 +75,7 @@ const PostJob = () => {
           title={
             <div className='trackingJobs'>
               <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
-                Đăng bài
+                Chỉnh sửa bài viết
               </Typography.Title>
             </div>
           }
@@ -238,6 +260,15 @@ const PostJob = () => {
               />
             </Form.Item>
             <Form.Item style={{ textAlign: 'right' }}>
+              <Button
+                type='primary'
+                size='large'
+                danger
+                style={{ marginRight: 10 }}
+                onClick={(e) => removeItem()}
+              >
+                Xoá bài
+              </Button>
               <Button type='primary' size='large' htmlType='submit'>
                 Đăng bài tuyển dụng
               </Button>
@@ -249,4 +280,4 @@ const PostJob = () => {
   );
 };
 
-export default PostJob;
+export default EditJob;
