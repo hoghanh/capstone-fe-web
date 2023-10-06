@@ -49,7 +49,6 @@ const EditJob = () => {
   };
 
   function removeItem() {
-    console.log(id);
     remove({ endpoint: `/job/detail/${id}` })
       .then((res) => {
         notification.success({
@@ -134,26 +133,27 @@ const EditJob = () => {
                 onChange={handleTextAreaChange}
               />
             </Form.Item>
-            <Form.Item>
-              <Form.Item
-                name='dragger'
-                valuePropName='fileList'
-                getValueFromEvent={normFile}
-                noStyle
+            <Form.Item
+              name='files'
+              valuePropName='fileList'
+              getValueFromEvent={normFile}
+            >
+              <Upload.Dragger
+                name='file-upload'
+                maxCount={1}
+                beforeUpload={() => false}
               >
-                <Upload.Dragger name='files' action='/upload.do'>
-                  <p className='ant-upload-drag-icon'>
-                    <PaperClipOutlined />
-                  </p>
-                  <p className='ant-upload-text'>
-                    Kéo và thả bất kỳ hình ảnh hoặc tài liệu nào có thể hữu ích
-                    trong việc giải thích tóm tắt của bạn tại đây
-                  </p>
-                  <p className='ant-upload-hint'>
-                    (Kích thước tệp tối đa: 25 MB)
-                  </p>
-                </Upload.Dragger>
-              </Form.Item>
+                <p className='ant-upload-drag-icon'>
+                  <PaperClipOutlined />
+                </p>
+                <p className='ant-upload-text'>
+                  Kéo và thả bất kỳ hình ảnh hoặc tài liệu nào có thể hữu ích
+                  trong việc giải thích tóm tắt của bạn tại đây
+                </p>
+                <p className='ant-upload-hint'>
+                  (Kích thước tệp tối đa: 25 MB)
+                </p>
+              </Upload.Dragger>
             </Form.Item>
             <Form.Item
               name='category'
@@ -217,7 +217,14 @@ const EditJob = () => {
                   },
                 ]}
               >
-                <InputNumber placeholder='000' addonAfter='VNĐ' />
+                <InputNumber
+                  placeholder='000,000'
+                  addonAfter='VNĐ'
+                  min={0}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                />
               </Form.Item>
               <Form.Item
                 name={['paymentRange', 'to']}
@@ -233,7 +240,14 @@ const EditJob = () => {
                   },
                 ]}
               >
-                <InputNumber placeholder='000' addonAfter='VNĐ' />
+                <InputNumber
+                  placeholder='000, 000'
+                  addonAfter='VNĐ'
+                  min={0}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                />
               </Form.Item>
             </div>
             <Form.Item

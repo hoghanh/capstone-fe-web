@@ -11,27 +11,97 @@ import {
   Select,
   Typography,
   Upload,
+  notification,
 } from 'antd';
+import { storage } from 'config/firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
+import { post } from 'utils/APICaller';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const PostJob = () => {
   const { useBreakpoint } = Grid;
   const { sm, md, lg, xl } = useBreakpoint();
   const [remainingCharacters, setRemainingCharacters] = useState(5000);
+  const [progresspercent, setProgresspercent] = useState(0);
+  const clientId = LocalStorageUtils.getItem('profile').id;
+
+  const navigate = useNavigate();
 
   const [form] = Form.useForm();
 
   const normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
-  const onFinish = (values) => {
-    console.log(values);
+
+  const handleUpload = (event) => {
+    const file = event.files[0].originFileObj;
+
+    if (!file) return;
+
+    const storageRef = ref(storage, `jobs/client-${clientId}/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          createNewJob(event, downloadURL);
+        });
+      }
+    );
   };
+
+  const onFinish = (values) => {
+    if (values.files.length > 0) {
+      handleUpload(values);
+    } else {
+      createNewJob(values);
+    }
+  };
+
+  function createNewJob(values, url) {
+    post({
+      endpoint: `/job/create`,
+      body: {
+        title: values.title,
+        description: values.description,
+        fileAttachment: url,
+        proposalSubmitDeadline: values.deadline,
+        lowestIncome: values.paymentRange.from,
+        highestIncome: values.paymentRange.to,
+        clientId: clientId,
+        status: true,
+        subCategory: values.category,
+        skill: values.skills,
+      },
+    })
+      .then((res) => {
+        notification.success({
+          message: 'Đăng bài viết mới thành công',
+        });
+        navigate(`/client/jobs-management`);
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Có lỗi xảy ra',
+        });
+      });
+  }
 
   const handleTextAreaChange = (e) => {
     const textAreaValue = e.target.value;
@@ -112,26 +182,27 @@ const PostJob = () => {
                 onChange={handleTextAreaChange}
               />
             </Form.Item>
-            <Form.Item>
-              <Form.Item
-                name='dragger'
-                valuePropName='fileList'
-                getValueFromEvent={normFile}
-                noStyle
+            <Form.Item
+              name='files'
+              valuePropName='fileList'
+              getValueFromEvent={normFile}
+            >
+              <Upload.Dragger
+                name='file-upload'
+                maxCount={1}
+                beforeUpload={() => false}
               >
-                <Upload.Dragger name='files' action='/upload.do'>
-                  <p className='ant-upload-drag-icon'>
-                    <PaperClipOutlined />
-                  </p>
-                  <p className='ant-upload-text'>
-                    Kéo và thả bất kỳ hình ảnh hoặc tài liệu nào có thể hữu ích
-                    trong việc giải thích tóm tắt của bạn tại đây
-                  </p>
-                  <p className='ant-upload-hint'>
-                    (Kích thước tệp tối đa: 25 MB)
-                  </p>
-                </Upload.Dragger>
-              </Form.Item>
+                <p className='ant-upload-drag-icon'>
+                  <PaperClipOutlined />
+                </p>
+                <p className='ant-upload-text'>
+                  Kéo và thả bất kỳ hình ảnh hoặc tài liệu nào có thể hữu ích
+                  trong việc giải thích tóm tắt của bạn tại đây
+                </p>
+                <p className='ant-upload-hint'>
+                  (Kích thước tệp tối đa: 25 MB)
+                </p>
+              </Upload.Dragger>
             </Form.Item>
             <Form.Item
               name='category'
@@ -195,7 +266,14 @@ const PostJob = () => {
                   },
                 ]}
               >
-                <InputNumber placeholder='000' addonAfter='VNĐ' />
+                <InputNumber
+                  placeholder='000,000'
+                  addonAfter='VNĐ'
+                  min={0}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                />
               </Form.Item>
               <Form.Item
                 name={['paymentRange', 'to']}
@@ -211,7 +289,14 @@ const PostJob = () => {
                   },
                 ]}
               >
-                <InputNumber placeholder='000' addonAfter='VNĐ' />
+                <InputNumber
+                  placeholder='000, 000'
+                  addonAfter='VNĐ'
+                  min={0}
+                  formatter={(value) =>
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                />
               </Form.Item>
             </div>
             <Form.Item
