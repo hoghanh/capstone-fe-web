@@ -1,5 +1,4 @@
 import React, { lazy, Suspense } from 'react';
-import { Spin } from 'antd';
 import { Route, Routes } from 'react-router-dom';
 import { HomeFilled } from '@ant-design/icons';
 import UserLayout from 'layout/defaultLayout/UserLayout';
@@ -9,6 +8,7 @@ import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
+import Loading from 'components/loading/loading';
 
 export const routes = [
   {
@@ -43,7 +43,6 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
   },
-
   {
     path: '/profile',
     element: lazy(() => import('pages/profile/Profile')),
@@ -66,6 +65,46 @@ export const routes = [
     role: ['client'],
   },
   {
+    path: '/client/jobs-management',
+    element: lazy(() => import('pages/jobmanagement/ClientJobManagement')),
+    name: 'job-post-managment',
+    title: 'Bài viết',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/post-job',
+    element: lazy(() => import('pages/job/PostJob')),
+    name: 'post-job',
+    title: 'Đăng bài viết',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/edit-job',
+    element: lazy(() => import('pages/job/EditJob')),
+    name: 'edit-job',
+    title: 'Chỉnh sửa bài viết',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/edit-job/:id',
+    element: lazy(() => import('pages/job/EditJob')),
+    name: 'edit-job',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/job-detail',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
+    title: 'Chi tiết dự án',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/job-detail/:id',
+    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    name: 'jobdetail',
+    // role: ['client'],
+  },
+  {
     path: '/proposals',
     element: lazy(() => import('pages/proposals/Proposals')),
     name: 'proposals',
@@ -84,7 +123,6 @@ export const routes = [
     name: 'freelancerProfile',
     title: 'Hồ sơ ứng cử viên',
     // role: ['client'],
-
   },
   {
     path: '/client/proposals',
@@ -99,7 +137,7 @@ const Router = () => {
   const auth = useRecoilValue(authState);
 
   return (
-    <Suspense fallback={<Spin />}>
+    <Suspense fallback={<Loading />}>
       <Routes>
         {routes.map(({ path, element, name, role, layout }) => (
           <Route
