@@ -15,10 +15,10 @@ import {
 } from 'antd';
 import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
-import { post } from 'utils/APICaller';
+import { get, post } from 'utils/APICaller';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const PostJob = () => {
@@ -27,6 +27,13 @@ const PostJob = () => {
   const [remainingCharacters, setRemainingCharacters] = useState(5000);
   const [progresspercent, setProgresspercent] = useState(0);
   const clientId = LocalStorageUtils.getItem('profile').id;
+  const [category, setCategory] = useState([]);
+  const [skills, setSkills] = useState([]);
+
+  useEffect(() => {
+    getCategory();
+    getSkill();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -37,6 +44,15 @@ const PostJob = () => {
       return e;
     }
     return e?.fileList;
+  };
+
+  const handleTextAreaChange = (e) => {
+    const textAreaValue = e.target.value;
+    const charCount = textAreaValue.length;
+    const remainingChars = 5000 - charCount;
+
+    form.setFieldsValue({ description: textAreaValue });
+    setRemainingCharacters(remainingChars);
   };
 
   const handleUpload = (event) => {
@@ -103,14 +119,39 @@ const PostJob = () => {
       });
   }
 
-  const handleTextAreaChange = (e) => {
-    const textAreaValue = e.target.value;
-    const charCount = textAreaValue.length;
-    const remainingChars = 5000 - charCount;
+  function getCategory() {
+    get({
+      endpoint: `/subCategory/`,
+    })
+      .then((res) => {
+        setCategory(
+          res.data.map((item) => ({
+            label: item.name,
+            value: item.name,
+          }))
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-    form.setFieldsValue({ description: textAreaValue });
-    setRemainingCharacters(remainingChars);
-  };
+  function getSkill() {
+    get({
+      endpoint: `/skill/`,
+    })
+      .then((res) => {
+        setSkills(
+          res.data.map((item) => ({
+            label: item.name,
+            value: item.name,
+          }))
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <>
@@ -224,13 +265,13 @@ const PostJob = () => {
               <Select
                 mode='multiple'
                 size='large'
-                placeholder='Nhập hoặc chọn phân loại'
+                placeholder='Chọn phân loại'
                 style={{ width: '100%' }}
-              >
-                <Select.Option value='tag1'>Tag 1</Select.Option>
-                <Select.Option value='tag2'>Tag 2</Select.Option>
-                <Select.Option value='tag3'>Tag 3</Select.Option>
-              </Select>
+                options={category.map((cate) => ({
+                  label: cate.name,
+                  value: cate.id,
+                }))}
+              ></Select>
             </Form.Item>
             <Form.Item
               name='skills'
@@ -240,15 +281,13 @@ const PostJob = () => {
               extra='Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất.'
             >
               <Select
-                mode='multiple'
+                mode='tags'
                 size='large'
                 placeholder='Nhập hoặc chọn kĩ năng'
                 style={{ width: '100%' }}
-              >
-                <Select.Option value='tag1'>Tag 1</Select.Option>
-                <Select.Option value='tag2'>Tag 2</Select.Option>
-                <Select.Option value='tag3'>Tag 3</Select.Option>
-              </Select>
+                options={skills}
+                tokenSeparators={[',']}
+              ></Select>
             </Form.Item>
             <div style={{ display: 'flex', gap: 30, alignItems: 'center' }}>
               <Typography.Title level={4}>Khoảng lương</Typography.Title>
