@@ -18,7 +18,7 @@ export const CalculateDaysLeft = (endDate) => {
     );
 
     remainTime = {
-      days: daysDifference - 1,
+      days: daysDifference,
       hours: hoursDifference,
     };
   }

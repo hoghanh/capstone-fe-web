@@ -23,7 +23,7 @@ import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const PostJob = () => {
   const { useBreakpoint } = Grid;
-  const { sm, md, lg, xl } = useBreakpoint();
+  const { md } = useBreakpoint();
   const [remainingCharacters, setRemainingCharacters] = useState(5000);
   const [progresspercent, setProgresspercent] = useState(0);
   const clientId = LocalStorageUtils.getItem('profile').id;

@@ -57,8 +57,8 @@ const closingItems = [
     label: 'Chỉnh sửa',
   },
   {
-    key: 'open',
-    label: 'Gia hạn bài viết',
+    key: 'extend',
+    label: 'Gia hạn bài viết 3 ngày',
   },
   {
     key: 'delete',
@@ -136,6 +136,9 @@ const ClientJobManagement = () => {
     } else if (checkAction.includes('edit')) {
       const itemId = checkAction.replace('edit_', '');
       navigate(`edit-job/${itemId}`);
+    } else if (checkAction.includes('extend')) {
+      const itemId = checkAction.replace('extend_', '');
+      extendItem(itemId);
     }
   };
 
@@ -147,6 +150,22 @@ const ClientJobManagement = () => {
         });
         getJobList();
         setActiveTabKey('closing');
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Xảy ra lỗi trong quá trình',
+        });
+      });
+  }
+
+  function extendItem(id) {
+    post({ endpoint: `/job/extend/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Gia hạn bài viết 3 ngày thành công',
+        });
+        getJobList();
+        setActiveTabKey('hiring');
       })
       .catch((err) => {
         notification.error({
