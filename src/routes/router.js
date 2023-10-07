@@ -36,7 +36,7 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
-  }, 
+  },
   {
     path: '/jobs/job-detail/:id',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
@@ -50,11 +50,17 @@ export const routes = [
     // role: ['user'],
   },
   {
-    //để tạm thời
     path: '/client',
-    element: lazy(() => import('layout/defaultLayout/ClientLayout')),
+    element: lazy(() => import('pages/dashboard/Dashboard')),
     name: 'client',
     title: <HomeFilled />,
+    role: ['client'],
+  },
+  {
+    path: '/client/schedule',
+    element: lazy(() => import('pages/schedule/InterviewSchedule')),
+    name: 'schedule',
+    title: 'Lịch phỏng vấn',
     role: ['client'],
   },
   {
