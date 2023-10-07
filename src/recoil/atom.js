@@ -1,5 +1,5 @@
 // recoilAtoms.js
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 
 export const categoriesNavbarState = atom({
   key: 'categoriesNavbarState',
@@ -169,6 +169,17 @@ export const clientProfile = atom({
     updatedAt: '',
     accountId: '',
     accounts: clientAccounts,
+  },
+});
+
+export const listSkillsState = atom({
+  key: 'listSkills',
+  default: {
+    id: '',
+    name: '',
+    description: '',
+    createdAt: '',
+    updatedAt: '',
   },
 });
 

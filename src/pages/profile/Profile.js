@@ -4,16 +4,19 @@ import { get } from 'utils/APICaller';
 import Overview from './Overview';
 import Certificates from './Certificates';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { authState, freelancerState, profileState } from 'recoil/atom';
+import { authState, freelancerState, listSkillsState, profileState } from 'recoil/atom';
 
 const Profile = () => {
   const [informationUser, setInformationUser] = useRecoilState(profileState);
   const [freelancer, setFreelancer] = useRecoilState(freelancerState);
+  const [listSkills, setListSkill] = useRecoilState(listSkillsState);
   const auth = useRecoilValue(authState);
   
+  console.log(listSkills)
   useEffect(() => {
     fetchProfile();
     getFreelancer();
+    fetchSkills();
   }, []);
 
 
@@ -22,6 +25,17 @@ const Profile = () => {
       .then((response) => {
         const data = response.data;
         setInformationUser(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchSkills = async () => {
+    await get({ endpoint: `/skill/` })
+      .then((response) => {
+        const data = response.data;
+        setListSkill(data);
       })
       .catch((error) => {
         console.log(error);

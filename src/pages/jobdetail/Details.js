@@ -25,6 +25,8 @@ import { authState, freelancerState, jobDetailState } from 'recoil/atom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import TextArea from 'antd/es/input/TextArea';
 import { post } from 'utils/APICaller';
+import { storage } from 'services/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const { Dragger } = Upload;
 
@@ -35,17 +37,27 @@ const SubmitProposal = () => {
   const freelancer = useRecoilValue(freelancerState);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [file, setFile] = useState(null)
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const createProposal = (values) => {
-    const{description, dragger} = values;
+  const uploadFile = async (file) => {
+    const proposalsRef = ref(storage, `proposals/${file.name}`);
+    await uploadBytes(proposalsRef, file);
+    const downloadURL = await getDownloadURL(proposalsRef);
+    return downloadURL;
+  };
+
+  const createProposal = async (values) => {
+    const { description, dragger } = values;
+    const fileURL = await uploadFile(dragger[0]);
+    console.log(fileURL)
     post({
       endpoint: `/proposal/create`,
       body: {
-        fileAttach: '123',
+        fileAttach: fileURL,
         description: description,
         sendDate: '2023-08-28T11:00:00.000Z',
         freelancerId: freelancer.id,
@@ -64,46 +76,36 @@ const SubmitProposal = () => {
       });
   };
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      console.log('Received values:', values);
-      // Gửi dữ liệu đi ở đây
-      createProposal(values);
-      setIsModalOpen(false);
-    }).catch(error => {
-      console.error('Validation failed:', error);
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        console.log('Received values:', values);
+        createProposal(values);
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Validation failed:', error);
+      });
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const onChange = (e) => {
-    console.log('Change:', e.target.value);
-  };
-
   const normFile = (e) => {
     console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
-    return [e.file];
+    return e?.fileList;
   };
+
+
   
   const props = {
-    name: 'file',
-    multiple: true,
-    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+    name: 'pdf',
+    action: 'gs://capstone-sep.appspot.com/proposals',
+    maxCount: 1,
+    multiple: false,
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files);
     },
@@ -148,7 +150,6 @@ const SubmitProposal = () => {
                         minHeight: 120,
                         resize: 'none',
                       }}
-                      onChange={onChange}
                       placeholder="textarea"
                     />
                   </Form.Item>
@@ -167,15 +168,35 @@ const SubmitProposal = () => {
                     name="dragger"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
-                    noStyle
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: 'Hãy thêm file của bạn vào!',
-                    //   },
-                    // ]}
+                
+                    rules={[
+                      { required: true, message: 'Xin hãy tải tệp lên' },
+                      {
+                        validator(_, fileList) {
+                          return new Promise((resolve, reject) => {
+                            if (fileList && fileList[0].size > 9000000) {
+                              reject('kích thước tệp quá lớn');
+                            } else {
+                              resolve('Tải lên thành công');
+                            }
+                          });
+                        },
+                      },
+                    ]}
                   >
-                    <Dragger {...props} name="files" action="/upload.do">
+                    <Dragger
+                      {...props}
+                      beforeUpload={(file) => {
+                        return new Promise((resolve, reject) => {
+                          if (file.size > 9000000) {
+                            reject('kích thước tệp quá lớn');
+                            // message.error('Kích thước tệp quá lớn');
+                          } else {
+                            resolve('Tải lên thành công');
+                          }
+                        });
+                      }}
+                    >
                       <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                       </p>
