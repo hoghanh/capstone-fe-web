@@ -1,7 +1,7 @@
 export const FormatVND = (number, currencySymbol = 'VNĐ') => {
   const formattedNumber = new Intl.NumberFormat('vi-VN').format(number);
   return `${formattedNumber} ${currencySymbol}`;
-}
+};
 
 export const CalculateDaysLeft = (endDate) => {
   const currentDate = new Date();
@@ -31,12 +31,13 @@ export const CalculateDaysLeft = (endDate) => {
     output = 'Quá hạn';
   }
   return output;
-}
+};
 
+export const formatDate = (dateInput) => {
+  const date = new Date(dateInput);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+  const year = date.getFullYear();
 
-export const FormatPhone = (value) => {
-  if (value.startsWith('0')) {
-    return value;
-  }
-  return `0${value}`;
-}
+  return `${day}/${month}/${year}`;
+};

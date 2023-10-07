@@ -270,11 +270,11 @@ export const Star = ({ size = 20, color = '#000' }) => {
   );
 };
 
-export const File = ({ size = 20, color = '#000' }) => {
+export const File = ({ size = 50, color = '#000' }) => {
   return (
     <svg
-      width='50'
-      height='60'
+      width={size}
+      height={(size * 6) / 5}
       viewBox='0 0 50 60'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

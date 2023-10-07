@@ -6,6 +6,10 @@ body {
 #root > div > .ant-breadcrumb {
   padding: 10px 20px; margin:  20px 0 30px 0 }
 
+.ant-breadcrumb > ol {
+  min-width: 360px
+}
+
 .ant-typography  a {
   color: #02ADFD
 }
@@ -30,6 +34,7 @@ body {
   font-weight: 700;
 }
 
+
 .ant-btn-default {
   color: #02ADFD;
   border-radius: 12px;
@@ -37,12 +42,40 @@ body {
   background: var(--background, #FFFFFF);
 }
 
+.ant-btn-primary.ant-btn-lg {
+  color: #013042;
+  border-radius: 25px;
+  font-weight: 700;
+}
+
+.ant-btn-primary.ant-btn-lg:not(:disabled):hover {
+  color: #013042;
+  border-radius: 25px;
+  font-weight: 700;
+}
+
+
 .ant-modal-content {
   padding: 0 !important;
 }
 
 .ant-layout-footer .ant-list-tem {
   padding: 0 !important;
+}
+
+.ant-select-selection-item {
+  background-color: var(--Alice-Blue, #EDF6FF);
+  color: var(--Blue-Whale, #013042);
+}
+
+.ant-select-multiple .ant-select-selection-item {
+  background-color: var(--Alice-Blue, #EDF6FF);
+  color: var(--Blue-Whale, #013042);
+}
+
+.ant-select-multiple.ant-select-lg .ant-select-selection-item {
+  background-color: var(--Alice-Blue, #EDF6FF);
+  color: var(--Blue-Whale, #013042);
 }
 
 .swiper-button-next button, .swiper-button-prev button{
