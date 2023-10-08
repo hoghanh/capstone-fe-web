@@ -1,29 +1,45 @@
 import {  Layout } from 'antd'
 import React, { useEffect } from 'react'
 import ProposalsTracking from './ProposalsTracking'
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { get } from 'utils/APICaller';
-import { proposalListState } from 'recoil/atom';
+import { authState, proposalListState } from 'recoil/atom';
 
 
 
 
 const Proposals = () => {
-  const [proposals, setProposals] = useRecoilState(proposalListState);
+  const [, setProposals] = useRecoilState(proposalListState);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    getProposals();
-  }, []);
-  const getProposals = async () => {
-    await get({ endpoint: `/proposal/freelancer/1` })
+    getFreelancer();
+  });
+
+  const getFreelancer = async () => {
+    await get({ endpoint: `/freelancer/profile/${auth.id}` })
       .then((response) => {
         const data = response.data;
-        setProposals(data);
+        getProposals(data.id);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  const getProposals = async (freelancerId) => {
+    await get({ endpoint: `/proposal/freelancer/${freelancerId}` })
+      .then((response) => {
+        const data = response.data;
+        let proposals = data.filter(proposal => proposal.jobId !== null && proposal.jobs !== null)
+        setProposals(proposals);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
 
   return (
     <>

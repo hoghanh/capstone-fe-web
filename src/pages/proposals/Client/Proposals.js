@@ -9,16 +9,17 @@ import { proposalListState } from 'recoil/atom';
 
 
 const Proposals = () => {
-  const [proposals, setProposals] = useRecoilState(proposalListState);
+  const [ setProposals] = useRecoilState(proposalListState);
 
   useEffect(() => {
     getProposals();
-  }, []);
+  });
   const getProposals = async () => {
     await get({ endpoint: `/proposal/freelancer/1` })
       .then((response) => {
         const data = response.data;
-        setProposals(data);
+        let proposals = data.filter(proposal => proposal.jobId !== null && proposal.jobs !== null)
+        setProposals(proposals);
       })
       .catch((error) => {
         console.log(error);
