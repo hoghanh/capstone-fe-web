@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ModalPrimary } from 'components/Modal/Modal';
-// import confirm from 'antd/es/modal/confirm';
 import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { Flag, Pen, Plus, SearchOutlined, Trash } from 'components/icon/Icon';

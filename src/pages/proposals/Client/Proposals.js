@@ -13,7 +13,7 @@ const Proposals = () => {
 
   useEffect(() => {
     getProposals();
-  });
+  },[]);
   const getProposals = async () => {
     await get({ endpoint: `/proposal/freelancer/1` })
       .then((response) => {
