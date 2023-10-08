@@ -1,5 +1,5 @@
 import { ClockCircleFilled, InboxOutlined } from '@ant-design/icons';
-import { Col, List, Row, Typography,  message, Upload, Form, Skeleton, notification } from 'antd';
+import { Col, List, Row, Typography, message, Upload, Form, Skeleton, notification } from 'antd';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import {
   AddressCard,
@@ -7,10 +7,8 @@ import {
   CreditCard,
   Donate,
   Envelope,
-  Flag,
   MapMarkerAlt,
   PaperClipOutlined,
-  Pen,
   PhoneAlt,
 } from 'components/icon/Icon';
 import LoginModal from 'layout/header/LoginModal';
@@ -28,10 +26,7 @@ import { post } from 'utils/APICaller';
 
 const { Dragger } = Upload;
 
-
-
 const SubmitProposal = () => {
-
   const freelancer = useRecoilValue(freelancerState);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +36,7 @@ const SubmitProposal = () => {
   };
 
   const createProposal = (values) => {
-    const{description, dragger} = values;
+    const { description } = values;
     post({
       endpoint: `/proposal/create`,
       body: {
@@ -64,14 +59,17 @@ const SubmitProposal = () => {
       });
   };
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      console.log('Received values:', values);
-      // Gửi dữ liệu đi ở đây
-      createProposal(values);
-      setIsModalOpen(false);
-    }).catch(error => {
-      console.error('Validation failed:', error);
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        console.log('Received values:', values);
+        // Gửi dữ liệu đi ở đây
+        createProposal(values);
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Validation failed:', error);
+      });
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -88,7 +86,7 @@ const SubmitProposal = () => {
     }
     return [e.file];
   };
-  
+
   const props = {
     name: 'file',
     multiple: true,
@@ -354,8 +352,8 @@ const SkillArticle = () => {
     const skeletonButtons = Array.from({ length: 5 }, (_, index) => (
       <Skeleton.Button key={index} active shape={'round'} />
     ));
-  
-    return <div style={{display: 'flex', gap: 15}} >{skeletonButtons}</div>;
+
+    return <div style={{ display: 'flex', gap: 15 }}>{skeletonButtons}</div>;
   };
 
   return (
@@ -390,7 +388,7 @@ const SkillArticle = () => {
             )}
           />
         ) : (
-          <SkeletonSkills/>
+          <SkeletonSkills />
         )}
       </CustomCol>
     </CustomRow>
