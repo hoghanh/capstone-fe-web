@@ -36,7 +36,7 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
-  }, 
+  },
   {
     path: '/jobs/job-detail/:id',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
@@ -122,6 +122,13 @@ export const routes = [
     element: lazy(() => import('pages/profile/Client/FreelancerProfile')),
     name: 'freelancerProfile',
     title: 'Hồ sơ ứng cử viên',
+    // role: ['client'],
+  },
+  {
+    path: '/client/billing',
+    element: lazy(() => import('pages/billing/Billing')),
+    name: 'billing',
+    title: 'Hoá đơn',
     // role: ['client'],
   },
   {
