@@ -419,6 +419,7 @@ const EditJob = () => {
               <Form.Item
                 name={['paymentRange', 'to']}
                 label='Đến: '
+                dependencies={['paymentRange', 'from']}
                 rules={[
                   {
                     required: true,
@@ -428,6 +429,18 @@ const EditJob = () => {
                       </div>
                     ),
                   },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      const fromValue = getFieldValue(['paymentRange', 'from']);
+                      if (!fromValue || !value) {
+                        return Promise.resolve();
+                      }
+                      if (value >= fromValue) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject('Đến phải lớn hơn hoặc bằng Từ');
+                    },
+                  }),
                 ]}
               >
                 <InputNumber
