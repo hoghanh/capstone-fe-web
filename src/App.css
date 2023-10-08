@@ -200,9 +200,7 @@ body {
 .modalPrimary .searchInput .ant-input-group-addon {
   height: 45px !important;
   border-radius: 8px !important;
-  border: 0.25px solid #000 !important;
   background: #FFF !important;
-  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
   align-items: center;
 }
 
