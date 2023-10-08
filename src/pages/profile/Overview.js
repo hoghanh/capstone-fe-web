@@ -18,7 +18,7 @@ import { ModalPrimary } from 'components/Modal/Modal';
 // import confirm from 'antd/es/modal/confirm';
 import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { Checking, Flag, Pen, Plus, SearchOutlined, Star, Trash } from 'components/icon/Icon';
+import { Flag, Pen, Plus, SearchOutlined, Trash } from 'components/icon/Icon';
 import React, { useState } from 'react';
 import color from 'styles/color';
 import css from './profile.module.css';

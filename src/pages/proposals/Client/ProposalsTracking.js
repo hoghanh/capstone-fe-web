@@ -1,6 +1,6 @@
 import { Card, Col, Input, Row, Typography, DatePicker, Image, Empty } from 'antd';
 import { CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { PaperClipOutlined, Pen } from 'components/icon/Icon';
+import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useState } from 'react';
 import color from 'styles/color';
 import { useRecoilState, useRecoilValue } from 'recoil';

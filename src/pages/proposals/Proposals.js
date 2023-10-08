@@ -14,7 +14,7 @@ const Proposals = () => {
 
   useEffect(() => {
     getFreelancer();
-  }, []);
+  });
 
   const getFreelancer = async () => {
     await get({ endpoint: `/freelancer/profile/${auth.id}` })

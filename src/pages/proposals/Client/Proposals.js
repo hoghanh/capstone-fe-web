@@ -9,11 +9,11 @@ import { proposalListState } from 'recoil/atom';
 
 
 const Proposals = () => {
-  const [proposals, setProposals] = useRecoilState(proposalListState);
+  const [ setProposals] = useRecoilState(proposalListState);
 
   useEffect(() => {
     getProposals();
-  }, []);
+  });
   const getProposals = async () => {
     await get({ endpoint: `/proposal/freelancer/1` })
       .then((response) => {
