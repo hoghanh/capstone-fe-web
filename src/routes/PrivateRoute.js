@@ -10,7 +10,11 @@ const PrivateRoute = ({ element: Element, allowedRoles }) => {
   }
 
   if (!allowedRoles.includes(auth.role)) {
-    return <Navigate to='/' />;
+    if (auth.role === 'client') {
+      return <Navigate to='/client' />;
+    } else {
+      return <Navigate to='/' />;
+    }
   }
 
   return <Element />;

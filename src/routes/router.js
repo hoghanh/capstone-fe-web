@@ -9,6 +9,7 @@ import PrivateRoute from './PrivateRoute';
 import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 import Loading from 'components/loading/loading';
+import PageNotFound from 'pages/404/PageNotFound';
 
 export const routes = [
   {
@@ -173,6 +174,7 @@ const Router = () => {
             />
           </Route>
         ))}
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </Suspense>
   );
