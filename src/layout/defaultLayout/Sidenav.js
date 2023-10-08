@@ -32,12 +32,7 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/jobs-management'
-          className={
-            page === 'client/jobs-management' ||
-            page === 'client/jobs-management/post-job'
-              ? 'active'
-              : ''
-          }
+          className={page.startsWith('client/jobs-management') ? 'active' : ''}
         >
           <span className='icon'>
             <List />

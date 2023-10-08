@@ -13,8 +13,10 @@ import {
   Upload,
   notification,
 } from 'antd';
+import Loading from 'components/loading/loading';
 import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import joblist from 'styles/joblist';
@@ -29,8 +31,15 @@ const EditJob = () => {
   const clientId = LocalStorageUtils.getItem('profile').id;
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [url, setUrl] = useState('');
+  const [initialValues, setInitialValues] = useState([]);
+  const [props, setProps] = useState({
+    defaultFileList: [],
+  });
 
   useEffect(() => {
+    getJob();
     getCategory();
     getSkill();
   }, []);
@@ -85,17 +94,40 @@ const EditJob = () => {
   };
 
   const onFinish = (values) => {
-    console.log(values);
-    if (values.files.length > 0) {
-      handleUpload(values);
+    if (props.defaultFileList.length > 0) {
+      if (
+        values.files !== undefined &&
+        values.files !== null &&
+        values.files !== ''
+      ) {
+        if (values.files.length > 0) {
+          handleUpload(values);
+        } else {
+          updateJob(values, '');
+        }
+      } else {
+        updateJob(values, props.defaultFileList[0].url);
+      }
     } else {
-      updateJob(values);
+      if (
+        values.files !== undefined &&
+        values.files !== null &&
+        values.files !== ''
+      ) {
+        if (values.files.length > 0) {
+          handleUpload(values);
+        } else {
+          updateJob(values, '');
+        }
+      } else {
+        updateJob(values, '');
+      }
     }
   };
 
   function updateJob(values, url) {
     put({
-      endpoint: `/job/create`,
+      endpoint: `/job/detail/${id}`,
       body: {
         title: values.title,
         description: values.description,
@@ -111,7 +143,7 @@ const EditJob = () => {
     })
       .then((res) => {
         notification.success({
-          message: 'Đăng bài viết mới thành công',
+          message: 'Cập nhật bài viết thành công',
         });
         navigate(`/client/jobs-management`);
       })
@@ -119,6 +151,57 @@ const EditJob = () => {
         notification.error({
           message: 'Có lỗi xảy ra',
         });
+      });
+  }
+
+  function getJob() {
+    setIsLoading(true);
+    get({
+      endpoint: `/job/detail/${id}`,
+    })
+      .then((res) => {
+        if (
+          res.data.fileAttachment !== null &&
+          res.data.fileAttachment !== undefined &&
+          res.data.fileAttachment !== ''
+        ) {
+          let url = new URL(res.data.fileAttachment);
+          const encodedFilename = url.pathname.split('/').pop();
+
+          const fileName = decodeURIComponent(encodedFilename).split('/').pop();
+          setProps({
+            defaultFileList: [
+              {
+                uid: '-1',
+                name: fileName,
+                status: 'done',
+                url: url.href,
+              },
+            ],
+          });
+        }
+        setRemainingCharacters(5000 - res.data.description.length);
+        setInitialValues({
+          title: res.data.title,
+          description: res.data.description,
+          category: res.data.subcategories.map((category) => ({
+            label: category.name,
+            value: category.name,
+          })),
+          skills: res.data.skills.map((skill) => ({
+            label: skill.name,
+            value: skill.name,
+          })),
+          paymentRange: {
+            from: res.data.lowestIncome,
+            to: res.data.highestIncome,
+          },
+          deadline: moment(res.data.proposalSubmitDeadline),
+        });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -171,7 +254,9 @@ const EditJob = () => {
       });
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
         <Card
@@ -193,6 +278,7 @@ const EditJob = () => {
             onFinish={onFinish}
             style={{ padding: '20px 30px' }}
             layout='vertical'
+            initialValues={initialValues}
           >
             <Form.Item
               name='title'
@@ -247,6 +333,7 @@ const EditJob = () => {
               getValueFromEvent={normFile}
             >
               <Upload.Dragger
+                {...props}
                 name='file-upload'
                 maxCount={1}
                 beforeUpload={() => false}
@@ -285,10 +372,7 @@ const EditJob = () => {
                 size='large'
                 placeholder='Chọn phân loại'
                 style={{ width: '100%' }}
-                options={category.map((cate) => ({
-                  label: cate.name,
-                  value: cate.id,
-                }))}
+                options={category}
               ></Select>
             </Form.Item>
             <Form.Item
@@ -390,7 +474,7 @@ const EditJob = () => {
                 Xoá bài
               </Button>
               <Button type='primary' size='large' htmlType='submit'>
-                Đăng bài tuyển dụng
+                Cập nhật bài viết
               </Button>
             </Form.Item>
           </Form>

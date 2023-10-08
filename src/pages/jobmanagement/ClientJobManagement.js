@@ -8,19 +8,17 @@ import {
   Grid,
   Dropdown,
 } from 'antd';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import joblist from 'styles/joblist';
-import { get, post, remove } from 'utils/APICaller';
+import { get, put, remove } from 'utils/APICaller';
 import {
   CalculateDaysLeft,
   FormatVND,
   formatDate,
 } from 'components/formatter/format';
 import Loading from 'components/loading/loading';
-import { useRecoilValue } from 'recoil';
-import { clientProfile } from 'recoil/atom';
 import { File } from 'components/icon/Icon';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
 
@@ -143,7 +141,7 @@ const ClientJobManagement = () => {
   };
 
   function closeItem(id) {
-    post({ endpoint: `/job/close/${id}` })
+    put({ endpoint: `/job/close/${id}` })
       .then((res) => {
         notification.success({
           message: 'Đã đóng bài viết thành công',
@@ -159,7 +157,7 @@ const ClientJobManagement = () => {
   }
 
   function extendItem(id) {
-    post({ endpoint: `/job/extend/${id}` })
+    put({ endpoint: `/job/extend/${id}` })
       .then((res) => {
         notification.success({
           message: 'Gia hạn bài viết 3 ngày thành công',

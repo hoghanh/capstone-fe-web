@@ -83,8 +83,16 @@ const PostJob = () => {
   };
 
   const onFinish = (values) => {
-    if (values.files.length > 0) {
-      handleUpload(values);
+    if (
+      values.files !== undefined &&
+      values.files !== null &&
+      values.files !== ''
+    ) {
+      if (values.files.length > 0) {
+        handleUpload(values);
+      } else {
+        createNewJob(values);
+      }
     } else {
       createNewJob(values);
     }
@@ -92,7 +100,7 @@ const PostJob = () => {
 
   function createNewJob(values, url) {
     post({
-      endpoint: `/job/create`,
+      endpoint: `/job`,
       body: {
         title: values.title,
         description: values.description,
@@ -267,10 +275,7 @@ const PostJob = () => {
                 size='large'
                 placeholder='Chọn phân loại'
                 style={{ width: '100%' }}
-                options={category.map((cate) => ({
-                  label: cate.name,
-                  value: cate.id,
-                }))}
+                options={category}
               ></Select>
             </Form.Item>
             <Form.Item
