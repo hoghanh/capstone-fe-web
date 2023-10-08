@@ -109,6 +109,8 @@ export const jobDetailState = atom({
   },
 });
 
+
+
 export const freelancerState = atom({
   key: 'freelancerState',
   default: {
@@ -128,6 +130,21 @@ export const freelancerState = atom({
   },
 });
 
+const clientAccounts = {
+  id: 0,
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  image: '',
+  password: '',
+  role: '',
+  currency: 0,
+  status: true,
+  createdAt: '',
+  updatedAt: '',
+}
+
 export const clientProfile = atom({
   key: 'clientProfile',
   default: {
@@ -140,7 +157,18 @@ export const clientProfile = atom({
     updatedAt: '',
     accountId: 0,
     introduction: '',
-    accounts: accounts,
+    accounts: clientAccounts,
+  },
+});
+
+export const listSkillsState = atom({
+  key: 'listSkills',
+  default: {
+    id: '',
+    name: '',
+    description: '',
+    createdAt: '',
+    updatedAt: '',
   },
 });
 
