@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Layout } from 'antd';
 import Details from './Details';
 import { get } from 'utils/APICaller';
@@ -8,9 +8,8 @@ import { useParams } from 'react-router-dom';
 
 const JobDetail = () => {
   const [jobDetail, setJobDetail] = useRecoilState(jobDetailState);
-  const [freelancer, setFreelancer] = useState(freelancerState);
+  const [freelancer, setFreelancer] = useRecoilState(freelancerState);
   const auth = useRecoilValue(authState);
-  // console.log(jobDetail.skills);
   let { id } = useParams();
   useEffect(() => {
     getJobDetail();

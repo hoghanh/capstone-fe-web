@@ -130,17 +130,6 @@ export const freelancerState = atom({
   },
 });
 
-// export const getFreelancer = selector({
-//   key: "getFreelancer",
-//   get: ({ get }) => {
-//     const account = get(freelancerState);
-//     return {
-//       phone: account.accounts.phone,
-//       address: account.accounts.address,
-//     };
-//   },
-// });
-
 const clientAccounts = {
   id: 0,
   name: '',

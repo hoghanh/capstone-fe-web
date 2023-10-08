@@ -1,18 +1,7 @@
 import { ClockCircleFilled, InboxOutlined } from '@ant-design/icons';
-import { Col, List, Row, Typography,  message, Upload, Form, Skeleton, notification } from 'antd';
+import { Col, List, Row, Typography, Upload, Form, Skeleton, notification } from 'antd';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import {
-  AddressCard,
-  BookMarkOutlined,
-  CreditCard,
-  Donate,
-  Envelope,
-  Flag,
-  MapMarkerAlt,
-  PaperClipOutlined,
-  Pen,
-  PhoneAlt,
-} from 'components/icon/Icon';
+import { BookMarkOutlined, Envelope, MapMarkerAlt, PaperClipOutlined, PhoneAlt } from 'components/icon/Icon';
 import LoginModal from 'layout/header/LoginModal';
 import React, { useState } from 'react';
 import color from 'styles/color';
@@ -25,43 +14,59 @@ import { authState, freelancerState, jobDetailState } from 'recoil/atom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import TextArea from 'antd/es/input/TextArea';
 import { post } from 'utils/APICaller';
-import { storage } from 'services/firebase';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from 'config/firebase';
+import { useParams } from 'react-router-dom';
 
 const { Dragger } = Upload;
 
-
-
 const SubmitProposal = () => {
-
   const freelancer = useRecoilValue(freelancerState);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [file, setFile] = useState(null)
+  const [, setProgresspercent] = useState(0);
+  let { id } = useParams();
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const uploadFile = async (file) => {
-    const proposalsRef = ref(storage, `proposals/${file.name}`);
-    await uploadBytes(proposalsRef, file);
-    const downloadURL = await getDownloadURL(proposalsRef);
-    return downloadURL;
+  const uploadFile = (event) => {
+    const file = event.dragger[0].originFileObj;
+
+    if (!file) return;
+
+    const storageRef = ref(storage, `proposals/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          createProposal(event, downloadURL);
+        });
+      },
+    );
   };
 
-  const createProposal = async (values) => {
-    const { description, dragger } = values;
-    const fileURL = await uploadFile(dragger[0]);
-    console.log(fileURL)
+  const createProposal = async (values, url) => {
+    const { description } = values;
+    const time = new Date();
     post({
-      endpoint: `/proposal/create`,
+      endpoint: `/proposal`,
       body: {
-        fileAttach: fileURL,
+        fileAttach: url,
         description: description,
-        sendDate: '2023-08-28T11:00:00.000Z',
+        sendDate: time.toISOString(),
         freelancerId: freelancer.id,
-        jobId: 2,
+        jobId: id,
       },
     })
       .then((res) => {
@@ -75,12 +80,13 @@ const SubmitProposal = () => {
         });
       });
   };
+
   const handleOk = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log('Received values:', values);
-        createProposal(values);
+        console.log('Received values:', values.dragger.length);
+        uploadFile(values);
         setIsModalOpen(false);
       })
       .catch((error) => {
@@ -91,24 +97,18 @@ const SubmitProposal = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
 
-
-  
   const props = {
-    name: 'pdf',
-    action: 'gs://capstone-sep.appspot.com/proposals',
+    name: 'files',
     maxCount: 1,
-    multiple: false,
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
-    },
+    beforeUpload: () => false,
   };
 
   return (
@@ -168,35 +168,9 @@ const SubmitProposal = () => {
                     name="dragger"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
-                
-                    rules={[
-                      { required: true, message: 'Xin hãy tải tệp lên' },
-                      {
-                        validator(_, fileList) {
-                          return new Promise((resolve, reject) => {
-                            if (fileList && fileList[0].size > 9000000) {
-                              reject('kích thước tệp quá lớn');
-                            } else {
-                              resolve('Tải lên thành công');
-                            }
-                          });
-                        },
-                      },
-                    ]}
+                    rules={[{ required: true, message: 'Xin hãy tải tệp lên' }]}
                   >
-                    <Dragger
-                      {...props}
-                      beforeUpload={(file) => {
-                        return new Promise((resolve, reject) => {
-                          if (file.size > 9000000) {
-                            reject('kích thước tệp quá lớn');
-                            // message.error('Kích thước tệp quá lớn');
-                          } else {
-                            resolve('Tải lên thành công');
-                          }
-                        });
-                      }}
-                    >
+                    <Dragger {...props}>
                       <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                       </p>
@@ -216,7 +190,6 @@ const SubmitProposal = () => {
 //Header Article right
 const HeaderArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
-
   return (
     <>
       <Row>
@@ -331,52 +304,12 @@ const AttachmentArticle = () => {
 //Skill
 const SkillArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
-  // console.log(jobDetail.skills);
-  const Skill = [
-    {
-      title: 'Javascript',
-    },
-    {
-      title: 'Html',
-    },
-    {
-      title: 'NextJS',
-    },
-    {
-      title: 'ReactJS',
-    },
-    {
-      title: 'Javascript',
-    },
-    {
-      title: 'Html',
-    },
-    {
-      title: 'NextJS',
-    },
-    {
-      title: 'ReactJS',
-    },
-    {
-      title: 'Javascript',
-    },
-    {
-      title: 'Html',
-    },
-    {
-      title: 'NextJS',
-    },
-    {
-      title: 'ReactJS',
-    },
-  ];
-
   const SkeletonSkills = () => {
     const skeletonButtons = Array.from({ length: 5 }, (_, index) => (
       <Skeleton.Button key={index} active shape={'round'} />
     ));
-  
-    return <div style={{display: 'flex', gap: 15}} >{skeletonButtons}</div>;
+
+    return <div style={{ display: 'flex', gap: 15 }}>{skeletonButtons}</div>;
   };
 
   return (
@@ -411,7 +344,7 @@ const SkillArticle = () => {
             )}
           />
         ) : (
-          <SkeletonSkills/>
+          <SkeletonSkills />
         )}
       </CustomCol>
     </CustomRow>
@@ -461,43 +394,6 @@ const AboutCustomer = () => {
           3 bài viết đã đăng
         </Typography.Title>
       </CustomCol>
-    </CustomRow>
-  );
-};
-
-//Verified Informations
-const VerifiedInformations = () => {
-  return (
-    <CustomRow gutter={[0, 10]}>
-      <Col span={24}>
-        <Typography.Title level={5} style={{ margin: '0 0 0 -5px' }}>
-          Xác minh
-        </Typography.Title>
-      </Col>
-      <Col span={24} style={{ display: 'flex' }}>
-        <AddressCard />
-        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
-          Đã xác minh danh tính
-        </Typography.Text>
-      </Col>
-      <Col span={24} style={{ display: 'flex' }}>
-        <Donate />
-        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
-          Đã xác minh thanh toán
-        </Typography.Text>
-      </Col>
-      <Col span={24} style={{ display: 'flex' }}>
-        <Envelope />
-        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
-          Đã xác minh địa chỉ email
-        </Typography.Text>
-      </Col>
-      <Col span={24} style={{ display: 'flex' }}>
-        <CreditCard />
-        <Typography.Text style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}>
-          Chưa xác minh hình thức thanh toán
-        </Typography.Text>
-      </Col>
     </CustomRow>
   );
 };
@@ -584,8 +480,6 @@ const InformationRight = ({ showModalLogin }) => {
         </Col> */}
         <CustomDivider />
         <AboutCustomer />
-        {/* <CustomDivider />
-        <VerifiedInformations /> */}
         <CustomDivider />
         <ContactInfo />
       </Row>
@@ -629,8 +523,6 @@ const InformationResponsive = ({ showModalLogin }) => {
               </Col> */}
         {/* <CustomDivider /> */}
         <AboutCustomer />
-        {/* <CustomDivider />
-        <VerifiedInformations /> */}
         <CustomDivider />
         <ContactInfo />
       </Row>
