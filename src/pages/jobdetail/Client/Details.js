@@ -1,20 +1,68 @@
 import { ClockCircleFilled } from '@ant-design/icons';
-import { Col, List, Row, Typography, Skeleton } from 'antd';
+import { Col, List, Row, Typography, Skeleton, Modal, notification } from 'antd';
 import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { BookMarkOutlined, PaperClipOutlined, Pen, Trash } from 'components/icon/Icon';
-import React from 'react';
+import { PaperClipOutlined, Pen, Trash } from 'components/icon/Icon';
+import React, { useState } from 'react';
 import color from 'styles/color';
-import css from '../jobDetail.module.css';
 import '../jobDetail.module.css';
 import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 import { useRecoilValue } from 'recoil';
 import { jobDetailState } from 'recoil/atom';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ModalAlert, ModalPrimary } from 'components/Modal/Modal';
+import { remove } from 'utils/APICaller';
+
+
+const RemoveAlert = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const removeItem = () => {
+    remove({ endpoint: `/job/detail/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Xoá bài viết thành công',
+        });
+        navigate('/client/jobs-management');
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Có lỗi xảy ra trong quá trình xoá',
+        });
+      });
+  }
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    removeItem();
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return (
+    <>
+      <Col onClick={showModal} style={{ cursor: 'pointer' }}>
+        <Trash color={'red'} />
+      </Col>
+      <ModalAlert title={'Thông báo'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Typography.Text>Bạn chắc chắn muốn xóa chưa?</Typography.Text>
+      </ModalAlert>
+    </>
+  );
+};
 
 //Header Article right
 const HeaderArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
-  const {id} = useParams();
+  const { id } = useParams();
+
   return (
     <>
       <Row>
@@ -44,11 +92,8 @@ const HeaderArticle = () => {
             </CustomCol>
             <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Row gutter={[15, 10]}>
-                <Col style={{ cursor: 'pointer' }}>
-                  <Trash color={'red'} />
-                </Col>
+                <RemoveAlert />
                 <Link to={`/client/jobs-management/edit-job/${id}`}>
-                  {' '}
                   <Col style={{ cursor: 'pointer' }}>
                     <Pen size={24} />
                   </Col>
