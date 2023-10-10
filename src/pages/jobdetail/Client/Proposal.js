@@ -2,13 +2,14 @@ import { Card, Col, Row, Typography } from 'antd';
 import { CustomCard, CustomCol, CustomRow } from 'components/customize/Layout';
 import { File, User } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import color from 'styles/color';
 import { get } from 'utils/APICaller';
 
 
 // Header section
 const HeaderSection = () => {
+  const { id } = useParams();
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <CustomCol>
@@ -17,9 +18,9 @@ const HeaderSection = () => {
         </Typography.Title>
       </CustomCol>
       <CustomCol>
-        <Link to={'/client/proposals'}>
+        <Link to={`/client/jobs-management/job-detail/${id}/proposals`}>
           <Typography.Title level={3} style={{ color: color.colorPrimary, margin: 0  }}>
-            Coi chi tiết
+            Xem chi tiết
           </Typography.Title>
         </Link>
       </CustomCol>
@@ -33,13 +34,15 @@ const BodySection = () => {
   const [countSent, setCountSent] = useState(0);
   const [countApproved, setCountApproved] = useState(0);
   const [countDeclined, setCountDeclined] = useState(0);
+  const {id} = useParams();
+  console.log(id)
   useEffect(() => {
     getProposals();
   }, [])
   
-  console.log(countTotal)
+  // console.log(countTotal)
   const getProposals = async () => {
-    await get({ endpoint: `/proposal/freelancer/1` })
+    await get({ endpoint: `/proposal/job/${id}` })
       .then((response) => {
         const data = response.data;
         let proposals = data.filter(proposal => proposal.jobId !== null && proposal.jobs !== null)

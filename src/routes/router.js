@@ -105,6 +105,12 @@ export const routes = [
     // role: ['client'],
   },
   {
+    path: '/client/jobs-management/job-detail/:id/proposals',
+    element: lazy(() => import('pages/jobdetail/Client/ProposalList')),
+    name: 'proposals',
+    // role: ['client'],
+  },
+  {
     path: '/proposals',
     element: lazy(() => import('pages/proposals/Proposals')),
     name: 'proposals',

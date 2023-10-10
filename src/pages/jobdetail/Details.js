@@ -64,7 +64,7 @@ const SubmitProposal = () => {
       body: {
         fileAttach: url,
         description: description,
-        sendDate: time.toISOString(),
+        sendDate: time,
         freelancerId: freelancer.id,
         jobId: id,
       },
