@@ -9,15 +9,10 @@ const ModalPrimary = ({ children, ...rest}) => {
   );
 };
 
-const ModalAlert = (Comp) => (props) => {
+const ModalAlert = ({ children, ...rest}) => {
   return (
-    <Modal
-      {...props}
-      onCancel={() => {
-        alert('Modal đã đóng!');
-      }}
-    >
-      <Comp {...props} />
+    <Modal className={'modalPrimary modalAlert'} cancelText={'Hủy bỏ'} okText={'Xóa'} {...rest} >
+      {children}
     </Modal>
   );
 };

@@ -29,8 +29,9 @@ const TabSent = () => {
   const list = proposalList.filter((item) => {
     return search === ''
       ? item.status === 'Sent'
-      : item.jobs?.title.toLowerCase().includes(search) && item.status === 'Sent'
+      : item.freelancers?.accounts?.name.toLowerCase().includes(search) && item.status === 'Sent';
   });
+  console.log(list);
   const informationUser = useRecoilValue(profileState);
   return (
     <>
@@ -60,7 +61,7 @@ const TabSent = () => {
                           >
                             <Image
                               width={72}
-                              src={informationUser.image}
+                              src={proposal.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
                               style={{ borderRadius: '50%' }}
@@ -71,7 +72,7 @@ const TabSent = () => {
                               <Col>
                                 <Link to="/client/proposals/freelancer-profile">
                                   <Typography.Title level={4} style={{ margin: 0 }}>
-                                    Nguyen Van A
+                                    {proposal.freelancers.accounts.name}
                                   </Typography.Title>
                                 </Link>
                               </Col>
@@ -83,23 +84,6 @@ const TabSent = () => {
                         <ButtonPrimary style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}>
                           Gửi lời mời
                         </ButtonPrimary>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={'space-between'}>
-                      <Col>
-                        <Row gutter={[0, 10]}>
-                          <Col span={24}>
-                            <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs?.title}
-                            </Typography.Title>
-                          </Col>
-                          <Col span={24}>
-                            <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
-                          </Col>
-                        </Row>
                       </Col>
                     </Row>
                   </Col>
@@ -141,7 +125,7 @@ const TabDeclined = () => {
   const list = proposalList.filter((item) => {
     return search === ''
       ? item.status === 'declined'
-      : item.jobs?.title.toLowerCase().includes(search) && item.status === 'declined';
+      : item.freelancers?.accounts?.name.toLowerCase().includes(search) && item.status === 'declined';
   });
   const informationUser = useRecoilValue(profileState);
 
@@ -173,7 +157,7 @@ const TabDeclined = () => {
                           >
                             <Image
                               width={72}
-                              src={informationUser.image}
+                              src={proposal.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
                               style={{ borderRadius: '50%' }}
@@ -183,7 +167,7 @@ const TabDeclined = () => {
                             <Row gutter={10}>
                               <Col>
                                 <Typography.Title level={4} style={{ margin: 0 }}>
-                                  Nguyen Van A
+                                  {proposal.freelancers?.accounts?.name}
                                 </Typography.Title>
                               </Col>
                             </Row>
@@ -219,23 +203,6 @@ const TabDeclined = () => {
                       </Col>
                     </Row>
                   </Col>
-                  <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={'space-between'}>
-                      <Col>
-                        <Row gutter={[0, 10]}>
-                          <Col span={24}>
-                            <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs?.title}
-                            </Typography.Title>
-                          </Col>
-                          <Col span={24}>
-                            <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                  </Col>
-
                   <Col span={24}>
                     <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
                       {proposal.description}
@@ -273,7 +240,7 @@ const TabApproved = () => {
   const list = proposalList.filter((item) => {
     return search === ''
       ? item.status === 'approved'
-      : item.jobs?.title.toLowerCase().includes(search) && item.status === 'approved';
+      : item.freelancers?.accounts?.name.toLowerCase().includes(search) && item.status === 'approved';
   });
   const informationUser = useRecoilValue(profileState);
   return (
@@ -304,7 +271,7 @@ const TabApproved = () => {
                           >
                             <Image
                               width={72}
-                              src={informationUser.image}
+                              src={proposal.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
                               style={{ borderRadius: '50%' }}
@@ -314,7 +281,7 @@ const TabApproved = () => {
                             <Row gutter={10}>
                               <Col>
                                 <Typography.Title level={4} style={{ margin: 0 }}>
-                                  Nguyen Van A
+                                  {proposal.freelancers?.accounts?.name}
                                 </Typography.Title>
                               </Col>
                             </Row>
@@ -335,28 +302,10 @@ const TabApproved = () => {
                       </Col>
                     </Row>
                   </Col>
-                  <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={'space-between'}>
-                      <Col>
-                        <Row gutter={[0, 10]}>
-                          <Col span={24}>
-                            <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs?.title}
-                            </Typography.Title>
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                  </Col>
 
                   <Col span={24}>
                     <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                      {/* {proposal.description} */}
-                      Lorem ipsum dolor sit amet consectetur. Aliquet convallis in cras quis aliquam. Gravida ipsum
-                      bibendum pretium nulla vitae cursus leo. Facilisis aliquam neque magna interdum vitae. Porttitor
-                      non sit nulla non nunc mattis porttitor fermentum. Eu proin elementum massa in bibendum. Sed
-                      pharetra eget sit nibh id orci nulla eros. Pellentesque orci orci quam senectus ac venenatis
-                      tortor sed. Augue.
+                      {proposal.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
