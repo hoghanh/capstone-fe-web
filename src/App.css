@@ -275,7 +275,10 @@ body {
   color: var(--White, #FFF) !important;
 }
 
-
+.ant-collapse-content {
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
 
 /* responsive */
 

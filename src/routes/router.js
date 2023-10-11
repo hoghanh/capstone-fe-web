@@ -65,6 +65,13 @@ export const routes = [
     role: ['client'],
   },
   {
+    path: '/client/profile/edit',
+    element: lazy(() => import('pages/profile/Client/EditProfileClient')),
+    name: 'edit-profile',
+    title: 'Sửa hồ sơ cá nhân',
+    // role: ['client'],
+  },
+  {
     path: '/client/jobs-management',
     element: lazy(() => import('pages/jobmanagement/ClientJobManagement')),
     name: 'job-post-managment',
