@@ -21,6 +21,7 @@ import {
 import Loading from 'components/loading/loading';
 import { File } from 'components/icon/Icon';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
+import { ModalPrimary } from 'components/Modal/Modal';
 
 const tabList = [
   {
@@ -73,6 +74,12 @@ const ClientJobManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabKey, setActiveTabKey] = useState('');
   const [filteredJobList, setFilteredJobList] = useState(jobList);
+  const [isModalDelete, setIsModalDelete] = useState(false);
+  const [isModalClose, setIsModalClose] = useState(false);
+  const [isModalExtend, setIsModalExtend] = useState(false);
+  const [itemIdToDelete, setItemIdToDelete] = useState(null);
+  const [itemIdToClose, setItemIdToClose] = useState(null);
+  const [itemIdToExtend, setItemIdToExtend] = useState(null);
 
   const profileUser = LocalStorageUtils.getItem('profile');
 
@@ -100,7 +107,7 @@ const ClientJobManagement = () => {
     });
 
     setFilteredJobList(filtered);
-  }, [isLoading, activeTabKey]);
+  }, [isLoading, activeTabKey, jobList]);
 
   function getJobList() {
     get({
@@ -127,16 +134,19 @@ const ClientJobManagement = () => {
     const checkAction = key.toString();
     if (checkAction.includes('delete')) {
       const itemId = checkAction.replace('delete_', '');
-      removeItem(itemId);
+      setItemIdToDelete(itemId);
+      setIsModalDelete(true);
     } else if (checkAction.includes('close')) {
       const itemId = checkAction.replace('close_', '');
-      closeItem(itemId);
+      setItemIdToClose(itemId);
+      setIsModalClose(true);
     } else if (checkAction.includes('edit')) {
       const itemId = checkAction.replace('edit_', '');
       navigate(`edit-job/${itemId}`);
     } else if (checkAction.includes('extend')) {
       const itemId = checkAction.replace('extend_', '');
-      extendItem(itemId);
+      setItemIdToExtend(itemId);
+      setIsModalExtend(true);
     }
   };
 
@@ -185,6 +195,42 @@ const ClientJobManagement = () => {
         });
       });
   }
+
+  const handleDelete = () => {
+    if (itemIdToDelete) {
+      removeItem(itemIdToDelete);
+      setIsModalDelete(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (itemIdToClose) {
+      closeItem(itemIdToClose);
+      setIsModalClose(false);
+    }
+  };
+
+  const handleExtend = () => {
+    if (itemIdToExtend) {
+      extendItem(itemIdToExtend);
+      setIsModalExtend(false);
+    }
+  };
+
+  const handleCancelDeleteModal = () => {
+    setIsModalDelete(false);
+    setItemIdToDelete(null);
+  };
+
+  const handleCancelCloseModal = () => {
+    setIsModalClose(false);
+    setItemIdToClose(null);
+  };
+
+  const handleCancelExtendModal = () => {
+    setIsModalExtend(false);
+    setItemIdToExtend(null);
+  };
 
   return (
     <>
@@ -285,6 +331,36 @@ const ClientJobManagement = () => {
             </div>
           ))}
         </Card>
+        <ModalPrimary
+          title={'Hoàn thành công việc'}
+          open={isModalDelete}
+          bodyStyle={{ paddingTop: 20 }}
+          onOk={handleDelete}
+          onCancel={handleCancelDeleteModal}
+          onText={'trung'}
+        >
+          Bạn có chắc muốn xoá công việc
+        </ModalPrimary>
+        <ModalPrimary
+          title={'Hoàn thành công việc'}
+          open={isModalClose}
+          bodyStyle={{ paddingTop: 20 }}
+          onOk={handleClose}
+          onCancel={handleCancelCloseModal}
+          onText={'trung'}
+        >
+          Bạn có chắc muốn đóng công việc
+        </ModalPrimary>
+        <ModalPrimary
+          title={'Hoàn thành công việc'}
+          open={isModalExtend}
+          bodyStyle={{ paddingTop: 20 }}
+          onOk={handleExtend}
+          onCancel={handleCancelExtendModal}
+          onText={'trung'}
+        >
+          Bạn có chắc muốn gia hạn công việc
+        </ModalPrimary>
       </Layout.Content>
     </>
   );
