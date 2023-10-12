@@ -270,6 +270,10 @@ body {
   border-radius: 25px;
   background: var(--Alice-Blue, #EDF6FF);
 }
+.modalAlert .ant-modal-footer .ant-btn-primary{
+  background-color: var(--Error, #EB4335) !important;
+  color: var(--White, #FFF) !important;
+}
 
 
 

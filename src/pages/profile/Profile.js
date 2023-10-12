@@ -7,8 +7,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState, freelancerState, listSkillsState, profileState } from 'recoil/atom';
 
 const Profile = () => {
-  const [ setInformationUser] = useRecoilState(profileState);
-  const [ setFreelancer] = useRecoilState(freelancerState);
+  const [ ,setInformationUser] = useRecoilState(profileState);
+  const [ ,setFreelancer] = useRecoilState(freelancerState);
   const [listSkills, setListSkill] = useRecoilState(listSkillsState);
   const auth = useRecoilValue(authState);
   
@@ -17,7 +17,7 @@ const Profile = () => {
     fetchProfile();
     getFreelancer();
     fetchSkills();
-  });
+  },[]);
 
 
   const fetchProfile = async () => {
