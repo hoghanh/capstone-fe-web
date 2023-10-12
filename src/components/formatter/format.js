@@ -1,35 +1,34 @@
+import moment from 'moment';
+
 export const FormatVND = (number, currencySymbol = 'VNĐ') => {
   const formattedNumber = new Intl.NumberFormat('vi-VN').format(number);
   return `${formattedNumber} ${currencySymbol}`;
 };
 
 export const CalculateDaysLeft = (endDate) => {
-  const currentDate = new Date();
-
-  endDate = new Date(endDate);
-  let remainTime;
+  const currentDate = moment();
+  endDate = moment(endDate);
   let output;
 
-  if (endDate >= currentDate) {
-    const timeDifference = endDate.getTime() - currentDate.getTime();
-    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-    const hoursDifference = Math.floor(
-      (timeDifference % (1000 * 3600 * 24)) / (1000 * 3600)
-    );
+  if (endDate.isSameOrAfter(currentDate)) {
+    const duration = moment.duration(endDate.diff(currentDate));
+    const daysDifference = duration.days();
+    const hoursDifference = duration.hours();
 
-    remainTime = {
-      days: daysDifference,
-      hours: hoursDifference,
-    };
-  }
-
-  if (remainTime?.days) {
-    output = remainTime.days + ' ngày ' + remainTime.hours + ' giờ còn lại';
-  } else if (remainTime?.hours) {
-    output = remainTime.hours + ' giờ còn lại';
+    if (daysDifference > 0) {
+      output = daysDifference + ' ngày ' + hoursDifference + ' giờ còn lại';
+    } else if (hoursDifference > 0) {
+      output = hoursDifference + ' giờ còn lại';
+    } else {
+      output = 'Sắp hết hạn';
+    }
   } else {
-    output = 'Quá hạn';
+    const duration = moment.duration(currentDate.diff(endDate));
+    const daysDifference = duration.days();
+
+    output = 'Quá hạn ' + daysDifference + ' ngày';
   }
+
   return output;
 };
 

@@ -1,4 +1,4 @@
-import { Card, Col, Input, Row, Typography, DatePicker } from 'antd';
+import { Card, Col, Input, Row, Typography, DatePicker, Empty } from 'antd';
 import { CustomDivider, CustomRow } from 'components/customize/Layout';
 import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useState } from 'react';
@@ -24,64 +24,143 @@ const tabListNoTitle = [
 const TabSent = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
+  const list = proposalList.filter((item) => {
+    return search === ''
+      ? item.status === 'Sent'
+      : item.jobs.title.toLowerCase().includes(search) && item.status === 'Sent';
+  });
+  return (
+      <Row>
+        {list.length === 0 || list === null ? (
+          <Col span={24}>
+            <Empty />
+          </Col>
+        ) : (
+          list.map((proposal, index) => {
+            return (
+                <Col key={index} span={24}>
+                  <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                    <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
+                      <Row justify={'space-between'}>
+                        <Col>
+                          <Row gutter={[0, 10]}>
+                            <Col span={24}>
+                              <Typography.Title level={4} style={{ margin: 0 }}>
+                                {proposal.jobs.title}
+                              </Typography.Title>
+                            </Col>
+                            <Col span={24}>
+                              <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                    </Col>
+
+                    <Col span={24}>
+                      <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                        {proposal.description}
+                      </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <CustomRow align={'middle'}>
+                        <Col>
+                          <PaperClipOutlined />
+                        </Col>
+                        <Col>
+                          <Typography.Text
+                            underline={true}
+                            style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                          >
+                            fileAttachName.doc
+                          </Typography.Text>
+                        </Col>
+                      </CustomRow>
+                    </Col>
+                  </Row>
+                  {list.length === index + 1 ? null : <CustomDivider />}
+                </Col>
+            );
+          })
+        )}
+      </Row>
+  );
+};
+
+const TabApproved = () => {
+  const proposalList = useRecoilValue(proposalListState);
+  const search = useRecoilValue(valueSearchState);
+  const list = proposalList.filter((item) => {
+    return search === ''
+      ? item.status === 'approved'
+      : item.jobs.title.toLowerCase().includes(search) && item.status === 'approved';
+  });
   return (
     <>
       <Row>
-        {proposalList &&
-          proposalList
-            .filter((item) => {
-              return search === ''
-                ? item.status === 'Sent'
-                : item.jobs.title.toLowerCase().includes(search) && item.status === 'Sent';
-            })
-            .map((proposal, index) => {
-              return (
-                <>
-                  <Col key={index} span={24} style={{ padding: 20 }}>
-                    <Row gutter={[0, 5]}>
-                      <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                        <Row justify={'space-between'}>
-                          <Col>
-                            <Row gutter={[0, 10]}>
-                              <Col span={24}>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
-                                  {proposal.jobs.title}
-                                </Typography.Title>
-                              </Col>
-                              <Col span={24}>
-                                <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
-                              </Col>
-                            </Row>
+        {list.length === 0 || list === null ? (
+          <Col span={24}>
+            <Empty />
+          </Col>
+        ) : (
+          list.map((proposal, index) => {
+            return (
+              <Col key={index} span={24}>
+                <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                  <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
+                    <Row justify={'space-between'}>
+                      <Col>
+                        <Row gutter={[0, 10]}>
+                          <Col span={24}>
+                            <Typography.Title level={4} style={{ margin: 0 }}>
+                              {proposal.jobs.title}
+                            </Typography.Title>
+                          </Col>
+                          <Col span={24}>
+                            <Typography.Text style={{ margin: 0 }}>Lương: 400.000VND</Typography.Text>
+                          </Col>
+                          <Col span={24}>
+                            <Typography.Text style={{ margin: 0, paddingRight: 15 }}>
+                              Ngày bắt đầu: 23/7/2023
+                            </Typography.Text>
+                            <Typography.Text style={{ margin: 0 }}>Ngày kết thúc: 24/7/2023</Typography.Text>
                           </Col>
                         </Row>
                       </Col>
-
-                      <Col span={24}>
-                        <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                          {proposal.description}
-                        </Typography.Text>
-                      </Col>
-                      <Col span={24}>
-                        <CustomRow align={'middle'}>
-                          <Col>
-                            <PaperClipOutlined />
-                          </Col>
-                          <Col>
-                            <Typography.Text
-                              underline={true}
-                              style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
-                            >
-                              fileAttachName.doc
-                            </Typography.Text>
-                          </Col>
-                        </CustomRow>
-                      </Col>
                     </Row>
                   </Col>
-                  <CustomDivider />
-                </>
-              );
-            })}
+
+                  <Col span={24}>
+                    <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                      {proposal.description}
+                    </Typography.Text>
+                  </Col>
+                  <Col span={24}>
+                    <CustomRow align={'middle'}>
+                      <Col>
+                        <Typography.Title level={5} style={{ margin: 0, paddingRight: 10 }}>
+                          Hợp đồng
+                        </Typography.Title>
+                      </Col>
+                      <Col>
+                        <PaperClipOutlined />
+                      </Col>
+                      <Col>
+                        <Typography.Text
+                          underline={true}
+                          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                        >
+                          fileAttachName.doc
+                        </Typography.Text>
+                      </Col>
+                    </CustomRow>
+                  </Col>
+                </Row>
+                {list.length === index + 1 ? null : <CustomDivider />}
+              </Col>
+            );
+          })
+        )}
       </Row>
     </>
   );
@@ -90,143 +169,67 @@ const TabSent = () => {
 const TabDeclined = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
-
+  const list = proposalList.filter((item) => {
+    return search === ''
+      ? item.status === 'declined'
+      : item.jobs.title.toLowerCase().includes(search) && item.status === 'declined';
+  });
   return (
     <>
       <Row>
-        {proposalList &&
-          proposalList
-            .filter((item) => {
-              return search === ''
-                ? item.status === 'declined'
-                : item.jobs.title.toLowerCase().includes(search) && item.status === 'declined';
-            })
-            .map((proposal, index) => {
-              return (
-                <>
-                  <Col key={index} span={24} style={{ padding: 20 }}>
-                    <Row gutter={[0, 5]}>
-                      <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                        <Row justify={'space-between'}>
-                          <Col>
-                            <Row gutter={[0, 10]}>
-                              <Col span={24}>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
-                                  {proposal.jobs.title}
-                                </Typography.Title>
-                              </Col>
-                              <Col span={24}>
-                                <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
-                      </Col>
+        {list.length === 0 || list === null ? (
+          <Col span={24}>
+            <Empty />
+          </Col>
+        ) : (
+          list.map((proposal, index) => {
+            return (
+              
+                <Col key={index} span={24}>
+                  <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                    <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
+                      <Row justify={'space-between'}>
+                        <Col>
+                          <Row gutter={[0, 10]}>
+                            <Col span={24}>
+                              <Typography.Title level={4} style={{ margin: 0 }}>
+                                {proposal.jobs.title}
+                              </Typography.Title>
+                            </Col>
+                            <Col span={24}>
+                              <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                    </Col>
 
-                      <Col span={24}>
-                        <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                          {proposal.description}
-                        </Typography.Text>
-                      </Col>
-                      <Col span={24}>
-                        <CustomRow align={'middle'}>
-                          <Col>
-                            <PaperClipOutlined />
-                          </Col>
-                          <Col>
-                            <Typography.Text
-                              underline={true}
-                              style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
-                            >
-                              fileAttachName.doc
-                            </Typography.Text>
-                          </Col>
-                        </CustomRow>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <CustomDivider />
-                </>
-              );
-            })}
-      </Row>
-    </>
-  );
-};
-
-const TabApproved = () => {
-  const proposalList = useRecoilValue(proposalListState);
-  const search = useRecoilValue(valueSearchState);
-
-  return (
-    <>
-      <Row>
-        {proposalList &&
-          proposalList
-            .filter((item) => {
-              return search === ''
-                ? item.status === 'approved'
-                : item.jobs.title.toLowerCase().includes(search) && item.status === 'approved';
-            })
-            .map((proposal, index) => {
-              return (
-                <>
-                  <Col key={index} span={24} style={{ padding: 20 }}>
-                    <Row gutter={[0, 5]}>
-                      <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                        <Row justify={'space-between'}>
-                          <Col>
-                            <Row gutter={[0, 10]}>
-                              <Col span={24}>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
-                                  {proposal.jobs.title}
-                                </Typography.Title>
-                              </Col>
-                              <Col span={24}>
-                                <Typography.Text style={{ margin: 0 }}>Lương: 400.000VND</Typography.Text>
-                              </Col>
-                              <Col span={24}>
-                                <Typography.Text style={{ margin: 0, paddingRight: 15 }}>
-                                  Ngày bắt đầu: 23/7/2023
-                                </Typography.Text>
-                                <Typography.Text style={{ margin: 0 }}>Ngày kết thúc: 24/7/2023</Typography.Text>
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
-                      </Col>
-
-                      <Col span={24}>
-                        <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                          {proposal.description}
-                        </Typography.Text>
-                      </Col>
-                      <Col span={24}>
-                        <CustomRow align={'middle'}>
-                          <Col>
-                            <Typography.Title level={5} style={{ margin: 0, paddingRight: 10 }}>
-                              Hợp đồng
-                            </Typography.Title>
-                          </Col>
-                          <Col>
-                            <PaperClipOutlined />
-                          </Col>
-                          <Col>
-                            <Typography.Text
-                              underline={true}
-                              style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
-                            >
-                              fileAttachName.doc
-                            </Typography.Text>
-                          </Col>
-                        </CustomRow>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <CustomDivider />
-                </>
-              );
-            })}
+                    <Col span={24}>
+                      <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                        {proposal.description}
+                      </Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <CustomRow align={'middle'}>
+                        <Col>
+                          <PaperClipOutlined />
+                        </Col>
+                        <Col>
+                          <Typography.Text
+                            underline={true}
+                            style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                          >
+                            fileAttachName.doc
+                          </Typography.Text>
+                        </Col>
+                      </CustomRow>
+                    </Col>
+                  </Row>
+                  {list.length === index + 1 ? null : <CustomDivider />}
+                </Col>
+            );
+          })
+        )}
       </Row>
     </>
   );
@@ -268,14 +271,14 @@ const ProposalsTracking = () => {
     }
   };
   return (
-    <Card style={{ padding: 0, marginBottom: 30 }}>
+    <Card style={{ marginBottom: 30 }}>
       <Row gutter={[0, 10]}>
         <Col span={24}>
           <Typography.Title level={3} style={{ margin: '20px 30px 10px' }}>
             Đề xuất của tôi
           </Typography.Title>
         </Col>
-        <Col span={12} style={{ padding: 20 }}>
+        <Col span={12} style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20  }}>
           <Search
             placeholder="Tìm kiếm..."
             allowClear
@@ -285,7 +288,7 @@ const ProposalsTracking = () => {
             }}
           />
         </Col>
-        <Col span={12} style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
+        <Col span={12} style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 , display: 'flex', justifyContent: 'flex-end' }}>
           <RangePicker
             value={dates || value}
             disabledDate={disabledDate}

@@ -100,8 +100,14 @@ export const routes = [
   },
   {
     path: '/client/jobs-management/job-detail/:id',
-    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    element: lazy(() => import('pages/jobdetail/Client/JobDetail')),
     name: 'jobdetail',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/job-detail/:id/proposals',
+    element: lazy(() => import('pages/jobdetail/Client/ProposalList')),
+    name: 'proposals',
     // role: ['client'],
   },
   {
