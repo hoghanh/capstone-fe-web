@@ -34,12 +34,19 @@ body {
   font-weight: 700;
 }
 
-
 .ant-btn-default {
   color: #02ADFD;
   border-radius: 12px;
   border: 1px solid var(--artyclick-sky-blue, #02ADFD);
   background: var(--background, #FFFFFF);
+}
+
+.ant-btn-default.ant-btn-dangerous {
+  color: white;
+  border-radius: 25px;
+  border: 1px solid var(--Error, #EB4335);
+  background: var(--Error, #EB4335);
+  font-weight: 700;
 }
 
 .ant-btn-primary.ant-btn-lg {
@@ -184,7 +191,6 @@ body {
 }
 
 .modalPrimary .ant-modal-footer .ant-btn-default{
-  background-color: white;
   font-weight: 700;
   font-size: 16px;
   height: auto;
