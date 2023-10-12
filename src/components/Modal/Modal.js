@@ -1,9 +1,15 @@
-import React from "react";
-import { Modal } from "antd";
+import React from 'react';
+import { Modal } from 'antd';
 
-const ModalPrimary = ({ children, ...rest}) => {
+const ModalPrimary = ({ children, ...rest }) => {
   return (
-    <Modal className={'modalPrimary'} cancelText={'Hủy bỏ'} okText={'Lưu'} {...rest} >
+    <Modal
+      className='modalPrimary'
+      cancelText='Hủy bỏ'
+      okText='Lưu'
+      okType='primary'
+      {...rest}
+    >
       {children}
     </Modal>
   );
@@ -22,7 +28,4 @@ const ModalAlert = (Comp) => (props) => {
   );
 };
 
-
-
-
-export {ModalPrimary, ModalAlert};
+export { ModalPrimary, ModalAlert };
