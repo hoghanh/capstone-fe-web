@@ -280,8 +280,18 @@ body {
   background-color: var(--Error, #EB4335) !important;
   color: var(--White, #FFF) !important;
 }
+/* 
+.modalDisabled .ant-modal-footer .ant-btn-primary{
+  background-color: var(--Disabled, #7a7b7c) !important;
+  color: var(--White, #FFF) !important;
+} */
 
 
+
+.ant-collapse-content {
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
 
 /* responsive */
 

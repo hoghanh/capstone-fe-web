@@ -89,7 +89,7 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/profile'
-          className={page === 'client/profile' ? 'active' : ''}
+          className={page === 'client/profile' || page === 'client/profile/edit' ? 'active' : ''}
         >
           <span className='icon'>
             <User />
