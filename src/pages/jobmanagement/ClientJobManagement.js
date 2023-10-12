@@ -332,32 +332,34 @@ const ClientJobManagement = () => {
           ))}
         </Card>
         <ModalPrimary
-          title={'Hoàn thành công việc'}
+          title='Hoàn thành công việc'
           open={isModalDelete}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleDelete}
           onCancel={handleCancelDeleteModal}
-          onText={'trung'}
+          okText='Xoá'
+          okType='danger'
         >
           Bạn có chắc muốn xoá công việc
         </ModalPrimary>
         <ModalPrimary
-          title={'Hoàn thành công việc'}
+          title='Đóng công việc'
           open={isModalClose}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleClose}
           onCancel={handleCancelCloseModal}
-          onText={'trung'}
+          okText='Đóng công việc'
+          okType='danger'
         >
           Bạn có chắc muốn đóng công việc
         </ModalPrimary>
         <ModalPrimary
-          title={'Hoàn thành công việc'}
+          title='Gia hạn công việc'
           open={isModalExtend}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleExtend}
           onCancel={handleCancelExtendModal}
-          onText={'trung'}
+          okText='Gia hạn công việc'
         >
           Bạn có chắc muốn gia hạn công việc
         </ModalPrimary>
