@@ -9,7 +9,7 @@ import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 import { useRecoilValue } from 'recoil';
 import { jobDetailState } from 'recoil/atom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ModalAlert, ModalPrimary } from 'components/Modal/Modal';
+import { ModalAlert } from 'components/Modal/Modal';
 import { remove } from 'utils/APICaller';
 
 
