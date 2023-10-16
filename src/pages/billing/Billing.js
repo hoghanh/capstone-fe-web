@@ -1,88 +1,95 @@
-import { Card, Grid, Layout, Space, Table, Tag, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  DatePicker,
+  Grid,
+  Layout,
+  Table,
+  Tag,
+  Typography,
+} from 'antd';
+import { FormatVND, formatDateTime } from 'components/formatter/format';
+import { useEffect, useState } from 'react';
 import joblist from 'styles/joblist';
+import { get } from 'utils/APICaller';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const columns = [
   {
     title: 'Loại',
     key: 'types',
     dataIndex: 'types',
-    render: (_, { types }) => (
-      <>
-        {types.map((type) => {
-          let color = type.length > 5 ? 'geekblue' : 'green';
-          if (type === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={type}>
-              {type.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
+    render: (_, { type }) => (
+      <Tag color={type === '+' ? 'green' : 'red'} key={type}>
+        {type}
+      </Tag>
     ),
   },
   {
     title: 'Ngày giao dịch',
     dataIndex: 'datetime',
     key: 'datetime',
+    render: (_, { createdAt }) => (
+      <Typography>{formatDateTime(createdAt)}</Typography>
+    ),
   },
   {
     title: 'Chi tiết',
     dataIndex: 'detail',
     key: 'detail',
+    render: (_, { description }) => <Typography>{description}</Typography>,
   },
   {
     title: 'Biến động',
     key: 'amounts',
     dataIndex: 'amounts',
-    render: (_, { amounts }) => (
+    render: (_, { amount, type }) => (
       <>
-        {amounts.map((amount) => {
-          let color = amount.length > 5 ? 'geekblue' : 'green';
-          if (amount === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={amount}>
-              {amount}
-            </Tag>
-          );
-        })}
+        <Typography
+          style={{
+            color: type === '+' ? '#6FCD40' : '#F8797F',
+          }}
+        >
+          {type}
+          {FormatVND(amount)}
+        </Typography>
       </>
     ),
-  },
-];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    types: ['nice', 'developer'],
-    amounts: ['cool', 'teacher'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    types: ['loser'],
-    amounts: ['cool', 'teacher'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    types: ['cool', 'teacher'],
-    amounts: ['cool', 'teacher'],
   },
 ];
 
 function Billing() {
   const { useBreakpoint } = Grid;
   const { md, lg } = useBreakpoint();
+
+  const [bills, setBills] = useState([]);
+  const [filterList, setFilterList] = useState([]);
+
+  useEffect(() => {
+    get({
+      endpoint: `/payment/client/${LocalStorageUtils.getItem('profile').id}`,
+    })
+      .then((res) => {
+        setBills(res.data);
+        setFilterList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  function filterDate(date, dateString) {
+    if (dateString) {
+      setFilterList([]);
+      const list = bills.filter((bill) => {
+        const compareDate = bill.createdAt.split('T', 1);
+        return compareDate[0] === dateString;
+      });
+      setFilterList(list);
+    } else {
+      setFilterList(bills);
+    }
+  }
 
   return (
     <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
@@ -98,8 +105,21 @@ function Billing() {
             </Typography.Title>
           </div>
         }
+        extra={
+          <>
+            <DatePicker style={{ marginRight: 20 }} onChange={filterDate} />
+            <Button size='large' type='primary'>
+              Nạp tiền
+            </Button>
+          </>
+        }
       >
-        <Table columns={columns} dataSource={data} style={{ padding: 30 }} />
+        <Table
+          columns={columns}
+          dataSource={filterList}
+          rowKey={(filterList) => filterList.id}
+          style={{ padding: 30 }}
+        />
       </Card>
     </Layout.Content>
   );
