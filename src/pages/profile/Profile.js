@@ -12,7 +12,6 @@ const Profile = () => {
   const [listSkills, setListSkill] = useRecoilState(listSkillsState);
   const auth = useRecoilValue(authState);
   
-  console.log(listSkills)
   useEffect(() => {
     fetchProfile();
     getFreelancer();
