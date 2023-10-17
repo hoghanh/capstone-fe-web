@@ -11,7 +11,7 @@ import {
 import { FormatVND, formatDateTime } from 'components/formatter/format';
 import { useEffect, useState } from 'react';
 import joblist from 'styles/joblist';
-import { get } from 'utils/APICaller';
+import { get, post } from 'utils/APICaller';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const columns = [
@@ -64,14 +64,17 @@ function Billing() {
 
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
+  const [currency, setCurrency] = useState();
+  const id = LocalStorageUtils.getItem('profile').id;
 
   useEffect(() => {
     get({
-      endpoint: `/payment/client/${LocalStorageUtils.getItem('profile').id}`,
+      endpoint: `/payment/client/${id}`,
     })
       .then((res) => {
-        setBills(res.data);
-        setFilterList(res.data);
+        setBills(res.data.payment);
+        setFilterList(res.data.payment);
+        setCurrency(res.data.clientCurrency);
       })
       .catch((err) => {
         console.log(err);
@@ -91,6 +94,20 @@ function Billing() {
     }
   }
 
+  function onClick() {
+    post({
+      endpoint: `/payment/vnpay`,
+      body: {
+        amount: '10000',
+        bankCode: '',
+        language: 'vn',
+        clientId: id,
+      },
+    }).then((res) => {
+      window.open(res.data.vnpUrl);
+    });
+  }
+
   return (
     <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
       <Card
@@ -103,12 +120,19 @@ function Billing() {
             <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
               Tra cứu giao dịch
             </Typography.Title>
+            <Typography.Title level={5} style={{ paddingLeft: 30 }}>
+              Số dư : {FormatVND(currency)}
+            </Typography.Title>
           </div>
         }
         extra={
           <>
-            <DatePicker style={{ marginRight: 20 }} onChange={filterDate} />
-            <Button size='large' type='primary'>
+            <DatePicker
+              style={{ marginRight: 20 }}
+              onChange={filterDate}
+              size='middle'
+            />
+            <Button size='large' type='primary' onClick={onClick}>
               Nạp tiền
             </Button>
           </>
