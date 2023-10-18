@@ -1,0 +1,102 @@
+.events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.events li:has(.ant-badge-status-error)~li:has(.ant-badge-status-error) {
+    display: none;
+}
+
+
+.events .ant-badge-status {
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.notes-month {
+    font-size: 28px;
+    text-align: center;
+}
+
+.notes-month section {
+    font-size: 28px;
+}
+
+.events .ant-badge-status-text {
+    display: none;
+}
+
+.calendar .ant-picker-cell {
+    width: 65px;
+    height: 50px;
+}
+
+.calendar .ant-picker-cell-inner.ant-picker-calendar-date {
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.calendar .ant-picker-calendar-date-value {
+    text-align: center;
+}
+
+.calendar .ant-badge.ant-badge-status .ant-badge-status-dot {
+    width: 12px;
+    height: 12px;
+}
+
+.btn-month {
+    display: flex;
+    width: 39px;
+    height: 39px;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 25px;
+    background: var(--Bluish-Cyan, #89DBE9);
+    border: none;
+}
+
+.text-month {
+    color: #000;
+    text-align: center;
+    /* 14/regular */
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+table {
+    border-collapse: collapse;
+    /* Collapse borders to avoid double borders */
+    width: 100%;
+    /* Set the table width to 100% of its container */
+}
+
+
+/* Define the style for table cells */
+td {
+    border: 1px solid #70DBFF;
+    /* Border style for data cells */
+    text-align: left;
+    /* Align text to the left in data cells */
+    padding: 8px;
+    /* Add padding to data cells */
+}
