@@ -25,7 +25,7 @@ import Loading from "components/loading/loading";
 import { storage } from "config/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useEffect, useState } from "react";
-import { useNavigate, } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { clientProfile } from "recoil/atom";
 import color from "styles/color";
@@ -39,22 +39,24 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-  
+
 const BasicInformation = () => {
   const [form] = Form.useForm();
   const [informationUser, setInformationUser] = useRecoilState(clientProfile);
   const [, setProgresspercent] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
   const [avatar, setAvatar] = useState([
     {
       uid: Math.random(),
-      name: 'image.png',
-      status: 'done',
-      url: `${informationUser.accounts.image}`,
+      name: "avatar.png",
+      status: "done",
+      url: `${informationUser?.accounts.image}`,
     },
   ]);
+
+  console.log(informationUser)
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -66,59 +68,6 @@ const BasicInformation = () => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-
-  const updateClientInfo = async (values, url) => {
-    const {
-      name,
-      introduction,
-      email,
-      phone,
-      address,
-      companyWebsite,
-      taxCode,
-    } = values;
-    console.log(name);
-    put({
-      endpoint: `/client/profile/${informationUser.id}`,
-      body: {
-        taxCode,
-        companyWebsite,
-        introduction,
-        account: {
-          name,
-          phone,
-          email,
-          address,
-          image: url,
-        },
-      },
-    })
-      .then((res) => {
-        setInformationUser({
-          ...informationUser,
-          taxCode,
-          companyWebsite,
-          introduction,
-          accounts: {
-            ...informationUser.accounts,
-            name,
-            phone,
-            email,
-            address,
-          },
-        });
-        notification.success({
-          message: "Cập nhật thành công!",
-        });
-      })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
-      });
-  };
-  
-  const handleChange = ({ avatar: newAvatar }) => setAvatar(newAvatar);
 
   const uploadFile = (event) => {
     const file = event.image[0].originFileObj;
@@ -146,9 +95,65 @@ const BasicInformation = () => {
       }
     );
   };
-  
+
+  const updateClientInfo = (values, image) => {
+    const {
+      name,
+      introduction,
+      email,
+      phone,
+      address,
+      companyWebsite,
+      taxCode,
+    } = values;
+    console.log(image);
+    put({
+      endpoint: `/client/profile/${informationUser.accountId}`,
+      body: {
+        taxCode,
+        companyWebsite,
+        introduction,
+        account: {
+          name,
+          phone,
+          email,
+          address,
+          image,
+        },
+      },
+    })
+      .then((res) => {
+        setInformationUser({
+          ...informationUser,
+          taxCode,
+          companyWebsite,
+          introduction,
+          accounts: {
+            ...informationUser.accounts,
+            name,
+            phone,
+            email,
+            address,
+            image,
+          },
+        });
+        notification.success({
+          message: "Cập nhật thành công!",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleChange = ({ avatar: newAvatar }) => setAvatar(newAvatar);
+
+
+
   const normFile = (e) => {
-    console.log('Upload event:', e);
+    console.log("Upload event:", e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -159,15 +164,13 @@ const BasicInformation = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log('Received values:', values);
-        uploadFile(values)
+        console.log("Received values:", values);
+        uploadFile(values);
       })
       .catch((error) => {
         console.error("Validation failed:", error);
       });
   };
-
-
 
   const props = {
     listType: "picture-card",
@@ -194,9 +197,8 @@ const BasicInformation = () => {
       </div>
     </div>
   );
-  
-  const handleCancel = () => setPreviewOpen(false);
 
+  const handleCancel = () => setPreviewOpen(false);
 
   return (
     <>
@@ -257,20 +259,20 @@ const BasicInformation = () => {
               >
                 <Upload {...props}>{uploadButton}</Upload>
               </Form.Item>
-                <ModalPrimary
-                  open={previewOpen}
-                  title={previewTitle}
-                  footer={null}
-                  onCancel={handleCancel}
-                >
-                  <img
-                    alt="example"
-                    style={{
-                      width: "100%",
-                    }}
-                    src={previewImage}
-                  />
-                </ModalPrimary>
+              <ModalPrimary
+                open={previewOpen}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{
+                    width: "100%",
+                  }}
+                  src={previewImage}
+                />
+              </ModalPrimary>
             </Row>
           </Col>
           <Col span={24}>
@@ -415,7 +417,8 @@ const BasicInformation = () => {
 const RemoveAlert = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const clientId = LocalStorageUtils.getItem('profile').id;
+  //sửa lại id
+  const clientId = LocalStorageUtils.getItem("profile").id;
 
   const removeItem = () => {
     remove({ endpoint: `/accounts/profile/${clientId}` })
@@ -470,6 +473,53 @@ const RemoveAlert = () => {
 
 const ChangePassword = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [informationUser, setInformationUser] = useRecoilState(clientProfile);
+
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        console.log("Received values:", values);
+        changePassword(values);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+  
+  const changePassword = (values) => {
+    const { password, confirmPassword } = values;
+    put({
+      endpoint: `/accounts/password/${informationUser.accountId}`,
+      body: {
+        oldPassword: password,
+        newPassword: confirmPassword,
+      },
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đổi mật khẩu thành công!",
+        });
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+
+        if (error.response.status === 403) {
+          notification.error({
+            message: error.response.data.message,
+          });
+        } else {
+          notification.error({
+            message: "Đổi mật khẩu thất bại!",
+          });
+        }
+      });
+  };
+
+  
 
   return (
     <>
@@ -517,11 +567,24 @@ const ChangePassword = () => {
             <Typography.Title level={4}>Xác nhận lại mật khẩu</Typography.Title>
             <Form.Item
               name={"confirmPassword"}
+              dependencies={["newPassword"]}
               rules={[
                 {
                   required: true,
                   message: "Không được để trống ô này!",
                 },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("newPassword") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "Mật khẩu mới không khớp"
+                      )
+                    );
+                  },
+                }),
               ]}
             >
               <Input
@@ -541,7 +604,9 @@ const ChangePassword = () => {
               >
                 Hủy
               </ButtonPrimary>
-              <ButtonPrimary htmlType="submit">Lưu</ButtonPrimary>
+              <ButtonPrimary htmlType="submit" onClick={handleOk}>
+                Lưu
+              </ButtonPrimary>
             </Form.Item>
           </Col>
         </Row>
@@ -579,7 +644,7 @@ const EditProfileClient = () => {
     console.log(key);
   };
   useEffect(() => {}, []);
-  const client = LocalStorageUtils.getItem('profile');
+  const client = LocalStorageUtils.getItem("profile");
 
   const panelStyle = {
     marginBottom: 24,
