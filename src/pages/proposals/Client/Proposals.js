@@ -15,7 +15,7 @@ const Proposals = () => {
   }, []);
 
   const getProposals = async () => {
-    get({ endpoint: `/proposal/client/${client.accountId}` })
+    get({ endpoint: `/proposal/client/${client.id}` })
       .then((response) => {
         const data = response.data;
         let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
