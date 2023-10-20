@@ -336,23 +336,24 @@ const EditInterview = ({ proposal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [timeBooking, setTimeBooking] = useState('');
-  console.log(timeBooking);
-  const showModal = () => {
 
+  const showModal = () => {
     setIsModalOpen(true);
   };
+
   const clientId = LocalStorageUtils.getItem("profile").id;
 
   const onChange = (value, dateString) => {
     setTimeBooking(dateString);
   };
+
   const onOk = (value) => {
     console.log("onOk: ", value);
   };
 
-  const interviewProposal = (jobId) => {
+  const interviewProposal = () => {
     put({
-      endpoint: `/proposal/interview/${jobId}`,
+      endpoint: `/proposal/interview/${proposal.jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -489,7 +490,6 @@ const AcceptInterview = ({ proposal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [timeBooking, setTimeBooking] = useState('');
-  console.log(timeBooking);
   const showModal = () => {
 
     setIsModalOpen(true);
@@ -497,17 +497,16 @@ const AcceptInterview = ({ proposal }) => {
   const clientId = LocalStorageUtils.getItem("profile").id;
 
   const onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
     setTimeBooking(dateString);
   };
   const onOk = (value) => {
     console.log("onOk: ", value);
   };
 
-  const interviewProposal = (jobId) => {
+  const interviewProposal = () => {
+    console.log(proposal.jobId)
     put({
-      endpoint: `/proposal/interview/${jobId}`,
+      endpoint: `/proposal/interview/${proposal.jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -534,6 +533,7 @@ const AcceptInterview = ({ proposal }) => {
       },
     })
       .then((res) => {
+        console.log('hello')
         interviewProposal();
       })
       .catch((error) => {
