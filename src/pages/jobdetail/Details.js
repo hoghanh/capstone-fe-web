@@ -85,7 +85,6 @@ const SubmitProposal = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log('Received values:', values.dragger.length);
         uploadFile(values);
         setIsModalOpen(false);
       })
@@ -99,7 +98,6 @@ const SubmitProposal = () => {
   };
 
   const normFile = (e) => {
-    console.log('Upload event:', e);
 
     if (Array.isArray(e)) {
       return e;
