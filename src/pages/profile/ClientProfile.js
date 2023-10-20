@@ -3,7 +3,7 @@ import { ButtonIcon } from "components/customize/GlobalCustomize";
 import { Pen } from "components/icon/Icon";
 import Loading from "components/loading/loading";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { clientProfile } from "recoil/atom";
 import LocalStorageUtils from "utils/LocalStorageUtils";

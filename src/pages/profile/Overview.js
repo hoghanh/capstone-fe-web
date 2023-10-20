@@ -23,7 +23,7 @@ import color from 'styles/color';
 import css from './profile.module.css';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { freelancerState, profileState } from 'recoil/atom';
-import { post } from 'utils/APICaller';
+import { put } from 'utils/APICaller';
 
 const Skill = [
   {
@@ -74,16 +74,16 @@ for (let i = 0; i < Skill.length; i++) {
 }
 
 const EditPersonalInformation = () => {
-  //Modal
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const showModal = () => {
     setIsModalOpen(true);
-  };
+  };  
+  
   const updateFreelancerInfo = (values) => {
     const { phone, address } = values;
-    post({
+    put({
       endpoint: `/freelancer/basicInfo/${informationUser.id}`,
       body: {
         phone: phone,
@@ -114,7 +114,6 @@ const EditPersonalInformation = () => {
     form
       .validateFields()
       .then((values) => {
-        // Gửi dữ liệu đi ở đây
         updateFreelancerInfo(values);
         setIsModalOpen(false);
       })
@@ -122,6 +121,7 @@ const EditPersonalInformation = () => {
         console.error('Validation failed:', error);
       });
   };
+  
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -216,7 +216,7 @@ const EditWorkingTime = () => {
 
   const handleOk = () => {
     const hoursPerWeek = hoursPerWeekOptions.find((item) => item.value === value).label;
-    post({
+    put({
       endpoint: `/freelancer/hoursPerWeek/${informationUser.id}`,
       body: {
         hoursPerWeek,
@@ -467,7 +467,7 @@ const EditMajor = () => {
   };
   const handleOk = () => {
     const major = value;
-    post({
+    put({
       endpoint: `/freelancer/major/${informationUser.id}`,
       body: {
         major,
@@ -540,7 +540,7 @@ console.log(informationUser)
       .validateFields()
       .then((values) => {
         const {title, introduction} = values;
-        post({
+        put({
           endpoint: `/freelancer/introduction/${informationUser.id}`,
           body: {
             title,
@@ -713,7 +713,7 @@ const EditNameAvatar = () => {
       .validateFields()
       .then((values) => {
         const {name, image} = values;
-        post({
+        put({
           endpoint: `/freelancer/nameImage/${informationUser.id}`,
           body: {
             name,

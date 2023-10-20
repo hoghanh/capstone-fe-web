@@ -1,4 +1,4 @@
-import { PaperClipOutlined } from "@ant-design/icons";
+import { PaperClipOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -11,8 +11,8 @@ import {
   Input,
   InputNumber,
   Layout,
+  Modal,
   Row,
-  Select,
   Typography,
   Upload,
   notification,
@@ -25,23 +25,56 @@ import Loading from "components/loading/loading";
 import { storage } from "config/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { clientProfile } from "recoil/atom";
 import color from "styles/color";
-import { remove } from "utils/APICaller";
+import { put, remove } from "utils/APICaller";
+import LocalStorageUtils from "utils/LocalStorageUtils";
 
-const { Dragger } = Upload;
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const BasicInformation = () => {
   const [form] = Form.useForm();
-
+  const [informationUser, setInformationUser] = useRecoilState(clientProfile);
   const [, setProgresspercent] = useState(0);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [avatar, setAvatar] = useState([
+    {
+      uid: Math.random(),
+      name: "avatar.png",
+      status: "done",
+      url: `${informationUser?.accounts.image}`,
+    },
+  ]);
+
+  console.log(informationUser)
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
 
   const uploadFile = (event) => {
-    const file = event.dragger[0].originFileObj;
+    const file = event.image[0].originFileObj;
 
     if (!file) return;
 
-    const storageRef = ref(storage, `proposals/${file.name}`);
+    const storageRef = ref(storage, `images/avatars/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -57,35 +90,145 @@ const BasicInformation = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          // createProposal(event, downloadURL);
+          updateClientInfo(event, downloadURL);
         });
       }
     );
   };
 
+  const updateClientInfo = (values, image) => {
+    const {
+      name,
+      introduction,
+      email,
+      phone,
+      address,
+      companyWebsite,
+      taxCode,
+    } = values;
+    console.log(image);
+    put({
+      endpoint: `/client/profile/${informationUser.accountId}`,
+      body: {
+        taxCode,
+        companyWebsite,
+        introduction,
+        account: {
+          name,
+          phone,
+          email,
+          address,
+          image,
+        },
+      },
+    })
+      .then((res) => {
+        setInformationUser({
+          ...informationUser,
+          taxCode,
+          companyWebsite,
+          introduction,
+          accounts: {
+            ...informationUser.accounts,
+            name,
+            phone,
+            email,
+            address,
+            image,
+          },
+        });
+        notification.success({
+          message: "Cập nhật thành công!",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleChange = ({ avatar: newAvatar }) => setAvatar(newAvatar);
+
+
+
   const normFile = (e) => {
+    console.log("Upload event:", e);
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
 
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        console.log("Received values:", values);
+        uploadFile(values);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
   const props = {
-    name: "files",
+    listType: "picture-card",
+    fileList: avatar,
     maxCount: 1,
     beforeUpload: () => false,
+    onRemove: () => false,
+    showUploadList: {
+      showRemoveIcon: false,
+    },
+    onPreview: handlePreview,
+    onChange: handleChange,
   };
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Tải ảnh lên
+      </div>
+    </div>
+  );
+
+  const handleCancel = () => setPreviewOpen(false);
 
   return (
     <>
       <Form
         form={form}
         name="editProfile"
-        // initialValues={{
-        //   remember: true,
-        //   phone: informationUser.accounts.phone,
-        //   address: informationUser.accounts.address,
-        // }}
+        initialValues={{
+          remember: true,
+          introduction: informationUser?.introduction
+            ? informationUser.introduction
+            : "Chưa có thông tin",
+          name: informationUser?.accounts?.name
+            ? informationUser.accounts.name
+            : "Chưa có thông tin",
+          email: informationUser?.accounts?.email
+            ? informationUser.accounts.email
+            : "Chưa có thông tin",
+          phone: informationUser?.accounts?.phone
+            ? informationUser.accounts.phone
+            : "Chưa có thông tin",
+          address: informationUser?.accounts?.address
+            ? informationUser.accounts.address
+            : "Chưa có thông tin",
+          companyWebsite: informationUser?.companyWebsite
+            ? informationUser.companyWebsite
+            : "Chưa có thông tin",
+          taxCode: informationUser?.taxCode
+            ? informationUser.taxCode
+            : "Chưa có thông tin",
+        }}
       >
         <Row gutter={[10, 10]} style={{ padding: 5 }}>
           <Col span={24}>
@@ -109,48 +252,41 @@ const BasicInformation = () => {
           <Col span={24}>
             <Typography.Title level={4}>Ảnh đại diện</Typography.Title>
             <Row>
-              <Col span={6}>
-                <Avatar
-                  shape="square"
-                  size={180}
-                  src={
-                    "https://i.9mobi.vn/cf/images/ba/2018/4/16/anh-avatar-dep-10.jpg"
-                  }
+              <Form.Item
+                name="image"
+                valuePropName="fileList"
+                getValueFromEvent={normFile}
+              >
+                <Upload {...props}>{uploadButton}</Upload>
+              </Form.Item>
+              <ModalPrimary
+                open={previewOpen}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{
+                    width: "100%",
+                  }}
+                  src={previewImage}
                 />
-              </Col>
-              <Col span={18}>
-                <Form.Item
-                  name={"imgFile"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Không được để trống ô này!",
-                    },
-                  ]}
-                >
-                  <Dragger {...props}>
-                    <p className="ant-upload-drag-icon">
-                      <PaperClipOutlined />
-                    </p>
-                    <p className="ant-upload-text">
-                      Kéo và thả bất kỳ hình ảnh bạn muốn
-                    </p>
-                    <p className="ant-upload-hint">
-                      (Kích thước tệp tối đa: 25 MB)
-                    </p>
-                  </Dragger>
-                </Form.Item>
-              </Col>
+              </ModalPrimary>
             </Row>
           </Col>
           <Col span={24}>
             <Typography.Title level={4}>Giới thiệu</Typography.Title>
             <Form.Item
-              name={"description"}
+              name={"introduction"}
               rules={[
                 {
                   required: true,
                   message: "Không được để trống ô này!",
+                },
+                {
+                  min: 10,
+                  message: "Giá trị phải lớn hơn hoặc bằng 10",
                 },
               ]}
             >
@@ -173,7 +309,7 @@ const BasicInformation = () => {
               <Col span={12}>
                 <Typography.Title level={4}>Email</Typography.Title>
                 <Form.Item
-                  name={"email"}
+                  name="email"
                   rules={[
                     {
                       required: true,
@@ -181,8 +317,7 @@ const BasicInformation = () => {
                     },
                   ]}
                 >
-                  {" "}
-                  <Input placeholder="VD: Foody.com.vn" />
+                  <Input placeholder="VD: foody@gmail.com" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -228,7 +363,7 @@ const BasicInformation = () => {
               <Col span={12}>
                 <Typography.Title level={4}>Website</Typography.Title>
                 <Form.Item
-                  name={"website"}
+                  name={"companyWebsite"}
                   rules={[
                     {
                       required: true,
@@ -242,7 +377,7 @@ const BasicInformation = () => {
               <Col span={12}>
                 <Typography.Title level={4}>Mã số thuế</Typography.Title>
                 <Form.Item
-                  name={"tax"}
+                  name={"taxCode"}
                   rules={[
                     {
                       required: true,
@@ -268,7 +403,9 @@ const BasicInformation = () => {
               >
                 Hủy
               </ButtonPrimary>
-              <ButtonPrimary htmlType="submit">Lưu</ButtonPrimary>
+              <ButtonPrimary onClick={handleOk} htmlType="submit">
+                Lưu
+              </ButtonPrimary>
             </Form.Item>
           </Col>
         </Row>
@@ -277,77 +414,19 @@ const BasicInformation = () => {
   );
 };
 
-const DisableAlert = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const removeItem = () => {
-    remove({ endpoint: `/job/detail/${id}` })
-      .then((res) => {
-        notification.success({
-          message: "Xoá bài viết thành công",
-        });
-        navigate("/client/jobs-management");
-      })
-      .catch((error) => {
-        notification.error({
-          message: "Có lỗi xảy ra trong quá trình xoá",
-        });
-      });
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    removeItem();
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  return (
-    <>
-      <ButtonPrimary
-        onClick={showModal}
-        style={{
-          marginRight: 10,
-          backgroundColor: color.colorInfo,
-        }}
-        $primary
-        htmlType="reset"
-      >
-        Vô hiệu hóa
-      </ButtonPrimary>
-      <ModalPrimary
-        title={"Thông báo"}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText={"Vô hiệu hóa"}
-      >
-        <Typography.Text>Bạn chắc chắn muốn xóa chưa?</Typography.Text>
-      </ModalPrimary>
-    </>
-  );
-};
-
 const RemoveAlert = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { id } = useParams();
   const navigate = useNavigate();
+  //sửa lại id
+  const clientId = LocalStorageUtils.getItem("profile").id;
 
   const removeItem = () => {
-    remove({ endpoint: `/job/detail/${id}` })
+    remove({ endpoint: `/accounts/profile/${clientId}` })
       .then((res) => {
         notification.success({
-          message: "Xoá bài viết thành công",
+          message: "Tài khoản đã bị xóa",
         });
-        navigate("/client/jobs-management");
+        navigate("/");
       })
       .catch((error) => {
         notification.error({
@@ -394,10 +473,57 @@ const RemoveAlert = () => {
 
 const ChangePassword = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [informationUser, setInformationUser] = useRecoilState(clientProfile);
+
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        console.log("Received values:", values);
+        changePassword(values);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+  
+  const changePassword = (values) => {
+    const { password, confirmPassword } = values;
+    put({
+      endpoint: `/accounts/password/${informationUser.accountId}`,
+      body: {
+        oldPassword: password,
+        newPassword: confirmPassword,
+      },
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đổi mật khẩu thành công!",
+        });
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+
+        if (error.response.status === 403) {
+          notification.error({
+            message: error.response.data.message,
+          });
+        } else {
+          notification.error({
+            message: "Đổi mật khẩu thất bại!",
+          });
+        }
+      });
+  };
+
+  
 
   return (
     <>
-      <Form name="changePassword">
+      <Form form={form} name="changePassword">
         <Row gutter={[10, 10]} style={{ padding: 5 }}>
           <Col span={24}>
             <Typography.Title level={4}>Mật khẩu hiện tại</Typography.Title>
@@ -441,11 +567,24 @@ const ChangePassword = () => {
             <Typography.Title level={4}>Xác nhận lại mật khẩu</Typography.Title>
             <Form.Item
               name={"confirmPassword"}
+              dependencies={["newPassword"]}
               rules={[
                 {
                   required: true,
                   message: "Không được để trống ô này!",
                 },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("newPassword") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "Mật khẩu mới không khớp"
+                      )
+                    );
+                  },
+                }),
               ]}
             >
               <Input
@@ -465,7 +604,9 @@ const ChangePassword = () => {
               >
                 Hủy
               </ButtonPrimary>
-              <ButtonPrimary htmlType="submit">Lưu</ButtonPrimary>
+              <ButtonPrimary htmlType="submit" onClick={handleOk}>
+                Lưu
+              </ButtonPrimary>
             </Form.Item>
           </Col>
         </Row>
@@ -498,13 +639,12 @@ const getItems = (panelStyle) => [
 ];
 
 const EditProfileClient = () => {
-  const { useBreakpoint } = Grid;
-  const { md } = useBreakpoint();
   const [isLoading, setIsLoading] = useState(false);
   const onChange = (key) => {
     console.log(key);
   };
   useEffect(() => {}, []);
+  const client = LocalStorageUtils.getItem("profile");
 
   const panelStyle = {
     marginBottom: 24,
@@ -513,6 +653,7 @@ const EditProfileClient = () => {
     border: "none",
     boxShadow: "2px 6px 4px 0px rgba(0, 0, 0, 0.25)",
   };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -546,7 +687,6 @@ const EditProfileClient = () => {
                 paddingTop: 10,
               }}
             >
-              <DisableAlert />
               <RemoveAlert />
             </div>
           </div>
