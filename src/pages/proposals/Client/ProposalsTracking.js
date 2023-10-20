@@ -1,12 +1,15 @@
-import { Card, Col, Input, Row, Typography, DatePicker, Image, Empty } from 'antd';
+import { Card, Col, Input, Row, Typography, DatePicker, Image, Empty, Form, notification } from 'antd';
 import { CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
 import { PaperClipOutlined } from 'components/icon/Icon';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { profileState, proposalListState, valueSearchState } from 'recoil/atom';
-import { ButtonPrimary } from 'components/customize/GlobalCustomize';
+import { ButtonIcon, ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { Link } from 'react-router-dom';
+import { ModalPrimary } from 'components/Modal/Modal';
+import { post, put } from 'utils/APICaller';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const tabListNoTitle = [
   {
@@ -139,11 +142,46 @@ const TabDeclined = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
-    return search === ''
-      ? item.status === 'declined'
-      : item.jobs?.title.toLowerCase().includes(search) && item.status === 'declined';
+    return search === ""
+      ? item.status === "interview"
+      : item.jobs?.title.toLowerCase().includes(search) &&
+          item.status === "interview";
   });
   const informationUser = useRecoilValue(profileState);
+
+  const declineProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/decline/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã từ chối",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const approvedProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/approve/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã duyệt công việc",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+
 
   return (
     <>
@@ -155,18 +193,26 @@ const TabDeclined = () => {
         ) : (
           list.map((proposal, index) => {
             return (
-              <Col span={24}>
-                <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+              <Col key={index} span={24}>
+                <Row
+                  style={{
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                  }}
+                  gutter={[0, 5]}
+                >
                   <Col span={24}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
-                        <Row align={'middle'}>
+                        <Row align={"middle"}>
                           <Col
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
+                              display: "flex",
+                              alignItems: "center",
                               marginRight: 10,
-                              position: 'relative',
+                              position: "relative",
                               paddingLeft: 10,
                               paddingRight: 10,
                             }}
@@ -176,13 +222,16 @@ const TabDeclined = () => {
                               src={informationUser.image}
                               alt="Apofoitisi logo"
                               preview={true}
-                              style={{ borderRadius: '50%' }}
+                              style={{ borderRadius: "50%" }}
                             />
                           </Col>
                           <CustomCol>
                             <Row gutter={10}>
                               <Col>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
+                                <Typography.Title
+                                  level={4}
+                                  style={{ margin: 0 }}
+                                >
                                   Nguyen Van A
                                 </Typography.Title>
                               </Col>
@@ -193,24 +242,26 @@ const TabDeclined = () => {
                       <Col>
                         <Row gutter={[10, 10]}>
                           <Col>
-                            <ButtonPrimary
-                              $info
-                              style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}
-                            >
-                              Sửa thời gian phỏng vấn
-                            </ButtonPrimary>
+                            <EditInterview/>
                           </Col>
                           <Col>
-                            <ButtonPrimary
+                          <ButtonPrimary
                               $warning
-                              style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}
+                              style={{ padding: "10px 20px" }}
+                              onClick={() => declineProposal(proposal.jobId)}
                             >
                               Từ chối
                             </ButtonPrimary>
                           </Col>
                           <Col>
                             <ButtonPrimary
-                              style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}
+                              onClick={() => approvedProposal(proposal.jobId)}
+                              style={{
+                                paddingRight: 20,
+                                paddingLeft: 20,
+                                paddingBottom: 10,
+                                paddingTop: 10,
+                              }}
                             >
                               Bắt đầu làm
                             </ButtonPrimary>
@@ -220,7 +271,7 @@ const TabDeclined = () => {
                     </Row>
                   </Col>
                   <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
@@ -229,7 +280,9 @@ const TabDeclined = () => {
                             </Typography.Title>
                           </Col>
                           <Col span={24}>
-                            <Typography.Text style={{ margin: 0 }}>Công ty cổ phần Foody</Typography.Text>
+                            <Typography.Text style={{ margin: 0 }}>
+                              Công ty cổ phần Foody
+                            </Typography.Text>
                           </Col>
                         </Row>
                       </Col>
@@ -237,19 +290,31 @@ const TabDeclined = () => {
                   </Col>
 
                   <Col span={24}>
-                    <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                    <Typography.Text
+                      style={{
+                        display: "flex",
+                        margin: 0,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                      }}
+                    >
                       {proposal.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={'middle'}>
+                    <CustomRow align={"middle"}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
                       <Col>
                         <Typography.Text
                           underline={true}
-                          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                          }}
                         >
                           fileAttachName.doc
                         </Typography.Text>
@@ -267,15 +332,347 @@ const TabDeclined = () => {
   );
 };
 
+const EditInterview = ({ proposal }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [timeBooking, setTimeBooking] = useState('');
+  console.log(timeBooking);
+  const showModal = () => {
+
+    setIsModalOpen(true);
+  };
+  const clientId = LocalStorageUtils.getItem("profile").id;
+
+  const onChange = (value, dateString) => {
+    setTimeBooking(dateString);
+  };
+  const onOk = (value) => {
+    console.log("onOk: ", value);
+  };
+
+  const interviewProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/interview/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã cập nhật lịch phỏng vấn!",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const createAppointment = (values) => {
+    const { url } = values;
+    post({
+      endpoint: `/appointment/`,
+      body: {
+        location: url,
+        link: "https://meet.google.com/xye-stsk-ghs",
+        time: timeBooking,
+        clientId: clientId,
+        proposalId: proposal.id,
+      },
+    })
+      .then((res) => {
+        interviewProposal();
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        createAppointment(values);
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonPrimary
+        $info
+        onClick={showModal}
+        style={{
+          paddingRight: 20,
+          paddingLeft: 20,
+          paddingBottom: 10,
+          paddingTop: 10,
+        }}
+      >
+        Sửa thời gian phỏng vấn
+      </ButtonPrimary>
+      <ModalPrimary
+        title={"Chỉnh sửa thông tin"}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          name="submitProposal"
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={4}>
+                    Link phỏng vấn (hoặc địa điểm)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="url"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Ex: Microsoft" />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Typography.Title level={4}>
+                    Link phỏng vấn (hoặc địa điểm)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="datetime"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showTime
+                      onChange={onChange}
+                      onOk={onOk}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const AcceptInterview = ({ proposal }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [timeBooking, setTimeBooking] = useState('');
+  console.log(timeBooking);
+  const showModal = () => {
+
+    setIsModalOpen(true);
+  };
+  const clientId = LocalStorageUtils.getItem("profile").id;
+
+  const onChange = (value, dateString) => {
+    console.log("Selected Time: ", value);
+    console.log("Formatted Selected Time: ", dateString);
+    setTimeBooking(dateString);
+  };
+  const onOk = (value) => {
+    console.log("onOk: ", value);
+  };
+
+  const interviewProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/interview/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã cập nhật lịch phỏng vấn!",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const createAppointment = (values) => {
+    const { url } = values;
+    post({
+      endpoint: `/appointment/`,
+      body: {
+        location: url,
+        link: "https://meet.google.com/xye-stsk-ghs",
+        time: timeBooking,
+        clientId: clientId,
+        proposalId: proposal.id,
+      },
+    })
+      .then((res) => {
+        interviewProposal();
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        createAppointment(values);
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonPrimary
+        onClick={showModal}
+        style={{
+          paddingRight: 20,
+          paddingLeft: 20,
+          paddingBottom: 10,
+          paddingTop: 10,
+        }}
+      >
+        Bắt đầu phỏng vấn
+      </ButtonPrimary>
+      <ModalPrimary
+        title={"Chỉnh sửa thông tin"}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          name="submitProposal"
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={4}>
+                    Link phỏng vấn (hoặc địa điểm)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="url"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Ex: Microsoft" />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Typography.Title level={4}>
+                    Link phỏng vấn (hoặc địa điểm)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="datetime"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showTime
+                      onChange={onChange}
+                      onOk={onOk}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
+    </>
+  );
+};
+
+
 const TabApproved = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
-    return search === ''
-      ? item.status === 'approved'
-      : item.jobs?.title.toLowerCase().includes(search) && item.status === 'approved';
+    return search === ""
+      ? item.status === "Sent"
+      : item.jobs?.title.toLowerCase().includes(search) &&
+          item.status === "Sent";
   });
   const informationUser = useRecoilValue(profileState);
+ 
+  useEffect(() => {
+
+  }, [list])
+  
+  const declineProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/decline/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã từ chôi",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+
+
   return (
     <>
       <Row>
@@ -287,17 +684,25 @@ const TabApproved = () => {
           list.map((proposal, index) => {
             return (
               <Col key={index} span={24}>
-                <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                <Row
+                  style={{
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                  }}
+                  gutter={[0, 5]}
+                >
                   <Col span={24}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
-                        <Row align={'middle'}>
+                        <Row align={"middle"}>
                           <Col
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
+                              display: "flex",
+                              alignItems: "center",
                               marginRight: 10,
-                              position: 'relative',
+                              position: "relative",
                               paddingLeft: 10,
                               paddingRight: 10,
                             }}
@@ -307,13 +712,16 @@ const TabApproved = () => {
                               src={informationUser.image}
                               alt="Apofoitisi logo"
                               preview={true}
-                              style={{ borderRadius: '50%' }}
+                              style={{ borderRadius: "50%" }}
                             />
                           </Col>
                           <CustomCol>
                             <Row gutter={10}>
                               <Col>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
+                                <Typography.Title
+                                  level={4}
+                                  style={{ margin: 0 }}
+                                >
                                   Nguyen Van A
                                 </Typography.Title>
                               </Col>
@@ -324,19 +732,23 @@ const TabApproved = () => {
                       <Col>
                         <Row gutter={[10, 10]}>
                           <Col>
-                            <ButtonPrimary $warning style={{ padding: '10px 20px' }}>
+                            <ButtonPrimary
+                              $warning
+                              style={{ padding: "10px 20px" }}
+                              onClick={() => declineProposal(proposal.jobId)}
+                            >
                               Từ chối
                             </ButtonPrimary>
                           </Col>
                           <Col>
-                            <ButtonPrimary style={{ padding: '10px 20px' }}>Bắt đầu làm</ButtonPrimary>
+                            <AcceptInterview proposal={proposal} />
                           </Col>
                         </Row>
                       </Col>
                     </Row>
                   </Col>
                   <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
@@ -350,24 +762,31 @@ const TabApproved = () => {
                   </Col>
 
                   <Col span={24}>
-                    <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                      {/* {proposal.description} */}
-                      Lorem ipsum dolor sit amet consectetur. Aliquet convallis in cras quis aliquam. Gravida ipsum
-                      bibendum pretium nulla vitae cursus leo. Facilisis aliquam neque magna interdum vitae. Porttitor
-                      non sit nulla non nunc mattis porttitor fermentum. Eu proin elementum massa in bibendum. Sed
-                      pharetra eget sit nibh id orci nulla eros. Pellentesque orci orci quam senectus ac venenatis
-                      tortor sed. Augue.
+                    <Typography.Text
+                      style={{
+                        display: "flex",
+                        margin: 0,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                      }}
+                    >
+                      {proposal.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={'middle'}>
+                    <CustomRow align={"middle"}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
                       <Col>
                         <Typography.Text
                           underline={true}
-                          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                          }}
                         >
                           fileAttachName.doc
                         </Typography.Text>
