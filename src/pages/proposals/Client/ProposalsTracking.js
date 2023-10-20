@@ -143,11 +143,45 @@ const TabDeclined = () => {
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
     return search === ""
-      ? item.status === "declined"
+      ? item.status === "interview"
       : item.jobs?.title.toLowerCase().includes(search) &&
-          item.status === "declined";
+          item.status === "interview";
   });
   const informationUser = useRecoilValue(profileState);
+
+  const declineProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/decline/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã từ chối",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const approvedProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/approve/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã duyệt công việc",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+
 
   return (
     <>
@@ -208,33 +242,20 @@ const TabDeclined = () => {
                       <Col>
                         <Row gutter={[10, 10]}>
                           <Col>
-                            <ButtonPrimary
-                              $info
-                              style={{
-                                paddingRight: 20,
-                                paddingLeft: 20,
-                                paddingBottom: 10,
-                                paddingTop: 10,
-                              }}
-                            >
-                              Sửa thời gian phỏng vấn
-                            </ButtonPrimary>
+                            <EditInterview/>
                           </Col>
                           <Col>
-                            <ButtonPrimary
+                          <ButtonPrimary
                               $warning
-                              style={{
-                                paddingRight: 20,
-                                paddingLeft: 20,
-                                paddingBottom: 10,
-                                paddingTop: 10,
-                              }}
+                              style={{ padding: "10px 20px" }}
+                              onClick={() => declineProposal(proposal.jobId)}
                             >
                               Từ chối
                             </ButtonPrimary>
                           </Col>
                           <Col>
                             <ButtonPrimary
+                              onClick={() => approvedProposal(proposal.jobId)}
                               style={{
                                 paddingRight: 20,
                                 paddingLeft: 20,
@@ -311,36 +332,27 @@ const TabDeclined = () => {
   );
 };
 
-const AcceptInterview = ({ proposal }) => {
+const EditInterview = ({ proposal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const [timeBooking, setTimeBooking] = useState('');
+  console.log(timeBooking);
   const showModal = () => {
-    console.log(proposal);
 
     setIsModalOpen(true);
   };
   const clientId = LocalStorageUtils.getItem("profile").id;
 
   const onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+    setTimeBooking(dateString);
   };
   const onOk = (value) => {
     console.log("onOk: ", value);
   };
 
-  const createAppointment = (values) => {
-    const { datetime, url } = values;
-    post({
-      endpoint: `/appointment/`,
-      body: {
-        location: url,
-        link: "https://meet.google.com/xye-stsk-ghs",
-        time: datetime,
-        clientId: clientId,
-        freelancerId: proposal.freelancerId,
-        jobId: proposal.jobId,
-      },
+  const interviewProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/interview/${jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -354,11 +366,187 @@ const AcceptInterview = ({ proposal }) => {
       });
   };
 
+  const createAppointment = (values) => {
+    const { url } = values;
+    post({
+      endpoint: `/appointment/`,
+      body: {
+        location: url,
+        link: "https://meet.google.com/xye-stsk-ghs",
+        time: timeBooking,
+        clientId: clientId,
+        proposalId: proposal.id,
+      },
+    })
+      .then((res) => {
+        interviewProposal();
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
   const handleOk = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values.datetime);
+        createAppointment(values);
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonPrimary
+        $info
+        onClick={showModal}
+        style={{
+          paddingRight: 20,
+          paddingLeft: 20,
+          paddingBottom: 10,
+          paddingTop: 10,
+        }}
+      >
+        Sửa thời gian phỏng vấn
+      </ButtonPrimary>
+      <ModalPrimary
+        title={"Chỉnh sửa thông tin"}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          name="submitProposal"
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Title level={4}>
+                    Link phỏng vấn (hoặc địa điểm)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="url"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Ex: Microsoft" />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Typography.Title level={4}>
+                    Link phỏng vấn (hoặc địa điểm)
+                  </Typography.Title>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="datetime"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showTime
+                      onChange={onChange}
+                      onOk={onOk}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
+    </>
+  );
+};
+
+const AcceptInterview = ({ proposal }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [timeBooking, setTimeBooking] = useState('');
+  console.log(timeBooking);
+  const showModal = () => {
+
+    setIsModalOpen(true);
+  };
+  const clientId = LocalStorageUtils.getItem("profile").id;
+
+  const onChange = (value, dateString) => {
+    console.log("Selected Time: ", value);
+    console.log("Formatted Selected Time: ", dateString);
+    setTimeBooking(dateString);
+  };
+  const onOk = (value) => {
+    console.log("onOk: ", value);
+  };
+
+  const interviewProposal = (jobId) => {
+    put({
+      endpoint: `/proposal/interview/${jobId}`,
+    })
+      .then((res) => {
+        notification.success({
+          message: "Đã cập nhật lịch phỏng vấn!",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const createAppointment = (values) => {
+    const { url } = values;
+    post({
+      endpoint: `/appointment/`,
+      body: {
+        location: url,
+        link: "https://meet.google.com/xye-stsk-ghs",
+        time: timeBooking,
+        clientId: clientId,
+        proposalId: proposal.id,
+      },
+    })
+      .then((res) => {
+        interviewProposal();
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
         createAppointment(values);
         setIsModalOpen(false);
       })
@@ -451,14 +639,15 @@ const AcceptInterview = ({ proposal }) => {
   );
 };
 
+
 const TabApproved = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
     return search === ""
-      ? item.status === "approved"
+      ? item.status === "Sent"
       : item.jobs?.title.toLowerCase().includes(search) &&
-          item.status === "approved";
+          item.status === "Sent";
   });
   const informationUser = useRecoilValue(profileState);
  
@@ -467,7 +656,6 @@ const TabApproved = () => {
   }, [list])
   
   const declineProposal = (jobId) => {
-    console.log(jobId);
     put({
       endpoint: `/proposal/decline/${jobId}`,
     })
@@ -482,6 +670,8 @@ const TabApproved = () => {
         });
       });
   };
+
+
 
   return (
     <>
@@ -580,14 +770,7 @@ const TabApproved = () => {
                         paddingRight: 10,
                       }}
                     >
-                      {/* {proposal.description} */}
-                      Lorem ipsum dolor sit amet consectetur. Aliquet convallis
-                      in cras quis aliquam. Gravida ipsum bibendum pretium nulla
-                      vitae cursus leo. Facilisis aliquam neque magna interdum
-                      vitae. Porttitor non sit nulla non nunc mattis porttitor
-                      fermentum. Eu proin elementum massa in bibendum. Sed
-                      pharetra eget sit nibh id orci nulla eros. Pellentesque
-                      orci orci quam senectus ac venenatis tortor sed. Augue.
+                      {proposal.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
