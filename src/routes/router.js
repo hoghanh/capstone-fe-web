@@ -132,6 +132,13 @@ export const routes = [
     // role: ['client'],
   },
   {
+    path: '/client/billing',
+    element: lazy(() => import('pages/billing/Billing')),
+    name: 'billing',
+    title: 'Hoá đơn',
+    // role: ['client'],
+  },
+  {
     path: '/client/proposals',
     element: lazy(() => import('pages/proposals/Client/Proposals')),
     name: 'proposals',
