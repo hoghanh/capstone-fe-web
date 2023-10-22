@@ -2,7 +2,6 @@ import color from './color';
 
 const joblist = {
   card: {
-    marginBottom: 30,
     boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
     width: '97%',
     margin: '0 auto',

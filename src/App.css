@@ -95,6 +95,15 @@ body {
   padding: 0px !important;
 }
 
+.ant-menu-submenu.ant-menu-submenu-inline .ant-badge-status-dot.ant-badge-status-default {
+  width: 20px;
+  height: 20px;
+}
+
+.appoinment-list .ant-menu-inline .ant-menu-item {
+  height: auto
+}
+
 /* Scroll */
 
 .skillSlider {

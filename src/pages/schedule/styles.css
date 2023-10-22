@@ -1,4 +1,4 @@
-.events {
+.schedule-interview .events {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -11,12 +11,12 @@
     transform: translateX(-50%);
 }
 
-.events li:has(.ant-badge-status-error)~li:has(.ant-badge-status-error) {
+.schedule-interview .events li:has(.ant-badge-status-error)~li:has(.ant-badge-status-error) {
     display: none;
 }
 
 
-.events .ant-badge-status {
+.schedule-interview .events .ant-badge-status {
     width: 100%;
     overflow: hidden;
     font-size: 12px;
@@ -24,25 +24,25 @@
     text-overflow: ellipsis;
 }
 
-.notes-month {
+.schedule-interview .notes-month {
     font-size: 28px;
     text-align: center;
 }
 
-.notes-month section {
+.schedule-interview .notes-month section {
     font-size: 28px;
 }
 
-.events .ant-badge-status-text {
+.schedule-interview .events .ant-badge-status-text {
     display: none;
 }
 
-.calendar .ant-picker-cell {
+.schedule-interview .calendar .ant-picker-cell {
     width: 65px;
     height: 50px;
 }
 
-.calendar .ant-picker-cell-inner.ant-picker-calendar-date {
+.schedule-interview .calendar .ant-picker-cell-inner.ant-picker-calendar-date {
 
     position: absolute;
     left: 50%;
@@ -50,16 +50,16 @@
     transform: translate(-50%, -50%);
 }
 
-.calendar .ant-picker-calendar-date-value {
+.schedule-interview .calendar .ant-picker-calendar-date-value {
     text-align: center;
 }
 
-.calendar .ant-badge.ant-badge-status .ant-badge-status-dot {
+.schedule-interview .calendar .ant-badge.ant-badge-status .ant-badge-status-dot {
     width: 12px;
     height: 12px;
 }
 
-.btn-month {
+.schedule-interview .btn-month {
     display: flex;
     width: 39px;
     height: 39px;
@@ -72,7 +72,7 @@
     border: none;
 }
 
-.text-month {
+.schedule-interview .text-month {
     color: #000;
     text-align: center;
     /* 14/regular */
@@ -83,7 +83,7 @@
     line-height: normal;
 }
 
-table {
+.schedule-interview table {
     border-collapse: collapse;
     /* Collapse borders to avoid double borders */
     width: 100%;
@@ -92,7 +92,7 @@ table {
 
 
 /* Define the style for table cells */
-td {
+.schedule-interview td {
     border: 1px solid #70DBFF;
     /* Border style for data cells */
     text-align: left;
