@@ -3,96 +3,38 @@ import {
   Badge,
   Calendar,
   Card,
-  Col,
+  Dropdown,
   Grid,
   Layout,
   Menu,
-  Row,
   Typography,
   notification,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import joblist from 'styles/joblist';
+import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
-import {
-  AppstoreOutlined,
-  HeartFilled,
-  MailOutlined,
-  SettingOutlined,
-  SmileFilled,
-} from '@ant-design/icons';
+import { EllipsisOutlined } from '@ant-design/icons';
 import { get } from 'utils/APICaller';
-import { formatDate } from 'components/formatter/format';
+import { formatDateTime } from 'components/formatter/format';
+import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
+import Loading from 'components/loading/loading';
 
-const getListData = (value) => {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        {
-          type: 'warning',
-          content: 'This is warning event.',
-        },
-        {
-          type: 'success',
-          content: 'This is usual event.',
-        },
-      ];
-      break;
-    case 10:
-      listData = [
-        {
-          type: 'warning',
-          content: 'This is warning event.',
-        },
-        {
-          type: 'success',
-          content: 'This is usual event.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event.',
-        },
-      ];
-      break;
-    case 15:
-      listData = [
-        {
-          type: 'warning',
-          content: 'This is warning event',
-        },
-        {
-          type: 'success',
-          content: 'This is very long usual event......',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 1.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 2.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 3.',
-        },
-        {
-          type: 'error',
-          content: 'This is error event 4.',
-        },
-        {
-          type: 'other',
-          content: 'This is error event 5.',
-        },
-      ];
-      break;
-    default:
-  }
-  return listData || [];
-};
+const actions = [
+  {
+    key: 'edit',
+    label: 'Chỉnh sửa thông tin phỏng vấn',
+  },
+  {
+    key: 'start',
+    label: 'Nhận ứng viên',
+  },
+  {
+    key: 'decline',
+    label: 'Từ chối ứng viên',
+    danger: true,
+  },
+];
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -103,19 +45,6 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-
-const items = [
-  getItem('Navigation One', 'sub1', <MailOutlined />, [
-    getItem('Option 1', '11'),
-    getItem('Option 2', '12'),
-    getItem('Option 3', '13'),
-    getItem('Option 4', '14'),
-  ]),
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    getItem('Option 5', '15'),
-    getItem('Option 6', '16'),
-  ]),
-];
 
 const getMonthData = (value) => {
   if (value.month() === 8) {
@@ -147,7 +76,6 @@ const InterviewSchedule = () => {
         const filtered = res.data.filter((job) => {
           return job.status === true;
         });
-        console.log(filtered);
 
         const data = generateJobs(filtered);
 
@@ -162,7 +90,26 @@ const InterviewSchedule = () => {
           message: error.response.data.message,
         });
       });
-  }, []);
+  }, [clientId]);
+
+  const getListData = (value) => {
+    let listData = [];
+    jobListColor.forEach((item) => {
+      const time = new Date(item.time);
+      time.setHours(time.getHours() - 7, 0, 0);
+      if (time.getMonth() === value.month()) {
+        if (time.getDate() === value.date()) {
+          const checkDuplicate = listData.filter(
+            (listData) => listData.color === item.color
+          );
+          if (checkDuplicate.length === 0) {
+            listData.push(item);
+          }
+        }
+      }
+    });
+    return listData;
+  };
 
   const monthCellRender = (value) => {
     const num = getMonthData(value);
@@ -178,20 +125,8 @@ const InterviewSchedule = () => {
     return (
       <ul className='events'>
         {listData.map((item) => (
-          <li key={item.content}>
-            <Badge
-              status={item.type}
-              color={
-                item.type === 'error'
-                  ? '#E15554'
-                  : item.type === 'success'
-                  ? '#6FDB45'
-                  : item.type === 'warning'
-                  ? '#F2C94C'
-                  : '#7B61FF'
-              }
-              text={item.content}
-            />
+          <li key={item.color + item.time}>
+            <Badge status='default' color={item.color} />
           </li>
         ))}
       </ul>
@@ -217,44 +152,14 @@ const InterviewSchedule = () => {
           className='btn-month'
           onClick={() => onChange(value.clone().subtract(1, 'month'))}
         >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            width='31'
-            height='30'
-            viewBox='0 0 31 30'
-            fill='none'
-          >
-            <path
-              d='M18.6035 21.2068L12.3966 14.9999L18.6035 8.79297'
-              stroke='black'
-              strokeWidth='2'
-              strokeMiterlimit='10'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-          </svg>
+          <ArrowLeft />
         </button>
         <div className='text-month'>{value.format('MMMM')}</div>
         <button
           className='btn-month'
           onClick={() => onChange(value.clone().add(1, 'month'))}
         >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            width='31'
-            height='30'
-            viewBox='0 0 31 30'
-            fill='none'
-          >
-            <path
-              d='M12.3965 8.79421L18.6034 15.0011L12.3965 21.208'
-              stroke='black'
-              strokeWidth='2'
-              strokeMiterlimit='10'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-          </svg>
+          <ArrowRight />
         </button>
       </div>
     );
@@ -270,39 +175,90 @@ const InterviewSchedule = () => {
   }
 
   function generateJobs(jobs) {
+    setIsLoading(true);
     let items = [];
     let itemChildren = [];
     let coloritems = [];
-    jobs?.map((job) => {
+    jobs?.forEach((job) => {
       const color = getRandomColor();
       job.proposals?.forEach((proposal) => {
         itemChildren.push(
           getItem(
-            <>
+            <div
+              style={{
+                display: ' flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 15,
+                width: '100%',
+              }}
+            >
               <div>
                 <Avatar
                   style={{
-                    backgroundColor: '#fde3cf',
-                    color: '#f56a00',
                     marginRight: 10,
                   }}
-                >
-                  U
-                </Avatar>
-                <b>{proposal.freelancers?.accounts.name}</b>
+                  size='small'
+                  src={proposal.freelancers?.accounts.image}
+                ></Avatar>
+                <Typography.Text style={{ fontWeight: 'bold', color: '#000' }}>
+                  {proposal.freelancers?.accounts.name}
+                </Typography.Text>
               </div>
-              <div>Thời gian phỏng vấn : {proposal.appointments[0]?.time}</div>
-              <div>
-                Địa điểm : {proposal.appointments[0]?.location}{' '}
-                <Link to={proposal.appointments[0]?.link}>
-                  {proposal.appointments[0]?.link}
-                </Link>
-              </div>
-            </>,
-            'appointment_' + proposal.id,
-            null
+              <Dropdown
+                menu={{
+                  items: actions.map((action) => ({
+                    ...action,
+                    key:
+                      action.key +
+                      '_' +
+                      proposal?.appointments[0]?.appointmentId,
+                  })),
+                  onClick,
+                }}
+              >
+                <EllipsisOutlined />
+              </Dropdown>
+            </div>,
+            'appoinment_' + proposal?.appointments[0]?.appointmentId,
+            null,
+            [
+              {
+                key:
+                  'appointment_time_' +
+                  proposal?.appointments[0]?.appointmentId,
+                label:
+                  'Thời gian phỏng vấn: ' +
+                  formatDateTime(proposal.appointments[0]?.time),
+              },
+              {
+                key:
+                  'appointment_location_' +
+                  proposal?.appointments[0]?.appointmentId,
+                label: (
+                  <>
+                    Địa điểm : {proposal.appointments[0]?.location}{' '}
+                    <Link to={proposal.appointments[0]?.link}>
+                      {proposal.appointments[0]?.link}
+                    </Link>
+                  </>
+                ),
+              },
+            ],
+            'group'
           )
         );
+        coloritems.push({
+          jobId: job.id,
+          color: color,
+          time: proposal.appointments[0]?.time,
+        });
+      });
+
+      coloritems.sort((a, b) => {
+        const dateA = new Date(a.time);
+        const dateB = new Date(b.time);
+        return dateA - dateB;
       });
 
       items.push(
@@ -314,12 +270,14 @@ const InterviewSchedule = () => {
         )
       );
       itemChildren = [];
-      coloritems.push({ jobId: job.id, color: color });
     });
+    setIsLoading(false);
     return [items, coloritems];
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <Layout.Content
         style={{

@@ -63,17 +63,20 @@ body {
   padding: 0 !important;
 }
 
-.ant-select-selection-item {
+.edit-job .ant-select-selection-item,
+.post-job .ant-select-selection-item {
   background-color: var(--Alice-Blue, #EDF6FF);
   color: var(--Blue-Whale, #013042);
 }
 
-.ant-select-multiple .ant-select-selection-item {
+.edit-job .ant-select-multiple .ant-select-selection-item,
+.post-job .ant-select-multiple .ant-select-selection-item {
   background-color: var(--Alice-Blue, #EDF6FF);
   color: var(--Blue-Whale, #013042);
 }
 
-.ant-select-multiple.ant-select-lg .ant-select-selection-item {
+.edit-job .ant-select-multiple.ant-select-lg .ant-select-selection-item,
+.post-job .ant-select-multiple.ant-select-lg .ant-select-selection-item {
   background-color: var(--Alice-Blue, #EDF6FF);
   color: var(--Blue-Whale, #013042);
 }
