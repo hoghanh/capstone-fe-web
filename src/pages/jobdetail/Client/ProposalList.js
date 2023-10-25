@@ -12,13 +12,11 @@ const Proposals = () => {
   useEffect(() => {
     getProposals();
   }, []);
-
   const getProposals = async () => {
     get({ endpoint: `/proposal/job/${id}` })
       .then((response) => {
         const data = response.data;
         // let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
-        console.log(data)
         setProposals(data);
       })
       .catch((error) => {
