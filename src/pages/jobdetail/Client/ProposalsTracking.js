@@ -1,38 +1,53 @@
-import { Card, Col, Input, Row, Typography, DatePicker, Image, Empty } from 'antd';
-import { CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { PaperClipOutlined } from 'components/icon/Icon';
-import React, { useState } from 'react';
-import color from 'styles/color';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { profileState, proposalListState, valueSearchState } from 'recoil/atom';
-import { ButtonPrimary } from 'components/customize/GlobalCustomize';
-import { Link } from 'react-router-dom';
+import {
+  Card,
+  Col,
+  Input,
+  Row,
+  Typography,
+  DatePicker,
+  Image,
+  Empty,
+} from "antd";
+import {
+  CustomCol,
+  CustomDivider,
+  CustomRow,
+} from "components/customize/Layout";
+import { PaperClipOutlined } from "components/icon/Icon";
+import React, { useState } from "react";
+import color from "styles/color";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { profileState, proposalListState, valueSearchState } from "recoil/atom";
+import { ButtonPrimary } from "components/customize/GlobalCustomize";
+import { Link } from "react-router-dom";
 
 const tabListNoTitle = [
   {
-    key: 'Sent',
-    label: 'Phù hợp với công việc',
+    key: "Recommend",
+    label: "Phù hợp với công việc",
   },
   {
-    key: 'Approved',
-    label: 'Đã gửi đi',
+    key: "Approved",
+    label: "Được gửi",
   },
   {
-    key: 'Declined',
-    label: 'Phỏng vấn',
+    key: "Declined",
+    label: "Phỏng vấn",
   },
 ];
 
-const TabSent = () => {
+const TabRecommend = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
-    return search === ''
-      ? item.status === 'Sent'
-      : item.freelancers?.accounts?.name.toLowerCase().includes(search) && item.status === 'Sent';
+    return search === ""
+      ? item.status === "Sent"
+      : item.freelancers?.accounts.name.toLowerCase().includes(search) &&
+          item.status === "Sent";
   });
+  const [ellipsis, setEllipsis] = useState(true);
+  console.log(proposalList);
   console.log(list);
-  const informationUser = useRecoilValue(profileState);
   return (
     <>
       <Row>
@@ -44,35 +59,46 @@ const TabSent = () => {
           list.map((proposal, index) => {
             return (
               <Col key={index} span={24}>
-                <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                <Row
+                  style={{
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                  }}
+                  gutter={[0, 5]}
+                >
                   <Col span={24}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
-                        <Row align={'middle'}>
+                        <Row align={"middle"}>
                           <Col
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
+                              display: "flex",
+                              alignItems: "center",
                               marginRight: 10,
-                              position: 'relative',
+                              position: "relative",
                               paddingLeft: 10,
                               paddingRight: 10,
                             }}
                           >
                             <Image
                               width={72}
-                              src={proposal.freelancers?.accounts?.image}
-                              alt="Apofoitisi logo"
+                              src={proposal?.freelancers.accounts.image}
+                              alt="Freelancer Avatar"
                               preview={true}
-                              style={{ borderRadius: '50%' }}
+                              style={{ borderRadius: "50%" }}
                             />
                           </Col>
                           <CustomCol>
                             <Row gutter={10}>
                               <Col>
                                 <Link to="/client/proposals/freelancer-profile">
-                                  <Typography.Title level={4} style={{ margin: 0 }}>
-                                    {proposal.freelancers.accounts.name}
+                                  <Typography.Title
+                                    level={4}
+                                    style={{ margin: 0 }}
+                                  >
+                                    {proposal?.freelancers.accounts.name}
                                   </Typography.Title>
                                 </Link>
                               </Col>
@@ -80,31 +106,53 @@ const TabSent = () => {
                           </CustomCol>
                         </Row>
                       </Col>
-                      <Col>
-                        <ButtonPrimary style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}>
-                          Gửi lời mời
-                        </ButtonPrimary>
-                      </Col>
                     </Row>
                   </Col>
 
                   <Col span={24}>
-                    <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
-                      {proposal.description}
-                    </Typography.Text>
+                    <Link to={`/jobs/job-detail/${proposal.id}`}>
+                      <Typography.Paragraph
+                        style={{
+                          margin: 0,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                        }}
+                        ellipsis={
+                          ellipsis
+                            ? {
+                                rows: 3,
+                              }
+                            : false
+                        }
+                      >
+                        {proposal?.description}
+                      </Typography.Paragraph>
+                    </Link>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={'middle'}>
+                    <CustomRow align={"middle"}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-                        <Typography.Text
-                          underline={true}
-                          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                        <a
+                          href={proposal?.fileAttach}
+                          target="_blank"
+                          download={proposal?.fileAttach}
+                          rel="noreferrer"
                         >
-                          fileAttachName.doc
-                        </Typography.Text>
+                          <Typography.Text
+                            underline={true}
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: color.colorPrimary,
+                            }}
+                          >
+                            fileAttachName.doc
+                          </Typography.Text>
+                        </a>
                       </Col>
                     </CustomRow>
                   </Col>
@@ -123,9 +171,10 @@ const TabDeclined = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
-    return search === ''
-      ? item.status === 'declined'
-      : item.freelancers?.accounts?.name.toLowerCase().includes(search) && item.status === 'declined';
+    return search === ""
+      ? item.status === "declined"
+      : item.freelancers?.accounts?.name.toLowerCase().includes(search) &&
+          item.status === "declined";
   });
   const informationUser = useRecoilValue(profileState);
 
@@ -140,17 +189,25 @@ const TabDeclined = () => {
           list.map((proposal, index) => {
             return (
               <Col span={24}>
-                <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                <Row
+                  style={{
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                  }}
+                  gutter={[0, 5]}
+                >
                   <Col span={24}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
-                        <Row align={'middle'}>
+                        <Row align={"middle"}>
                           <Col
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
+                              display: "flex",
+                              alignItems: "center",
                               marginRight: 10,
-                              position: 'relative',
+                              position: "relative",
                               paddingLeft: 10,
                               paddingRight: 10,
                             }}
@@ -160,13 +217,16 @@ const TabDeclined = () => {
                               src={proposal.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
-                              style={{ borderRadius: '50%' }}
+                              style={{ borderRadius: "50%" }}
                             />
                           </Col>
                           <CustomCol>
                             <Row gutter={10}>
                               <Col>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
+                                <Typography.Title
+                                  level={4}
+                                  style={{ margin: 0 }}
+                                >
                                   {proposal.freelancers?.accounts?.name}
                                 </Typography.Title>
                               </Col>
@@ -179,7 +239,12 @@ const TabDeclined = () => {
                           <Col>
                             <ButtonPrimary
                               $info
-                              style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}
+                              style={{
+                                paddingRight: 20,
+                                paddingLeft: 20,
+                                paddingBottom: 10,
+                                paddingTop: 10,
+                              }}
                             >
                               Sửa thời gian phỏng vấn
                             </ButtonPrimary>
@@ -187,14 +252,24 @@ const TabDeclined = () => {
                           <Col>
                             <ButtonPrimary
                               $warning
-                              style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}
+                              style={{
+                                paddingRight: 20,
+                                paddingLeft: 20,
+                                paddingBottom: 10,
+                                paddingTop: 10,
+                              }}
                             >
                               Từ chối
                             </ButtonPrimary>
                           </Col>
                           <Col>
                             <ButtonPrimary
-                              style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 10, paddingTop: 10 }}
+                              style={{
+                                paddingRight: 20,
+                                paddingLeft: 20,
+                                paddingBottom: 10,
+                                paddingTop: 10,
+                              }}
                             >
                               Bắt đầu làm
                             </ButtonPrimary>
@@ -204,19 +279,31 @@ const TabDeclined = () => {
                     </Row>
                   </Col>
                   <Col span={24}>
-                    <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                    <Typography.Text
+                      style={{
+                        display: "flex",
+                        margin: 0,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                      }}
+                    >
                       {proposal.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={'middle'}>
+                    <CustomRow align={"middle"}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
                       <Col>
                         <Typography.Text
                           underline={true}
-                          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                          }}
                         >
                           fileAttachName.doc
                         </Typography.Text>
@@ -238,9 +325,10 @@ const TabApproved = () => {
   const proposalList = useRecoilValue(proposalListState);
   const search = useRecoilValue(valueSearchState);
   const list = proposalList.filter((item) => {
-    return search === ''
-      ? item.status === 'approved'
-      : item.freelancers?.accounts?.name.toLowerCase().includes(search) && item.status === 'approved';
+    return search === ""
+      ? item.status === "Sent"
+      : item.freelancers?.accounts?.name.toLowerCase().includes(search) &&
+          item.status === "Sent";
   });
   const informationUser = useRecoilValue(profileState);
   return (
@@ -254,17 +342,25 @@ const TabApproved = () => {
           list.map((proposal, index) => {
             return (
               <Col key={index} span={24}>
-                <Row style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }} gutter={[0, 5]}>
+                <Row
+                  style={{
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                  }}
+                  gutter={[0, 5]}
+                >
                   <Col span={24}>
-                    <Row justify={'space-between'}>
+                    <Row justify={"space-between"}>
                       <Col>
-                        <Row align={'middle'}>
+                        <Row align={"middle"}>
                           <Col
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
+                              display: "flex",
+                              alignItems: "center",
                               marginRight: 10,
-                              position: 'relative',
+                              position: "relative",
                               paddingLeft: 10,
                               paddingRight: 10,
                             }}
@@ -274,13 +370,16 @@ const TabApproved = () => {
                               src={proposal.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
-                              style={{ borderRadius: '50%' }}
+                              style={{ borderRadius: "50%" }}
                             />
                           </Col>
                           <CustomCol>
                             <Row gutter={10}>
                               <Col>
-                                <Typography.Title level={4} style={{ margin: 0 }}>
+                                <Typography.Title
+                                  level={4}
+                                  style={{ margin: 0 }}
+                                >
                                   {proposal.freelancers?.accounts?.name}
                                 </Typography.Title>
                               </Col>
@@ -291,12 +390,17 @@ const TabApproved = () => {
                       <Col>
                         <Row gutter={[10, 10]}>
                           <Col>
-                            <ButtonPrimary $warning style={{ padding: '10px 20px' }}>
+                            <ButtonPrimary
+                              $warning
+                              style={{ padding: "10px 20px" }}
+                            >
                               Từ chối
                             </ButtonPrimary>
                           </Col>
                           <Col>
-                            <ButtonPrimary style={{ padding: '10px 20px' }}>Bắt đầu làm</ButtonPrimary>
+                            <ButtonPrimary style={{ padding: "10px 20px" }}>
+                              Bắt đầu làm
+                            </ButtonPrimary>
                           </Col>
                         </Row>
                       </Col>
@@ -304,19 +408,31 @@ const TabApproved = () => {
                   </Col>
 
                   <Col span={24}>
-                    <Typography.Text style={{ display: 'flex', margin: 0, paddingLeft: 10, paddingRight: 10 }}>
+                    <Typography.Text
+                      style={{
+                        display: "flex",
+                        margin: 0,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                      }}
+                    >
                       {proposal.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={'middle'}>
+                    <CustomRow align={"middle"}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
                       <Col>
                         <Typography.Text
                           underline={true}
-                          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                          }}
                         >
                           fileAttachName.doc
                         </Typography.Text>
@@ -335,13 +451,13 @@ const TabApproved = () => {
 };
 
 const contentListNoTitle = {
-  Sent: <TabSent />,
+  Recommend: <TabRecommend />,
   Approved: <TabApproved />,
   Declined: <TabDeclined />,
 };
 
 const ProposalsTracking = () => {
-  const [activeTabKey2, setActiveTabKey2] = useState('Sent');
+  const [activeTabKey2, setActiveTabKey2] = useState("Recommend");
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
   const [value, setValue] = useState(null);
@@ -358,8 +474,8 @@ const ProposalsTracking = () => {
     if (!dates) {
       return false;
     }
-    const tooLate = dates[0] && current.diff(dates[0], 'days') >= 7;
-    const tooEarly = dates[1] && dates[1].diff(current, 'days') >= 7;
+    const tooLate = dates[0] && current.diff(dates[0], "days") >= 7;
+    const tooEarly = dates[1] && dates[1].diff(current, "days") >= 7;
     return !!tooEarly || !!tooLate;
   };
   const onOpenChange = (open) => {
@@ -373,17 +489,25 @@ const ProposalsTracking = () => {
     <Card style={{ padding: 0, marginBottom: 30 }}>
       <Row gutter={[0, 10]}>
         <Col span={24}>
-          <Typography.Title level={3} style={{ margin: '20px 30px 10px' }}>
+          <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
             Đề xuất của tôi
           </Typography.Title>
         </Col>
-        <Col span={12} style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 20 }}>
+        <Col
+          span={12}
+          style={{
+            paddingTop: 20,
+            paddingBottom: 20,
+            paddingLeft: 20,
+            paddingRight: 20,
+          }}
+        >
           <Search
             placeholder="Tìm kiếm..."
             allowClear
             onSearch={onSearch}
             style={{
-              width: '100%',
+              width: "100%",
             }}
           />
         </Col>
@@ -394,8 +518,8 @@ const ProposalsTracking = () => {
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 20,
-            display: 'flex',
-            justifyContent: 'flex-end',
+            display: "flex",
+            justifyContent: "flex-end",
           }}
         >
           <RangePicker
@@ -407,7 +531,7 @@ const ProposalsTracking = () => {
             onChange={(val) => {
               setValue(val);
             }}
-            format={'DD/MM/YYYY'}
+            format={"DD/MM/YYYY"}
             onOpenChange={onOpenChange}
             changeOnBlur
           />
@@ -415,16 +539,16 @@ const ProposalsTracking = () => {
         <Col className="trackingJobs" span={24}>
           <Card
             style={{
-              width: '100%',
-              border: 'transparent',
+              width: "100%",
+              border: "transparent",
             }}
             headStyle={{
               color: color.colorBlack,
-              fontWeight: 'bold',
+              fontWeight: "bold",
               paddingLeft: 30,
               paddingRight: 30,
-              margin: '10px 0',
-              borderBottom: '0.5px solid #000 !important',
+              margin: "10px 0",
+              borderBottom: "0.5px solid #000 !important",
             }}
             tabList={tabListNoTitle}
             activeTabKey={activeTabKey2}

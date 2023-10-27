@@ -40,3 +40,12 @@ export const formatDate = (dateInput) => {
 
   return `${day}/${month}/${year}`;
 };
+
+export const checkIfIsUrl = (url) => {
+  try {
+    const parsedUrl = new URL(url);
+    return !!parsedUrl;
+  } catch (error) {
+    return false;
+  }
+};
