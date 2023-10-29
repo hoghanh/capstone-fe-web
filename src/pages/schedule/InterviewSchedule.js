@@ -15,7 +15,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { get } from 'utils/APICaller';
+import { get, put } from 'utils/APICaller';
 import { formatDateTime } from 'components/formatter/format';
 import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
@@ -54,7 +54,7 @@ const getMonthData = (value) => {
 
 const InterviewSchedule = () => {
   const { useBreakpoint } = Grid;
-  const { sm, md, lg, xl } = useBreakpoint();
+  const { md } = useBreakpoint();
 
   const clientId = LocalStorageUtils.getItem('profile').id;
   const { pathname } = useLocation();
@@ -63,11 +63,55 @@ const InterviewSchedule = () => {
   const [jobList, setJobList] = useState([]);
   const [jobListColor, setJobListColor] = useState([]);
 
+  const location = useLocation();
+
   const onClick = (e) => {
     console.log('click ', e);
+    const checkAction = e.key.toString();
+    if (checkAction.includes('start')) {
+      const itemId = checkAction.replace('start_', '');
+      approveProposal(itemId);
+    } else if (checkAction.includes('decline')) {
+      const itemId = checkAction.replace('decline_', '');
+      declineProposal(itemId);
+    } else if (checkAction.includes('edit')) {
+      const itemId = checkAction.replace('edit_', '');
+    }
   };
 
+  function approveProposal(id) {
+    put({ endpoint: `/proposal/approve/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Đã nhận ứng viên',
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Có lỗi xảy ra! Vui lòng thử lại',
+        });
+      });
+  }
+
+  function declineProposal(id) {
+    put({ endpoint: `/proposal/decline/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Đã từ chối ứng viên',
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Có lỗi xảy ra! Vui lòng thử lại',
+        });
+      });
+  }
+
   useEffect(() => {
+    getInterviewSchedule();
+  }, []);
+
+  function getInterviewSchedule() {
     setIsLoading(true);
     get({
       endpoint: `/job/appointment/${clientId}`,
@@ -90,7 +134,7 @@ const InterviewSchedule = () => {
           message: error.response.data.message,
         });
       });
-  }, [clientId]);
+  }
 
   const getListData = (value) => {
     let listData = [];
@@ -209,10 +253,7 @@ const InterviewSchedule = () => {
                 menu={{
                   items: actions.map((action) => ({
                     ...action,
-                    key:
-                      action.key +
-                      '_' +
-                      proposal?.appointments[0]?.appointmentId,
+                    key: action.key + '_' + proposal?.id,
                   })),
                   onClick,
                 }}
@@ -255,11 +296,7 @@ const InterviewSchedule = () => {
         });
       });
 
-      coloritems.sort((a, b) => {
-        const dateA = new Date(a.time);
-        const dateB = new Date(b.time);
-        return dateA - dateB;
-      });
+      coloritems.sort((a, b) => new Date(a.time) - new Date(b.time));
 
       items.push(
         getItem(

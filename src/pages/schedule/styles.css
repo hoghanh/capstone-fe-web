@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    bottom: -22px;
+    bottom: -27px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -14,7 +14,6 @@
 .schedule-interview .events li:has(.ant-badge-status-error)~li:has(.ant-badge-status-error) {
     display: none;
 }
-
 
 .schedule-interview .events .ant-badge-status {
     width: 100%;
@@ -39,11 +38,10 @@
 
 .schedule-interview .calendar .ant-picker-cell {
     width: 65px;
-    height: 50px;
+    height: 65px;
 }
 
 .schedule-interview .calendar .ant-picker-cell-inner.ant-picker-calendar-date {
-
     position: absolute;
     left: 50%;
     top: 50%;

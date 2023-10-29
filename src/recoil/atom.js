@@ -161,3 +161,8 @@ export const authState = atom({
     exp: 0,
   },
 });
+
+export const appoinmentState = atom({
+  key: 'appointmentList',
+  default: [],
+});
