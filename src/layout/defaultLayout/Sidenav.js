@@ -29,12 +29,7 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/jobs-management'
-          className={
-            page === 'client/jobs-management' ||
-            page === 'client/jobs-management/post-job'
-              ? 'active'
-              : ''
-          }
+          className={page.startsWith('client/jobs-management') ? 'active' : ''}
         >
           <span className='icon'>
             <List />
@@ -96,7 +91,7 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/profile'
-          className={page === 'client/profile' ? 'active' : ''}
+          className={page === 'client/profile' || page === 'client/profile/edit' ? 'active' : ''}
         >
           <span className='icon'>
             <User />

@@ -1,25 +1,23 @@
 import { Layout } from 'antd';
 import React, { useEffect } from 'react';
-import ProposalsTracking from './ProposalsTracking';
 import { useRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
 import { proposalListState } from 'recoil/atom';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
+import { useParams } from 'react-router-dom';
+import ProposalsTracking from './ProposalsTracking';
 
 const Proposals = () => {
-  const [, setProposals] = useRecoilState(proposalListState);
-  const client= LocalStorageUtils.getItem('profile');
-
+  const [proposals, setProposals] = useRecoilState(proposalListState);
+  const { id } = useParams();
   useEffect(() => {
     getProposals();
   }, []);
-
   const getProposals = async () => {
-    get({ endpoint: `/proposal/client/${client.id}` })
+    get({ endpoint: `/proposal/job/${id}` })
       .then((response) => {
         const data = response.data;
-        let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
-        setProposals(proposals);
+        // let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
+        setProposals(data);
       })
       .catch((error) => {
         console.log(error);

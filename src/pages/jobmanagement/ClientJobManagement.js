@@ -8,21 +8,20 @@ import {
   Grid,
   Dropdown,
 } from 'antd';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import joblist from 'styles/joblist';
-import { get, remove } from 'utils/APICaller';
+import { get, put, remove } from 'utils/APICaller';
 import {
   CalculateDaysLeft,
   FormatVND,
   formatDate,
 } from 'components/formatter/format';
 import Loading from 'components/loading/loading';
-import { useRecoilValue } from 'recoil';
-import { clientProfile } from 'recoil/atom';
 import { File } from 'components/icon/Icon';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
+import { ModalPrimary } from 'components/Modal/Modal';
 
 const tabList = [
   {
@@ -35,7 +34,7 @@ const tabList = [
   },
 ];
 
-const items = [
+const hiringItems = [
   {
     key: 'edit',
     label: 'Chỉnh sửa',
@@ -51,14 +50,36 @@ const items = [
   },
 ];
 
+const closingItems = [
+  {
+    key: 'edit',
+    label: 'Chỉnh sửa',
+  },
+  {
+    key: 'extend',
+    label: 'Gia hạn bài viết 3 ngày',
+  },
+  {
+    key: 'delete',
+    label: 'Xoá',
+    danger: true,
+  },
+];
+
 const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
   const { sm, md, lg, xl } = useBreakpoint();
 
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTabKey, setActiveTabKey] = useState('hiring');
+  const [activeTabKey, setActiveTabKey] = useState('');
   const [filteredJobList, setFilteredJobList] = useState(jobList);
+  const [isModalDelete, setIsModalDelete] = useState(false);
+  const [isModalClose, setIsModalClose] = useState(false);
+  const [isModalExtend, setIsModalExtend] = useState(false);
+  const [itemIdToDelete, setItemIdToDelete] = useState(null);
+  const [itemIdToClose, setItemIdToClose] = useState(null);
+  const [itemIdToExtend, setItemIdToExtend] = useState(null);
 
   const profileUser = LocalStorageUtils.getItem('profile');
 
@@ -71,6 +92,7 @@ const ClientJobManagement = () => {
   useEffect(() => {
     setIsLoading(true);
     getJobList();
+    setActiveTabKey('hiring');
   }, []);
 
   useEffect(() => {
@@ -85,7 +107,7 @@ const ClientJobManagement = () => {
     });
 
     setFilteredJobList(filtered);
-  }, [isLoading, activeTabKey]);
+  }, [isLoading, activeTabKey, jobList]);
 
   function getJobList() {
     get({
@@ -112,13 +134,53 @@ const ClientJobManagement = () => {
     const checkAction = key.toString();
     if (checkAction.includes('delete')) {
       const itemId = checkAction.replace('delete_', '');
-      removeItem(itemId);
-    } else if (checkAction.includes('closing')) {
+      setItemIdToDelete(itemId);
+      setIsModalDelete(true);
+    } else if (checkAction.includes('close')) {
+      const itemId = checkAction.replace('close_', '');
+      setItemIdToClose(itemId);
+      setIsModalClose(true);
     } else if (checkAction.includes('edit')) {
       const itemId = checkAction.replace('edit_', '');
       navigate(`edit-job/${itemId}`);
+    } else if (checkAction.includes('extend')) {
+      const itemId = checkAction.replace('extend_', '');
+      setItemIdToExtend(itemId);
+      setIsModalExtend(true);
     }
   };
+
+  function closeItem(id) {
+    put({ endpoint: `/job/close/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Đã đóng bài viết thành công',
+        });
+        getJobList();
+        setActiveTabKey('closing');
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Xảy ra lỗi trong quá trình',
+        });
+      });
+  }
+
+  function extendItem(id) {
+    put({ endpoint: `/job/extend/${id}` })
+      .then((res) => {
+        notification.success({
+          message: 'Gia hạn bài viết 3 ngày thành công',
+        });
+        getJobList();
+        setActiveTabKey('hiring');
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Xảy ra lỗi trong quá trình',
+        });
+      });
+  }
 
   function removeItem(id) {
     remove({ endpoint: `/job/detail/${id}` })
@@ -126,7 +188,6 @@ const ClientJobManagement = () => {
         notification.success({
           message: 'Xoá bài viết thành công',
         });
-        getJobList();
       })
       .catch((error) => {
         notification.error({
@@ -134,6 +195,42 @@ const ClientJobManagement = () => {
         });
       });
   }
+
+  const handleDelete = () => {
+    if (itemIdToDelete) {
+      removeItem(itemIdToDelete);
+      setIsModalDelete(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (itemIdToClose) {
+      closeItem(itemIdToClose);
+      setIsModalClose(false);
+    }
+  };
+
+  const handleExtend = () => {
+    if (itemIdToExtend) {
+      extendItem(itemIdToExtend);
+      setIsModalExtend(false);
+    }
+  };
+
+  const handleCancelDeleteModal = () => {
+    setIsModalDelete(false);
+    setItemIdToDelete(null);
+  };
+
+  const handleCancelCloseModal = () => {
+    setIsModalClose(false);
+    setItemIdToClose(null);
+  };
+
+  const handleCancelExtendModal = () => {
+    setIsModalExtend(false);
+    setItemIdToExtend(null);
+  };
 
   return (
     <>
@@ -198,10 +295,16 @@ const ClientJobManagement = () => {
                 </div>
                 <Dropdown
                   menu={{
-                    items: items.map((item) => ({
-                      ...item,
-                      key: item.key + '_' + job.id.toString(),
-                    })),
+                    items:
+                      activeTabKey === 'hiring'
+                        ? hiringItems.map((item) => ({
+                            ...item,
+                            key: item.key + '_' + job.id.toString(),
+                          }))
+                        : closingItems.map((item) => ({
+                            ...item,
+                            key: item.key + '_' + job.id.toString(),
+                          })),
                     onClick,
                   }}
                 >
@@ -228,6 +331,38 @@ const ClientJobManagement = () => {
             </div>
           ))}
         </Card>
+        <ModalPrimary
+          title='Hoàn thành công việc'
+          open={isModalDelete}
+          bodyStyle={{ paddingTop: 20 }}
+          onOk={handleDelete}
+          onCancel={handleCancelDeleteModal}
+          okText='Xoá'
+          okType='danger'
+        >
+          Bạn có chắc muốn xoá công việc
+        </ModalPrimary>
+        <ModalPrimary
+          title='Đóng công việc'
+          open={isModalClose}
+          bodyStyle={{ paddingTop: 20 }}
+          onOk={handleClose}
+          onCancel={handleCancelCloseModal}
+          okText='Đóng công việc'
+          okType='danger'
+        >
+          Bạn có chắc muốn đóng công việc
+        </ModalPrimary>
+        <ModalPrimary
+          title='Gia hạn công việc'
+          open={isModalExtend}
+          bodyStyle={{ paddingTop: 20 }}
+          onOk={handleExtend}
+          onCancel={handleCancelExtendModal}
+          okText='Gia hạn công việc'
+        >
+          Bạn có chắc muốn gia hạn công việc
+        </ModalPrimary>
       </Layout.Content>
     </>
   );

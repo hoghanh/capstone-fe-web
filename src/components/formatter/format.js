@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const FormatVND = (number, currencySymbol = 'VNĐ') => {
   const formattedNumber = new Intl.NumberFormat('vi-VN').format(number);
   return `${formattedNumber} ${currencySymbol}`;
@@ -11,12 +13,6 @@ export const CalculateDaysLeft = (endDate) => {
   let remainTime;
   let output;
 
-  if (endDate >= currentDate) {
-    const timeDifference = endDate.getTime() - currentDate.getTime();
-    const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-    const hoursDifference = Math.floor(
-      (timeDifference % (1000 * 3600 * 24)) / (1000 * 3600)
-    );
 
     remainTime = {
       days: daysDifference,
@@ -60,4 +56,11 @@ export const formatDateTime = (dateInput) => {
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
   return `${formattedDate}`;
+export const checkIfIsUrl = (url) => {
+  try {
+    const parsedUrl = new URL(url);
+    return !!parsedUrl;
+  } catch (error) {
+    return false;
+  }
 };

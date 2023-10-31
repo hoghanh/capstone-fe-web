@@ -72,6 +72,13 @@ export const routes = [
     role: ['client'],
   },
   {
+    path: '/client/profile/edit',
+    element: lazy(() => import('pages/profile/Client/EditProfileClient')),
+    name: 'edit-profile',
+    title: 'Sửa hồ sơ cá nhân',
+    // role: ['client'],
+  },
+  {
     path: '/client/jobs-management',
     element: lazy(() => import('pages/jobmanagement/ClientJobManagement')),
     name: 'job-post-managment',
@@ -107,8 +114,14 @@ export const routes = [
   },
   {
     path: '/client/jobs-management/job-detail/:id',
-    element: lazy(() => import('pages/jobdetail/JobDetail')),
+    element: lazy(() => import('pages/jobdetail/Client/JobDetail')),
     name: 'jobdetail',
+    // role: ['client'],
+  },
+  {
+    path: '/client/jobs-management/job-detail/:id/proposals',
+    element: lazy(() => import('pages/jobdetail/Client/ProposalList')),
+    name: 'proposals',
     // role: ['client'],
   },
   {

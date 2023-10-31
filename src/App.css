@@ -34,12 +34,19 @@ body {
   font-weight: 700;
 }
 
-
 .ant-btn-default {
   color: #02ADFD;
   border-radius: 12px;
   border: 1px solid var(--artyclick-sky-blue, #02ADFD);
   background: var(--background, #FFFFFF);
+}
+
+.ant-btn-default.ant-btn-dangerous {
+  color: white;
+  border-radius: 25px;
+  border: 1px solid var(--Error, #EB4335);
+  background: var(--Error, #EB4335);
+  font-weight: 700;
 }
 
 .ant-btn-primary.ant-btn-lg {
@@ -196,7 +203,6 @@ body {
 }
 
 .modalPrimary .ant-modal-footer .ant-btn-default{
-  background-color: white;
   font-weight: 700;
   font-size: 16px;
   height: auto;
@@ -212,9 +218,7 @@ body {
 .modalPrimary .searchInput .ant-input-group-addon {
   height: 45px !important;
   border-radius: 8px !important;
-  border: 0.25px solid #000 !important;
   background: #FFF !important;
-  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
   align-items: center;
 }
 
@@ -284,8 +288,22 @@ body {
   border-radius: 25px;
   background: var(--Alice-Blue, #EDF6FF);
 }
+.modalAlert .ant-modal-footer .ant-btn-primary{
+  background-color: var(--Error, #EB4335) !important;
+  color: var(--White, #FFF) !important;
+}
+/* 
+.modalDisabled .ant-modal-footer .ant-btn-primary{
+  background-color: var(--Disabled, #7a7b7c) !important;
+  color: var(--White, #FFF) !important;
+} */
 
 
+
+.ant-collapse-content {
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
 
 /* responsive */
 
