@@ -7,8 +7,8 @@ import { authState, freelancerState, jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
 
 const JobDetail = () => {
-  const [jobDetail, setJobDetail] = useRecoilState(jobDetailState);
-  const [freelancer, setFreelancer] = useRecoilState(freelancerState);
+  const [, setJobDetail] = useRecoilState(jobDetailState);
+  const [, setFreelancer] = useRecoilState(freelancerState);
   const auth = useRecoilValue(authState);
   let { id } = useParams();
   useEffect(() => {

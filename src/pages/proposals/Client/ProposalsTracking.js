@@ -21,8 +21,7 @@ import { PaperClipOutlined } from "components/icon/Icon";
 import React, { useEffect, useState } from "react";
 import color from "styles/color";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { profileState, proposalListState, valueSearchState } from "recoil/atom";
-import { ButtonPrimary } from "components/customize/GlobalCustomize";
+import {  valueSearchState } from "recoil/atom";
 import { Link } from "react-router-dom";
 import { ModalPrimary } from "components/Modal/Modal";
 import { get, post, put } from "utils/APICaller";
@@ -415,12 +414,15 @@ const TabSent = ({ activeTabKey }) => {
   const [proposalList, setProposalList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(true);
+  const [ellipsis,] = useState(true);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [isModalAccept, setIsModalAccept] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize,] = useState(5)
+
   const client= LocalStorageUtils.getItem('profile');
 
 
@@ -428,9 +430,7 @@ const TabSent = ({ activeTabKey }) => {
     getProposals();
   }, []);
 
-
   useEffect(() => {
-    console.log('helo')
     const filtered = proposalList.filter((item) => {
       if (activeTabKey === "Sent") {
         return search === ""
@@ -481,6 +481,16 @@ const TabSent = ({ activeTabKey }) => {
     }
   };
 
+  const handleChange = (page) => {
+    setPage(page);
+  };
+
+  const getPagedList = () => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return list.slice(start, end);
+  };
+
   return (
     <Row>
       {list.length === 0 || list === null ? (
@@ -488,7 +498,7 @@ const TabSent = ({ activeTabKey }) => {
           <Empty />
         </Col>
       ) : (
-        list?.map((proposal, index) => {
+        getPagedList()?.map((proposal, index) => {
           return (
             <Col key={index} span={24}>
               <Row
@@ -618,34 +628,38 @@ const TabSent = ({ activeTabKey }) => {
               </Row>
               <CustomDivider />
               <Interview
-                  isModalInterview={isModalInterview}
-                  setIsModalInterview={setIsModalInterview}
-                  proposal={proposal}
-                />
-                <EditInterview
-                  isModalEdit={isModalEdit}
-                  setIsModalEdit={setIsModalEdit}
-                  proposal={proposal}
-                />
+                isModalInterview={isModalInterview}
+                setIsModalInterview={setIsModalInterview}
+                proposal={proposal}
+              />
+              <EditInterview
+                isModalEdit={isModalEdit}
+                setIsModalEdit={setIsModalEdit}
+                proposal={proposal}
+              />
               <DeclineInterview
                 isModalDecline={isModalDecline}
                 setIsModalDecline={setIsModalDecline}
               />
               <AcceptInterview
-                  isModalAccept={isModalAccept}
-                  setIsModalAccept={setIsModalAccept}
-                  proposal={proposal}
-                />
+                isModalAccept={isModalAccept}
+                setIsModalAccept={setIsModalAccept}
+                proposal={proposal}
+              />
             </Col>
           );
         })
       )}
-      {/* <Pagination
-            total={list.length}
-            onChange={onChange}
-            showSizeChanger={false}
-            style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
-          /> */}
+      <Col span={24}>
+         <Pagination
+          current={page}
+          total={list.length}
+          showSizeChanger={false}
+          pageSize={pageSize}
+          onChange={handleChange}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+        />
+      </Col>
     </Row>
   );
 };
@@ -686,7 +700,7 @@ const ProposalsTracking = () => {
       <Row gutter={[0, 10]}>
         <Col span={24}>
           <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
-            Đề xuất của tôi
+            Công việc của tôi
           </Typography.Title>
         </Col>
         <Col
