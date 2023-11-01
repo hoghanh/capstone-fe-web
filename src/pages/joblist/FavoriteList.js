@@ -91,7 +91,6 @@ const FavoriteList = () => {
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    console.log(auth)
     getFavorite();
   }, [subCateId, subCateName]);
 
