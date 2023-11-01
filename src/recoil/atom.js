@@ -6,8 +6,8 @@ export const categoriesNavbarState = atom({
   default: [],
 });
 
-export const proposalListState = atom({
-  key: 'proposalListState',
+export const applicationListState = atom({
+  key: 'applicationListState',
   default: [],
 });
 
@@ -76,7 +76,7 @@ const clients = {
   updateAt: '',
 };
 
-const proposals = {
+const applications = {
   id: '',
   description: '',
   fileAttach: '',
@@ -95,7 +95,7 @@ export const jobDetailState = atom({
     title: '',
     description: '',
     fileAttachment: '',
-    proposalSubmitDeadline: '',
+    applicationSubmitDeadline: '',
     lowestIncome: 0,
     highestIncome: 0,
     applied: 0,
@@ -105,7 +105,7 @@ export const jobDetailState = atom({
     clientId: 0,
     clients: clients,
     skills: skills,
-    proposals: proposals,
+    applications: applications,
   },
 });
 

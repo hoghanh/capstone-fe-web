@@ -4,7 +4,7 @@ import { PaperClipOutlined } from "components/icon/Icon";
 import React, { useState } from "react";
 import color from "styles/color";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { proposalListState, valueSearchState } from "recoil/atom";
+import { applicationListState, valueSearchState } from "recoil/atom";
 
 const tabListNoTitle = [
   {
@@ -22,9 +22,9 @@ const tabListNoTitle = [
 ];
 
 const TabSent = () => {
-  const proposalList = useRecoilValue(proposalListState);
+  const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = proposalList.filter((item) => {
+  const list = applicationList.filter((item) => {
     return search === ""
       ? item.status === "Sent"
       : item.jobs.title.toLowerCase().includes(search) &&
@@ -37,7 +37,7 @@ const TabSent = () => {
           <Empty />
         </Col>
       ) : (
-        list.map((proposal, index) => {
+        list.map((application, index) => {
           return (
             <Col key={index} span={24}>
               <Row
@@ -55,7 +55,7 @@ const TabSent = () => {
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
                           <Typography.Title level={4} style={{ margin: 0 }}>
-                            {proposal.jobs.title}
+                            {application.jobs.title}
                           </Typography.Title>
                         </Col>
                         <Col span={24}>
@@ -77,7 +77,7 @@ const TabSent = () => {
                       paddingRight: 10,
                     }}
                   >
-                    {proposal.description}
+                    {application.description}
                   </Typography.Text>
                 </Col>
                 <Col span={24}>
@@ -111,9 +111,9 @@ const TabSent = () => {
 };
 
 const TabApproved = () => {
-  const proposalList = useRecoilValue(proposalListState);
+  const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = proposalList.filter((item) => {
+  const list = applicationList.filter((item) => {
     return search === ""
       ? item.status === "approved"
       : item.jobs.title.toLowerCase().includes(search) &&
@@ -127,7 +127,7 @@ const TabApproved = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((proposal, index) => {
+          list.map((application, index) => {
             return (
               <Col key={index} span={24}>
                 <Row
@@ -145,7 +145,7 @@ const TabApproved = () => {
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs.title}
+                              {application.jobs.title}
                             </Typography.Title>
                           </Col>
                           <Col span={24}>
@@ -177,7 +177,7 @@ const TabApproved = () => {
                         paddingRight: 10,
                       }}
                     >
-                      {proposal.description}
+                      {application.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
@@ -220,9 +220,9 @@ const TabApproved = () => {
 };
 
 const TabDeclined = () => {
-  const proposalList = useRecoilValue(proposalListState);
+  const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = proposalList.filter((item) => {
+  const list = applicationList.filter((item) => {
     return search === ""
       ? item.status === "declined"
       : item.jobs.title.toLowerCase().includes(search) &&
@@ -236,7 +236,7 @@ const TabDeclined = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((proposal, index) => {
+          list.map((application, index) => {
             return (
               <Col key={index} span={24}>
                 <Row
@@ -254,7 +254,7 @@ const TabDeclined = () => {
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs.title}
+                              {application.jobs.title}
                             </Typography.Title>
                           </Col>
                           <Col span={24}>
@@ -276,7 +276,7 @@ const TabDeclined = () => {
                         paddingRight: 10,
                       }}
                     >
-                      {proposal.description}
+                      {application.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
@@ -316,7 +316,7 @@ const contentListNoTitle = {
   Declined: <TabDeclined />,
 };
 
-const ProposalsTracking = () => {
+const ApplicationsTracking = () => {
   const [activeTabKey2, setActiveTabKey2] = useState("Sent");
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
@@ -422,4 +422,4 @@ const ProposalsTracking = () => {
   );
 };
 
-export default ProposalsTracking;
+export default ApplicationsTracking;

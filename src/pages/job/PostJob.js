@@ -105,7 +105,7 @@ const PostJob = () => {
         title: values.title,
         description: values.description,
         fileAttachment: url,
-        proposalSubmitDeadline: values.deadline,
+        applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
         clientId: clientId,

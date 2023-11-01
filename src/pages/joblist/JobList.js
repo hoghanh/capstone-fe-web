@@ -325,7 +325,7 @@ const JobList = () => {
                     <Typography.Text level={4}>
                       Lương thoả thuận: {FormatVND(job.lowestIncome)} -{" "}
                       {FormatVND(job.highestIncome)} /{" "}
-                      {CalculateDaysLeft(job.proposalSubmitDeadline)}
+                      {CalculateDaysLeft(job.applicationSubmitDeadline)}
                     </Typography.Text>
                   </div>
                   <div

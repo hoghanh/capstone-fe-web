@@ -91,7 +91,6 @@ const FavoriteList = () => {
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    console.log(auth)
     getFavorite();
   }, [subCateId, subCateName]);
 
@@ -296,7 +295,7 @@ const FavoriteList = () => {
                       <Typography.Text level={4}>
                         Lương thoả thuận: {FormatVND(job.lowestIncome)} -{" "}
                         {FormatVND(job.highestIncome)} /{" "}
-                        {CalculateDaysLeft(job.proposalSubmitDeadline)}
+                        {CalculateDaysLeft(job.applicationSubmitDeadline)}
                       </Typography.Text>
                     </div>
                     <RemoveFavorite id={job.id} getFavorite={getFavorite} />

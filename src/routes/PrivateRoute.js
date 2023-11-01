@@ -4,7 +4,6 @@ import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 const PrivateRoute = ({ element: Element, allowedRoles }) => {
   const auth = useRecoilValue(authState);
-  console.log(auth)
 
   if (!auth.email) {
     return <Navigate to='/' />;

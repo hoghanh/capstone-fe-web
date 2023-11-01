@@ -2,22 +2,22 @@ import { Layout } from 'antd';
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
-import { proposalListState } from 'recoil/atom';
+import { applicationListState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
-import ProposalsTracking from './ProposalsTracking';
+import ApplicationsTracking from './ApplicationsTracking';
 
-const Proposals = () => {
-  const [proposals, setProposals] = useRecoilState(proposalListState);
+const Applications = () => {
+  const [applications, setApplications] = useRecoilState(applicationListState);
   const { id } = useParams();
   useEffect(() => {
-    getProposals();
+    getApplications();
   }, []);
-  const getProposals = async () => {
-    get({ endpoint: `/proposal/job/${id}` })
+  const getApplications = async () => {
+    get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         const data = response.data;
-        // let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
-        setProposals(data);
+        // let applications = data.filter((application) => application.jobId !== null && application.jobs !== null);
+        setApplications(data);
       })
       .catch((error) => {
         console.log(error);
@@ -27,7 +27,7 @@ const Proposals = () => {
   return (
     <>
       <Layout.Content className={'containerBody'} style={styles.containerBody}>
-        <ProposalsTracking />
+        <ApplicationsTracking />
       </Layout.Content>
     </>
   );
@@ -37,4 +37,4 @@ const styles = {
   containerBody: { maxWidth: 1080, margin: '40px auto 0' },
 };
 
-export default Proposals;
+export default Applications;

@@ -42,7 +42,7 @@ import { useParams } from "react-router-dom";
 
 const { Dragger } = Upload;
 
-const SubmitProposal = () => {
+const SubmitApplication = () => {
   const freelancer = useRecoilValue(freelancerState);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +58,7 @@ const SubmitProposal = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `proposals/${file.name}`);
+    const storageRef = ref(storage, `applications/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -74,18 +74,18 @@ const SubmitProposal = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          createProposal(event, downloadURL);
+          createApplication(event, downloadURL);
         });
       }
     );
   };
 
-  const createProposal = async (values, url) => {
+  const createApplication = async (values, url) => {
     const { description } = values;
     const time = new Date();
     console.log(url, description, time, freelancer.id, id);
     post({
-      endpoint: `/proposal`,
+      endpoint: `/application`,
       body: {
         fileAttach: url,
         description: description,
@@ -148,7 +148,7 @@ const SubmitProposal = () => {
       >
         <Form
           form={form}
-          name="submitProposal"
+          name="submitApplication"
           initialValues={{ remember: true }}
         >
           <Row gutter={[0, 10]}>
@@ -329,7 +329,7 @@ const HeaderArticle = () => {
                 <Typography.Text
                   style={{ ...styles.headerTextRight, marginLeft: 10 }}
                 >
-                  {CalculateDaysLeft(jobDetail.proposalSubmitDeadline)}
+                  {CalculateDaysLeft(jobDetail.applicationSubmitDeadline)}
                 </Typography.Text>
               </div>
             </CustomCol>
@@ -379,7 +379,7 @@ const HeaderArticle = () => {
                     <Typography.Text
                       style={{ ...styles.headerTextRight, marginLeft: 10 }}
                     >
-                      {CalculateDaysLeft(jobDetail.proposalSubmitDeadline)}
+                      {CalculateDaysLeft(jobDetail.applicationSubmitDeadline)}
                     </Typography.Text>
                   </div>
                 </Col>
@@ -609,7 +609,7 @@ const ArticleLeft = () => {
       <HeaderArticle
         lowestIncome={jobDetail.lowestIncome}
         highestIncome={jobDetail.highestIncome}
-        proposalSubmitDeadline={jobDetail.proposalSubmitDeadline}
+        applicationSubmitDeadline={jobDetail.applicationSubmitDeadline}
       />
       <CustomDivider />
       <DescriptionsArticle description={jobDetail.description} />
@@ -643,7 +643,7 @@ const InformationRight = ({ showModalLogin }) => {
           }}
         >
           {auth.email ? (
-            <SubmitProposal />
+            <SubmitApplication />
           ) : (
             <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
           )}
@@ -772,7 +772,7 @@ const Details = () => {
         }}
       >
         {auth.email ? (
-            <SubmitProposal />
+            <SubmitApplication />
           ) : (
             <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
           )}

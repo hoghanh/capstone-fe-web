@@ -104,7 +104,7 @@ const BodySection = () => {
   );
 };
 
-const Proposal = () => {
+const Application = () => {
   return (
     <>
       <CustomCard style={{ padding: 20 }}>
@@ -133,4 +133,4 @@ const styles = {
 };
 
 
-export default Proposal;
+export default Application;
