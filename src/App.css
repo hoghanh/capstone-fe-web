@@ -109,6 +109,7 @@ body {
 }
 
 ::-webkit-scrollbar {
+  width: 5px;
   height: 5px;
 }
 
@@ -121,7 +122,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #555 ;
 }
 
 
@@ -239,6 +240,11 @@ body {
   background: #FFF !important;
   box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
 }
+
+.modalPrimary .introText textarea{
+  height: auto !important;
+}
+.modalPrimary .introText
 
 .modalPrimary .introText .ant-input{
   border: none!important;

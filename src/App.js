@@ -4,7 +4,6 @@ import { gapi } from 'gapi-script';
 
 import Router from './routes/router';
 import useAuthActions from 'recoil/action';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import './App.css';
 import { CLIENTID } from 'config';
 import Loading from 'components/loading/loading';

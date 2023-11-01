@@ -490,7 +490,7 @@ const ProposalsTracking = () => {
       <Row gutter={[0, 10]}>
         <Col span={24}>
           <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
-            Đề xuất của tôi
+            Công việc của tôi
           </Typography.Title>
         </Col>
         <Col
