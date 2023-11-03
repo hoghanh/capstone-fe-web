@@ -9,6 +9,7 @@ import PrivateRoute from './PrivateRoute';
 import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 import Loading from 'components/loading/loading';
+import PageNotFound from 'pages/404/PageNotFound';
 
 export const routes = [
   {
@@ -44,7 +45,7 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
     title: 'Chi tiết dự án',
-  }, 
+  },
   {
     path: '/jobs/job-detail/:id',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
@@ -58,11 +59,17 @@ export const routes = [
     role: ['freelancer'],
   },
   {
-    //để tạm thời
     path: '/client',
-    element: lazy(() => import('layout/defaultLayout/ClientLayout')),
+    element: lazy(() => import('pages/dashboard/Dashboard')),
     name: 'client',
     title: <HomeFilled />,
+    role: ['client'],
+  },
+  {
+    path: '/client/schedule',
+    element: lazy(() => import('pages/schedule/InterviewSchedule')),
+    name: 'schedule',
+    title: 'Lịch phỏng vấn',
     role: ['client'],
   },
   {
@@ -151,6 +158,12 @@ export const routes = [
     element: lazy(() => import('pages/applications/Client/Applications')),
     name: 'applications',
     title: 'Danh sách ứng tuyển',
+  },
+  {
+    path: '/client/billing',
+    element: lazy(() => import('pages/billing/Billing')),
+    name: 'billing',
+    title: 'Hoá đơn',
     // role: ['client'],
   },
 ];
@@ -189,6 +202,7 @@ const Router = () => {
             />
           </Route>
         ))}
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </Suspense>
   );

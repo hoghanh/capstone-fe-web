@@ -8,6 +8,7 @@ export const FormatVND = (number, currencySymbol = 'VNĐ') => {
 export const CalculateDaysLeft = (endDate) => {
   const currentDate = moment();
   endDate = moment(endDate);
+  endDate.setHours(endDate.getHours() - 7);
   let output;
 
   if (endDate.isSameOrAfter(currentDate)) {
@@ -22,23 +23,36 @@ export const CalculateDaysLeft = (endDate) => {
     } else {
       output = 'Sắp hết hạn';
     }
-  } else {
-    const duration = moment.duration(currentDate.diff(endDate));
-    const daysDifference = duration.days();
-
-    output = 'Quá hạn ' + daysDifference + ' ngày';
+    return output;
   }
-
-  return output;
 };
 
 export const formatDate = (dateInput) => {
   const date = new Date(dateInput);
   const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
 
   return `${day}/${month}/${year}`;
+};
+
+export const formatDateTime = (dateInput) => {
+  const date = new Date(dateInput);
+  date.setHours(date.getHours() - 7);
+
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+
+  const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(date);
+
+  return `${formattedDate}`;
 };
 
 export const checkIfIsUrl = (url) => {

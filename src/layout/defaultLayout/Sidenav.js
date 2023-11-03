@@ -16,10 +16,7 @@ function Sidenav({ color }) {
     {
       key: 'dashboard-client',
       label: (
-        <Link
-          to='/client/dashboard'
-          className={page === 'client/dashboard' ? 'active' : ''}
-        >
+        <Link to='/client' className={page === 'client' ? 'active' : ''}>
           <span className='icon'>
             <Dashboard />
           </span>
@@ -46,7 +43,7 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/applications'
-          className={page === 'client/applications' || page === '/client/applications/freelancer-profile' ? 'active' : ''}
+          className={page.startsWith('client/applications') ? 'active' : ''}
         >
           <span className='icon'>
             <Documents />
@@ -60,7 +57,7 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/schedule'
-          className={page === 'client/billing' ? 'active' : ''}
+          className={page === 'client/schedule' ? 'active' : ''}
         >
           <span className='icon'>
             <Timer />
