@@ -258,7 +258,10 @@ const EditJob = () => {
     <Loading />
   ) : (
     <>
-      <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
+      <Layout.Content
+        className='edit-job'
+        style={{ maxWidth: 1080, margin: '0 auto' }}
+      >
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}

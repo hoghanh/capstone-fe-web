@@ -580,3 +580,45 @@ export const Toggler = ({ size = 24, color = '#828282' }) => {
     </svg>
   );
 };
+
+export const ArrowLeft = ({ size = 31, color = '#828282' }) => {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width={size}
+      height={size}
+      viewBox='0 0 31 30'
+      fill='none'
+    >
+      <path
+        d='M18.6035 21.2068L12.3966 14.9999L18.6035 8.79297'
+        stroke='black'
+        strokeWidth='2'
+        strokeMiterlimit='10'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  );
+};
+
+export const ArrowRight = ({ size = 31, color = '#828282' }) => {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width={size}
+      height={size}
+      viewBox='0 0 31 30'
+      fill='none'
+    >
+      <path
+        d='M12.3965 8.79421L18.6034 15.0011L12.3965 21.208'
+        stroke='black'
+        strokeWidth='2'
+        strokeMiterlimit='10'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  );
+};

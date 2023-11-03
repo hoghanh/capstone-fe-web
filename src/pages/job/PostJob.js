@@ -163,7 +163,10 @@ const PostJob = () => {
 
   return (
     <>
-      <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
+      <Layout.Content
+        className='post-job'
+        style={{ maxWidth: 1080, margin: '0 auto' }}
+      >
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}

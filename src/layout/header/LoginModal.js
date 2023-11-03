@@ -23,7 +23,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         const data = response.data;
         setInformationUser(data);
         saveProfile(data);
-        navigate('/client/profile');
+        navigate('/client');
       })
       .catch((error) => {
         console.log(error);

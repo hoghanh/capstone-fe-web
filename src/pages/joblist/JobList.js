@@ -221,7 +221,7 @@ const JobList = () => {
                   {job.clients?.accounts?.name.toUpperCase()}
                 </Typography.Title>
               </div>
-              <div style={{ padding: 10, overflow: 'auto' }}>
+              <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
                 <div
                   style={{
                     display: ' flex',
