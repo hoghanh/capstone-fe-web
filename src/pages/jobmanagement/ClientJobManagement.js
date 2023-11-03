@@ -68,7 +68,7 @@ const closingItems = [
 
 const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
-  const { sm, md, lg, xl } = useBreakpoint();
+  const { md } = useBreakpoint();
 
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,9 +99,9 @@ const ClientJobManagement = () => {
     const currentTime = new Date().getTime();
     const filtered = jobList.filter((job) => {
       if (activeTabKey === 'hiring') {
-        return new Date(job.proposalSubmitDeadline).getTime() > currentTime;
+        return new Date(job.applicationSubmitDeadline).getTime() > currentTime;
       } else if (activeTabKey === 'closing') {
-        return new Date(job.proposalSubmitDeadline).getTime() <= currentTime;
+        return new Date(job.applicationSubmitDeadline).getTime() <= currentTime;
       }
       return true;
     });
@@ -114,6 +114,7 @@ const ClientJobManagement = () => {
       endpoint: `/job/client/${profileUser.id}`,
     })
       .then((res) => {
+        console.log(res.data)
         const filtered = res.data.filter((job) => {
           return job.status === true;
         });
@@ -313,7 +314,7 @@ const ClientJobManagement = () => {
               </div>
               <Typography.Text level={4}>
                 Ngày đăng: {formatDate(job.createdAt)} -{' '}
-                {CalculateDaysLeft(job.proposalSubmitDeadline)}
+                {CalculateDaysLeft(job.applicationSubmitDeadline)}
               </Typography.Text>
               <br />
               <Typography.Text

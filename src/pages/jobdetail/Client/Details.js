@@ -86,7 +86,7 @@ const HeaderArticle = () => {
               <div>
                 <ClockCircleFilled />
                 <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
-                  {CalculateDaysLeft(jobDetail.proposalSubmitDeadline)}
+                  {CalculateDaysLeft(jobDetail.applicationSubmitDeadline)}
                 </Typography.Text>
               </div>
             </CustomCol>
@@ -120,7 +120,7 @@ const HeaderArticle = () => {
                   <div>
                     <ClockCircleFilled />
                     <Typography.Text style={{ ...styles.headerTextRight, marginLeft: 10 }}>
-                      {CalculateDaysLeft(jobDetail.proposalSubmitDeadline)}
+                      {CalculateDaysLeft(jobDetail.applicationSubmitDeadline)}
                     </Typography.Text>
                   </div>
                 </Col>
@@ -241,7 +241,7 @@ const ArticleLeft = () => {
       <HeaderArticle
         lowestIncome={jobDetail.lowestIncome}
         highestIncome={jobDetail.highestIncome}
-        proposalSubmitDeadline={jobDetail.proposalSubmitDeadline}
+        applicationSubmitDeadline={jobDetail.applicationSubmitDeadline}
       />
       <CustomDivider />
       <DescriptionsArticle description={jobDetail.description} />

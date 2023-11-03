@@ -67,7 +67,7 @@ const BodySection = () => {
   );
 };
 
-const ProposalsStatus = () => {
+const ApplicationsStatus = () => {
   return (
     <>
       <CustomCard style={{ padding: 0 }}>
@@ -92,4 +92,4 @@ const styles = {
   },
 };
 
-export default ProposalsStatus;
+export default ApplicationsStatus;

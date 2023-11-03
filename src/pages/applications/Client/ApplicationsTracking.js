@@ -69,7 +69,7 @@ const interviewItems = [
   },
 ];
 
-const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
+const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
   const [form] = Form.useForm();
   const [timeBooking, setTimeBooking] = useState("");
 
@@ -79,9 +79,9 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
     setTimeBooking(dateString);
   };
 
-  const interviewProposal = () => {
+  const interviewApplication = () => {
     put({
-      endpoint: `/proposal/interview/${proposal.jobId}`,
+      endpoint: `/application/interview/${application.jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -107,11 +107,11 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
         link,
         time: timeBooking,
         clientId: clientId,
-        proposalId: proposal.id,
+        applicationId: application.id,
       },
     })
       .then((res) => {
-        interviewProposal();
+        interviewApplication();
       })
       .catch((error) => {
         notification.error({
@@ -208,7 +208,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
   );
 };
 
-const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
+const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
   const [form] = Form.useForm();
   const [timeBooking, setTimeBooking] = useState("");
   const clientId = LocalStorageUtils.getItem("profile").id;
@@ -217,9 +217,9 @@ const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
     setTimeBooking(dateString);
   };
 
-  const interviewProposal = () => {
+  const interviewApplication = () => {
     put({
-      endpoint: `/proposal/interview/${proposal.id}`,
+      endpoint: `/application/interview/${application.id}`,
     })
       .then((res) => {
         notification.success({
@@ -242,11 +242,11 @@ const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
         link: "https://meet.google.com/xye-stsk-ghs",
         time: timeBooking,
         clientId: clientId,
-        proposalId: proposal.id,
+        applicationId: application.id,
       },
     })
       .then((res) => {
-        interviewProposal();
+        interviewApplication();
       })
       .catch((error) => {
         notification.error({
@@ -339,11 +339,11 @@ const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
   );
 };
 
-const DeclineInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
+const DeclineInterview = ({ isModalDecline, setIsModalDecline, application }) => {
   
   const declineInterview = () => {
     put({
-      endpoint: `/proposal/decline/${proposal.jobId}`,
+      endpoint: `/application/decline/${application.jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -383,7 +383,7 @@ const DeclineInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
   );
 };
 
-const AcceptInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
+const AcceptInterview = ({ isModalDecline, setIsModalDecline, application }) => {
 
   const handleOk = () => {
     setIsModalDecline(false);
@@ -411,7 +411,7 @@ const AcceptInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
 };
 
 const TabSent = ({ activeTabKey }) => {
-  const [proposalList, setProposalList] = useState([]);
+  const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
   const [ellipsis,] = useState(true);
@@ -427,11 +427,11 @@ const TabSent = ({ activeTabKey }) => {
 
 
   useEffect(() => {
-    getProposals();
+    getApplications();
   }, []);
 
   useEffect(() => {
-    const filtered = proposalList.filter((item) => {
+    const filtered = applicationList.filter((item) => {
       if (activeTabKey === "Sent") {
         return search === ""
           ? item.status === "Sent"
@@ -446,14 +446,14 @@ const TabSent = ({ activeTabKey }) => {
       return true;
     });
     setList(filtered);
-  }, [search, activeTabKey, proposalList]);
+  }, [search, activeTabKey, applicationList]);
 
-  const getProposals = async () => {
-    get({ endpoint: `/proposal/client/${client.id}` })
+  const getApplications = async () => {
+    get({ endpoint: `/application/client/${client.id}` })
       .then((response) => {
         const data = response.data;
-        let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
-        setProposalList(proposals);
+        let applications = data.filter((application) => application.jobId !== null && application.jobs !== null);
+        setApplicationList(applications);
       })
       .catch((error) => {
         console.log(error);
@@ -498,7 +498,7 @@ const TabSent = ({ activeTabKey }) => {
           <Empty />
         </Col>
       ) : (
-        getPagedList()?.map((proposal, index) => {
+        getPagedList()?.map((application, index) => {
           return (
             <Col key={index} span={24}>
               <Row
@@ -526,7 +526,7 @@ const TabSent = ({ activeTabKey }) => {
                         >
                           <Image
                             width={72}
-                            src={proposal?.freelancers.accounts.image}
+                            src={application?.freelancers.accounts.image}
                             alt="Apofoitisi logo"
                             preview={true}
                             style={{ borderRadius: "50%" }}
@@ -535,12 +535,12 @@ const TabSent = ({ activeTabKey }) => {
                         <CustomCol>
                           <Row gutter={10}>
                             <Col>
-                              <Link to="/client/proposals/freelancer-profile">
+                              <Link to="/client/applications/freelancer-profile">
                                 <Typography.Title
                                   level={4}
                                   style={{ margin: 0 }}
                                 >
-                                  {proposal?.freelancers.accounts.name}
+                                  {application?.freelancers.accounts.name}
                                 </Typography.Title>
                               </Link>
                             </Col>
@@ -555,11 +555,11 @@ const TabSent = ({ activeTabKey }) => {
                             activeTabKey === "Sent"
                               ? sentItems.map((item) => ({
                                   ...item,
-                                  key: item.key + "_" + proposal.id.toString(),
+                                  key: item.key + "_" + application.id.toString(),
                                 }))
                               : interviewItems.map((item) => ({
                                   ...item,
-                                  key: item.key + "_" + proposal.id.toString(),
+                                  key: item.key + "_" + application.id.toString(),
                                 })),
                           onClick,
                         }}
@@ -574,9 +574,9 @@ const TabSent = ({ activeTabKey }) => {
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Link to={`/jobs/job-detail/${proposal.id}`}>
+                          <Link to={`/jobs/job-detail/${application.id}`}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs?.title}
+                              {application.jobs?.title}
                             </Typography.Title>
                           </Link>
                         </Col>
@@ -586,7 +586,7 @@ const TabSent = ({ activeTabKey }) => {
                 </Col>
 
                 <Col span={24}>
-                  <Link to={`/jobs/job-detail/${proposal?.id}`}>
+                  <Link to={`/jobs/job-detail/${application?.id}`}>
                     <Typography.Paragraph
                       style={{
                         margin: 0,
@@ -601,7 +601,7 @@ const TabSent = ({ activeTabKey }) => {
                           : false
                       }
                     >
-                      {proposal.description}
+                      {application.description}
                     </Typography.Paragraph>
                   </Link>
                 </Col>
@@ -630,12 +630,12 @@ const TabSent = ({ activeTabKey }) => {
               <Interview
                 isModalInterview={isModalInterview}
                 setIsModalInterview={setIsModalInterview}
-                proposal={proposal}
+                application={application}
               />
               <EditInterview
                 isModalEdit={isModalEdit}
                 setIsModalEdit={setIsModalEdit}
-                proposal={proposal}
+                application={application}
               />
               <DeclineInterview
                 isModalDecline={isModalDecline}
@@ -644,7 +644,7 @@ const TabSent = ({ activeTabKey }) => {
               <AcceptInterview
                 isModalAccept={isModalAccept}
                 setIsModalAccept={setIsModalAccept}
-                proposal={proposal}
+                application={application}
               />
             </Col>
           );
@@ -664,7 +664,7 @@ const TabSent = ({ activeTabKey }) => {
   );
 };
 
-const ProposalsTracking = () => {
+const ApplicationsTracking = () => {
   const [activeTabKey, setActiveTabKey] = useState("Sent");
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
@@ -772,4 +772,4 @@ const ProposalsTracking = () => {
   );
 };
 
-export default ProposalsTracking;
+export default ApplicationsTracking;

@@ -1,7 +1,7 @@
 import {  Layout } from 'antd'
 import React, { useEffect, useState } from 'react'
 import JobStatus from './JobStatus'
-import ProposalsStatus from './ProposalsStatus'
+import ApplicationsStatus from './ApplicationsStatus'
 
 
 
@@ -12,7 +12,7 @@ const JobManagement = () => {
     <>
     <Layout.Content className={'containerBody'} style={styles.containerBody}>
       <JobStatus/>
-      <ProposalsStatus/>
+      <ApplicationsStatus/>
     </Layout.Content>
   </>
   )

@@ -132,7 +132,7 @@ const EditJob = () => {
         title: values.title,
         description: values.description,
         fileAttachment: url,
-        proposalSubmitDeadline: values.deadline,
+        applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
         clientId: clientId,
@@ -196,7 +196,7 @@ const EditJob = () => {
             from: res.data.lowestIncome,
             to: res.data.highestIncome,
           },
-          deadline: moment(res.data.proposalSubmitDeadline),
+          deadline: moment(res.data.applicationSubmitDeadline),
         });
         setIsLoading(false);
       })

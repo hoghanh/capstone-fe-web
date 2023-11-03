@@ -18,7 +18,7 @@ const HeaderSection = () => {
         </Typography.Title>
       </CustomCol>
       <CustomCol>
-        <Link to={`/client/jobs-management/job-detail/${id}/proposals`}>
+        <Link to={`/client/jobs-management/job-detail/${id}/applications`}>
           <Typography.Title level={3} style={{ color: color.colorPrimary, margin: 0  }}>
             Xem chi tiết
           </Typography.Title>
@@ -37,21 +37,21 @@ const BodySection = () => {
   const {id} = useParams();
   console.log(id)
   useEffect(() => {
-    getProposals();
+    getApplications();
   }, [])
   
   // console.log(countTotal)
-  const getProposals = async () => {
-    await get({ endpoint: `/proposal/job/${id}` })
+  const getApplications = async () => {
+    await get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         const data = response.data;
-        let proposals = data.filter(proposal => proposal.jobId !== null && proposal.jobs !== null)
-        setCountTotal(proposals.length);
-        let listSent = proposals.filter(proposal => proposal.status !== null && proposal.status ==='Sent')
+        let applications = data.filter(application => application.jobId !== null && application.jobs !== null)
+        setCountTotal(applications.length);
+        let listSent = applications.filter(application => application.status !== null && application.status ==='Sent')
         setCountSent(listSent.length);
-        let listApproved = proposals.filter(proposal => proposal.status !== null && proposal.status ==='approved')
+        let listApproved = applications.filter(application => application.status !== null && application.status ==='approved')
         setCountApproved(listApproved.length);
-        let listDeclined = proposals.filter(proposal => proposal.status !== null && proposal.status ==='declined')
+        let listDeclined = applications.filter(application => application.status !== null && application.status ==='declined')
         setCountDeclined(listDeclined.length);
       })
       .catch((error) => {
@@ -113,7 +113,7 @@ const BodySection = () => {
   );
 };
 
-const Proposals = () => {
+const Applications = () => {
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 20 }}>
@@ -138,4 +138,4 @@ const styles = {
   },
 };
 
-export default Proposals;
+export default Applications;

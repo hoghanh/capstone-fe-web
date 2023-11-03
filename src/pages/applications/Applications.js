@@ -1,15 +1,15 @@
 import {  Layout } from 'antd'
 import React, { useEffect } from 'react'
-import ProposalsTracking from './ProposalsTracking'
+import ApplicationsTracking from './ApplicationsTracking'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { get } from 'utils/APICaller';
-import { authState, proposalListState } from 'recoil/atom';
+import { authState, applicationListState } from 'recoil/atom';
 
 
 
 
-const Proposals = () => {
-  const [, setProposals] = useRecoilState(proposalListState);
+const Applications = () => {
+  const [, setApplications] = useRecoilState(applicationListState);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
@@ -20,19 +20,19 @@ const Proposals = () => {
     await get({ endpoint: `/freelancer/profile/${auth.id}` })
       .then((response) => {
         const data = response.data;
-        getProposals(data.id);
+        getApplications(data.id);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const getProposals = async (freelancerId) => {
-    await get({ endpoint: `/proposal/freelancer/${freelancerId}` })
+  const getApplications = async (freelancerId) => {
+    await get({ endpoint: `/application/freelancer/${freelancerId}` })
       .then((response) => {
         const data = response.data;
-        let proposals = data.filter(proposal => proposal.jobId !== null && proposal.jobs !== null)
-        setProposals(proposals);
+        let applications = data.filter(application => application.jobId !== null && application.jobs !== null)
+        setApplications(applications);
       })
       .catch((error) => {
         console.log(error);
@@ -44,7 +44,7 @@ const Proposals = () => {
   return (
     <>
     <Layout.Content className={'containerBody'} style={styles.containerBody}>
-      <ProposalsTracking/>
+      <ApplicationsTracking/>
     </Layout.Content>
   </>
   )
@@ -56,4 +56,4 @@ const styles = {
 
 
 
-export default Proposals;
+export default Applications;

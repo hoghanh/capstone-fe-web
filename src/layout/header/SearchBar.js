@@ -35,7 +35,7 @@ const onFail = () => {
 const items = [
   {
     key: "1",
-    label: <Link to="/proposals"><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
+    label: <Link to="/applications"><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
     icon: <Manage size={14} color="#222222"/>,
 
   },
@@ -45,12 +45,12 @@ const items = [
     icon: <User size={14} color="#222222"/>,
   },
   {
-    key: "3",
+    key: "4",
     label: <Link to="/favorite"><Typography.Text style={{marginLeft: 10}}>Danh sách yêu thích</Typography.Text></Link>,
     icon: <Heart size={14}/>
   },
   {
-    key: "4",
+    key: "3",
     label: (
       <GoogleLogout
         clientId={CLIENTID}
