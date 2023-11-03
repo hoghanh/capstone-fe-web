@@ -6,7 +6,6 @@ import { Link, useParams } from 'react-router-dom';
 import color from 'styles/color';
 import { get } from 'utils/APICaller';
 
-
 // Header section
 const HeaderSection = () => {
   const { id } = useParams();
@@ -14,12 +13,15 @@ const HeaderSection = () => {
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <CustomCol>
         <Typography.Title level={3} style={styles.titleHeader}>
-          Đề xuất
+          Danh sách ứng tuyển
         </Typography.Title>
       </CustomCol>
       <CustomCol>
         <Link to={`/client/jobs-management/job-detail/${id}/applications`}>
-          <Typography.Title level={3} style={{ color: color.colorPrimary, margin: 0  }}>
+          <Typography.Title
+            level={3}
+            style={{ color: color.colorPrimary, margin: 0 }}
+          >
             Xem chi tiết
           </Typography.Title>
         </Link>
@@ -34,24 +36,36 @@ const BodySection = () => {
   const [countSent, setCountSent] = useState(0);
   const [countApproved, setCountApproved] = useState(0);
   const [countDeclined, setCountDeclined] = useState(0);
-  const {id} = useParams();
-  console.log(id)
+  const { id } = useParams();
+  console.log(id);
   useEffect(() => {
     getApplications();
-  }, [])
-  
+  }, []);
+
   // console.log(countTotal)
   const getApplications = async () => {
     await get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         const data = response.data;
-        let applications = data.filter(application => application.jobId !== null && application.jobs !== null)
+        let applications = data.filter(
+          (application) =>
+            application.jobId !== null && application.jobs !== null
+        );
         setCountTotal(applications.length);
-        let listSent = applications.filter(application => application.status !== null && application.status ==='Sent')
+        let listSent = applications.filter(
+          (application) =>
+            application.status !== null && application.status === 'Sent'
+        );
         setCountSent(listSent.length);
-        let listApproved = applications.filter(application => application.status !== null && application.status ==='approved')
+        let listApproved = applications.filter(
+          (application) =>
+            application.status !== null && application.status === 'approved'
+        );
         setCountApproved(listApproved.length);
-        let listDeclined = applications.filter(application => application.status !== null && application.status ==='declined')
+        let listDeclined = applications.filter(
+          (application) =>
+            application.status !== null && application.status === 'declined'
+        );
         setCountDeclined(listDeclined.length);
       })
       .catch((error) => {
@@ -60,51 +74,119 @@ const BodySection = () => {
   };
 
   return (
-    <Row justify={'space-between'} gutter={[40,40]} style={{ padding: '5px 20px 20px' }}>
-      <Col span={24} sm={{span: 6}}>
-       <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray, minHeight: 155 }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column'}}>
+    <Row
+      justify={'space-between'}
+      gutter={[40, 40]}
+      style={{ padding: '5px 20px 20px' }}
+    >
+      <Col span={24} sm={{ span: 6 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+            minHeight: 155,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
             <Col>
               <User color={color.colorBlack} size={'50'} />
             </Col>
             <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>{countTotal} người phù hợp với mô tả công việc</Typography.Title>
-            </Col>
-          </Row>
-       </Card>
-      </Col>
-      <Col span={24} sm={{span: 6}}>
-        <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray, minHeight: 155 }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column' }}>
-            <Col>
-              <User color={color.colorBlack} size={'50'} />
-            </Col>
-            <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>{countSent} người đã ứng tuyển</Typography.Title>
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-      <Col span={24} sm={{span: 6}}>
-        <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray, minHeight: 155 }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column' }}>
-            <Col>
-              <User color={color.colorBlack} size={'50'} />
-            </Col>
-            <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>{countDeclined} người được phỏng vấn</Typography.Title>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                {countTotal} người phù hợp với mô tả công việc
+              </Typography.Title>
             </Col>
           </Row>
         </Card>
       </Col>
-      <Col span={24} sm={{span: 6}}>
-        <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray, minHeight: 155 }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column' }}>
+      <Col span={24} sm={{ span: 6 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+            minHeight: 155,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
             <Col>
               <User color={color.colorBlack} size={'50'} />
             </Col>
             <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>{countApproved} người được nhận việc</Typography.Title>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                {countSent} người đã ứng tuyển
+              </Typography.Title>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+      <Col span={24} sm={{ span: 6 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+            minHeight: 155,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
+            <Col>
+              <User color={color.colorBlack} size={'50'} />
+            </Col>
+            <Col>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                {countDeclined} người được phỏng vấn
+              </Typography.Title>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+      <Col span={24} sm={{ span: 6 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+            minHeight: 155,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
+            <Col>
+              <User color={color.colorBlack} size={'50'} />
+            </Col>
+            <Col>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                {countApproved} người được nhận việc
+              </Typography.Title>
             </Col>
           </Row>
         </Card>

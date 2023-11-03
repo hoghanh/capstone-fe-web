@@ -114,11 +114,11 @@ const ClientJobManagement = () => {
       endpoint: `/job/client/${profileUser.id}`,
     })
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         const filtered = res.data.filter((job) => {
           return job.status === true;
         });
-        setJobList(filtered);
+        setJobList(res.data);
         setFilteredJobList(filtered);
         setTimeout(() => {
           setIsLoading(false);

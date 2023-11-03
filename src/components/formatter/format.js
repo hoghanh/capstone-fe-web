@@ -8,7 +8,8 @@ export const FormatVND = (number, currencySymbol = 'VNĐ') => {
 export const CalculateDaysLeft = (endDate) => {
   const currentDate = moment();
   endDate = moment(endDate);
-  endDate.setHours(endDate.getHours() - 7);
+
+  endDate.setHours(endDate.moment().hour() - 7);
   let output;
 
   if (endDate.isSameOrAfter(currentDate)) {

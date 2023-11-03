@@ -1,9 +1,8 @@
 import { Card, Col, Row, Typography } from 'antd';
-import { CustomCard, CustomCol, CustomRow } from 'components/customize/Layout';
+import { CustomCard, CustomCol } from 'components/customize/Layout';
 import { File } from 'components/icon/Icon';
 import React from 'react';
 import color from 'styles/color';
-
 
 // Header section
 const HeaderSection = () => {
@@ -11,11 +10,14 @@ const HeaderSection = () => {
     <Row justify={'space-between'} style={{ padding: 25 }}>
       <CustomCol>
         <Typography.Title level={3} style={styles.titleHeader}>
-          Đề xuất
+          Danh sách ứng tuyển
         </Typography.Title>
       </CustomCol>
       <CustomCol>
-        <Typography.Title level={3} style={{ color: color.colorPrimary, margin: 0  }}>
+        <Typography.Title
+          level={3}
+          style={{ color: color.colorPrimary, margin: 0 }}
+        >
           Coi chi tiết
         </Typography.Title>
       </CustomCol>
@@ -26,39 +28,88 @@ const HeaderSection = () => {
 //Body Section
 const BodySection = () => {
   return (
-    <Row justify={'space-between'} gutter={[40,40]} style={{ padding: '5px 20px 20px' }}>
-      <Col span={24} sm={{span: 8}}>
-       <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column'}}>
+    <Row
+      justify={'space-between'}
+      gutter={[40, 40]}
+      style={{ padding: '5px 20px 20px' }}
+    >
+      <Col span={24} sm={{ span: 8 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
             <Col>
               <File />
             </Col>
             <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>Đề xuất bị từ chối</Typography.Title>
-            </Col>
-          </Row>
-       </Card>
-      </Col>
-      <Col span={24} sm={{span: 8}}>
-        <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column' }}>
-            <Col>
-              <File />
-            </Col>
-            <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>6 đề xuất đã được gửi đi</Typography.Title>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                Thư ứng tuyển bị từ chối
+              </Typography.Title>
             </Col>
           </Row>
         </Card>
       </Col>
-      <Col span={24} sm={{span: 8}}>
-        <Card style={{ padding: 20, borderRadius: 20, backgroundColor: color.colorLightGray }}>
-          <Row align={'middle'} gutter={[0,10]} style={{ flexDirection: 'column' }}>
+      <Col span={24} sm={{ span: 8 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
             <Col>
               <File />
             </Col>
             <Col>
-              <Typography.Title level={5} style={{margin: 0, textAlign:'center'}}>3 đề xuất vào phòng phỏng vấn</Typography.Title>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                6 thư ứng tuyển đã được gửi đi
+              </Typography.Title>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+      <Col span={24} sm={{ span: 8 }}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
+            <Col>
+              <File />
+            </Col>
+            <Col>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                3 thư ứng tuyển vào phòng phỏng vấn
+              </Typography.Title>
             </Col>
           </Row>
         </Card>

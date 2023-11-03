@@ -48,7 +48,7 @@ function Sidenav({ color }) {
           <span className='icon'>
             <Documents />
           </span>
-          <span className='label'>Đề xuất</span>
+          <span className='label'>Danh sách ứng tuyển</span>
         </Link>
       ),
     },
@@ -85,7 +85,11 @@ function Sidenav({ color }) {
       label: (
         <Link
           to='/client/profile'
-          className={page === 'client/profile' || page === 'client/profile/edit' ? 'active' : ''}
+          className={
+            page === 'client/profile' || page === 'client/profile/edit'
+              ? 'active'
+              : ''
+          }
         >
           <span className='icon'>
             <User />
