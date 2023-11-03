@@ -65,22 +65,44 @@ const InterviewSchedule = () => {
 
   const location = useLocation();
 
-  const onClick = (e) => {
-    console.log('click ', e);
+  const onClick = (e, time, applicationId) => {
+    //todo: gọi api để check xem application đã được approve hay decline chưa, nếu chưa thì xử lý start/ end else thì không cần xử lý,
     const checkAction = e.key.toString();
+    const appoinmentTime = new Date(time);
+    const today = new Date();
+    const timeDifference = appoinmentTime - today;
+
     if (checkAction.includes('start')) {
       const itemId = checkAction.replace('start_', '');
-      approveProposal(itemId);
+      if (timeDifference < 0) {
+        notification.error({
+          message:
+            'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
+        });
+      } else {
+      }
+      approveAplication(itemId);
     } else if (checkAction.includes('decline')) {
       const itemId = checkAction.replace('decline_', '');
-      declineProposal(itemId);
+      declineAplication(itemId);
     } else if (checkAction.includes('edit')) {
-      const itemId = checkAction.replace('edit_', '');
+      if (timeDifference > 24 * 60 * 60 * 1000) {
+        const itemId = checkAction.replace('edit_', '');
+      } else if (timeDifference <= 24 * 60 * 60 * 1000 && timeDifference > 0) {
+        notification.error({
+          message:
+            'Cách thời gian phỏng vấn chưa đến 1 ngày, bạn không thể chỉnh sửa',
+        });
+      } else {
+        notification.error({
+          message: 'Đã quá thời gian phỏng vấn, bạn không thể chỉnh sửa',
+        });
+      }
     }
   };
 
-  function approveProposal(id) {
-    put({ endpoint: `/proposal/approve/${id}` })
+  function approveAplication(id) {
+    put({ endpoint: `/aplication/approve/${id}` })
       .then((res) => {
         notification.success({
           message: 'Đã nhận ứng viên',
@@ -93,8 +115,8 @@ const InterviewSchedule = () => {
       });
   }
 
-  function declineProposal(id) {
-    put({ endpoint: `/proposal/decline/${id}` })
+  function declineAplication(id) {
+    put({ endpoint: `/application/decline/${id}` })
       .then((res) => {
         notification.success({
           message: 'Đã từ chối ứng viên',
@@ -117,11 +139,8 @@ const InterviewSchedule = () => {
       endpoint: `/job/appointment/${clientId}`,
     })
       .then((res) => {
-        const filtered = res.data.filter((job) => {
-          return job.status === true;
-        });
-
-        const data = generateJobs(filtered);
+        const data = generateJobs(res.data);
+        console.log(data);
 
         setJobList(data[0]);
         setJobListColor(data[1]);
@@ -225,7 +244,7 @@ const InterviewSchedule = () => {
     let coloritems = [];
     jobs?.forEach((job) => {
       const color = getRandomColor();
-      job.proposals?.forEach((proposal) => {
+      job.applications?.forEach((application) => {
         itemChildren.push(
           getItem(
             <div
@@ -243,44 +262,49 @@ const InterviewSchedule = () => {
                     marginRight: 10,
                   }}
                   size='small'
-                  src={proposal.freelancers?.accounts.image}
+                  src={application.freelancers?.accounts.image}
                 ></Avatar>
                 <Typography.Text style={{ fontWeight: 'bold', color: '#000' }}>
-                  {proposal.freelancers?.accounts.name}
+                  {application.freelancers?.accounts.name}
                 </Typography.Text>
               </div>
               <Dropdown
                 menu={{
                   items: actions.map((action) => ({
                     ...action,
-                    key: action.key + '_' + proposal?.id,
+                    key: action.key + '_' + application?.id,
+                    onClick: () =>
+                      onClick(
+                        action,
+                        application.appointments[0]?.time,
+                        application?.id
+                      ),
                   })),
-                  onClick,
                 }}
               >
                 <EllipsisOutlined />
               </Dropdown>
             </div>,
-            'appoinment_' + proposal?.appointments[0]?.appointmentId,
+            'appoinment_' + application?.appointments[0]?.appointmentId,
             null,
             [
               {
                 key:
                   'appointment_time_' +
-                  proposal?.appointments[0]?.appointmentId,
+                  application?.appointments[0]?.appointmentId,
                 label:
                   'Thời gian phỏng vấn: ' +
-                  formatDateTime(proposal.appointments[0]?.time),
+                  formatDateTime(application.appointments[0]?.time),
               },
               {
                 key:
                   'appointment_location_' +
-                  proposal?.appointments[0]?.appointmentId,
+                  application?.appointments[0]?.appointmentId,
                 label: (
                   <>
-                    Địa điểm : {proposal.appointments[0]?.location}{' '}
-                    <Link to={proposal.appointments[0]?.link}>
-                      {proposal.appointments[0]?.link}
+                    Địa điểm : {application.appointments[0]?.location}{' '}
+                    <Link to={application.appointments[0]?.link}>
+                      {application.appointments[0]?.link}
                     </Link>
                   </>
                 ),
@@ -292,7 +316,7 @@ const InterviewSchedule = () => {
         coloritems.push({
           jobId: job.id,
           color: color,
-          time: proposal.appointments[0]?.time,
+          time: application.appointments[0]?.time,
         });
       });
 

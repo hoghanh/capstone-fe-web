@@ -6,28 +6,25 @@ export const FormatVND = (number, currencySymbol = 'VNĐ') => {
 };
 
 export const CalculateDaysLeft = (endDate) => {
-  const currentDate = new Date();
-
-  endDate = new Date(endDate);
-  endDate.setHours(endDate.getHours() - 7, 0, 0);
-  let remainTime;
+  const currentDate = moment();
+  endDate = moment(endDate);
+  endDate.setHours(endDate.getHours() - 7);
   let output;
 
+  if (endDate.isSameOrAfter(currentDate)) {
+    const duration = moment.duration(endDate.diff(currentDate));
+    const daysDifference = duration.days();
+    const hoursDifference = duration.hours();
 
-    remainTime = {
-      days: daysDifference,
-      hours: hoursDifference,
-    };
+    if (daysDifference > 0) {
+      output = daysDifference + ' ngày ' + hoursDifference + ' giờ còn lại';
+    } else if (hoursDifference > 0) {
+      output = hoursDifference + ' giờ còn lại';
+    } else {
+      output = 'Sắp hết hạn';
+    }
+    return output;
   }
-
-  if (remainTime?.days) {
-    output = remainTime.days + ' ngày ' + remainTime.hours + ' giờ còn lại';
-  } else if (remainTime?.hours) {
-    output = remainTime.hours + ' giờ còn lại';
-  } else {
-    output = 'Quá hạn';
-  }
-  return output;
 };
 
 export const formatDate = (dateInput) => {
@@ -41,7 +38,7 @@ export const formatDate = (dateInput) => {
 
 export const formatDateTime = (dateInput) => {
   const date = new Date(dateInput);
-  date.setHours(date.getHours() - 7, 0, 0);
+  date.setHours(date.getHours() - 7);
 
   const options = {
     year: 'numeric',
@@ -53,9 +50,11 @@ export const formatDateTime = (dateInput) => {
     hour12: false,
   };
 
-  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+  const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(date);
 
   return `${formattedDate}`;
+};
+
 export const checkIfIsUrl = (url) => {
   try {
     const parsedUrl = new URL(url);
