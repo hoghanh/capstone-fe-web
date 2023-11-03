@@ -21,8 +21,7 @@ import { PaperClipOutlined } from "components/icon/Icon";
 import React, { useEffect, useState } from "react";
 import color from "styles/color";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { profileState, proposalListState, valueSearchState } from "recoil/atom";
-import { ButtonPrimary } from "components/customize/GlobalCustomize";
+import {  valueSearchState } from "recoil/atom";
 import { Link } from "react-router-dom";
 import { ModalPrimary } from "components/Modal/Modal";
 import { get, post, put } from "utils/APICaller";
@@ -70,7 +69,7 @@ const interviewItems = [
   },
 ];
 
-const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
+const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
   const [form] = Form.useForm();
   const [timeBooking, setTimeBooking] = useState("");
 
@@ -80,9 +79,9 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
     setTimeBooking(dateString);
   };
 
-  const interviewProposal = () => {
+  const interviewApplication = () => {
     put({
-      endpoint: `/proposal/interview/${proposal.jobId}`,
+      endpoint: `/application/interview/${application.jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -108,11 +107,11 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
         link,
         time: timeBooking,
         clientId: clientId,
-        proposalId: proposal.id,
+        applicationId: application.id,
       },
     })
       .then((res) => {
-        interviewProposal();
+        interviewApplication();
       })
       .catch((error) => {
         notification.error({
@@ -209,7 +208,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, proposal }) => {
   );
 };
 
-const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
+const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
   const [form] = Form.useForm();
   const [timeBooking, setTimeBooking] = useState("");
   const clientId = LocalStorageUtils.getItem("profile").id;
@@ -218,9 +217,9 @@ const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
     setTimeBooking(dateString);
   };
 
-  const interviewProposal = () => {
+  const interviewApplication = () => {
     put({
-      endpoint: `/proposal/interview/${proposal.id}`,
+      endpoint: `/application/interview/${application.id}`,
     })
       .then((res) => {
         notification.success({
@@ -243,11 +242,11 @@ const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
         link: "https://meet.google.com/xye-stsk-ghs",
         time: timeBooking,
         clientId: clientId,
-        proposalId: proposal.id,
+        applicationId: application.id,
       },
     })
       .then((res) => {
-        interviewProposal();
+        interviewApplication();
       })
       .catch((error) => {
         notification.error({
@@ -340,11 +339,11 @@ const Interview = ({ isModalInterview, setIsModalInterview, proposal }) => {
   );
 };
 
-const DeclineInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
+const DeclineInterview = ({ isModalDecline, setIsModalDecline, application }) => {
   
   const declineInterview = () => {
     put({
-      endpoint: `/proposal/decline/${proposal.jobId}`,
+      endpoint: `/application/decline/${application.jobId}`,
     })
       .then((res) => {
         notification.success({
@@ -384,7 +383,7 @@ const DeclineInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
   );
 };
 
-const AcceptInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
+const AcceptInterview = ({ isModalDecline, setIsModalDecline, application }) => {
 
   const handleOk = () => {
     setIsModalDecline(false);
@@ -412,26 +411,27 @@ const AcceptInterview = ({ isModalDecline, setIsModalDecline, proposal }) => {
 };
 
 const TabSent = ({ activeTabKey }) => {
-  const [proposalList, setProposalList] = useState([]);
+  const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(true);
+  const [ellipsis,] = useState(true);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [isModalAccept, setIsModalAccept] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize,] = useState(5)
+
   const client= LocalStorageUtils.getItem('profile');
 
 
   useEffect(() => {
-    getProposals();
+    getApplications();
   }, []);
 
-
   useEffect(() => {
-    console.log('helo')
-    const filtered = proposalList.filter((item) => {
+    const filtered = applicationList.filter((item) => {
       if (activeTabKey === "Sent") {
         return search === ""
           ? item.status === "Sent"
@@ -446,14 +446,14 @@ const TabSent = ({ activeTabKey }) => {
       return true;
     });
     setList(filtered);
-  }, [search, activeTabKey, proposalList]);
+  }, [search, activeTabKey, applicationList]);
 
-  const getProposals = async () => {
-    get({ endpoint: `/proposal/client/${client.id}` })
+  const getApplications = async () => {
+    get({ endpoint: `/application/client/${client.id}` })
       .then((response) => {
         const data = response.data;
-        let proposals = data.filter((proposal) => proposal.jobId !== null && proposal.jobs !== null);
-        setProposalList(proposals);
+        let applications = data.filter((application) => application.jobId !== null && application.jobs !== null);
+        setApplicationList(applications);
       })
       .catch((error) => {
         console.log(error);
@@ -481,6 +481,16 @@ const TabSent = ({ activeTabKey }) => {
     }
   };
 
+  const handleChange = (page) => {
+    setPage(page);
+  };
+
+  const getPagedList = () => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return list.slice(start, end);
+  };
+
   return (
     <Row>
       {list.length === 0 || list === null ? (
@@ -488,7 +498,7 @@ const TabSent = ({ activeTabKey }) => {
           <Empty />
         </Col>
       ) : (
-        list?.map((proposal, index) => {
+        getPagedList()?.map((application, index) => {
           return (
             <Col key={index} span={24}>
               <Row
@@ -516,7 +526,7 @@ const TabSent = ({ activeTabKey }) => {
                         >
                           <Image
                             width={72}
-                            src={proposal?.freelancers.accounts.image}
+                            src={application?.freelancers.accounts.image}
                             alt="Apofoitisi logo"
                             preview={true}
                             style={{ borderRadius: "50%" }}
@@ -525,12 +535,12 @@ const TabSent = ({ activeTabKey }) => {
                         <CustomCol>
                           <Row gutter={10}>
                             <Col>
-                              <Link to="/client/proposals/freelancer-profile">
+                              <Link to="/client/applications/freelancer-profile">
                                 <Typography.Title
                                   level={4}
                                   style={{ margin: 0 }}
                                 >
-                                  {proposal?.freelancers.accounts.name}
+                                  {application?.freelancers.accounts.name}
                                 </Typography.Title>
                               </Link>
                             </Col>
@@ -545,11 +555,11 @@ const TabSent = ({ activeTabKey }) => {
                             activeTabKey === "Sent"
                               ? sentItems.map((item) => ({
                                   ...item,
-                                  key: item.key + "_" + proposal.id.toString(),
+                                  key: item.key + "_" + application.id.toString(),
                                 }))
                               : interviewItems.map((item) => ({
                                   ...item,
-                                  key: item.key + "_" + proposal.id.toString(),
+                                  key: item.key + "_" + application.id.toString(),
                                 })),
                           onClick,
                         }}
@@ -564,9 +574,9 @@ const TabSent = ({ activeTabKey }) => {
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Link to={`/jobs/job-detail/${proposal.id}`}>
+                          <Link to={`/jobs/job-detail/${application.id}`}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
-                              {proposal.jobs?.title}
+                              {application.jobs?.title}
                             </Typography.Title>
                           </Link>
                         </Col>
@@ -576,7 +586,7 @@ const TabSent = ({ activeTabKey }) => {
                 </Col>
 
                 <Col span={24}>
-                  <Link to={`/jobs/job-detail/${proposal?.id}`}>
+                  <Link to={`/jobs/job-detail/${application?.id}`}>
                     <Typography.Paragraph
                       style={{
                         margin: 0,
@@ -591,7 +601,7 @@ const TabSent = ({ activeTabKey }) => {
                           : false
                       }
                     >
-                      {proposal.description}
+                      {application.description}
                     </Typography.Paragraph>
                   </Link>
                 </Col>
@@ -618,39 +628,43 @@ const TabSent = ({ activeTabKey }) => {
               </Row>
               <CustomDivider />
               <Interview
-                  isModalInterview={isModalInterview}
-                  setIsModalInterview={setIsModalInterview}
-                  proposal={proposal}
-                />
-                <EditInterview
-                  isModalEdit={isModalEdit}
-                  setIsModalEdit={setIsModalEdit}
-                  proposal={proposal}
-                />
+                isModalInterview={isModalInterview}
+                setIsModalInterview={setIsModalInterview}
+                application={application}
+              />
+              <EditInterview
+                isModalEdit={isModalEdit}
+                setIsModalEdit={setIsModalEdit}
+                application={application}
+              />
               <DeclineInterview
                 isModalDecline={isModalDecline}
                 setIsModalDecline={setIsModalDecline}
               />
               <AcceptInterview
-                  isModalAccept={isModalAccept}
-                  setIsModalAccept={setIsModalAccept}
-                  proposal={proposal}
-                />
+                isModalAccept={isModalAccept}
+                setIsModalAccept={setIsModalAccept}
+                application={application}
+              />
             </Col>
           );
         })
       )}
-      {/* <Pagination
-            total={list.length}
-            onChange={onChange}
-            showSizeChanger={false}
-            style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
-          /> */}
+      <Col span={24}>
+         <Pagination
+          current={page}
+          total={list.length}
+          showSizeChanger={false}
+          pageSize={pageSize}
+          onChange={handleChange}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+        />
+      </Col>
     </Row>
   );
 };
 
-const ProposalsTracking = () => {
+const ApplicationsTracking = () => {
   const [activeTabKey, setActiveTabKey] = useState("Sent");
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
@@ -686,7 +700,7 @@ const ProposalsTracking = () => {
       <Row gutter={[0, 10]}>
         <Col span={24}>
           <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
-            Đề xuất của tôi
+            Công việc của tôi
           </Typography.Title>
         </Col>
         <Col
@@ -758,4 +772,4 @@ const ProposalsTracking = () => {
   );
 };
 
-export default ProposalsTracking;
+export default ApplicationsTracking;

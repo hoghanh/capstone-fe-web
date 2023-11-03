@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Input,
   Image,
@@ -10,47 +10,54 @@ import {
   Grid,
   Menu,
   Dropdown,
-} from 'antd';
-import { SearchOutlined, MenuOutlined, SettingFilled } from '@ant-design/icons';
-import { ReactSVG } from 'react-svg';
-import { useRecoilValue } from 'recoil';
+} from "antd";
+import { SearchOutlined, MenuOutlined, SettingFilled } from "@ant-design/icons";
+import { ReactSVG } from "react-svg";
+import { useRecoilValue } from "recoil";
 
-import RegisterModal from './RegisterModal';
-import LoginModal from './LoginModal';
-import useAuthActions from 'recoil/action';
-import { categoriesNavbarState, authState } from 'recoil/atom';
-import { GoogleLogout } from 'react-google-login';
-import { CLIENTID } from 'config';
-import { Logout } from 'components/icon/Icon';
-import { Link } from 'react-router-dom';
+import RegisterModal from "./RegisterModal";
+import LoginModal from "./LoginModal";
+import useAuthActions from "recoil/action";
+import { categoriesNavbarState, authState } from "recoil/atom";
+import { GoogleLogout } from "react-google-login";
+import { CLIENTID } from "config";
+import { Heart, Logout, Manage, User } from "components/icon/Icon";
+import { Link } from "react-router-dom";
 
 const onSuccess = () => {
-  console.log('Logout success');
+  console.log("Logout success");
 };
 
 const onFail = () => {
-  console.log('Fail');
+  console.log("Fail");
 };
 
 const items = [
   {
-    key: '1',
-    label: <Link to="/proposals">Quản lý công việc</Link>,
+    key: "1",
+    label: <Link to="/applications"><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
+    icon: <Manage size={14} color="#222222"/>,
+
   },
   {
-    key: '2',
-    label: 'Cài Đặt',
-    icon: <SettingFilled />,
+    key: "2",
+    label: <Link to="/profile"><Typography.Text style={{marginLeft: 10}}>Trang cá nhân</Typography.Text></Link>,
+    icon: <User size={14} color="#222222"/>,
   },
   {
-    key: '3',
+    key: "4",
+    label: <Link to="/favorite"><Typography.Text style={{marginLeft: 10}}>Danh sách yêu thích</Typography.Text></Link>,
+    icon: <Heart size={14}/>
+  },
+  {
+    key: "3",
     label: (
       <GoogleLogout
         clientId={CLIENTID}
         onLogoutSuccess={onSuccess}
         onFailure={onFail}
         render={(renderProps) => (
-          <Typography.Text onClick={renderProps.onClick}>
+          <Typography.Text onClick={renderProps.onClick} style={{marginLeft: 10}}>
             Đăng xuất
           </Typography.Text>
         )}
@@ -101,7 +108,7 @@ function SearchBar() {
   };
 
   const handleMove = (type) => {
-    if (type === 'register') {
+    if (type === "register") {
       setOpenRegister(true);
       setOpenLogin(false);
     } else {
@@ -111,13 +118,13 @@ function SearchBar() {
   };
 
   const onClick = ({ key }) => {
-    if (key === '3') {
+    if (key === "3") {
       logout();
     }
   };
 
   return (
-    <Layout.Header style={{ background: '#FFFFFF', padding: '0 20px' }}>
+    <Layout.Header style={{ background: "#FFFFFF", padding: "0 20px" }}>
       {/* Modal Register */}
       <RegisterModal
         visible={openRegister}
@@ -135,47 +142,51 @@ function SearchBar() {
       />
 
       <Row
-        align='middle'
-        justify='space-between'
+        align="middle"
+        justify="space-between"
         style={{
           maxWidth: 1080,
-          margin: '0 auto',
+          margin: "0 auto",
         }}
       >
         <Col xs={6} sm={2} md={2} lg={1} xl={0}>
           <div>
             <MenuOutlined onClick={toggleCollapsed} />
             <Menu
-              mode='inline'
+              mode="inline"
               inlineCollapsed={collapsed}
               items={categoriesNavbar}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 width: 300,
                 zIndex: 100,
-                display: collapsed ? 'none' : '',
+                display: collapsed ? "none" : "",
               }}
             />
           </div>
         </Col>
         <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Image
-            width={34}
-            src='/icon/logo.svg'
-            alt='Apofoitisi logo'
-            preview={false}
-          />
+          <Link to="/">
+            <Image
+              width={34}
+              src="/icon/logo.svg"
+              alt="Apofoitisi logo"
+              preview={false}
+            />
+          </Link>
         </Col>
         <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Typography.Title level={3} style={{ margin: 0 }}>
-            SEP
-          </Typography.Title>
+          <Link to="/">
+            <Typography.Title level={3} style={{ margin: 0 }}>
+              SEP
+            </Typography.Title>
+          </Link>
         </Col>
 
         <Col xs={0} sm={12} md={11} lg={13} xl={13}>
           <Input
-            placeholder='Tìm kiếm'
-            prefix={<SearchOutlined style={{ color: '#828282' }} />}
+            placeholder="Tìm kiếm"
+            prefix={<SearchOutlined style={{ color: "#828282" }} />}
             style={{
               padding: 10,
               borderRadius: 8,
@@ -189,10 +200,10 @@ function SearchBar() {
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
               <ReactSVG
                 style={{ height: 40 }}
-                src='/icon/notification.svg'
+                src="/icon/notification.svg"
                 beforeInjection={(svg) => {
-                  svg.setAttribute('width', '32');
-                  svg.setAttribute('height', '32');
+                  svg.setAttribute("width", "32");
+                  svg.setAttribute("height", "32");
                 }}
               />
             </Col>
@@ -201,10 +212,10 @@ function SearchBar() {
                 <div>
                   <ReactSVG
                     style={{ height: 40 }}
-                    src='/icon/user.svg'
+                    src="/icon/user.svg"
                     beforeInjection={(svg) => {
-                      svg.setAttribute('width', '32');
-                      svg.setAttribute('height', '32');
+                      svg.setAttribute("width", "32");
+                      svg.setAttribute("height", "32");
                     }}
                   />
                 </div>

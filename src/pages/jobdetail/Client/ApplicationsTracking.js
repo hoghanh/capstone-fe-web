@@ -17,7 +17,7 @@ import { PaperClipOutlined } from "components/icon/Icon";
 import React, { useState } from "react";
 import color from "styles/color";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { profileState, proposalListState, valueSearchState } from "recoil/atom";
+import { profileState, applicationListState, valueSearchState } from "recoil/atom";
 import { ButtonPrimary } from "components/customize/GlobalCustomize";
 import { Link } from "react-router-dom";
 
@@ -37,16 +37,16 @@ const tabListNoTitle = [
 ];
 
 const TabRecommend = () => {
-  const proposalList = useRecoilValue(proposalListState);
+  const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = proposalList.filter((item) => {
+  const list = applicationList.filter((item) => {
     return search === ""
       ? item.status === "Sent"
       : item.freelancers?.accounts.name.toLowerCase().includes(search) &&
           item.status === "Sent";
   });
   const [ellipsis, setEllipsis] = useState(true);
-  console.log(proposalList);
+  console.log(applicationList);
   console.log(list);
   return (
     <>
@@ -56,7 +56,7 @@ const TabRecommend = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((proposal, index) => {
+          list.map((application, index) => {
             return (
               <Col key={index} span={24}>
                 <Row
@@ -84,7 +84,7 @@ const TabRecommend = () => {
                           >
                             <Image
                               width={72}
-                              src={proposal?.freelancers.accounts.image}
+                              src={application?.freelancers.accounts.image}
                               alt="Freelancer Avatar"
                               preview={true}
                               style={{ borderRadius: "50%" }}
@@ -93,12 +93,12 @@ const TabRecommend = () => {
                           <CustomCol>
                             <Row gutter={10}>
                               <Col>
-                                <Link to="/client/proposals/freelancer-profile">
+                                <Link to="/client/applications/freelancer-profile">
                                   <Typography.Title
                                     level={4}
                                     style={{ margin: 0 }}
                                   >
-                                    {proposal?.freelancers.accounts.name}
+                                    {application?.freelancers.accounts.name}
                                   </Typography.Title>
                                 </Link>
                               </Col>
@@ -110,7 +110,7 @@ const TabRecommend = () => {
                   </Col>
 
                   <Col span={24}>
-                    <Link to={`/jobs/job-detail/${proposal.id}`}>
+                    <Link to={`/jobs/job-detail/${application.id}`}>
                       <Typography.Paragraph
                         style={{
                           margin: 0,
@@ -125,7 +125,7 @@ const TabRecommend = () => {
                             : false
                         }
                       >
-                        {proposal?.description}
+                        {application?.description}
                       </Typography.Paragraph>
                     </Link>
                   </Col>
@@ -136,9 +136,9 @@ const TabRecommend = () => {
                       </Col>
                       <Col>
                         <a
-                          href={proposal?.fileAttach}
+                          href={application?.fileAttach}
                           target="_blank"
-                          download={proposal?.fileAttach}
+                          download={application?.fileAttach}
                           rel="noreferrer"
                         >
                           <Typography.Text
@@ -168,9 +168,9 @@ const TabRecommend = () => {
 };
 
 const TabDeclined = () => {
-  const proposalList = useRecoilValue(proposalListState);
+  const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = proposalList.filter((item) => {
+  const list = applicationList.filter((item) => {
     return search === ""
       ? item.status === "declined"
       : item.freelancers?.accounts?.name.toLowerCase().includes(search) &&
@@ -186,7 +186,7 @@ const TabDeclined = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((proposal, index) => {
+          list.map((application, index) => {
             return (
               <Col span={24}>
                 <Row
@@ -214,7 +214,7 @@ const TabDeclined = () => {
                           >
                             <Image
                               width={72}
-                              src={proposal.freelancers?.accounts?.image}
+                              src={application.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
                               style={{ borderRadius: "50%" }}
@@ -227,7 +227,7 @@ const TabDeclined = () => {
                                   level={4}
                                   style={{ margin: 0 }}
                                 >
-                                  {proposal.freelancers?.accounts?.name}
+                                  {application.freelancers?.accounts?.name}
                                 </Typography.Title>
                               </Col>
                             </Row>
@@ -287,7 +287,7 @@ const TabDeclined = () => {
                         paddingRight: 10,
                       }}
                     >
-                      {proposal.description}
+                      {application.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
@@ -322,9 +322,9 @@ const TabDeclined = () => {
 };
 
 const TabApproved = () => {
-  const proposalList = useRecoilValue(proposalListState);
+  const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = proposalList.filter((item) => {
+  const list = applicationList.filter((item) => {
     return search === ""
       ? item.status === "Sent"
       : item.freelancers?.accounts?.name.toLowerCase().includes(search) &&
@@ -339,7 +339,7 @@ const TabApproved = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((proposal, index) => {
+          list.map((application, index) => {
             return (
               <Col key={index} span={24}>
                 <Row
@@ -367,7 +367,7 @@ const TabApproved = () => {
                           >
                             <Image
                               width={72}
-                              src={proposal.freelancers?.accounts?.image}
+                              src={application.freelancers?.accounts?.image}
                               alt="Apofoitisi logo"
                               preview={true}
                               style={{ borderRadius: "50%" }}
@@ -380,7 +380,7 @@ const TabApproved = () => {
                                   level={4}
                                   style={{ margin: 0 }}
                                 >
-                                  {proposal.freelancers?.accounts?.name}
+                                  {application.freelancers?.accounts?.name}
                                 </Typography.Title>
                               </Col>
                             </Row>
@@ -416,7 +416,7 @@ const TabApproved = () => {
                         paddingRight: 10,
                       }}
                     >
-                      {proposal.description}
+                      {application.description}
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
@@ -456,7 +456,7 @@ const contentListNoTitle = {
   Declined: <TabDeclined />,
 };
 
-const ProposalsTracking = () => {
+const ApplicationsTracking = () => {
   const [activeTabKey2, setActiveTabKey2] = useState("Recommend");
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
@@ -490,7 +490,7 @@ const ProposalsTracking = () => {
       <Row gutter={[0, 10]}>
         <Col span={24}>
           <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
-            Đề xuất của tôi
+            Công việc của tôi
           </Typography.Title>
         </Col>
         <Col
@@ -562,4 +562,4 @@ const ProposalsTracking = () => {
   );
 };
 
-export default ProposalsTracking;
+export default ApplicationsTracking;

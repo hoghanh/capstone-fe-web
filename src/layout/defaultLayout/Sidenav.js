@@ -39,17 +39,11 @@ function Sidenav({ color }) {
       ),
     },
     {
-      key: 'list-proposal-client',
+      key: 'list-application-client',
       label: (
         <Link
-          // to='/client/proposal'
-          to='/client/proposals'
-          className={
-            page === 'client/proposals' ||
-            page === '/client/proposals/freelancer-profile'
-              ? 'active'
-              : ''
-          }
+          to='/client/applications'
+          className={page.startsWith('client/applications') ? 'active' : ''}
         >
           <span className='icon'>
             <Documents />

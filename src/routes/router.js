@@ -26,6 +26,14 @@ export const routes = [
     title: 'Tìm công việc freelance',
   },
   {
+    path: '/favorite',
+    element: lazy(() => import('pages/joblist/FavoriteList')),
+    name: 'favorite list',
+    layout: 'breadcrumb',
+    title: 'Danh sách yêu thích',
+    role: ['freelancer'],
+  },
+  {
     path: '/jobs/:subCateId/:subCateName',
     element: lazy(() => import('pages/joblist/JobList')),
     name: 'jobs',
@@ -48,7 +56,7 @@ export const routes = [
     path: '/profile',
     element: lazy(() => import('pages/profile/Profile')),
     name: 'profile',
-    // role: ['user'],
+    role: ['freelancer'],
   },
   {
     path: '/client',
@@ -119,16 +127,16 @@ export const routes = [
     // role: ['client'],
   },
   {
-    path: '/client/jobs-management/job-detail/:id/proposals',
-    element: lazy(() => import('pages/jobdetail/Client/ProposalList')),
-    name: 'proposals',
+    path: '/client/jobs-management/job-detail/:id/applications',
+    element: lazy(() => import('pages/jobdetail/Client/ApplicationList')),
+    name: 'applications',
     // role: ['client'],
   },
   {
-    path: '/proposals',
-    element: lazy(() => import('pages/proposals/Proposals')),
-    name: 'proposals',
-    // role: ['freelancer'],s
+    path: '/applications',
+    element: lazy(() => import('pages/applications/Applications')),
+    name: 'applications',
+    // role: ['freelancer'],
   },
 
   {
@@ -137,25 +145,25 @@ export const routes = [
     name: 'jobmanagement',
     // role: ['client'],
   },
+  
   {
-    path: '/client/proposals/freelancer-profile',
+    path: '/client/applications/freelancer-profile',
     element: lazy(() => import('pages/profile/Client/FreelancerProfile')),
     name: 'freelancerProfile',
     title: 'Hồ sơ ứng cử viên',
     // role: ['client'],
   },
   {
+    path: '/client/applications',
+    element: lazy(() => import('pages/applications/Client/Applications')),
+    name: 'applications',
+    title: 'Danh sách ứng tuyển',
+  },
+  {
     path: '/client/billing',
     element: lazy(() => import('pages/billing/Billing')),
     name: 'billing',
     title: 'Hoá đơn',
-    // role: ['client'],
-  },
-  {
-    path: '/client/proposals',
-    element: lazy(() => import('pages/proposals/Client/Proposals')),
-    name: 'proposals',
-    title: 'Danh sách ứng tuyển',
     // role: ['client'],
   },
 ];

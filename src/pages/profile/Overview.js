@@ -140,7 +140,7 @@ const EditPersonalInformation = () => {
       >
         <Form
           form={form}
-          name="submitProposal"
+          name="submitApplication"
           initialValues={{
             remember: true,
             phone: informationUser.accounts.phone,
@@ -583,7 +583,7 @@ console.log(informationUser)
       <ModalPrimary title={'Giới thiệu'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
           form={form}
-          name="submitProposal"
+          name="submitApplication"
           initialValues={{
             remember: true,
             title: informationUser.title,
@@ -756,7 +756,7 @@ const EditNameAvatar = () => {
       <ModalPrimary title={'Thông tin cơ bản'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
           form={form}
-          name="submitProposal"
+          name="submitApplication"
           initialValues={{
             remember: true,
             name: informationUser.accounts.name,

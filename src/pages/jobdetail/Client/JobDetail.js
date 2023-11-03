@@ -5,7 +5,7 @@ import { get } from 'utils/APICaller';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState, clientProfile, jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
-import Proposal from './Proposal';
+import Application from './Application';
 
 const JobDetail = () => {
   const [, setJobDetail] = useRecoilState(jobDetailState);
@@ -42,7 +42,7 @@ const JobDetail = () => {
   return (
     <Layout.Content className={'containerBody'} style={styles.containerBody}>
       <Details />
-      <Proposal/>
+      <Application/>
     </Layout.Content>
   );
 };
