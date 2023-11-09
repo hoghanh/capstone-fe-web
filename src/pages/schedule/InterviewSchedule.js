@@ -19,6 +19,7 @@ import { get, put } from 'utils/APICaller';
 import { formatDateTime } from 'components/formatter/format';
 import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
+import EditScheduleModal from './EditScheduleModal';
 
 const actions = [
   {
@@ -62,47 +63,96 @@ const InterviewSchedule = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [jobList, setJobList] = useState([]);
   const [jobListColor, setJobListColor] = useState([]);
+  const [appointmentTime, setAppointmentTime] = useState('');
+  const [appointmentLocation, setAppointmentLocation] = useState('');
+  const [id, setId] = useState('');
+  let statusApplication = '';
 
-  const location = useLocation();
+  const [openModal, setOpenModal] = useState(false);
 
-  const onClick = (e, time, applicationId) => {
-    //todo: gọi api để check xem application đã được approve hay decline chưa, nếu chưa thì xử lý start/ end else thì không cần xử lý,
+  const showModal = (id, time, location) => {
+    setOpenModal(true);
+    setId(id);
+    setAppointmentLocation(location);
+    setAppointmentTime(time);
+  };
+  const handleOkModal = () => {
+    setTimeout(() => {
+      setOpenModal(false);
+    }, 3000);
+  };
+  const handleCancelModal = () => {
+    setOpenModal(false);
+  };
+
+  const onClick = (e, time, applicationId, appoinmentId, location) => {
     const checkAction = e.key.toString();
     const appoinmentTime = new Date(time);
     const today = new Date();
     const timeDifference = appoinmentTime - today;
 
-    if (checkAction.includes('start')) {
-      const itemId = checkAction.replace('start_', '');
-      if (timeDifference < 0) {
-        notification.error({
-          message:
-            'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
-        });
-      } else {
+    checkStatusApplication(applicationId);
+    setIsLoading(true);
+    setTimeout(() => {
+      if (checkAction.includes('start') || checkAction.includes('decline')) {
+        if (timeDifference > 0) {
+          notification.error({
+            message:
+              'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
+          });
+        } else if (
+          statusApplication === 'approved' ||
+          statusApplication === 'declined'
+        ) {
+          notification.error({
+            message:
+              (statusApplication === 'approved'
+                ? 'Đã nhận. '
+                : 'Đã từ chối. ') +
+              'Vui lòng xem chi tiết tại danh sách ứng tuyển ',
+          });
+          statusApplication = '';
+        } else {
+          if (checkAction.includes('start')) {
+            approveAplication(applicationId);
+          } else {
+            declineAplication(applicationId);
+          }
+        }
+      } else if (checkAction.includes('edit')) {
+        if (timeDifference > 24 * 60 * 60 * 1000) {
+          showModal(appoinmentId, time, location);
+        } else if (
+          timeDifference <= 24 * 60 * 60 * 1000 &&
+          timeDifference > 0
+        ) {
+          notification.error({
+            message:
+              'Cách thời gian phỏng vấn chưa đến 1 ngày, bạn không thể chỉnh sửa',
+          });
+        } else {
+          notification.error({
+            message: 'Đã quá thời gian phỏng vấn, bạn không thể chỉnh sửa',
+          });
+        }
       }
-      approveAplication(itemId);
-    } else if (checkAction.includes('decline')) {
-      const itemId = checkAction.replace('decline_', '');
-      declineAplication(itemId);
-    } else if (checkAction.includes('edit')) {
-      if (timeDifference > 24 * 60 * 60 * 1000) {
-        const itemId = checkAction.replace('edit_', '');
-      } else if (timeDifference <= 24 * 60 * 60 * 1000 && timeDifference > 0) {
-        notification.error({
-          message:
-            'Cách thời gian phỏng vấn chưa đến 1 ngày, bạn không thể chỉnh sửa',
-        });
-      } else {
-        notification.error({
-          message: 'Đã quá thời gian phỏng vấn, bạn không thể chỉnh sửa',
-        });
-      }
-    }
+      setIsLoading(false);
+    }, 3000);
+  };
+
+  const checkStatusApplication = (id) => {
+    get({ endpoint: `/application/detail/${id}` })
+      .then((res) => {
+        statusApplication = res.data.status;
+      })
+      .catch((error) => {
+        console.log(error);
+        return null;
+      });
   };
 
   function approveAplication(id) {
-    put({ endpoint: `/aplication/approve/${id}` })
+    put({ endpoint: `/application/approve/${id}` })
       .then((res) => {
         notification.success({
           message: 'Đã nhận ứng viên',
@@ -277,7 +327,11 @@ const InterviewSchedule = () => {
                       onClick(
                         action,
                         application.appointments[0]?.time,
-                        application?.id
+                        application?.id,
+                        application?.appointments[0]?.appointmentId,
+                        application.appointments[0]?.location.length > 0
+                          ? application.appointments[0]?.location
+                          : application.appointments[0]?.link
                       ),
                   })),
                 }}
@@ -347,6 +401,14 @@ const InterviewSchedule = () => {
         }}
         className='schedule-interview'
       >
+        <EditScheduleModal
+          visible={openModal}
+          onCancel={handleCancelModal}
+          onOk={handleOkModal}
+          appointmentTime={appointmentTime}
+          appointmentLocation={appointmentLocation}
+          id={id}
+        />
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={{
