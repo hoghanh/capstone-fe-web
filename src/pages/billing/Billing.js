@@ -9,7 +9,9 @@ import {
   Typography,
 } from 'antd';
 import { FormatVND, formatDateTime } from 'components/formatter/format';
+import Loading from 'components/loading/loading';
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
@@ -66,20 +68,56 @@ function Billing() {
   const [filterList, setFilterList] = useState([]);
   const [currency, setCurrency] = useState();
   const id = LocalStorageUtils.getItem('profile').id;
+  const [isLoading, setIsLoading] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const queryParams = new URLSearchParams(location.search);
+  const { vnp_Amount, vnp_BankTranNo, vnp_PayDate, vnp_TransactionNo } =
+    Object.fromEntries(queryParams.entries());
 
   useEffect(() => {
-    get({
-      endpoint: `/payment/client/${id}`,
-    })
-      .then((res) => {
-        setBills(res.data.payment);
-        setFilterList(res.data.payment);
-        setCurrency(res.data.clientCurrency);
+    setIsLoading(true);
+    if (!vnp_Amount) {
+      get({
+        endpoint: `/payment/client/${id}`,
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+        .then((res) => {
+          setBills(res.data.payment);
+          setFilterList(res.data.payment);
+          setCurrency(res.data.clientCurrency);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setIsLoading(true);
+      post({
+        endpoint: `/payment`,
+        body: {
+          status: 'success',
+          name: vnp_BankTranNo,
+          description: 'Giao dịch ' + vnp_BankTranNo,
+          amount: vnp_Amount,
+          orderId: vnp_TransactionNo,
+          transDate: vnp_PayDate,
+          transType: '02',
+          type: '+',
+          clientId: id,
+        },
+      })
+        .then((res) => {
+          setIsLoading(false);
+          navigate('/client/billing');
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          console.log(err);
+        });
+    }
+  }, [vnp_Amount]);
 
   function filterDate(date, dateString) {
     if (dateString) {
@@ -104,11 +142,13 @@ function Billing() {
         clientId: id,
       },
     }).then((res) => {
-      window.open(res.data.vnpUrl);
+      window.location.href = res.data.vnpUrl;
     });
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
       <Card
         bodyStyle={{ padding: 'unset' }}
