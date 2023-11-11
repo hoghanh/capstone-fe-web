@@ -116,7 +116,7 @@ const ClientJobManagement = () => {
       .then((res) => {
         console.log(res.data)
         const filtered = res.data.filter((job) => {
-          return job.status === true;
+          return job.status === 'open';
         });
         setJobList(filtered);
         setFilteredJobList(filtered);

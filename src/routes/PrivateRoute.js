@@ -9,7 +9,7 @@ const PrivateRoute = ({ element: Element, allowedRoles }) => {
     return <Navigate to='/' />;
   }
 
-  console.log(allowedRoles.includes(auth.role))
+  // console.log(allowedRoles.includes(auth.role))
   if (!allowedRoles.includes(auth.role)) {
     return <Navigate to='/' />;
   }

@@ -77,16 +77,19 @@ const clients = {
 };
 
 const applications = {
-  id: '',
-  description: '',
-  fileAttach: '',
-  sendDate: '',
-  status: '',
-  createdAt: '',
-  updatedAt: '',
-  freelancerId: '',
-  jobId: '',
+  id: "",
+  description: "",
+  fileAttach: "",
+  sendDate: "",
+  status: "",
+  createdAt: "",
+  updatedAt: "",
+  freelancerId: "",
+  jobId: "",
 };
+
+
+
 
 export const jobDetailState = atom({
   key: 'jobDetailState',
@@ -109,23 +112,38 @@ export const jobDetailState = atom({
   },
 });
 
+const language = {
+  id: "",
+  name: "",
+  level: "",
+  freelancerId: 0,
+};
 
+const certificates = {
+  name: "",
+  issuingOrganization: "",
+  issueDate: "",
+  expirationDate: "",
+  credentialId: "",
+  credentialUrl: "",
+};
 
 export const freelancerState = atom({
-  key: 'freelancerState',
+  key: "freelancerState",
   default: {
-    id: '',
-    status: '',
-    cvFile: '',
-    hoursPerWeek: '',
-    languages: '',
-    education: '',
-    introduction: '',
-    major: '',
-    title: '',
-    createdAt: '',
-    updatedAt: '',
-    accountId: '',
+    id: "",
+    status: "",
+    cvFile: "",
+    hoursPerWeek: "",
+    language: [],
+    certificates: [],
+    skills: [],
+    introduction: "",
+    major: "",
+    title: "",
+    createdAt: "",
+    updatedAt: "",
+    accountId: "",
     accounts: accounts,
   },
 });
