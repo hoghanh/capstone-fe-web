@@ -6,11 +6,9 @@ import AntProvider from 'config/AntProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <AntProvider>
-      <RecoilRoot>
-        <App />
-      </RecoilRoot>
-    </AntProvider>
-  </React.StrictMode>
+  <AntProvider>
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
+  </AntProvider>
 );

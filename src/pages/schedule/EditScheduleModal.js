@@ -12,7 +12,6 @@ import { ModalPrimary } from 'components/Modal/Modal';
 import { CustomRow } from 'components/customize/Layout';
 import moment from 'moment';
 import { put } from 'utils/APICaller';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 function EditScheduleModal({
   visible,

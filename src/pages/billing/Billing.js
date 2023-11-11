@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
+import ModalTopup from './ModalTopup';
 
 const columns = [
   {
@@ -62,13 +63,14 @@ const columns = [
 
 function Billing() {
   const { useBreakpoint } = Grid;
-  const { md, lg } = useBreakpoint();
+  const { md } = useBreakpoint();
 
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
   const [currency, setCurrency] = useState();
   const id = LocalStorageUtils.getItem('profile').id;
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,13 +96,14 @@ function Billing() {
         });
     } else {
       setIsLoading(true);
+      let amount = parseFloat(vnp_Amount) / 100;
       post({
         endpoint: `/payment`,
         body: {
           status: 'success',
           name: vnp_BankTranNo,
           description: 'Giao dịch ' + vnp_BankTranNo,
-          amount: vnp_Amount,
+          amount: amount.toString(),
           orderId: vnp_TransactionNo,
           transDate: vnp_PayDate,
           transType: '02',
@@ -132,24 +135,28 @@ function Billing() {
     }
   }
 
-  function onClick() {
-    post({
-      endpoint: `/payment/vnpay`,
-      body: {
-        amount: '10000',
-        bankCode: '',
-        language: 'vn',
-        clientId: id,
-      },
-    }).then((res) => {
-      window.location.href = res.data.vnpUrl;
-    });
-  }
+  const showModal = (id) => {
+    setOpenModal(true);
+  };
+  const handleOkModal = () => {
+    setTimeout(() => {
+      setOpenModal(false);
+    }, 3000);
+  };
+  const handleCancelModal = () => {
+    setOpenModal(false);
+  };
 
   return isLoading ? (
     <Loading />
   ) : (
     <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
+      <ModalTopup
+        visible={openModal}
+        onCancel={handleCancelModal}
+        onOk={handleOkModal}
+        id={id}
+      />
       <Card
         bodyStyle={{ padding: 'unset' }}
         style={joblist.card}
@@ -172,7 +179,7 @@ function Billing() {
               onChange={filterDate}
               size='middle'
             />
-            <Button size='large' type='primary' onClick={onClick}>
+            <Button size='large' type='primary' onClick={showModal}>
               Nạp tiền
             </Button>
           </>
