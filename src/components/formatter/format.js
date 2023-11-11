@@ -9,7 +9,7 @@ export const CalculateDaysLeft = (endDate) => {
   const currentDate = moment();
   endDate = moment(endDate);
 
-  endDate.setHours(endDate.moment().hour() - 7);
+  endDate.add(-7, 'hours');
   let output;
 
   if (endDate.isSameOrAfter(currentDate)) {
