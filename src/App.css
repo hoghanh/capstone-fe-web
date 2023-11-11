@@ -227,9 +227,9 @@ body {
   box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.10) !important;
 }
 
-.modalPrimary .ant-select .ant-select-selector{
+/* .modalPrimary .ant-select .ant-select-selector{
   border: none!important;
-}
+} */
 
 .modalPrimary .searchInput .ant-input-wrapper .ant-input-group-addon{
   border-top-right-radius: 0px !important;

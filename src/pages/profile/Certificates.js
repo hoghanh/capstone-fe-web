@@ -1,14 +1,286 @@
-import { Col, Image, Row, Typography } from 'antd';
-import { ButtonIcon } from 'components/customize/GlobalCustomize';
-import { CustomCard, CustomCol, CustomDivider, CustomRow } from 'components/customize/Layout';
-import { Plus } from 'components/icon/Icon';
-import React from 'react';
-import css from './profile.module.css';
+import {
+  Col,
+  DatePicker,
+  Dropdown,
+  Form,
+  Image,
+  Input,
+  Row,
+  Typography,
+  notification,
+} from "antd";
+import { ButtonIcon } from "components/customize/GlobalCustomize";
+import {
+  CustomCard,
+  CustomCol,
+  CustomDivider,
+  CustomRow,
+} from "components/customize/Layout";
+import { Plus } from "components/icon/Icon";
+import React, { useState } from "react";
+import css from "./profile.module.css";
+import { ModalPrimary } from "components/Modal/Modal";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { freelancerState } from "recoil/atom";
+import { post, put, remove } from "utils/APICaller";
+import moment from "moment";
+import { formatDate } from "components/formatter/format";
+import { Link } from "react-router-dom";
+import { EllipsisOutlined } from "@ant-design/icons";
 
-// Header section
+const items = [
+  {
+    key: "edit",
+    label: "Chỉnh sửa",
+  },
+  {
+    key: "remove",
+    label: "Xóa",
+    danger: true,
+  },
+];
+
+const AddCertifications = () => {
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const [issueDate, setIssueDate] = useState();
+  const [expirationDate, setExpirationDate] = useState();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const onIssueDate = (date, dateString) => {
+    setIssueDate(dateString);
+  };
+
+  const onExpDate = (date, dateString) => {
+    setExpirationDate(dateString);
+  };
+
+  const addCertificates = (values) => {
+    const { name, issuingOrganization, credentialId, credentialUrl } = values;
+    post({
+      endpoint: `/certificate/`,
+      body: {
+        name,
+        issuingOrganization,
+        issueDate,
+        expirationDate,
+        credentialId,
+        credentialUrl,
+        accountId: informationUser.accountId,
+      },
+    })
+      .then((res) => {
+        const certificate = res.data;
+        setInformationUser({
+          ...informationUser,
+          certificates: [...informationUser.certificates, certificate],
+        });
+        notification.success({
+          message: "Cập nhật thành công!",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        console.log(values);
+        addCertificates(values);
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonIcon onClick={showModal}>
+        <Plus />
+      </ButtonIcon>
+      <ModalPrimary
+        title={"Thêm chứng chỉ mới"}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          name="submitCertificate"
+          initialValues={{
+            remember: false,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Tên chứng chỉ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="name"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <Input
+                      placeholder="VD: Certified Scrum Master (CSM)"
+                      controls={false}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Tổ chức cấp</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="issuingOrganization"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <Input
+                      style={{ width: "40%" }}
+                      placeholder="VD: Scrum Alliance"
+                      controls={false}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={12}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Ngày cấp</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="issueDate"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showNow={false}
+                      format={"DD-MM-YYYY"}
+                      onChange={onIssueDate}
+                      disabledDate={(current) => {
+                        return current && current > moment().endOf("day");
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={12}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Ngày Hết hạn</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item name="expirationDate">
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showNow={false}
+                      format={"DD-MM-YYYY"}
+                      onChange={onExpDate}
+                      disabledDate={(current) => {
+                        const issueDate = form.getFieldValue("issueDate");
+                        return (
+                          current &&
+                          issueDate &&
+                          current.isBefore(issueDate.clone().add(30, "days"))
+                        );
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>ID chứng chỉ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="credentialId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="VD: CSM-123456789A" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Đường dẫn chứng chỉ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="credentialUrl"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="VD: https://certificate.com/csm-123456789a" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
+    </>
+  );
+};
+
 const HeaderSection = () => {
   return (
-    <Row justify={'space-between'} style={{ padding: 25 }}>
+    <Row justify={"space-between"} style={{ padding: 25 }}>
       <Col>
         <Row>
           <CustomCol>
@@ -19,63 +291,365 @@ const HeaderSection = () => {
         </Row>
       </Col>
       <Col>
-        <ButtonIcon>
-          <Plus />
-        </ButtonIcon>
+        <AddCertifications />
       </Col>
     </Row>
   );
 };
 
-//Body Section
 const BodySection = () => {
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
+  const [isModalEdit, setIsModalEdit] = useState(false);
+  const [isModalRemove, setIsModalRemove] = useState(false);
+  const [isIdItem, setIsIdItem] = useState(null);
+  const [certificate, setCertificate] = useState(null);
+  const [issueDate, setIssueDate] = useState();
+  const [expirationDate, setExpirationDate] = useState();
+  const [form] = Form.useForm();
+
+  
+
+  const onIssueDate = (date, dateString) => {
+    setIssueDate(dateString);
+  };
+
+  const onExpDate = (date, dateString) => {
+    setExpirationDate(dateString);
+  };
+
+  const onClick = (id, key) => {
+    const checkAction = key.toString();
+    if (checkAction.includes("remove")) {
+      setIsIdItem(id);
+      setIsModalRemove(true);
+    } else if (checkAction.includes("edit")) {
+      setIsIdItem(id);
+      setCertificate(
+        informationUser.certificates.find((item) => item.id === id)
+      );
+      setIsModalEdit(true);
+    }
+  };
+
+  const handleRemove = () => {
+    remove({
+      endpoint: `/certificate/detail/${isIdItem}`,
+    })
+      .then((res) => {
+        setInformationUser({
+          ...informationUser,
+          certificates: informationUser.certificates.filter((certificate) => certificate.id !== isIdItem),
+        });
+        notification.success({
+          message: res.data,
+        });
+        setIsIdItem(null);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+    setIsModalRemove(false);
+  };
+  
+
+  const handleCancelRemove = () => {
+    setIsModalRemove(false);
+  };
+
+  const handleEdit = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        console.log(values)
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+    // put({
+    //   endpoint: `/certificate/detail/${isIdItem}`,
+    //   body:{
+
+    //   }
+    // })
+    //   .then((res) => {
+    //     setInformationUser({
+    //       ...informationUser,
+    //       certificates: informationUser.certificates.filter((certificate) => certificate.id !== isIdItem),
+    //     });
+    //     notification.success({
+    //       message: res.data,
+    //     });
+    //     setIsIdItem(null);
+    //   })
+    //   .catch((error) => {
+    //     notification.error({
+    //       message: error.response.data.message,
+    //     });
+    //   });
+    setIsModalRemove(false);
+  };
+
+  const handleCancelEdit = () => {
+    setIsModalEdit(false);
+    setIsIdItem(null);
+  };
+
   return (
     <Row style={{ marginRight: 30, marginLeft: 30 }}>
-      <Col span={24}>
-        <Row className={css.certificate} style={{ padding: '20px 30px' }} align={'middle'}>
-          <Col span={0} sm={{span: 4}} style={{ paddingRight: 20 }}>
-            <Image src="img/certificate-1.png" preview={false}></Image>
+      {informationUser?.certificates.map((certificate, index) => (
+        <div key={certificate.id} style={{ width: "100%" }}>
+          <Col span={24}>
+            <Row
+              className={css.certificate}
+              style={{ padding: "20px 30px" }}
+              align={"middle"}
+            >
+              <Col span={0} sm={{ span: 4 }} style={{ paddingRight: 20 }}>
+                <Link to={certificate.credentialUrl} target="_blank">
+                  <Image src="img/certificate-1.png" preview={false}></Image>
+                </Link>
+              </Col>
+              <Col span={24} sm={{ span: 20 }}>
+                <Row>
+                  <Col span={23}>
+                    <CustomRow>
+                      <Col span={24}>
+                        <Link to={certificate.credentialUrl} target="_blank">
+                          <Typography.Title level={3} style={{ margin: 0 }}>
+                            {certificate.name}
+                          </Typography.Title>
+                        </Link>
+                      </Col>
+                      <Col span={24}>
+                        <Typography.Text>
+                          Tổ chức: {certificate.issuingOrganization}
+                        </Typography.Text>
+                      </Col>
+                      <Col span={24}>
+                        <Typography.Text>
+                          Ngày phát hành: {formatDate(certificate.issueDate)}
+                        </Typography.Text>
+                      </Col>
+                      <Col
+                        span={24}
+                        style={{
+                          display: certificate.expirationDate
+                            ? "block"
+                            : "none",
+                        }}
+                      >
+                        <Typography.Text>
+                          Ngày hết hạn: {formatDate(certificate.expirationDate)}
+                        </Typography.Text>
+                      </Col>
+                    </CustomRow>
+                  </Col>
+                  <Col
+                    span={1}
+                    style={{ display: "flex", alignItems: "flex-start" }}
+                  >
+                    <Dropdown
+                      menu={{
+                        items,
+                        onClick: ({ key }) => {
+                          onClick(certificate.id, key);
+                        },
+                      }}
+                    >
+                      <EllipsisOutlined />
+                    </Dropdown>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </Col>
-          <Col span={24} sm={{span: 20}}>
-            <CustomRow>
-              <Col span={24}>
-                <Typography.Title level={3} style={{ margin: 0 }}>
-                  UX (User Experience) Capstone
-                </Typography.Title>
-              </Col>
-              <Col span={24}>
-                <Typography.Text>Provider: Coursera and University of Michigan</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Typography.Text>Issued: February 2020</Typography.Text>
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
-      </Col>
-      <CustomDivider $primary />
-      <Col span={24}>
-        <Row className={css.certificate} style={{ padding: '20px 30px' }} align={'middle'}>
-          <Col span={0} sm={{span: 4}} style={{ paddingRight: 20 }}>
-            <Image src="img/certificate-1.png" preview={false}></Image>
-          </Col>
-          <Col span={24} sm={{span: 20}}>
-            <CustomRow>
-              <Col span={24}>
-                <Typography.Title level={3} style={{ margin: 0 }}>
-                  UX (User Experience) Capstone
-                </Typography.Title>
-              </Col>
-              <Col span={24}>
-                <Typography.Text>Provider: Coursera and University of Michigan</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Typography.Text>Issued: February 2020</Typography.Text>
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
-      </Col>
+          {informationUser?.certificates.length === index + 1 ? null : (
+            <CustomDivider $primary />
+          )}
+        </div>
+      ))}
+      <ModalPrimary
+        title="Cảnh báo"
+        open={isModalRemove}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleRemove}
+        onCancel={handleCancelRemove}
+        okText="Xóa"
+        okType="danger"
+      >
+        Bạn có chắc muốn xóa chứng chỉ này?
+      </ModalPrimary>
+
+      <ModalPrimary
+        title={"Chỉnh sửa chứng chỉ"}
+        open={isModalEdit}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleEdit}
+        onCancel={handleCancelEdit}
+      >
+        <Form
+          form={form}
+          name="editCertificate"
+          initialValues={{
+            remember: true,
+            // name: certificate?.name,
+            // issuingOrganization: certificate?.issuingOrganization,
+            // issueDate: moment(certificate?.issueDate),
+            // expirationDate: moment(certificate?.expirationDate),
+            // credentialId: certificate?.credentialId,
+            // credentialUrl: certificate?.credentialUrl,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Tên chứng chỉ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="name"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <Input
+                      placeholder="VD: Certified Scrum Master (CSM)"
+                      controls={false}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Tổ chức cấp</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="issuingOrganization"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <Input
+                      style={{ width: "40%" }}
+                      placeholder="VD: Scrum Alliance"
+                      controls={false}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={12}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Ngày cấp</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="issueDate"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showNow={false}
+                      format={"DD-MM-YYYY"}
+                      onChange={onIssueDate}
+                      disabledDate={(current) => {
+                        return current && current > moment().endOf("day");
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={12}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Ngày Hết hạn</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item name="expirationDate">
+                    <DatePicker
+                      style={{ with: "100%" }}
+                      showNow={false}
+                      format={"DD-MM-YYYY"}
+                      onChange={onExpDate}
+                      disabledDate={(current) => {
+                        const issueDate = form.getFieldValue("issueDate");
+                        return (
+                          current &&
+                          issueDate &&
+                          current.isBefore(issueDate.clone().add(30, "days"))
+                        );
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>ID chứng chỉ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="credentialId"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <Input placeholder="VD: CSM-123456789A" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Đường dẫn chứng chỉ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="credentialUrl"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Không được để trống ô này!",
+                    //   },
+                    // ]}
+                  >
+                    <Input placeholder="VD: https://certificate.com/csm-123456789a" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
     </Row>
   );
 };
@@ -84,9 +658,7 @@ const Certificates = () => {
   return (
     <>
       <CustomCard style={{ padding: 0 }}>
-        {/* Header section */}
         <HeaderSection />
-        {/* Body Section */}
         <BodySection />
       </CustomCard>
     </>
@@ -99,7 +671,7 @@ const styles = {
   },
 
   address: {
-    color: '#656565',
+    color: "#656565",
     paddingLeft: 10,
     marginBottom: 20,
   },
