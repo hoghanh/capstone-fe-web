@@ -1,4 +1,4 @@
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined } from "@ant-design/icons";
 import {
   Col,
   Form,
@@ -12,74 +12,32 @@ import {
   Skeleton,
   Typography,
   notification,
-} from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import { ModalPrimary } from 'components/Modal/Modal';
+} from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { ModalPrimary } from "components/Modal/Modal";
 import {
   ButtonIcon,
   ButtonPrimary,
-} from 'components/customize/GlobalCustomize';
+} from "components/customize/GlobalCustomize";
 import {
   CustomCard,
   CustomCol,
   CustomDivider,
   CustomRow,
-} from 'components/customize/Layout';
-import { Flag, Pen, Plus, SearchOutlined, Trash } from 'components/icon/Icon';
-import React, { useState } from 'react';
-import color from 'styles/color';
-import css from './profile.module.css';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { freelancerState, profileState } from 'recoil/atom';
-import { put } from 'utils/APICaller';
-
-const Skill = [
-  {
-    title: 'Javascript',
-  },
-  {
-    title: 'Html',
-  },
-  {
-    title: 'NextJS',
-  },
-  {
-    title: 'ReactJS',
-  },
-  {
-    title: 'Javascript',
-  },
-  {
-    title: 'Html',
-  },
-  {
-    title: 'NextJS',
-  },
-  {
-    title: 'ReactJS',
-  },
-  {
-    title: 'Javascript',
-  },
-  {
-    title: 'Html',
-  },
-  {
-    title: 'NextJS',
-  },
-  {
-    title: 'ReactJS',
-  },
-];
-
-const options = [];
-for (let i = 0; i < Skill.length; i++) {
-  const value = i.toString(36) + i;
-  options.push({
-    label: `${value}`,
-    value,
-  });
-}
+} from "components/customize/Layout";
+import { Flag, Pen, Plus, Trash } from "components/icon/Icon";
+import React, { useEffect, useState } from "react";
+import color from "styles/color";
+import css from "./profile.module.css";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  applicationListState,
+  authState,
+  freelancerState,
+  profileState,
+} from "recoil/atom";
+import { get, post, put, remove } from "utils/APICaller";
+import { formatDate } from "components/formatter/format";
 
 const EditPersonalInformation = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
@@ -108,7 +66,7 @@ const EditPersonalInformation = () => {
           },
         });
         notification.success({
-          message: 'Cập nhật thành công!',
+          message: "Cập nhật thành công!",
         });
       })
       .catch((error) => {
@@ -126,7 +84,7 @@ const EditPersonalInformation = () => {
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.error('Validation failed:', error);
+        console.error("Validation failed:", error);
       });
   };
 
@@ -140,7 +98,7 @@ const EditPersonalInformation = () => {
         <Pen />
       </ButtonIcon>
       <ModalPrimary
-        title={'Chỉnh sửa thông tin'}
+        title={"Chỉnh sửa thông tin"}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
@@ -148,7 +106,7 @@ const EditPersonalInformation = () => {
       >
         <Form
           form={form}
-          name='submitApplication'
+          name="submitInformation"
           initialValues={{
             remember: true,
             phone: informationUser.accounts.phone,
@@ -167,18 +125,18 @@ const EditPersonalInformation = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                       {
                         pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-                        message: 'Số điện thoại không hợp lệ!',
+                        message: "Số điện thoại không hợp lệ!",
                       },
                     ]}
                   >
                     <Input
-                      style={{ width: '40%' }}
+                      style={{ width: "40%" }}
                       prefix={<Flag />}
-                      placeholder='0123456789'
+                      placeholder="0123456789"
                       controls={false}
                     />
                   </Form.Item>
@@ -196,7 +154,7 @@ const EditPersonalInformation = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
@@ -217,10 +175,10 @@ const EditWorkingTime = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState(1);
   const hoursPerWeekOptions = [
-    { label: 'Nhiều hơn 30h / tuần', value: 1 },
-    { label: 'Ít hơn 30h / tuần', value: 2 },
-    { label: 'Có mặt khi yêu cầu', value: 3 },
-    { label: 'Không có giới hạn', value: 4 },
+    { label: "Nhiều hơn 30h / tuần", value: 1 },
+    { label: "Ít hơn 30h / tuần", value: 2 },
+    { label: "Có mặt khi yêu cầu", value: 3 },
+    { label: "Không có giới hạn", value: 4 },
   ];
 
   const showModal = () => {
@@ -243,7 +201,7 @@ const EditWorkingTime = () => {
           hoursPerWeek,
         });
         notification.success({
-          message: 'Cập nhật thành công!',
+          message: "Cập nhật thành công!",
         });
       })
       .catch((error) => {
@@ -268,7 +226,7 @@ const EditWorkingTime = () => {
         <Pen />
       </ButtonIcon>
       <ModalPrimary
-        title={'Khả dụng'}
+        title={"Khả dụng"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -310,20 +268,67 @@ const EditWorkingTime = () => {
     </>
   );
 };
+const languagesItems = [
+  { value: "1", label: "Cơ Bản" },
+  { value: "2", label: "Trung cấp" },
+  { value: "3", label: "Thông thạo" },
+];
 
 const AddLanguage = () => {
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const auth = useRecoilValue(authState);
+
+  const getFreelancer = () => {
+    get({ endpoint: `/freelancer/profile/${auth.id}` })
+      .then((response) => {
+        const data = response.data;
+        setInformationUser(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const handleOk = () => {
-    setIsModalOpen(false);
+    form
+      .validateFields()
+      .then((values) => {
+        const level = languagesItems.find(
+          (item) => item.value === values.level
+        ).label;
+        const { name } = values;
+        post({
+          endpoint: `/freelancer/languages/${informationUser.id}`,
+          body: {
+            name,
+            level,
+          },
+        })
+          .then((res) => {
+            getFreelancer();
+            notification.success({
+              message: res.data,
+            });
+            setIsModalOpen(false);
+          })
+          .catch((error) => {
+            notification.error({
+              message: error.response.data.message,
+            });
+          });
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
   };
 
   return (
@@ -332,165 +337,236 @@ const AddLanguage = () => {
         <Plus />
       </ButtonIcon>
       <ModalPrimary
-        title={'Thêm ngôn ngữ'}
+        title={"Thêm ngôn ngữ"}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Row gutter={[0, 10]}>
-          <Col span={12}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Ngôn ngữ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input
-                  className='searchInput'
-                  addonBefore={<SearchOutlined />}
-                  placeholder='Tìm kiếm ngôn ngữ'
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={12}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Trình độ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Select
-                  defaultValue='2'
-                  style={{ width: 120 }}
-                  onChange={handleChange}
-                  suffixIcon={<DownOutlined />}
-                  placement='bottomLeft'
-                  options={[
-                    { value: '1', label: 'Cơ Bản' },
-                    { value: '2', label: 'Giao tiếp' },
-                    { value: '3', label: 'Thông thạo' },
-                    { value: '4', label: 'Tự nhiên' },
-                  ]}
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
+        <Form form={form} name="addLanguage" initialValues={{ level: "2" }}>
+          <Row gutter={[0, 10]}>
+            <Col span={12}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Ngôn ngữ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="VD: Tiếng Anh" />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+            <Col span={12}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Typography.Text>Trình độ</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form.Item name="level">
+                    <Select
+                      style={{ width: 120 }}
+                      suffixIcon={<DownOutlined />}
+                      placement="bottomLeft"
+                      options={languagesItems}
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
       </ModalPrimary>
     </>
   );
 };
 
 const EditLanguages = () => {
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
+  const [languages, setLanguages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const auth = useRecoilValue(authState);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
+
+  const getFreelancer = () => {
+    get({ endpoint: `/freelancer/profile/${auth.id}` })
+      .then((response) => {
+        const data = response.data;
+        setInformationUser(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  const handleLanguageChange = (changedValues, allValues) => {
+    const changedField = Object.keys(changedValues)[0];
+    const id = changedField.replace("language", "").replace("level", "");
+    const name = allValues[`language${id}`];
+    let level = allValues[`level${id}`];
+    const getLevel = (level, languagesItems) => {
+      const item = languagesItems.find((item) => item.value === level);
+      return item ? item.label : level;
+    };
+    level = getLevel(level, languagesItems);
+    const obj = { id, name, level };
+    const index = languages.findIndex((o) => o.id === id);
+    if (index === -1) {
+      setLanguages((prevList) => [...prevList, obj]);
+    } else {
+      setLanguages((prevList) =>
+        prevList.map((o, i) => (i === index ? obj : o))
+      );
+    }
+  };
+
+  const handleDeleteLanguage = (languageId) => {
+    remove({
+      endpoint: `/freelancer/language/${languageId}`,
+    })
+      .then((res) => {
+        getFreelancer();
+        notification.success({
+          message: res.data,
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        put({
+          endpoint: `/freelancer/languages/${informationUser.id}`,
+          body: {
+            languages,
+          },
+        })
+          .then((res) => {
+            getFreelancer();
+            notification.success({
+              message: res.data,
+            });
+            setIsModalOpen(false);
+          })
+          .catch((error) => {
+            notification.error({
+              message: error.response.data.message,
+            });
+          });
+      })
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+
   return (
     <>
       <ButtonIcon onClick={showModal}>
         <Pen />
       </ButtonIcon>
       <ModalPrimary
-        title={'Chỉnh sửa ngôn ngữ'}
+        title={"Chỉnh sửa ngôn ngữ"}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Row gutter={[0, 10]}>
-          <Col span={12}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Ngôn ngữ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input placeholder='Tìm kiếm ngôn ngữ' />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={10}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Trình độ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Select
-                  defaultValue='2'
-                  style={{ width: 120 }}
-                  onChange={handleChange}
-                  suffixIcon={<DownOutlined />}
-                  placement='bottomLeft'
-                  options={[
-                    { value: '1', label: 'Cơ Bản' },
-                    { value: '2', label: 'Giao tiếp' },
-                    { value: '3', label: 'Thông thạo' },
-                    { value: '4', label: 'Tự nhiên' },
-                  ]}
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col offset={2}></Col>
-          <Col span={12}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Ngôn ngữ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input placeholder='Tìm kiếm ngôn ngữ' />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={10}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Trình độ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Select
-                  defaultValue='2'
-                  style={{ width: 120 }}
-                  onChange={handleChange}
-                  suffixIcon={<DownOutlined />}
-                  placement='bottomLeft'
-                  options={[
-                    { value: '1', label: 'Cơ Bản' },
-                    { value: '2', label: 'Giao tiếp' },
-                    { value: '3', label: 'Thông thạo' },
-                    { value: '4', label: 'Tự nhiên' },
-                  ]}
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col
-            span={2}
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-            }}
-          >
-            <ButtonIcon
-              style={{
-                backgroundColor: color.colorWhite,
-                border: `1px solid ${color.colorDeactivate}`,
-              }}
-            >
-              <Trash color={'#eb4335'} />
-            </ButtonIcon>
-          </Col>
-        </Row>
+        <Form
+          form={form}
+          onValuesChange={handleLanguageChange}
+          name="editLanguage"
+          initialValues={{ remember: false }}
+        >
+          <Row>
+            <Col span={24}>
+              <CustomRow gutter={[10, 10]}>
+                <Col span={12}>
+                  <Typography.Text>Ngôn ngữ</Typography.Text>
+                </Col>
+                <Col span={12}>
+                  <Typography.Text>Trình độ</Typography.Text>
+                </Col>
+              </CustomRow>
+            </Col>
+            {informationUser?.language.map((item) => {
+              return (
+                <Col key={item.id} span={24}>
+                  <CustomRow gutter={[10, 10]}>
+                    <Col span={12}>
+                      <Form.Item
+                        name={`language${item.id}`}
+                        initialValue={item.name}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Không được để trống ô này!",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="VD: Tiếng Anh" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={10}>
+                      <Form.Item
+                        name={`level${item.id}`}
+                        initialValue={item.level}
+                      >
+                        <Select
+                          style={{ width: 120 }}
+                          suffixIcon={<DownOutlined />}
+                          placement="bottomLeft"
+                          options={languagesItems}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col
+                      span={2}
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      {informationUser?.language.length > 1 && (
+                        <ButtonIcon
+                          onClick={() => handleDeleteLanguage(item.id)}
+                          style={{
+                            backgroundColor: color.colorWhite,
+                            border: `1px solid ${color.colorDeactivate}`,
+                          }}
+                        >
+                          <Trash color={"#eb4335"} />
+                        </ButtonIcon>
+                      )}
+                    </Col>
+                  </CustomRow>
+                </Col>
+              );
+            })}
+          </Row>
+        </Form>
       </ModalPrimary>
     </>
   );
@@ -499,7 +575,7 @@ const EditLanguages = () => {
 const EditMajor = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -518,7 +594,7 @@ const EditMajor = () => {
           major,
         });
         notification.success({
-          message: 'Cập nhật thành công!',
+          message: "Cập nhật thành công!",
         });
       })
       .catch((error) => {
@@ -542,7 +618,7 @@ const EditMajor = () => {
         <Plus />
       </ButtonIcon>
       <ModalPrimary
-        title={'Chuyên ngành'}
+        title={"Chuyên ngành"}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
@@ -554,8 +630,8 @@ const EditMajor = () => {
               <Col span={24}>
                 <Input
                   onChange={onChange}
-                  style={{ width: '100%' }}
-                  placeholder='Nhập chuyên ngành của bạn tại đây ...'
+                  style={{ width: "100%" }}
+                  placeholder="Nhập chuyên ngành của bạn tại đây ..."
                 />
               </Col>
             </CustomRow>
@@ -570,7 +646,6 @@ const EditIntroduction = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-  console.log(informationUser);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -593,7 +668,7 @@ const EditIntroduction = () => {
               introduction,
             });
             notification.success({
-              message: 'Cập nhật thành công!',
+              message: "Cập nhật thành công!",
             });
           })
           .catch((error) => {
@@ -605,14 +680,14 @@ const EditIntroduction = () => {
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.error('Validation failed:', error);
+        console.error("Validation failed:", error);
       });
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const onChange = (e) => {
-    console.log('Change:', e.target.value);
+    console.log("Change:", e.target.value);
   };
   return (
     <>
@@ -620,7 +695,7 @@ const EditIntroduction = () => {
         <Pen />
       </ButtonIcon>
       <ModalPrimary
-        title={'Giới thiệu'}
+        title={"Giới thiệu"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -648,7 +723,7 @@ const EditIntroduction = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
@@ -671,7 +746,7 @@ const EditIntroduction = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
@@ -681,7 +756,7 @@ const EditIntroduction = () => {
                       maxLength={1000}
                       style={{
                         height: 120,
-                        resize: 'none',
+                        resize: "none",
                       }}
                       onChange={onChange}
                       placeholder='textarea'
@@ -697,43 +772,105 @@ const EditIntroduction = () => {
   );
 };
 
-const EditSkills = () => {
+const EditSkills = ({ skillList, setSkillList }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
+  const [skills, setSkills] = useState([]);
+  const [value, setValue] = useState([]);
+  const auth = useRecoilValue(authState);
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
+  const getFreelancer = () => {
+    get({ endpoint: `/freelancer/profile/${auth.id}` })
+      .then((response) => {
+        const data = response.data;
+        setInformationUser(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    setValue(skillList.map((item) => item.name));
+  }, [skillList]);
+
+  const fetchSkills = () => {
+    get({ endpoint: `/skill/` })
+      .then((response) => {
+        const data = response.data;
+        setSkills(data);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const handleOk = () => {
-    setIsModalOpen(false);
+    put({
+      endpoint: `/freelancer/skills/${informationUser.id}`,
+      body: {
+        skill: value,
+      },
+    })
+      .then((res) => {
+        let updatedSkillList = [...skillList];
+        updatedSkillList = updatedSkillList.filter((skill) =>
+          value.includes(skill.name)
+        );
+        const missingSkills = value.filter(
+          (skill) => !updatedSkillList.some((s) => s.name === skill)
+        );
+        missingSkills.forEach((skill) => {
+          updatedSkillList.push({ name: skill, level: "Cơ bản" });
+        });
+        setSkillList(updatedSkillList);
+        getFreelancer();
+        notification.success({
+          message: res.data,
+        });
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const [value, setValue] = useState([
-    'Javascript',
-    'Html',
-    'NextJS',
-    'ReactJS',
-  ]);
+
   const selectProps = {
-    mode: 'multiple',
-    style: {
-      width: '100%',
-    },
+    mode: "multiple",
+    size: "large",
     value,
-    options,
+    options: skills?.map((item) => ({ label: item.name, value: item.name })),
     onChange: (newValue) => {
       setValue(newValue);
     },
-    placeholder: 'Thêm kỹ năng của bạn...',
-    maxTagCount: 'responsive',
+    placeholder: "Nhập hoặc chọn kĩ năng",
+    tokenSeparators: [","],
+    maxTagCount: "responsive",
   };
+
   return (
     <>
       <ButtonIcon onClick={showModal}>
         <Pen />
       </ButtonIcon>
       <ModalPrimary
-        title={'Kỹ năng chuyên môn'}
+        title={"Kỹ năng chuyên môn"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -748,11 +885,7 @@ const EditSkills = () => {
                 </Typography.Text>
               </Col>
               <Col span={24}>
-                <Select
-                  className='skillSelect'
-                  suffixIcon={<></>}
-                  {...selectProps}
-                />
+                <Select {...selectProps} />
               </Col>
             </CustomRow>
           </Col>
@@ -791,7 +924,7 @@ const EditNameAvatar = () => {
               },
             });
             notification.success({
-              message: 'Cập nhật thành công!',
+              message: res.data,
             });
           })
           .catch((error) => {
@@ -803,7 +936,7 @@ const EditNameAvatar = () => {
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.error('Validation failed:', error);
+        console.error("Validation failed:", error);
       });
   };
   const handleCancel = () => {
@@ -815,14 +948,14 @@ const EditNameAvatar = () => {
         <Pen />
       </ButtonIcon>
       <ModalPrimary
-        title={'Thông tin cơ bản'}
+        title={"Thông tin cơ bản"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         <Form
           form={form}
-          name='submitApplication'
+          name="submitNameAvatar"
           initialValues={{
             remember: true,
             name: informationUser.accounts.name,
@@ -843,7 +976,7 @@ const EditNameAvatar = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
@@ -865,7 +998,7 @@ const EditNameAvatar = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
@@ -881,91 +1014,35 @@ const EditNameAvatar = () => {
   );
 };
 
-const AddCertifications = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  return (
-    <>
-      <ButtonIcon>
-        <Pen />
-      </ButtonIcon>
-      <ModalPrimary
-        title={'Chỉnh sửa thông tin'}
-        open={isModalOpen}
-        bodyStyle={{ paddingTop: 20 }}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Row gutter={[0, 10]}>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Số điện thoại</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <InputNumber
-                  style={{ width: '40%' }}
-                  prefix={<Flag />}
-                  placeholder='0123456789'
-                  controls={false}
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Typography.Text>Địa chỉ</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input placeholder='Địa chỉ' />
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
-      </ModalPrimary>
-    </>
-  );
-};
-
-// Header section
 const HeaderSection = () => {
   const informationUser = useRecoilValue(freelancerState);
 
   return (
-    <Row justify={'space-between'} style={{ padding: 25 }}>
+    <Row justify={"space-between"} style={{ padding: 25 }}>
       <Col>
         <Row>
           <Col
-            style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}
+            style={{ display: "flex", alignItems: "center", marginRight: 10 }}
           >
             <Image
               width={72}
               src={informationUser.accounts.image}
               alt='Apofoitisi logo'
               preview={true}
-              style={{ borderRadius: '50%' }}
+              style={{ borderRadius: "50%" }}
             />
           </Col>
           <CustomCol
-            style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}
+            style={{ display: "flex", alignItems: "center", marginRight: 10 }}
           >
             <Row gutter={10}>
               <Col>
                 <Typography.Title level={2} style={styles.nameUser}>
                   {informationUser.accounts.name != null &&
-                  informationUser.accounts.name !== '' ? (
+                  informationUser.accounts.name !== "" ? (
                     informationUser.accounts.name
                   ) : (
-                    <Skeleton.Input size={'large'} />
+                    <Skeleton.Input size={"large"} />
                   )}
                 </Typography.Title>
               </Col>
@@ -992,7 +1069,6 @@ const HeaderSection = () => {
   );
 };
 
-//Body Section Left
 const BodySectionLeft = () => {
   const informationUser = useRecoilValue(freelancerState);
 
@@ -1000,13 +1076,13 @@ const BodySectionLeft = () => {
     <Col
       span={0}
       sm={{ span: 8 }}
-      style={{ borderRight: '1px solid #656565', padding: '30px 20px' }}
+      style={{ borderRight: "1px solid #656565", padding: "30px 20px" }}
     >
       <Row gutter={[0, 10]}>
         <Col>
           <Row gutter={[0, 10]}>
             <Col>
-              <Row align={'middle'} gutter={[30, 10]}>
+              <Row align={"middle"} gutter={[30, 10]}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0 }}>
                     Thông tin cá nhân
@@ -1020,7 +1096,7 @@ const BodySectionLeft = () => {
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Số điện thoại
@@ -1030,11 +1106,11 @@ const BodySectionLeft = () => {
                 </Col>
                 <Col span={24}>
                   <Typography.Text style={{ letterSpacing: 1 }}>
-                    {' '}
+                    {" "}
                     {informationUser.accounts.phone != null &&
-                    informationUser.accounts.phone !== ''
+                    informationUser.accounts.phone !== ""
                       ? informationUser.accounts.phone
-                      : 'Chưa có thông tin'}
+                      : "Chưa có thông tin"}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -1042,7 +1118,7 @@ const BodySectionLeft = () => {
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Địa chỉ
@@ -1053,9 +1129,9 @@ const BodySectionLeft = () => {
                 <Col span={24}>
                   <Typography.Text>
                     {informationUser.accounts.address != null &&
-                    informationUser.accounts.address !== ''
+                    informationUser.accounts.address !== ""
                       ? informationUser.accounts.address
-                      : 'Chưa có thông tin'}
+                      : "Chưa có thông tin"}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -1065,7 +1141,7 @@ const BodySectionLeft = () => {
         <Col>
           <Row gutter={[0, 10]}>
             <Col>
-              <Row align={'middle'} gutter={[30, 10]}>
+              <Row align={"middle"} gutter={[30, 10]}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0 }}>
                     Thông tin công việc
@@ -1076,7 +1152,7 @@ const BodySectionLeft = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Thời gian làm mỗi tuần
@@ -1090,9 +1166,9 @@ const BodySectionLeft = () => {
                 <Col>
                   <Typography.Text>
                     {informationUser.hoursPerWeek != null &&
-                    informationUser.hoursPerWeek !== ''
+                    informationUser.hoursPerWeek !== ""
                       ? informationUser.hoursPerWeek
-                      : 'Chưa có thông tin'}
+                      : "Chưa có thông tin"}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -1100,7 +1176,7 @@ const BodySectionLeft = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Ngôn ngữ
@@ -1114,29 +1190,22 @@ const BodySectionLeft = () => {
                     </Col>
                   </Row>
                 </Col>
-                <Col>
-                  <Typography.Text>
-                    <Typography.Text strong style={{ marginRight: 20 }}>
-                      Tiếng Anh:
+                {informationUser?.language.map((language) => (
+                  <Col key={language.id} span={24}>
+                    <Typography.Text>
+                      <Typography.Text strong style={{ marginRight: 20 }}>
+                        {language.name}:
+                      </Typography.Text>
+                      {language.level}
                     </Typography.Text>
-                    Giao tiếp
-                  </Typography.Text>
-                </Col>
-                <Col>
-                  <Typography.Text>
-                    <Typography.Text strong style={{ marginRight: 20 }}>
-                      Tiếng Nhật:
-                    </Typography.Text>
-                    Giao tiếp
-                  </Typography.Text>
-                </Col>
+                  </Col>
+                ))}
               </Row>
             </CustomCol>
-            {/* Left 3 */}
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Chuyên ngành
@@ -1150,9 +1219,9 @@ const BodySectionLeft = () => {
                 <Col>
                   <Typography.Text>
                     {informationUser.major != null &&
-                    informationUser.major !== ''
+                    informationUser.major !== ""
                       ? informationUser.major
-                      : 'Chưa có thông tin'}
+                      : "Chưa có thông tin"}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -1164,7 +1233,6 @@ const BodySectionLeft = () => {
   );
 };
 
-//Body Section Left Responsive
 const BodySectionLeftResponsive = () => {
   const informationUser = useRecoilValue(profileState);
 
@@ -1173,10 +1241,10 @@ const BodySectionLeftResponsive = () => {
       span={24}
       sm={{ span: 0 }}
       style={{
-        borderRight: '1px solid #656565',
-        padding: '30px 20px',
+        borderRight: "1px solid #656565",
+        padding: "30px 20px",
         marginBottom: 30,
-        boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
+        boxShadow: "2px 6px 4px 0px rgba(0, 0, 0, 0.25)",
         borderRadius: 20,
         backgroundColor: color.colorWhitegq,
       }}
@@ -1185,7 +1253,7 @@ const BodySectionLeftResponsive = () => {
         <Col>
           <Row gutter={[0, 10]}>
             <Col>
-              <Row align={'middle'} gutter={[30, 10]}>
+              <Row align={"middle"} gutter={[30, 10]}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0 }}>
                     Thông tin cá nhân
@@ -1199,7 +1267,7 @@ const BodySectionLeftResponsive = () => {
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Số điện thoại
@@ -1217,7 +1285,7 @@ const BodySectionLeftResponsive = () => {
             <CustomCol span={24}>
               <Row gutter={[0, 15]}>
                 <Col>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col span={24}>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Địa chỉ
@@ -1235,7 +1303,7 @@ const BodySectionLeftResponsive = () => {
         <Col>
           <Row gutter={[0, 10]}>
             <Col>
-              <Row align={'middle'} gutter={[30, 10]}>
+              <Row align={"middle"} gutter={[30, 10]}>
                 <Col>
                   <Typography.Title level={3} style={{ margin: 0 }}>
                     Thông tin công việc
@@ -1246,7 +1314,7 @@ const BodySectionLeftResponsive = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col span={24}>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Thời gian làm mỗi tuần
@@ -1265,7 +1333,7 @@ const BodySectionLeftResponsive = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col span={24}>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Ngôn ngữ
@@ -1301,7 +1369,7 @@ const BodySectionLeftResponsive = () => {
             <CustomCol>
               <Row gutter={[0, 15]}>
                 <Col span={24}>
-                  <Row align={'middle'} gutter={[30, 10]}>
+                  <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Chuyên ngành
@@ -1328,25 +1396,83 @@ const BodySectionLeftResponsive = () => {
   );
 };
 
-//Body Section Right
 const BodySectionRight = () => {
   const informationUser = useRecoilValue(freelancerState);
+  const applications = useRecoilValue(applicationListState);
+  const [isModalLevel, setIsModalLevel] = useState(false);
+  const [value, setValue] = useState(1);
+  const [skillList, setSkillList] = useState([]);
+  const [idSkill, setIdSkill] = useState(null);
+
+  const levelOptions = [
+    { label: "Cơ bản", value: 1 },
+    { label: "Trung cấp", value: 2 },
+    { label: "Thông thạo", value: 3 },
+  ];
+
+  useEffect(() => {
+    setSkillList(
+      informationUser?.skills.map((item) => ({
+        id: item.freelancerskill.freelancerSkillId,
+        name: item.name,
+        level: item.freelancerskill.level,
+      }))
+    );
+  }, [informationUser]);
+
+  const handleModaLevel = () => {
+    const level = levelOptions.find((item) => item.value === value).label;
+    put({
+      endpoint: `/freelancer/skill/${idSkill}`,
+      body: {
+        level,
+      },
+    })
+      .then((res) => {
+        const updatedSkillList = [...skillList];
+        const skillIndex = updatedSkillList.findIndex(
+          (skill) => skill.id === idSkill
+        );
+        updatedSkillList[skillIndex].level = level;
+        setSkillList(updatedSkillList);
+        notification.success({
+          message: res.data,
+        });
+        setIdSkill(null);
+        setIsModalLevel(false);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleModalLevelCancel = () => {
+    setIdSkill(null);
+    setIsModalLevel(false);
+  };
+
+  const onLevelChange = (e) => {
+    setValue(e.target.value);
+  };
+
   return (
     <Col span={24} sm={{ span: 16 }}>
       <Row>
         <Col span={24}>
           <Row>
             <Col span={24} style={{ padding: 20 }}>
-              <Row align={'middle'}>
+              <Row align={"middle"}>
                 <Col>
                   <Typography.Title
                     level={3}
                     style={{ margin: 0, paddingRight: 30 }}
                   >
                     {informationUser.title != null &&
-                    informationUser.title !== ''
+                    informationUser.title !== ""
                       ? informationUser.title
-                      : 'Chưa có thông tin'}
+                      : "Chưa có thông tin"}
                   </Typography.Title>
                 </Col>
                 <Col>
@@ -1357,9 +1483,9 @@ const BodySectionRight = () => {
             <Col span={24} style={{ padding: 20 }}>
               <Typography.Text>
                 {informationUser.introduction != null &&
-                informationUser.introduction !== ''
+                informationUser.introduction !== ""
                   ? informationUser.introduction
-                  : 'Chưa có thông tin'}
+                  : "Chưa có thông tin"}
               </Typography.Text>
             </Col>
           </Row>
@@ -1368,7 +1494,7 @@ const BodySectionRight = () => {
         <Col span={24}>
           <Row>
             <Col span={24} style={{ padding: 20 }}>
-              <Row align={'middle'}>
+              <Row align={"middle"}>
                 <Col>
                   <Typography.Title
                     level={4}
@@ -1378,7 +1504,10 @@ const BodySectionRight = () => {
                   </Typography.Title>
                 </Col>
                 <Col>
-                  <EditSkills />
+                  <EditSkills
+                    skillList={skillList}
+                    setSkillList={setSkillList}
+                  />
                 </Col>
               </Row>
             </Col>
@@ -1386,19 +1515,33 @@ const BodySectionRight = () => {
               <Row className='skillArticle' gutter={[0, 10]}>
                 <CustomCol span={24}>
                   <List
-                    style={{ overflowX: 'auto' }}
+                    style={{ overflowX: "auto" }}
                     grid={{
                       gutter: 15,
                     }}
-                    dataSource={Skill}
-                    renderItem={(item, index) => (
+                    dataSource={skillList?.map((item) => ({
+                      title: `${item.name} - ${item.level}`,
+                      level: item.level,
+                      id: item.id,
+                    }))}
+                    renderItem={(item) => (
                       <List.Item
+                        onClick={() => {
+                          setIsModalLevel(true);
+                          setValue(
+                            levelOptions.find((l) => l.label === item.level)
+                              .value
+                          );
+                          setIdSkill(item.id);
+                        }}
                         style={{
                           fontWeight: 700,
                           fontSize: 14,
-                          padding: '5px 10px',
+                          padding: "5px 10px",
                           backgroundColor: color.colorBluishCyan,
                           borderRadius: 25,
+                          textWrap: "nowrap",
+                          cursor: "pointer",
                         }}
                       >
                         {item.title}
@@ -1414,7 +1557,7 @@ const BodySectionRight = () => {
         <Col span={24}>
           <Row>
             <Col span={24} style={{ padding: 20 }}>
-              <Row align={'middle'}>
+              <Row align={"middle"}>
                 <Col>
                   <Typography.Title level={4} style={{ margin: 0 }}>
                     Dự án từng làm
@@ -1422,88 +1565,65 @@ const BodySectionRight = () => {
                 </Col>
               </Row>
             </Col>
-            <Col span={24}>
-              <CustomRow
-                gutter={[0, 10]}
-                style={{ paddingRight: 30, paddingLeft: 30 }}
-              >
-                <Col span={24}>
-                  <Typography.Title
-                    level={5}
-                    style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
+            {applications.map((item, index) => {
+              return (
+                <Col span={24} key={item.id}>
+                  <CustomRow
+                    gutter={[0, 10]}
+                    style={{ paddingRight: 30, paddingLeft: 30 }}
                   >
-                    Javascript expert with Next.js and React.js expertise
-                  </Typography.Title>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={10} align={'middle'}>
-                    <Col>
-                      <Typography.Text style={{ color: color.colorDeactivate }}>
-                        Jul 8, 2020 - Mar 8, 2023
-                      </Typography.Text>
+                    <Col span={24}>
+                      <Typography.Title
+                        level={5}
+                        style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
+                      >
+                        {item.jobs?.title}
+                      </Typography.Title>
                     </Col>
-                  </Row>
-                </Col>
-              </CustomRow>
-            </Col>
-            <CustomDivider $primary />
-            <Col span={24}>
-              <CustomRow
-                gutter={[0, 10]}
-                style={{ paddingRight: 30, paddingLeft: 30 }}
-              >
-                <Col span={24}>
-                  <Typography.Title
-                    level={5}
-                    style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
-                  >
-                    Javascript expert with Next.js and React.js expertise
-                  </Typography.Title>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={10} align={'middle'}>
-                    <Col>
-                      <Typography.Text style={{ color: color.colorDeactivate }}>
-                        Jul 8, 2020 - Mar 8, 2023
-                      </Typography.Text>
+                    <Col span={24}>
+                      <Row gutter={10} align={"middle"}>
+                        <Col>
+                          <Typography.Text
+                            style={{ color: color.colorDeactivate }}
+                          >
+                            {formatDate(item.sendDate)} -{" "}
+                            {formatDate(item.sendDate)}
+                          </Typography.Text>
+                        </Col>
+                      </Row>
                     </Col>
-                  </Row>
+                  </CustomRow>
+                  {applications.length === index + 1 ? null : <CustomDivider />}
                 </Col>
-              </CustomRow>
-            </Col>
-            <CustomDivider $primary />
-            <Col span={24}>
-              <CustomRow
-                gutter={[0, 10]}
-                style={{ paddingRight: 30, paddingLeft: 30 }}
-              >
-                <Col span={24}>
-                  <Typography.Title
-                    level={5}
-                    style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
-                  >
-                    Javascript expert with Next.js and React.js expertise
-                  </Typography.Title>
-                </Col>
-                <Col span={24}>
-                  <Row gutter={10} align={'middle'}>
-                    <Col>
-                      <Typography.Text style={{ color: color.colorDeactivate }}>
-                        Jul 8, 2020 - Mar 8, 2023
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                </Col>
-              </CustomRow>
-            </Col>
+              );
+            })}
           </Row>
         </Col>
       </Row>
+      <ModalPrimary
+        title={"Trình độ"}
+        open={isModalLevel}
+        onOk={handleModaLevel}
+        onCancel={handleModalLevelCancel}
+      >
+        <Row gutter={[0, 10]}>
+          <Col span={24}>
+            <Row>
+              <Radio.Group onChange={onLevelChange} value={value}>
+                {levelOptions.map((item) => (
+                  <Col key={item.value} span={24} style={{ padding: 5 }}>
+                    <Radio value={item.value}>{item.label}</Radio>
+                  </Col>
+                ))}
+              </Radio.Group>
+            </Row>
+          </Col>
+        </Row>
+      </ModalPrimary>
     </Col>
   );
 };
 
-//Body Section
 const BodySection = () => {
   return (
     <Row>
@@ -1517,10 +1637,8 @@ const Overview = () => {
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 30 }}>
-        {/* Header section */}
         <HeaderSection />
         <CustomDivider $primary />
-        {/* Body Section */}
         <BodySection />
       </CustomCard>
 
@@ -1535,7 +1653,7 @@ const styles = {
   },
 
   address: {
-    color: '#656565',
+    color: "#656565",
     paddingLeft: 10,
     marginBottom: 20,
   },
