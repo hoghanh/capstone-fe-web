@@ -11,7 +11,7 @@ import {
   Menu,
   Dropdown,
 } from "antd";
-import { SearchOutlined, MenuOutlined, SettingFilled } from "@ant-design/icons";
+import { SearchOutlined, MenuOutlined, SettingFilled, MailTwoTone } from "@ant-design/icons";
 import { ReactSVG } from "react-svg";
 import { useRecoilValue } from "recoil";
 
@@ -23,6 +23,7 @@ import { GoogleLogout } from "react-google-login";
 import { CLIENTID } from "config";
 import { Heart, Logout, Manage, User } from "components/icon/Icon";
 import { Link } from "react-router-dom";
+import { ModalPrimary } from "components/Modal/Modal";
 
 const onSuccess = () => {
   console.log("Logout success");
@@ -78,6 +79,7 @@ function SearchBar() {
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
+  const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -123,6 +125,19 @@ function SearchBar() {
     }
   };
 
+  const openForgotPasswordModal = () => {
+    setForgotPasswordVisible(true);
+    setOpenLogin(false)
+  };
+  
+  const closeForgotPasswordModal = () => {
+    setForgotPasswordVisible(false);
+  };
+
+  const sendMailForgotPassword = () => {
+    console.log('send');
+  }
+
   return (
     <Layout.Header style={{ background: "#FFFFFF", padding: "0 20px" }}>
       {/* Modal Register */}
@@ -139,7 +154,22 @@ function SearchBar() {
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
         handleMove={handleMove}
+        openForgotPasswordModal={openForgotPasswordModal}
       />
+
+      <ModalPrimary
+        title={'Quên mật khẩu'}
+        visible={forgotPasswordVisible}
+        onOk={sendMailForgotPassword}
+        onCancel={closeForgotPasswordModal}
+        okText='Gửi'
+      >
+        <Input
+          className='header-search'
+          placeholder='Type here...'
+          prefix={<MailTwoTone style={{ fontSize: '22px' }} />}
+        />
+      </ModalPrimary>
 
       <Row
         align="middle"

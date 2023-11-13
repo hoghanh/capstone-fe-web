@@ -10,7 +10,7 @@ import { useSetRecoilState } from 'recoil';
 import { clientProfile } from 'recoil/atom';
 import { useNavigate } from 'react-router-dom';
 
-function LoginModal({ visible, onCancel, onOk, handleMove }) {
+function LoginModal({ visible, onCancel, onOk, handleMove, openForgotPasswordModal }) {
   const navigate = useNavigate();
   const setInformationUser = useSetRecoilState(clientProfile);
   const [email, setEmail] = useState('');
@@ -135,7 +135,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         <div style={home.login.contain}>
           <Checkbox>Nhớ tài khoản</Checkbox>
           <Typography>
-            <Link>
+            <Link onClick={openForgotPasswordModal}>
               <b>Quên Mật Khẩu</b>
             </Link>
           </Typography>
