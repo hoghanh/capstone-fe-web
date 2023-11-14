@@ -4,7 +4,6 @@ import {
   Form,
   Image,
   Input,
-  InputNumber,
   List,
   Radio,
   Row,
@@ -1566,6 +1565,7 @@ const BodySectionRight = () => {
               </Row>
             </Col>
             {applications.map((item, index) => {
+              console.log(item)
               return (
                 <Col span={24} key={item.id}>
                   <CustomRow
@@ -1586,8 +1586,7 @@ const BodySectionRight = () => {
                           <Typography.Text
                             style={{ color: color.colorDeactivate }}
                           >
-                            {formatDate(item.sendDate)} -{" "}
-                            {formatDate(item.sendDate)}
+                            Ngày bắt đầu: {formatDate(item.updatedAt)}
                           </Typography.Text>
                         </Col>
                       </Row>

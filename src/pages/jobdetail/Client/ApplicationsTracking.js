@@ -20,6 +20,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { profileState, applicationListState, valueSearchState } from "recoil/atom";
 import { ButtonPrimary } from "components/customize/GlobalCustomize";
 import { Link } from "react-router-dom";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import 'dayjs/locale/vi';
+
 
 const tabListNoTitle = [
   {
@@ -534,6 +537,7 @@ const ApplicationsTracking = () => {
             format={"DD/MM/YYYY"}
             onOpenChange={onOpenChange}
             changeOnBlur
+            locale={locale}
           />
         </Col>
         <Col className="trackingJobs" span={24}>

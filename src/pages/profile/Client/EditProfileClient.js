@@ -1,17 +1,11 @@
-import { PaperClipOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import {
-  Avatar,
-  Button,
-  Card,
   Col,
   Collapse,
-  DatePicker,
   Form,
-  Grid,
   Input,
   InputNumber,
   Layout,
-  Modal,
   Row,
   Typography,
   Upload,
@@ -56,7 +50,6 @@ const BasicInformation = () => {
     },
   ]);
 
-  console.log(informationUser)
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
