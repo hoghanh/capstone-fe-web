@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import Details from './Details';
 import { get } from 'utils/APICaller';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -24,7 +24,9 @@ const JobDetail = () => {
         setJobDetail(data);
       })
       .catch((error) => {
-        console.log(error);
+        notification.error({
+          message: error.response.data.message,
+        });
       });
   };
 
@@ -35,7 +37,9 @@ const JobDetail = () => {
         setClient(data);
       })
       .catch((error) => {
-        console.log(error);
+        notification.error({
+          message: error.response.data.message,
+        });
       });
   };
 

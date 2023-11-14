@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import color from "styles/color";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { applicationListState, valueSearchState } from "recoil/atom";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import 'dayjs/locale/vi';
 
 const tabListNoTitle = [
   {
@@ -394,6 +396,7 @@ const ApplicationsTracking = () => {
             format={"DD/MM/YYYY"}
             onOpenChange={onOpenChange}
             changeOnBlur
+            locale={locale}
           />
         </Col>
         <Col className="trackingJobs" span={24}>
