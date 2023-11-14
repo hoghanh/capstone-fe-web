@@ -27,8 +27,11 @@ import { ModalPrimary } from "components/Modal/Modal";
 import { get, post, put } from "utils/APICaller";
 import LocalStorageUtils from "utils/LocalStorageUtils";
 import { EllipsisOutlined } from "@ant-design/icons";
-import moment from "moment";
 import { checkIfIsUrl } from "components/formatter/format";
+import dayjs from "dayjs";
+import locale from 'antd/es/date-picker/locale/vi_VN';
+import 'dayjs/locale/vi';
+
 
 const tabList = [
   {
@@ -69,8 +72,7 @@ const interviewItems = [
   },
 ];
 
-const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
-  const [form] = Form.useForm();
+const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, form }) => {
   const [timeBooking, setTimeBooking] = useState("");
 
   const clientId = LocalStorageUtils.getItem("profile").id;
@@ -81,7 +83,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
 
   const interviewApplication = () => {
     put({
-      endpoint: `/application/interview/${application.jobId}`,
+      endpoint: `/application/interview/${isIdItem}`,
     })
       .then((res) => {
         notification.success({
@@ -107,7 +109,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
         link,
         time: timeBooking,
         clientId: clientId,
-        applicationId: application.id,
+        applicationId:isIdItem,
       },
     })
       .then((res) => {
@@ -148,9 +150,6 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
         <Form
           form={form}
           name="editInterview"
-          initialValues={{
-            remember: true,
-          }}
         >
           <Row gutter={[0, 10]}>
             <Col span={24}>
@@ -180,7 +179,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="editDatetime"
+                    name="time"
                     rules={[
                       {
                         required: true,
@@ -194,8 +193,9 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
                       showNow={false}
                       onChange={onChange}
                       disabledDate={(current) => {
-                        return current && current < moment().endOf("day");
+                        return current && current.isBefore(dayjs().endOf('day'));
                       }}
+                      locale={locale}
                     />
                   </Form.Item>
                 </Col>
@@ -208,8 +208,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, application }) => {
   );
 };
 
-const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
-  const [form] = Form.useForm();
+const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdItem, form}) => {
   const [timeBooking, setTimeBooking] = useState("");
   const clientId = LocalStorageUtils.getItem("profile").id;
 
@@ -219,12 +218,15 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
 
   const interviewApplication = () => {
     put({
-      endpoint: `/application/interview/${application.id}`,
+      endpoint: `/application/interview/${isIdItem}`,
     })
       .then((res) => {
+        setIsIdItem(null);
         notification.success({
-          message: "Đã cập nhật lịch phỏng vấn!",
+          message: "Đặt lịch thành công!",
         });
+        form.resetFields();
+        setIsModalInterview(false);
       })
       .catch((error) => {
         notification.error({
@@ -234,15 +236,24 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
   };
 
   const createAppointment = (values) => {
-    const { url } = values;
+    const { address } = values;
+    let location = null;
+    let link = null;
+    if (checkIfIsUrl(address)) {
+      location = null;
+      link = address;
+    } else {
+      location = address;
+      link = null;
+    }
     post({
       endpoint: `/appointment/`,
       body: {
-        location: url,
-        link: "https://meet.google.com/xye-stsk-ghs",
+        location,
+        link,
         time: timeBooking,
         clientId: clientId,
-        applicationId: application.id,
+        applicationId: isIdItem,
       },
     })
       .then((res) => {
@@ -260,7 +271,6 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
       .validateFields()
       .then((values) => {
         createAppointment(values);
-        setIsModalInterview(false);
       })
       .catch((error) => {
         console.error("Validation failed:", error);
@@ -268,6 +278,7 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
   };
 
   const handleCancel = () => {
+    form.resetFields();
     setIsModalInterview(false);
   };
 
@@ -280,13 +291,7 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form
-          form={form}
-          name="bookInterview"
-          initialValues={{
-            remember: true,
-          }}
-        >
+        <Form form={form} name="bookingInterview">
           <Row gutter={[0, 10]}>
             <Col span={24}>
               <CustomRow gutter={[0, 10]}>
@@ -297,7 +302,7 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="url"
+                    name="address"
                     rules={[
                       {
                         required: true,
@@ -315,7 +320,7 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="datetime"
+                    name="time"
                     rules={[
                       {
                         required: true,
@@ -326,7 +331,14 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
                     <DatePicker
                       style={{ with: "100%" }}
                       showTime
+                      showNow={false}
                       onChange={onChange}
+                      disabledDate={(current) => {
+                        return (
+                          current && current.isBefore(dayjs().endOf("day"))
+                        );
+                      }}
+                      locale={locale}
                     />
                   </Form.Item>
                 </Col>
@@ -339,16 +351,17 @@ const Interview = ({ isModalInterview, setIsModalInterview, application }) => {
   );
 };
 
-const DeclineInterview = ({ isModalDecline, setIsModalDecline, application }) => {
-  
+const DeclineInterview = ({ isModalDecline, setIsModalDecline, isIdItem, setIsIdItem }) => {
   const declineInterview = () => {
     put({
-      endpoint: `/application/decline/${application.jobId}`,
+      endpoint: `/application/decline/${isIdItem}`,
     })
       .then((res) => {
+        setIsIdItem(null);
         notification.success({
-          message: "Đã từ chôi",
+          message: "Đã từ chối",
         });
+        setIsModalDecline(false);
       })
       .catch((error) => {
         notification.error({
@@ -357,9 +370,8 @@ const DeclineInterview = ({ isModalDecline, setIsModalDecline, application }) =>
       });
   };
 
-
   const handleOk = () => {
-    setIsModalDecline(false);
+    declineInterview();
   };
 
   const handleCancel = () => {
@@ -422,13 +434,12 @@ const TabSent = ({ activeTabKey }) => {
   const [isIdItem, setIsIdItem] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize,] = useState(5)
-
+  const [form] = Form.useForm();
   const client= LocalStorageUtils.getItem('profile');
-
 
   useEffect(() => {
     getApplications();
-  }, []);
+  }, [isIdItem]);
 
   useEffect(() => {
     const filtered = applicationList.filter((item) => {
@@ -460,23 +471,20 @@ const TabSent = ({ activeTabKey }) => {
       });
   };
 
-  const onClick = ({ key }) => {
+  const onClick = (id, key) => {
     const checkAction = key.toString();
     if (checkAction.includes("decline")) {
-      const itemId = checkAction.replace("decline_", "");
-      setIsIdItem(itemId);
+      console.log(id)
+      setIsIdItem(id);
       setIsModalDecline(true);
     } else if (checkAction.includes("interview")) {
-      const itemId = checkAction.replace("interview", "");
-      setIsIdItem(itemId);
+      setIsIdItem(id);
       setIsModalInterview(true);
     } else if (checkAction.includes("edit")) {
-      const itemId = checkAction.replace("edit_", "");
-      setIsIdItem(itemId);
+      setIsIdItem(id);
       setIsModalEdit(true);
     } else if (checkAction.includes("accept")) {
-      const itemId = checkAction.replace("accept_", "");
-      setIsIdItem(itemId);
+      setIsIdItem(id);
       setIsModalAccept(true);
     }
   };
@@ -555,13 +563,17 @@ const TabSent = ({ activeTabKey }) => {
                             activeTabKey === "Sent"
                               ? sentItems.map((item) => ({
                                   ...item,
-                                  key: item.key + "_" + application.id.toString(),
+                                  key:
+                                    item.key + "_" + application.id.toString(),
                                 }))
                               : interviewItems.map((item) => ({
                                   ...item,
-                                  key: item.key + "_" + application.id.toString(),
+                                  key:
+                                    item.key + "_" + application.id.toString(),
                                 })),
-                          onClick,
+                          onClick: ({ key }) => {
+                            onClick(application.id, key);
+                          },
                         }}
                       >
                         <EllipsisOutlined />
@@ -627,37 +639,44 @@ const TabSent = ({ activeTabKey }) => {
                 </Col>
               </Row>
               <CustomDivider />
-              <Interview
-                isModalInterview={isModalInterview}
-                setIsModalInterview={setIsModalInterview}
-                application={application}
-              />
-              <EditInterview
-                isModalEdit={isModalEdit}
-                setIsModalEdit={setIsModalEdit}
-                application={application}
-              />
-              <DeclineInterview
-                isModalDecline={isModalDecline}
-                setIsModalDecline={setIsModalDecline}
-              />
-              <AcceptInterview
-                isModalAccept={isModalAccept}
-                setIsModalAccept={setIsModalAccept}
-                application={application}
-              />
             </Col>
           );
         })
       )}
+      <Interview
+        isModalInterview={isModalInterview}
+        setIsModalInterview={setIsModalInterview}
+        isIdItem={isIdItem}
+        setIsIdItem={setIsIdItem}
+        form={form}
+      />
+      <EditInterview
+        isModalEdit={isModalEdit}
+        setIsModalEdit={setIsModalEdit}
+        isIdItem={isIdItem}
+        setIsIdItem={setIsIdItem}
+        form={form}
+      />
+      <DeclineInterview
+        isModalDecline={isModalDecline}
+        setIsModalDecline={setIsModalDecline}
+        isIdItem={isIdItem}
+        setIsIdItem={setIsIdItem}
+      />
+      <AcceptInterview
+        isModalAccept={isModalAccept}
+        setIsModalAccept={setIsModalAccept}
+        isIdItem={isIdItem}
+        setIsIdItem={setIsIdItem}
+      />
       <Col span={24}>
-         <Pagination
+        <Pagination
           current={page}
           total={list.length}
           showSizeChanger={false}
           pageSize={pageSize}
           onChange={handleChange}
-          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+          style={{ padding: 20, display: "flex", justifyContent: "center" }}
         />
       </Col>
     </Row>
@@ -744,6 +763,7 @@ const ApplicationsTracking = () => {
             format={"DD/MM/YYYY"}
             onOpenChange={onOpenChange}
             changeOnBlur
+            locale={locale}
           />
         </Col>
         <Col className="trackingJobs" span={24}>

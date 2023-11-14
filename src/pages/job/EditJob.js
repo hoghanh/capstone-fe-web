@@ -22,6 +22,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, put, remove } from 'utils/APICaller';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
+import locale from "antd/es/date-picker/locale/vi_VN";
+import 'dayjs/locale/vi';
 
 const EditJob = () => {
   const { useBreakpoint } = Grid;
@@ -477,6 +479,7 @@ const EditJob = () => {
                 size='large'
                 format='YYYY-MM-DD HH:mm:ss'
                 placeholder='Chọn ngày giờ'
+                locale={locale}
               />
             </Form.Item>
             <Form.Item style={{ textAlign: 'right' }}>

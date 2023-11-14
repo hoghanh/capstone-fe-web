@@ -17,16 +17,19 @@ import {
   CustomRow,
 } from "components/customize/Layout";
 import { Plus } from "components/icon/Icon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import css from "./profile.module.css";
 import { ModalPrimary } from "components/Modal/Modal";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { freelancerState } from "recoil/atom";
 import { post, put, remove } from "utils/APICaller";
 import moment from "moment";
 import { formatDate } from "components/formatter/format";
 import { Link } from "react-router-dom";
 import { EllipsisOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+import locale from "antd/es/date-picker/locale/vi_VN";
+import 'dayjs/locale/vi';
 
 const items = [
   {
@@ -67,7 +70,7 @@ const AddCertifications = () => {
         name,
         issuingOrganization,
         issueDate,
-        expirationDate,
+        expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
         credentialId,
         credentialUrl,
         accountId: informationUser.accountId,
@@ -94,12 +97,11 @@ const AddCertifications = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values);
         addCertificates(values);
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.error("Validation failed:", error);
+        notification.error("Validation failed:", error);
       });
   };
 
@@ -135,12 +137,12 @@ const AddCertifications = () => {
                 <Col span={24}>
                   <Form.Item
                     name="name"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Không được để trống ô này!",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                   >
                     <Input
                       placeholder="VD: Certified Scrum Master (CSM)"
@@ -158,12 +160,12 @@ const AddCertifications = () => {
                 <Col span={24}>
                   <Form.Item
                     name="issuingOrganization"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Không được để trống ô này!",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                   >
                     <Input
                       style={{ width: "40%" }}
@@ -183,21 +185,22 @@ const AddCertifications = () => {
                 <Col span={24}>
                   <Form.Item
                     name="issueDate"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Không được để trống ô này!",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                   >
                     <DatePicker
                       style={{ with: "100%" }}
                       showNow={false}
-                      format={"DD-MM-YYYY"}
+                      format={"YYYY-MM-DD"}
                       onChange={onIssueDate}
                       disabledDate={(current) => {
                         return current && current > moment().endOf("day");
                       }}
+                      locale={locale}
                     />
                   </Form.Item>
                 </Col>
@@ -214,16 +217,18 @@ const AddCertifications = () => {
                     <DatePicker
                       style={{ with: "100%" }}
                       showNow={false}
-                      format={"DD-MM-YYYY"}
+                      format={"YYYY-MM-DD"}
                       onChange={onExpDate}
                       disabledDate={(current) => {
                         const issueDate = form.getFieldValue("issueDate");
                         return (
-                          current &&
-                          issueDate &&
-                          current.isBefore(issueDate.clone().add(30, "days"))
+                          !issueDate || (current &&
+                            issueDate &&
+                            current.isBefore(issueDate.clone().add(30, "days")))
                         );
                       }}
+                      locale={locale}
+
                     />
                   </Form.Item>
                 </Col>
@@ -302,19 +307,25 @@ const BodySection = () => {
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [isModalRemove, setIsModalRemove] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
-  const [certificate, setCertificate] = useState(null);
+  const [certificates, setCertificates] = useState([]);
   const [issueDate, setIssueDate] = useState();
   const [expirationDate, setExpirationDate] = useState();
   const [form] = Form.useForm();
 
-  
+  useEffect(() => {
+    setCertificates(informationUser.certificates);
+  }, [informationUser]);
 
   const onIssueDate = (date, dateString) => {
     setIssueDate(dateString);
   };
 
   const onExpDate = (date, dateString) => {
-    setExpirationDate(dateString);
+    if (dateString === "") {
+      return setExpirationDate(null);
+    } else {
+      setExpirationDate(dateString);
+    }
   };
 
   const onClick = (id, key) => {
@@ -324,9 +335,19 @@ const BodySection = () => {
       setIsModalRemove(true);
     } else if (checkAction.includes("edit")) {
       setIsIdItem(id);
-      setCertificate(
-        informationUser.certificates.find((item) => item.id === id)
-      );
+      const item = certificates.find((c) => c.id === id);
+      if (item) {
+        form.setFieldsValue({
+          name: item.name,
+          issuingOrganization: item.issuingOrganization,
+          issueDate: dayjs(item.issueDate),
+          expirationDate: item.expirationDate
+            ? dayjs(item.expirationDate)
+            : null,
+          credentialId: item.credentialId,
+          credentialUrl: item.credentialUrl,
+        });
+      }
       setIsModalEdit(true);
     }
   };
@@ -338,7 +359,9 @@ const BodySection = () => {
       .then((res) => {
         setInformationUser({
           ...informationUser,
-          certificates: informationUser.certificates.filter((certificate) => certificate.id !== isIdItem),
+          certificates: informationUser.certificates.filter(
+            (certificate) => certificate.id !== isIdItem
+          ),
         });
         notification.success({
           message: res.data,
@@ -352,7 +375,6 @@ const BodySection = () => {
       });
     setIsModalRemove(false);
   };
-  
 
   const handleCancelRemove = () => {
     setIsModalRemove(false);
@@ -362,33 +384,52 @@ const BodySection = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values)
+        const {name, issuingOrganization, credentialId, credentialUrl} = values;
+        const newCertificate = {
+          id: isIdItem,
+          name,
+          issuingOrganization,
+          issueDate: dayjs(issueDate).format('YYYY-MM-DD'),
+          expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
+          credentialId,
+          credentialUrl,
+        };
+        put({
+          endpoint: `/certificate/detail/${isIdItem}`,
+          body: {
+            name,
+            issuingOrganization,
+            issueDate: dayjs(issueDate).format("YYYY-MM-DD"),
+            expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
+            credentialId,
+            credentialUrl,
+          },
+        })
+          .then((res) => {
+            const item = certificates.map((c) => {
+              if (c.id === isIdItem) {
+                return newCertificate;
+              } else {
+                return c;
+              }
+            });
+            setCertificates(item);
+            notification.success({
+              message: "Cập nhật thành công!",
+            });
+            setIsModalEdit(false);
+            setIsIdItem(null);
+          })
+          .catch((error) => {
+            notification.error({
+              message: error.response.data.message,
+            });
+          });
       })
       .catch((error) => {
-        console.error("Validation failed:", error);
+        notification.error("Validation failed:", error);
       });
-    // put({
-    //   endpoint: `/certificate/detail/${isIdItem}`,
-    //   body:{
-
-    //   }
-    // })
-    //   .then((res) => {
-    //     setInformationUser({
-    //       ...informationUser,
-    //       certificates: informationUser.certificates.filter((certificate) => certificate.id !== isIdItem),
-    //     });
-    //     notification.success({
-    //       message: res.data,
-    //     });
-    //     setIsIdItem(null);
-    //   })
-    //   .catch((error) => {
-    //     notification.error({
-    //       message: error.response.data.message,
-    //     });
-    //   });
-    setIsModalRemove(false);
+    
   };
 
   const handleCancelEdit = () => {
@@ -398,7 +439,7 @@ const BodySection = () => {
 
   return (
     <Row style={{ marginRight: 30, marginLeft: 30 }}>
-      {informationUser?.certificates.map((certificate, index) => (
+      {certificates.map((certificate, index) => (
         <div key={certificate.id} style={{ width: "100%" }}>
           <Col span={24}>
             <Row
@@ -465,7 +506,7 @@ const BodySection = () => {
               </Col>
             </Row>
           </Col>
-          {informationUser?.certificates.length === index + 1 ? null : (
+          {certificates.length === index + 1 ? null : (
             <CustomDivider $primary />
           )}
         </div>
@@ -494,12 +535,6 @@ const BodySection = () => {
           name="editCertificate"
           initialValues={{
             remember: true,
-            // name: certificate?.name,
-            // issuingOrganization: certificate?.issuingOrganization,
-            // issueDate: moment(certificate?.issueDate),
-            // expirationDate: moment(certificate?.expirationDate),
-            // credentialId: certificate?.credentialId,
-            // credentialUrl: certificate?.credentialUrl,
           }}
         >
           <Row gutter={[0, 10]}>
@@ -509,15 +544,7 @@ const BodySection = () => {
                   <Typography.Text>Tên chứng chỉ</Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <Form.Item
-                    name="name"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Không được để trống ô này!",
-                    //   },
-                    // ]}
-                  >
+                  <Form.Item name="name">
                     <Input
                       placeholder="VD: Certified Scrum Master (CSM)"
                       controls={false}
@@ -534,12 +561,12 @@ const BodySection = () => {
                 <Col span={24}>
                   <Form.Item
                     name="issuingOrganization"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Không được để trống ô này!",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                   >
                     <Input
                       style={{ width: "40%" }}
@@ -550,7 +577,6 @@ const BodySection = () => {
                 </Col>
               </CustomRow>
             </Col>
-
             <Col span={12}>
               <CustomRow gutter={[0, 10]}>
                 <Col span={24}>
@@ -559,53 +585,83 @@ const BodySection = () => {
                 <Col span={24}>
                   <Form.Item
                     name="issueDate"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Không được để trống ô này!",
-                    //   },
-                    // ]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                   >
                     <DatePicker
                       style={{ with: "100%" }}
                       showNow={false}
-                      format={"DD-MM-YYYY"}
+                      format={"YYYY-MM-DD"}
                       onChange={onIssueDate}
                       disabledDate={(current) => {
-                        return current && current > moment().endOf("day");
+                        return current && current.isAfter(dayjs().endOf("day"));
                       }}
+                      locale={locale}
+
                     />
                   </Form.Item>
                 </Col>
               </CustomRow>
             </Col>
-
             <Col span={12}>
               <CustomRow gutter={[0, 10]}>
                 <Col span={24}>
                   <Typography.Text>Ngày Hết hạn</Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <Form.Item name="expirationDate">
+                  <Form.Item
+                    name="expirationDate"
+                    rules={[
+                      {
+                        validator: async (_, value) => {
+                          const issueDate = form.getFieldValue("issueDate");
+                          if (!issueDate) {
+                            return Promise.reject(
+                              new Error("Vui lòng chọn ngày phát hành")
+                            );
+                          }
+
+                          if (value || null) {
+                            if (
+                              value.isBefore(issueDate.clone().add(30, "days"))
+                            ) {
+                              return Promise.reject(
+                                new Error(
+                                  "Ngày hết hạn phải cách cấp ít nhất 30 ngày"
+                                )
+                              );
+                            }
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
                     <DatePicker
                       style={{ with: "100%" }}
                       showNow={false}
-                      format={"DD-MM-YYYY"}
+                      format={"YYYY-MM-DD"}
                       onChange={onExpDate}
                       disabledDate={(current) => {
                         const issueDate = form.getFieldValue("issueDate");
                         return (
-                          current &&
-                          issueDate &&
-                          current.isBefore(issueDate.clone().add(30, "days"))
+                          !issueDate ||
+                          (current &&
+                            issueDate &&
+                            current.isBefore(issueDate.clone().add(30, "days")))
                         );
                       }}
+                      locale={locale}
+
                     />
                   </Form.Item>
                 </Col>
               </CustomRow>
             </Col>
-
             <Col span={24}>
               <CustomRow gutter={[0, 10]}>
                 <Col span={24}>
@@ -626,7 +682,6 @@ const BodySection = () => {
                 </Col>
               </CustomRow>
             </Col>
-
             <Col span={24}>
               <CustomRow gutter={[0, 10]}>
                 <Col span={24}>
