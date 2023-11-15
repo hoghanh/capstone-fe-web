@@ -85,11 +85,11 @@ const InterviewSchedule = () => {
     setOpenModal(false);
   };
 
-  const onClick = (e, time, applicationId, appoinmentId, location) => {
+  const onClick = (e, time, applicationId, appointmentId, location) => {
     const checkAction = e.key.toString();
-    const appoinmentTime = new Date(time);
+    const appointmentTime = new Date(time);
     const today = new Date();
-    const timeDifference = appoinmentTime - today;
+    const timeDifference = appointmentTime - today;
 
     checkStatusApplication(applicationId);
     setIsLoading(true);
@@ -114,14 +114,14 @@ const InterviewSchedule = () => {
           statusApplication = '';
         } else {
           if (checkAction.includes('start')) {
-            approveAplication(applicationId);
+            approveApplication(applicationId);
           } else {
-            declineAplication(applicationId);
+            declineApplication(applicationId);
           }
         }
       } else if (checkAction.includes('edit')) {
         if (timeDifference > 24 * 60 * 60 * 1000) {
-          showModal(appoinmentId, time, location);
+          showModal(appointmentId, time, location);
         } else if (
           timeDifference <= 24 * 60 * 60 * 1000 &&
           timeDifference > 0
@@ -151,7 +151,7 @@ const InterviewSchedule = () => {
       });
   };
 
-  function approveAplication(id) {
+  function approveApplication(id) {
     put({ endpoint: `/application/approve/${id}` })
       .then((res) => {
         notification.success({
@@ -165,7 +165,7 @@ const InterviewSchedule = () => {
       });
   }
 
-  function declineAplication(id) {
+  function declineApplication(id) {
     put({ endpoint: `/application/decline/${id}` })
       .then((res) => {
         notification.success({
