@@ -78,24 +78,24 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, appointmentId,  isIdItem, 
     setTimeBooking(dateString);
   };
       
-
   const editAppointment = (values) => {
-    const { address } = values;
+    const { editAddress } = values;
     let location = null;
     let link = null;
-    if (checkIfIsUrl(address)) {
+    if (checkIfIsUrl(editAddress)) {
       location = null;
-      link = address;
+      link = editAddress;
     } else {
-      location = address;
+      location = editAddress;
       link = null;
     }
+    console.log(location,link, dayjs(values.editTime))
     put({
       endpoint: `/appointment/detail/${appointmentId}`,
       body: {
         location,
         link,
-        time: timeBooking,
+        time: dayjs(values.editTime),
       },
     })
       .then((res) => {
@@ -197,15 +197,18 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, appointmentId,  isIdItem, 
   );
 };
 
-const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdItem, form}) => {
+const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdItem}) => {
   const [timeBooking, setTimeBooking] = useState("");
   const clientId = LocalStorageUtils.getItem("profile").id;
+  const [form] = Form.useForm();
+
 
   const onChange = (value, dateString) => {
     setTimeBooking(dateString);
   };
 
   const interviewApplication = () => {
+    console.log(isIdItem);
     put({
       endpoint: `/application/interview/${isIdItem}`,
     })
@@ -500,10 +503,11 @@ const TabSent = ({ activeTabKey }) => {
     } else if (checkAction.includes("edit")) {
       setIsIdItem(id);
       const item = appointment.find((c) => c.applicationId === id);
+      console.log(item)
       setAppointmentId(item.appointmentId);
       if (item) {
         form.setFieldsValue({
-          editAddress: item.location,
+          editAddress: item.location === null ? item.link : item.location,
           editTime: dayjs(item.time),
         });
       }
@@ -673,7 +677,6 @@ const TabSent = ({ activeTabKey }) => {
         setIsModalInterview={setIsModalInterview}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
-        form={form}
       />
       <EditInterview
         isModalEdit={isModalEdit}
