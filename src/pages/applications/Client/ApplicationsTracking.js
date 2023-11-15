@@ -89,7 +89,6 @@ const EditInterview = ({ isModalEdit, setIsModalEdit, appointmentId,  isIdItem, 
       location = editAddress;
       link = null;
     }
-    console.log(location,link, dayjs(values.editTime))
     put({
       endpoint: `/appointment/detail/${appointmentId}`,
       body: {
@@ -208,7 +207,6 @@ const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdIte
   };
 
   const interviewApplication = () => {
-    console.log(isIdItem);
     put({
       endpoint: `/application/interview/${isIdItem}`,
     })
@@ -494,7 +492,6 @@ const TabSent = ({ activeTabKey }) => {
   const onClick = (id, key) => {
     const checkAction = key.toString();
     if (checkAction.includes("decline")) {
-      console.log(id)
       setIsIdItem(id);
       setIsModalDecline(true);
     } else if (checkAction.includes("interview")) {
@@ -503,7 +500,6 @@ const TabSent = ({ activeTabKey }) => {
     } else if (checkAction.includes("edit")) {
       setIsIdItem(id);
       const item = appointment.find((c) => c.applicationId === id);
-      console.log(item)
       setAppointmentId(item.appointmentId);
       if (item) {
         form.setFieldsValue({
