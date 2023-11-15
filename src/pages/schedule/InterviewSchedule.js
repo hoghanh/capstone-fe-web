@@ -9,6 +9,9 @@ import {
   Menu,
   Typography,
   notification,
+  Row,
+  Col,
+  Table,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -20,6 +23,55 @@ import { formatDateTime } from 'components/formatter/format';
 import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
 import EditScheduleModal from './EditScheduleModal';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+
+// Cài đặt ngôn ngữ tiếng Việt cho Day.js
+dayjs.locale('vi');
+
+const dataSource = [
+  {
+    key: '1',
+    name: 'Mike',
+    age: 32,
+    address: '10 Downing Street',
+  },
+  {
+    key: '2',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street',
+  },
+];
+
+const columns = [
+  {
+    title: 'Công việc',
+    dataIndex: 'job',
+    key: 'name',
+  },
+  {
+    title: 'Người phỏng vấn',
+    dataIndex: 'interviewer',
+    key: 'age',
+  },
+  {
+    title: 'Thời gian',
+    dataIndex: 'time',
+    key: 'address',
+  },
+  {
+    title: 'Địa điểm',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: '',
+    key: 'x',
+    render: () => <a>Delete</a>,
+  },
+];
 
 const actions = [
   {
@@ -267,7 +319,7 @@ const InterviewSchedule = () => {
         >
           <ArrowLeft />
         </button>
-        <div className='text-month'>{value.format('MMMM')}</div>
+        <div className='text-month'>{capitalizeFirstLetter(value.format('MMMM'))}</div>
         <button
           className='btn-month'
           onClick={() => onChange(value.clone().add(1, 'month'))}
@@ -390,6 +442,10 @@ const InterviewSchedule = () => {
     return [items, coloritems];
   }
 
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -426,36 +482,41 @@ const InterviewSchedule = () => {
           }
           extra={page === 'client/schedule' ? '' : <Link>Xem chi tiết</Link>}
         >
-          <Calendar
-            locale={{
-              lang: {
-                locale: 'en',
-                monthFormat: 'MMMM',
-                weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-                weekdaysShort: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-              },
-            }}
-            fullscreen={false}
-            headerRender={({ value, onChange, type, onTypeChange }) => {
-              if (type === 'month') {
-                return monthHeader(value, onChange);
-              } else {
-                onTypeChange('month');
-                return null;
-              }
-            }}
-            className='calendar'
-            cellRender={cellRender}
-            style={{ margin: 30 }}
-          />
-          <Menu
-            onClick={onClick}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode='inline'
-            items={jobList}
-            className='appoinment-list'
-          />
+          <Row>
+            <Col span={12}>
+              <Calendar
+                locale={{
+                  lang: {
+                    locale: 'vi',
+                    monthFormat: 'MMMM',
+                  },
+                }}
+                fullscreen={false}
+                headerRender={({ value, onChange, type, onTypeChange }) => {
+                  if (type === 'month') {
+                    return monthHeader(value, onChange);
+                  } else {
+                    onTypeChange('month');
+                    return null;
+                  }
+                }}
+                className='calendar'
+                cellRender={cellRender}
+                style={{ margin: 30 }}
+              />
+            </Col>
+            <Col span={12}>
+              <Table dataSource={dataSource} columns={columns} />
+              {/* <Menu
+                onClick={onClick}
+                defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub1']}
+                mode='inline'
+                items={jobList}
+                className='appoinment-list'
+              /> */}
+            </Col>
+          </Row>
         </Card>
       </Layout.Content>
     </>

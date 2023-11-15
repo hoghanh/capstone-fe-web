@@ -90,7 +90,7 @@
 
 
 /* Define the style for table cells */
-.schedule-interview td {
+.schedule-interview .calendar td {
     border: 1px solid #70DBFF;
     /* Border style for data cells */
     text-align: left;
