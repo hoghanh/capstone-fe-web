@@ -63,7 +63,7 @@ const interviewItems = [
   },
   {
     key: "accept",
-    label: "Bắt đầu làm",
+    label: "Nhận ứng viên",
   },
   {
     key: "decline",
@@ -72,48 +72,37 @@ const interviewItems = [
   },
 ];
 
-const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, form }) => {
+const EditInterview = ({ isModalEdit, setIsModalEdit, appointmentId,  isIdItem, setIsIdItem, form }) => {
   const [timeBooking, setTimeBooking] = useState("");
-
-  const clientId = LocalStorageUtils.getItem("profile").id;
-
   const onChange = (value, dateString) => {
     setTimeBooking(dateString);
   };
-
-  const interviewApplication = () => {
-    put({
-      endpoint: `/application/interview/${isIdItem}`,
-    })
-      .then((res) => {
-        notification.success({
-          message: "Đã cập nhật lịch phỏng vấn!",
-        });
-      })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
-      });
-  };
       
-
-  const createAppointment = (values) => {
-    const { address } = values;
-    const location = checkIfIsUrl(address) ? null : address;
-    const link = checkIfIsUrl(address) ? address : null;
-    post({
-      endpoint: `/appointment/`,
+  const editAppointment = (values) => {
+    const { editAddress } = values;
+    let location = null;
+    let link = null;
+    if (checkIfIsUrl(editAddress)) {
+      location = null;
+      link = editAddress;
+    } else {
+      location = editAddress;
+      link = null;
+    }
+    put({
+      endpoint: `/appointment/detail/${appointmentId}`,
       body: {
         location,
         link,
-        time: timeBooking,
-        clientId: clientId,
-        applicationId:isIdItem,
+        time: dayjs(values.editTime),
       },
     })
       .then((res) => {
-        interviewApplication();
+        setIsIdItem(null);
+        notification.success({
+          message: "Đã thay đổi lịch phỏng vấn!",
+        });
+        setIsModalEdit(false);
       })
       .catch((error) => {
         notification.error({
@@ -126,8 +115,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, fo
     form
       .validateFields()
       .then((values) => {
-        createAppointment(values);
-        setIsModalEdit(false);
+        editAppointment(values);
       })
       .catch((error) => {
         console.error("Validation failed:", error);
@@ -161,7 +149,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, fo
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="address"
+                    name="editAddress"
                     rules={[
                       {
                         required: true,
@@ -169,7 +157,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, fo
                       },
                     ]}
                   >
-                    <Input placeholder="Ex: Microsoft" />
+                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -179,7 +167,7 @@ const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, fo
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="time"
+                    name="editTime"
                     rules={[
                       {
                         required: true,
@@ -208,9 +196,11 @@ const EditInterview = ({ isModalEdit, setIsModalEdit,  isIdItem, setIsIdItem, fo
   );
 };
 
-const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdItem, form}) => {
+const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdItem}) => {
   const [timeBooking, setTimeBooking] = useState("");
   const clientId = LocalStorageUtils.getItem("profile").id;
+  const [form] = Form.useForm();
+
 
   const onChange = (value, dateString) => {
     setTimeBooking(dateString);
@@ -310,7 +300,7 @@ const Interview = ({ isModalInterview, setIsModalInterview, isIdItem, setIsIdIte
                       },
                     ]}
                   >
-                    <Input placeholder="Ex: Microsoft" />
+                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -395,28 +385,41 @@ const DeclineInterview = ({ isModalDecline, setIsModalDecline, isIdItem, setIsId
   );
 };
 
-const AcceptInterview = ({ isModalDecline, setIsModalDecline, application }) => {
+const AcceptInterview = ({ isModalAccept, setIsModalAccept, isIdItem, setIsIdItem }) => {
 
   const handleOk = () => {
-    setIsModalDecline(false);
+    put({
+      endpoint: `/application/approve/${isIdItem}`,
+    })
+      .then((res) => {
+        setIsIdItem(null);
+        notification.success({
+          message: "Đã tuyển dụng",
+        });
+        setIsModalAccept(false);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
   };
 
   const handleCancel = () => {
-    setIsModalDecline(false);
+    setIsModalAccept(false);
   };
 
   return (
     <>
       <ModalPrimary
         title="Tuyển dụng"
-        open={isModalDecline}
+        open={isModalAccept}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Từ chối"
-        okType="danger"
+        okText="Tuyển dụng"
       >
-        Bạn có chắc muốn tuyển dụng hồ sơ này?
+        Bạn muốn tuyển dụng ứng viên này?
       </ModalPrimary>
     </>
   );
@@ -434,12 +437,27 @@ const TabSent = ({ activeTabKey }) => {
   const [isIdItem, setIsIdItem] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize,] = useState(5)
+  const [appointment, setAppointment] = useState([]);
+  const [appointmentId, setAppointmentId] = useState();
   const [form] = Form.useForm();
   const client= LocalStorageUtils.getItem('profile');
 
   useEffect(() => {
     getApplications();
+    getAppointment();
   }, [isIdItem]);
+
+  const getAppointment = () => {
+    get({ endpoint: `/appointment/client/${client.id}` })
+      .then((res) => {
+        const data = res.data.filter(item => item.applicationId != null)
+        setAppointment(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        return null;
+      });
+  };
 
   useEffect(() => {
     const filtered = applicationList.filter((item) => {
@@ -474,7 +492,6 @@ const TabSent = ({ activeTabKey }) => {
   const onClick = (id, key) => {
     const checkAction = key.toString();
     if (checkAction.includes("decline")) {
-      console.log(id)
       setIsIdItem(id);
       setIsModalDecline(true);
     } else if (checkAction.includes("interview")) {
@@ -482,6 +499,14 @@ const TabSent = ({ activeTabKey }) => {
       setIsModalInterview(true);
     } else if (checkAction.includes("edit")) {
       setIsIdItem(id);
+      const item = appointment.find((c) => c.applicationId === id);
+      setAppointmentId(item.appointmentId);
+      if (item) {
+        form.setFieldsValue({
+          editAddress: item.location === null ? item.link : item.location,
+          editTime: dayjs(item.time),
+        });
+      }
       setIsModalEdit(true);
     } else if (checkAction.includes("accept")) {
       setIsIdItem(id);
@@ -648,11 +673,11 @@ const TabSent = ({ activeTabKey }) => {
         setIsModalInterview={setIsModalInterview}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
-        form={form}
       />
       <EditInterview
         isModalEdit={isModalEdit}
         setIsModalEdit={setIsModalEdit}
+        appointmentId={appointmentId}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
         form={form}

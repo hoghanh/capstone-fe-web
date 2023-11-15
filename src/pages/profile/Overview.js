@@ -10,6 +10,7 @@ import {
   Select,
   Skeleton,
   Typography,
+  Upload,
   notification,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -24,7 +25,7 @@ import {
   CustomDivider,
   CustomRow,
 } from "components/customize/Layout";
-import { Flag, Pen, Plus, Trash } from "components/icon/Icon";
+import { Flag, PaperClipOutlined, Pen, Plus, Trash } from "components/icon/Icon";
 import React, { useEffect, useState } from "react";
 import color from "styles/color";
 import css from "./profile.module.css";
@@ -37,6 +38,8 @@ import {
 } from "recoil/atom";
 import { get, post, put, remove } from "utils/APICaller";
 import { formatDate } from "components/formatter/format";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "config/firebase";
 
 const EditPersonalInformation = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
@@ -575,35 +578,43 @@ const EditMajor = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [form] = Form.useForm();
 
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    const major = value;
-    put({
-      endpoint: `/freelancer/major/${informationUser.id}`,
-      body: {
-        major,
-      },
-    })
-      .then((res) => {
-        setInformationUser({
-          ...informationUser,
+    form
+    .validateFields()
+    .then((values) => {
+      const { major } = values;
+      put({
+        endpoint: `/freelancer/major/${informationUser.id}`,
+        body: {
           major,
-        });
-        notification.success({
-          message: "Cập nhật thành công!",
-        });
+        },
       })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
+        .then((res) => {
+          setInformationUser({
+            ...informationUser,
+            major,
+          });
+          notification.success({
+            message: "Cập nhật thành công!",
+          });
+        })
+        .catch((error) => {
+          notification.error({
+            message: error.response.data.message,
+          });
         });
-      });
 
-    setIsModalOpen(false);
-  };
+      setIsModalOpen(false);
+    })
+    .catch((error) => {
+      console.error("Validation failed:", error);
+    });
+     };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -623,19 +634,32 @@ const EditMajor = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Row gutter={[0, 10]}>
-          <Col span={24}>
-            <CustomRow gutter={[0, 10]}>
-              <Col span={24}>
-                <Input
-                  onChange={onChange}
-                  style={{ width: "100%" }}
-                  placeholder="Nhập chuyên ngành của bạn tại đây ..."
-                />
-              </Col>
-            </CustomRow>
-          </Col>
-        </Row>
+        <Form form={form}>
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Form.Item
+                    name="major"
+                    initialValue={informationUser.major}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Chuyên ngành không được để trống",
+                      },
+                    ]}
+                  >
+                    <Input
+                      onChange={onChange}
+                      style={{ width: "100%" }}
+                      placeholder="Nhập chuyên ngành của bạn tại đây ..."
+                    />
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
       </ModalPrimary>
     </>
   );
@@ -771,16 +795,22 @@ const EditIntroduction = () => {
   );
 };
 
-const EditSkills = ({ skillList, setSkillList }) => {
+const EditSkills = ({ skillList }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [skills, setSkills] = useState([]);
   const [value, setValue] = useState([]);
+  const [flat, setFlat] = useState(false);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
     fetchSkills();
   }, []);
+
+  useEffect(() => {
+    getFreelancer();
+    setFlat(false)
+  }, [flat]);
 
   const getFreelancer = () => {
     get({ endpoint: `/freelancer/profile/${auth.id}` })
@@ -822,18 +852,7 @@ const EditSkills = ({ skillList, setSkillList }) => {
       },
     })
       .then((res) => {
-        let updatedSkillList = [...skillList];
-        updatedSkillList = updatedSkillList.filter((skill) =>
-          value.includes(skill.name)
-        );
-        const missingSkills = value.filter(
-          (skill) => !updatedSkillList.some((s) => s.name === skill)
-        );
-        missingSkills.forEach((skill) => {
-          updatedSkillList.push({ name: skill, level: "Cơ bản" });
-        });
-        setSkillList(updatedSkillList);
-        getFreelancer();
+        setFlat(true);
         notification.success({
           message: res.data,
         });
@@ -1013,6 +1032,194 @@ const EditNameAvatar = () => {
   );
 };
 
+const EditCV = () => {
+  const [informationUser, setInformationUser] = useRecoilState(freelancerState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fileName, setFileName] = useState();
+  const [progresspercent, setProgresspercent] = useState(0);
+
+  const [form] = Form.useForm();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
+  const handleUpload = (event) => {
+    const file = event.files[0].originFileObj;
+    setFileName(file.name);
+
+    if (!file) return;
+
+    const storageRef = ref(storage, `CV/freelancer-${informationUser.id}/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          submitCV(downloadURL);
+        });
+      }
+    );
+  };
+
+  const submitCV = (url) =>{
+    put({
+      endpoint: `/freelancer/cvFile/${informationUser.id}`,
+      body: {
+        cvFile: url,
+      },
+    })
+      .then((res) => {
+        setInformationUser({...informationUser, cvFile: url})
+        notification.success({
+          message: 'Tải tệp thành công!',
+        });
+      })
+      .catch((err) => {
+        notification.error({
+          message: 'Có lỗi xảy ra',
+        });
+      });
+  }
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        if (
+          values.files !== undefined &&
+          values.files !== null &&
+          values.files !== ''
+        ) {
+          if (values.files.length > 0) {
+            handleUpload(values);
+          } else {
+            submitCV(values);
+          }
+        } else {
+          submitCV(values);
+        }
+        setIsModalOpen(false);
+      })
+      
+      .catch((error) => {
+        console.error("Validation failed:", error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonPrimary
+        onClick={showModal}
+        $primary
+        style={{ border: `1px solid ${color.colorDeactivate}` }}
+      >
+        Nộp CV/Resume
+      </ButtonPrimary>
+      <ModalPrimary
+        title={"Nộp CV/Resume"}
+        open={isModalOpen}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          name="submitCV"
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  <Form.Item
+                    name="files"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                  >
+                    <Upload.Dragger
+                      name="file-upload"
+                      maxCount={1}
+                      beforeUpload={() => false}
+                    >
+                      <p className="ant-upload-drag-icon">
+                        <PaperClipOutlined />
+                      </p>
+                      <p className="ant-upload-text">
+                        Kéo và thả tệp CV của bạn vào đây
+                      </p>
+                      <p className="ant-upload-hint">
+                        (Kích thước tệp tối đa: 25 MB)
+                      </p>
+                    </Upload.Dragger>
+                  </Form.Item>
+                </Col>
+              </CustomRow>
+            </Col>
+            <Col span={24}>
+              <CustomRow gutter={[0, 10]}>
+                <Col span={24}>
+                  {informationUser.cvFile ? (
+                    <Typography.Link
+                      href={informationUser.cvFile}
+                      target="_blank"
+                      underline={true}
+                      style={{
+                        fontWeight: 700,
+                        fontSize: 14,
+                        marginLeft: 5,
+                        color: color.colorPrimary,
+                        cursor: "pointer",
+                      }}
+                    >
+                      fileCV.pdf
+                    </Typography.Link>
+                  ) : (
+                    <Typography.Text
+                      style={{
+                        fontWeight: 700,
+                        fontSize: 14,
+                        marginLeft: 5,
+                        color: "#ccc",
+                        cursor: "not-allowed",
+                      }}
+                    >
+                      fileCV.pdf
+                    </Typography.Text>
+                  )}
+                </Col>
+              </CustomRow>
+            </Col>
+          </Row>
+        </Form>
+      </ModalPrimary>
+    </>
+  );
+};
+
 const HeaderSection = () => {
   const informationUser = useRecoilValue(freelancerState);
 
@@ -1055,12 +1262,7 @@ const HeaderSection = () => {
       <Col className={css.btnSubmitCV}>
         <Row gutter={[20, 0]}>
           <Col>
-            <ButtonPrimary
-              $primary
-              style={{ border: `1px solid ${color.colorDeactivate}` }}
-            >
-              Nộp CV/Resume
-            </ButtonPrimary>
+            <EditCV />
           </Col>
         </Row>
       </Col>

@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { get } from "utils/APICaller";
 import Overview from "./Overview";
 import Certificates from "./Certificates";
