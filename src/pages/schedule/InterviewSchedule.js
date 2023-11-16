@@ -6,9 +6,11 @@ import {
   Dropdown,
   Grid,
   Layout,
-  Menu,
   Typography,
   notification,
+  Row,
+  Col,
+  Table,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -20,6 +22,11 @@ import { formatDateTime } from 'components/formatter/format';
 import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
 import EditScheduleModal from './EditScheduleModal';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+
+// Cài đặt ngôn ngữ tiếng Việt cho Day.js
+dayjs.locale('vi');
 
 const actions = [
   {
@@ -69,6 +76,8 @@ const InterviewSchedule = () => {
   let statusApplication = '';
 
   const [openModal, setOpenModal] = useState(false);
+
+  const [dataTable, setDataTable] = useState([]);
 
   const showModal = (id, time, location) => {
     setOpenModal(true);
@@ -189,9 +198,8 @@ const InterviewSchedule = () => {
       endpoint: `/job/appointment/${clientId}`,
     })
       .then((res) => {
+        setDataTable(res.data);
         const data = generateJobs(res.data);
-        console.log(data);
-
         setJobList(data[0]);
         setJobListColor(data[1]);
         setTimeout(() => {
@@ -267,7 +275,9 @@ const InterviewSchedule = () => {
         >
           <ArrowLeft />
         </button>
-        <div className='text-month'>{value.format('MMMM')}</div>
+        <div className='text-month'>
+          {capitalizeFirstLetter(value.format('MMMM'))}
+        </div>
         <button
           className='btn-month'
           onClick={() => onChange(value.clone().add(1, 'month'))}
@@ -390,6 +400,75 @@ const InterviewSchedule = () => {
     return [items, coloritems];
   }
 
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  const renderAppointments = (appointments) => {
+    const appointmentColumns = [
+      {
+        title: 'Người phỏng vấn',
+        dataIndex: 'freelancers.accounts.name',
+        key: 'name',
+        render: (text, record) => record.freelancers.accounts.name,
+      },
+      {
+        title: 'Thời gian',
+        dataIndex: 'appointments.time',
+        key: 'time',
+        render: (text, record) => record.appointments[0].time,
+      },
+      {
+        title: 'Địa điểm',
+        dataIndex: 'appointments.location',
+        key: 'location',
+        render: (text, record) => record.appointments[0].location,
+      },
+      {
+        title: 'Thao tác',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: (text, record) => (
+          <Dropdown
+            menu={{
+              items: actions.map((action) => ({
+                ...action,
+                key: action.key + '_' + record?.id,
+                onClick: () =>
+                  onClick(
+                    action,
+                    record.appointments[0]?.time,
+                    record?.id,
+                    record?.appointments[0]?.appointmentId,
+                    record.appointments[0]?.location.length > 0
+                      ? record.appointments[0]?.location
+                      : record.appointments[0]?.link
+                  ),
+              })),
+            }}
+          >
+            <EllipsisOutlined />
+          </Dropdown>
+        ),
+      },
+    ];
+
+    return (
+      <Table
+        columns={appointmentColumns}
+        dataSource={appointments}
+        pagination={false}
+        rowKey={(record) => record.appointmentId}
+      />
+    );
+  };
+
+  const expandedRowRender = (record) => {
+    return renderAppointments(record.applications);
+  };
+
+  const columns = [{ title: 'Công việc', dataIndex: 'title', key: 'name' }];
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -426,36 +505,44 @@ const InterviewSchedule = () => {
           }
           extra={page === 'client/schedule' ? '' : <Link>Xem chi tiết</Link>}
         >
-          <Calendar
-            locale={{
-              lang: {
-                locale: 'en',
-                monthFormat: 'MMMM',
-                weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-                weekdaysShort: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-              },
-            }}
-            fullscreen={false}
-            headerRender={({ value, onChange, type, onTypeChange }) => {
-              if (type === 'month') {
-                return monthHeader(value, onChange);
-              } else {
-                onTypeChange('month');
-                return null;
-              }
-            }}
-            className='calendar'
-            cellRender={cellRender}
-            style={{ margin: 30 }}
-          />
-          <Menu
-            onClick={onClick}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode='inline'
-            items={jobList}
-            className='appoinment-list'
-          />
+          <Row>
+            <Col span={10}>
+              <Calendar
+                locale={{
+                  lang: {
+                    locale: 'vi',
+                    monthFormat: 'MMMM',
+                  },
+                }}
+                fullscreen={false}
+                headerRender={({ value, onChange, type, onTypeChange }) => {
+                  if (type === 'month') {
+                    return monthHeader(value, onChange);
+                  } else {
+                    onTypeChange('month');
+                    return null;
+                  }
+                }}
+                className='calendar'
+                cellRender={cellRender}
+                style={{ margin: 30 }}
+              />
+            </Col>
+            <Col span={14}>
+              <Table
+                columns={columns}
+                expandable={{
+                  expandedRowRender,
+                  defaultExpandedRowKeys: dataTable.map((record) =>
+                    record.id.toString()
+                  ),
+                }}
+                dataSource={dataTable}
+                rowKey={(record) => record.id}
+                pagination={false}
+              />
+            </Col>
+          </Row>
         </Card>
       </Layout.Content>
     </>
