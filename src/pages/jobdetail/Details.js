@@ -48,6 +48,7 @@ const SubmitApplication = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setProgresspercent] = useState(0);
   let { id } = useParams();
+  
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -110,11 +111,20 @@ const SubmitApplication = () => {
     form
       .validateFields()
       .then((values) => {
-        uploadFile(values);
+        console.log(values)
+        if (
+          values.dragger !== undefined &&
+          values.dragger !== null &&
+          values.dragger !== ""
+        ){
+          uploadFile(values);
+        }else{
+          createApplication(values)
+        }
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.error('Validation failed:', error);
+        console.error("Validation failed:", error);
       });
   };
 
@@ -193,7 +203,6 @@ const SubmitApplication = () => {
                     name='dragger'
                     valuePropName='fileList'
                     getValueFromEvent={normFile}
-                    rules={[{ required: true, message: 'Xin hãy tải tệp lên' }]}
                   >
                     <Dragger {...props}>
                       <p className='ant-upload-drag-icon'>
@@ -233,9 +242,7 @@ const HeaderArticle = () => {
         setFavoriteList(idList);
       })
       .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
+        console.log(error)
       });
   };
 
@@ -429,6 +436,7 @@ const DescriptionsArticle = ({ description }) => {
 
 //Attachment
 const AttachmentArticle = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <CustomRow>
       <Col span={24}>
@@ -436,20 +444,41 @@ const AttachmentArticle = () => {
           Tệp tin đính kèm
         </Typography.Title>
       </Col>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      <CustomCol span={24} style={{ display: "flex" }}>
         <PaperClipOutlined />
-        <Typography.Text
-          underline={true}
-          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}
-        >
-          fileAttachName.doc
-        </Typography.Text>
+        {jobDetail.fileAttachment ? (
+          <Typography.Link
+            href={jobDetail.fileAttachment}
+            target="_blank"
+            underline={true}
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: color.colorPrimary,
+              cursor: "pointer",
+            }}
+          >
+            fileCV.pdf
+          </Typography.Link>
+        ) : (
+          <Typography.Text
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: "#ccc",
+              cursor: "not-allowed",
+            }}
+          >
+            fileCV.pdf
+          </Typography.Text>
+        )}
       </CustomCol>
     </CustomRow>
   );
 };
 
-//Skill
 const SkillArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
   const SkeletonSkills = () => {
@@ -623,7 +652,9 @@ const ArticleLeft = () => {
 };
 
 const InformationRight = ({ showModalLogin }) => {
+  const jobDetail = useRecoilValue(jobDetailState);
   const auth = useRecoilValue(authState);
+
   return (
     <Col
       md={{ span: 6 }}
@@ -633,14 +664,14 @@ const InformationRight = ({ showModalLogin }) => {
         borderLeft: `1px solid ${color.colorBlueWhale}`,
       }}
     >
-      <Row style={{ justifyContent: 'center' }}>
+      <Row style={{ justifyContent: "center" }}>
         {/* Đăng nhập và phân quyền nếu đăng nhập  */}
         <Col
           style={{
-            margin: '20px 0',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            margin: "20px 0",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           {auth.email ? (
@@ -649,6 +680,8 @@ const InformationRight = ({ showModalLogin }) => {
             <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
           )}
         </Col>
+        <CustomDivider />
+
         {/* Sau khi được nhận việc  */}
         {/* <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Row>
@@ -668,7 +701,6 @@ const InformationRight = ({ showModalLogin }) => {
             </CustomCol>
           </Row>
         </Col> */}
-        <CustomDivider />
         <AboutCustomer />
         <CustomDivider />
         <ContactInfo />
@@ -728,6 +760,7 @@ const Details = () => {
   const [, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const auth = useRecoilValue(authState);
+
 
   const showModalLogin = () => {
     setOpenLogin(true);
