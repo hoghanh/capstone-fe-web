@@ -38,7 +38,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { get, post, remove } from 'utils/APICaller';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'config/firebase';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const { Dragger } = Upload;
 
@@ -523,16 +523,18 @@ const AboutCustomer = () => {
         <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
           Công ty
         </Typography.Text>
-        <Typography.Title
-          className={css.titleAboutCustomer}
-          level={5}
-          style={{
-            margin: '0 0 10px 0',
-            textAlign: 'center',
-          }}
-        >
-          {jobDetail.clients.accounts.name.toUpperCase()}
-        </Typography.Title>
+        <Link to={`/profile-client/${jobDetail?.clients.accountId}`}>
+          <Typography.Title
+            className={css.titleAboutCustomer}
+            level={5}
+            style={{
+              margin: '0 0 10px 0',
+              textAlign: 'center',
+            }}
+          >
+            {jobDetail?.clients.accounts.name.toUpperCase()}
+          </Typography.Title>
+        </Link>
       </CustomCol>
       <CustomCol
         span={24}

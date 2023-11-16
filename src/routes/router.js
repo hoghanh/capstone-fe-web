@@ -59,6 +59,12 @@ export const routes = [
     role: ['freelancer'],
   },
   {
+    path: '/profile-client/:id',
+    element: lazy(() => import('pages/profileclient/ProfileClient')),
+    name: 'profile-client',
+    role: ['freelancer'],
+  },
+  {
     path: '/client',
     element: lazy(() => import('pages/dashboard/Dashboard')),
     name: 'client',
