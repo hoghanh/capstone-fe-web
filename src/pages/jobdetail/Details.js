@@ -81,10 +81,9 @@ const SubmitApplication = () => {
     );
   };
 
-  const createApplication = async (values, url) => {
+  const createApplication = (values, url) => {
     const { description } = values;
     const time = new Date();
-    console.log(url, description, time, freelancer.id, id);
     post({
       endpoint: `/application`,
       body: {
@@ -111,7 +110,6 @@ const SubmitApplication = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values)
         if (
           values.dragger !== undefined &&
           values.dragger !== null &&

@@ -1767,7 +1767,6 @@ const BodySectionRight = () => {
               </Row>
             </Col>
             {applications.map((item, index) => {
-              console.log(item)
               return (
                 <Col span={24} key={item.id}>
                   <CustomRow

@@ -150,7 +150,6 @@ const JobList = () => {
   };
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setSortOption(value);
   };
 

@@ -11,7 +11,6 @@ const Overview = () => {
   const [clientAccount, setClientAccount] = useState();
   const { id } = useParams();
 
-  console.log(clientAccount);
   useEffect(() => {
     getClient();
   }, []);
