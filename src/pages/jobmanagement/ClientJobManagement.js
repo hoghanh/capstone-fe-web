@@ -22,7 +22,7 @@ import Loading from 'components/loading/loading';
 import { File } from 'components/icon/Icon';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { authState } from 'recoil/atom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 const tabList = [
   {
@@ -71,7 +71,7 @@ const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

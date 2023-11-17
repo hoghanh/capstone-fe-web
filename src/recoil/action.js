@@ -1,4 +1,4 @@
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import LocalStorageUtils from '../utils/LocalStorageUtils';
 import { authState } from './atom';
 import jwtDecode from 'jwt-decode';
@@ -37,11 +37,10 @@ const useAuthActions = () => {
   };
 
   const autoLogin = () => {
-    // debugger;
     const token = LocalStorageUtils.getToken();
-    const user = LocalStorageUtils.getUser();
-    if (user) {
-      const expireTime = new Date(jwtDecode(token).exp);
+    if (token) {
+      const user = jwtDecode(LocalStorageUtils.getUser());
+      const expireTime = new Date(jwtDecode(token).exp * 1000);
       if (expireTime > Date.now()) {
         setAuth({
           id: user.result.id,

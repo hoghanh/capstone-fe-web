@@ -4,7 +4,7 @@ import { Pen } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 import { get } from 'utils/APICaller';
 
@@ -12,7 +12,7 @@ function ClientProfile() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState();
 
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     function fetchProfile() {

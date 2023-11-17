@@ -23,7 +23,7 @@ import joblist from 'styles/joblist';
 import { get, put, remove } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 
 const EditJob = () => {
@@ -40,7 +40,7 @@ const EditJob = () => {
     defaultFileList: [],
   });
 
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     getJob();

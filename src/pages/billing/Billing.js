@@ -15,7 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import ModalTopup from './ModalTopup';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 
 const columns = [
@@ -66,7 +66,7 @@ function Billing() {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);

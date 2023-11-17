@@ -77,19 +77,16 @@ const clients = {
 };
 
 const applications = {
-  id: "",
-  description: "",
-  fileAttach: "",
-  sendDate: "",
-  status: "",
-  createdAt: "",
-  updatedAt: "",
-  freelancerId: "",
-  jobId: "",
+  id: '',
+  description: '',
+  fileAttach: '',
+  sendDate: '',
+  status: '',
+  createdAt: '',
+  updatedAt: '',
+  freelancerId: '',
+  jobId: '',
 };
-
-
-
 
 export const jobDetailState = atom({
   key: 'jobDetailState',
@@ -113,21 +110,21 @@ export const jobDetailState = atom({
 });
 
 export const freelancerState = atom({
-  key: "freelancerState",
+  key: 'freelancerState',
   default: {
-    id: "",
-    status: "",
-    cvFile: "",
-    hoursPerWeek: "",
+    id: '',
+    status: '',
+    cvFile: '',
+    hoursPerWeek: '',
     language: [],
     certificates: [],
     skills: [],
-    introduction: "",
-    major: "",
-    title: "",
-    createdAt: "",
-    updatedAt: "",
-    accountId: "",
+    introduction: '',
+    major: '',
+    title: '',
+    createdAt: '',
+    updatedAt: '',
+    accountId: '',
     accounts: accounts,
   },
 });
@@ -145,7 +142,7 @@ const clientAccounts = {
   status: true,
   createdAt: '',
   updatedAt: '',
-}
+};
 
 export const clientProfile = atom({
   key: 'clientProfile',
@@ -176,20 +173,7 @@ export const listSkillsState = atom({
 
 export const authState = atom({
   key: 'auth',
-  default: {
-    token: null,
-    id: '',
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
-    image: '',
-    password: '',
-    role: '',
-    currency: '',
-    status: 0,
-    exp: 0,
-  },
+  default: {},
 });
 
 export const appoinmentState = atom({

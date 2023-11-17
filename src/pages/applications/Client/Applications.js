@@ -7,7 +7,7 @@ import { applicationListState, authState } from 'recoil/atom';
 
 const Applications = () => {
   const [, setApplications] = useRecoilState(applicationListState);
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     getApplications();

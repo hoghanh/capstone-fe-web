@@ -207,7 +207,7 @@ const Interview = ({
   setIsIdItem,
 }) => {
   const [timeBooking, setTimeBooking] = useState('');
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
   const [form] = Form.useForm();
 
   const onChange = (value, dateString) => {
@@ -458,7 +458,7 @@ const TabSent = ({ activeTabKey }) => {
   const [appointmentId, setAppointmentId] = useState();
   const [form] = Form.useForm();
 
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     getApplications();

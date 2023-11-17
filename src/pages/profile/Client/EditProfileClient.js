@@ -20,7 +20,7 @@ import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { authState, clientProfile } from 'recoil/atom';
 import color from 'styles/color';
 import { put, remove } from 'utils/APICaller';
@@ -406,7 +406,7 @@ const BasicInformation = () => {
 const RemoveAlert = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   const removeItem = () => {
     remove({ endpoint: `/accounts/profile/${auth.id}` })

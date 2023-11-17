@@ -21,7 +21,7 @@ import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 
 const PostJob = () => {
@@ -32,7 +32,7 @@ const PostJob = () => {
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
 
-  const auth = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     getCategory();
