@@ -3,22 +3,24 @@ import React, { useEffect } from 'react';
 import ApplicationsTracking from './ApplicationsTracking';
 import { useRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
-import { applicationListState } from 'recoil/atom';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
+import { applicationListState, authState } from 'recoil/atom';
 
 const Applications = () => {
   const [, setApplications] = useRecoilState(applicationListState);
-  const client= LocalStorageUtils.getItem('profile');
+  const auth = useRecoilState(authState);
 
   useEffect(() => {
     getApplications();
   }, []);
 
   const getApplications = async () => {
-    get({ endpoint: `/application/client/${client.id}` })
+    get({ endpoint: `/application/client/${auth.id}` })
       .then((response) => {
         const data = response.data;
-        let applications = data.filter((application) => application.jobId !== null && application.jobs !== null);
+        let applications = data.filter(
+          (application) =>
+            application.jobId !== null && application.jobs !== null
+        );
         setApplications(applications);
       })
       .catch((error) => {

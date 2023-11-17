@@ -5,30 +5,13 @@ import { home } from '../../styles/homepage';
 import GoogleLoginButton from '../../components/button/GoogleLoginButton';
 import Link from 'antd/es/typography/Link';
 import useAuthActions from 'recoil/action';
-import { get, post } from 'utils/APICaller';
-import { useSetRecoilState } from 'recoil';
-import { clientProfile } from 'recoil/atom';
+import { post } from 'utils/APICaller';
 import { useNavigate } from 'react-router-dom';
 
 function LoginModal({ visible, onCancel, onOk, handleMove }) {
   const navigate = useNavigate();
-  const setInformationUser = useSetRecoilState(clientProfile);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { saveProfile } = useAuthActions();
-
-  function fetchProfile(id) {
-    get({ endpoint: `/client/profile/${id}` })
-      .then((response) => {
-        const data = response.data;
-        setInformationUser(data);
-        saveProfile(data);
-        navigate('/client');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   const { login } = useAuthActions();
 
@@ -54,8 +37,7 @@ function LoginModal({ visible, onCancel, onOk, handleMove }) {
         login(res.data.token);
         setEmail('');
         setPassword('');
-        fetchProfile(res.data.account.id);
-
+        navigate('/client');
         notification.success({
           message: 'Đăng nhập thành công',
         });

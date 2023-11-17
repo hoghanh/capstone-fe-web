@@ -37,11 +37,12 @@ const useAuthActions = () => {
   };
 
   const autoLogin = () => {
+    // debugger;
     const token = LocalStorageUtils.getToken();
     const user = LocalStorageUtils.getUser();
-    if (user && typeof user === 'object') {
-      const expireTime = user.exp * 1000 + Date.now();
-      if (user?.exp && expireTime > Date.now()) {
+    if (user) {
+      const expireTime = new Date(jwtDecode(token).exp);
+      if (expireTime > Date.now()) {
         setAuth({
           id: user.result.id,
           email: user.result.email,
@@ -83,15 +84,11 @@ const useAuthActions = () => {
       exp: 0,
     });
   };
-  const saveProfile = (data) => {
-    LocalStorageUtils.setItem('profile', data);
-  };
 
   return {
     login,
     autoLogin,
     logout,
-    saveProfile,
   };
 };
 

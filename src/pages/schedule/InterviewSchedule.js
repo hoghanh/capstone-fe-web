@@ -15,7 +15,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { get, put } from 'utils/APICaller';
 import { formatDateTime } from 'components/formatter/format';
@@ -24,6 +23,8 @@ import Loading from 'components/loading/loading';
 import EditScheduleModal from './EditScheduleModal';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import { useRecoilState } from 'recoil';
+import { authState } from 'recoil/atom';
 
 // Cài đặt ngôn ngữ tiếng Việt cho Day.js
 dayjs.locale('vi');
@@ -64,7 +65,8 @@ const InterviewSchedule = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
-  const clientId = LocalStorageUtils.getItem('profile').id;
+  const auth = useRecoilState(authState);
+
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
   const [isLoading, setIsLoading] = useState(true);
@@ -195,13 +197,13 @@ const InterviewSchedule = () => {
   function getInterviewSchedule() {
     setIsLoading(true);
     get({
-      endpoint: `/job/appointment/${clientId}`,
+      endpoint: `/job/appointment/${auth.id}`,
     })
       .then((res) => {
         setDataTable(res.data);
         const data = generateJobs(res.data);
         setJobList(data[0]);
-        setJobListColor(data[1]);
+        // setJobListColor(data[1]);
         setTimeout(() => {
           setIsLoading(false);
         }, [500]);
@@ -215,20 +217,19 @@ const InterviewSchedule = () => {
 
   const getListData = (value) => {
     let listData = [];
-    jobListColor.forEach((item) => {
-      const time = new Date(item.time);
-      time.setHours(time.getHours() - 7, 0, 0);
-      if (time.getMonth() === value.month()) {
-        if (time.getDate() === value.date()) {
-          const checkDuplicate = listData.filter(
-            (listData) => listData.color === item.color
-          );
-          if (checkDuplicate.length === 0) {
-            listData.push(item);
-          }
-        }
-      }
-    });
+    // jobListColor.forEach((item) => {
+    //   const time = new Date(item.time);
+    //   if (time.getMonth() === value.month()) {
+    //     if (time.getDate() === value.date()) {
+    //       const checkDuplicate = listData.filter(
+    //         (listData) => listData.color === item.color
+    //       );
+    //       if (checkDuplicate.length === 0) {
+    //         listData.push(item);
+    //       }
+    //     }
+    //   }
+    // });
     return listData;
   };
 
@@ -397,7 +398,7 @@ const InterviewSchedule = () => {
       itemChildren = [];
     });
     setIsLoading(false);
-    return [items, coloritems];
+    return [items];
   }
 
   const capitalizeFirstLetter = (str) => {
@@ -416,7 +417,7 @@ const InterviewSchedule = () => {
         title: 'Thời gian',
         dataIndex: 'appointments.time',
         key: 'time',
-        render: (text, record) => record.appointments[0].time,
+        render: (text, record) => formatDateTime(record.appointments[0].time),
       },
       {
         title: 'Địa điểm',
