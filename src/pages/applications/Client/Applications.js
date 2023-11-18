@@ -1,12 +1,12 @@
 import { Layout } from 'antd';
 import React, { useEffect } from 'react';
 import ApplicationsTracking from './ApplicationsTracking';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
 import { applicationListState, authState } from 'recoil/atom';
 
 const Applications = () => {
-  const [, setApplications] = useRecoilState(applicationListState);
+  const setApplications = useSetRecoilState(applicationListState);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
