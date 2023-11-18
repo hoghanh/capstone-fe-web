@@ -568,7 +568,7 @@ const TabSent = ({ activeTabKey }) => {
                         <CustomCol>
                           <Row gutter={10}>
                             <Col>
-                              <Link to="/client/applications/freelancer-profile">
+                              <Link to={`/client/applications/freelancer-profile/38`}>
                                 <Typography.Title
                                   level={4}
                                   style={{ margin: 0 }}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
 import Details from "./Details";
 import { get } from "utils/APICaller";
@@ -9,8 +9,10 @@ import { useParams } from "react-router-dom";
 const JobDetail = () => {
   const [, setJobDetail] = useRecoilState(jobDetailState);
   const [, setFreelancer] = useRecoilState(freelancerState);
+  const [ status, setStatus] = useState(false);
   const auth = useRecoilValue(authState);
   let { id } = useParams();
+
   useEffect(() => {
     getJobDetail();
     getFreelancer();
@@ -21,6 +23,11 @@ const JobDetail = () => {
       .then((response) => {
         const data = response.data;
         setJobDetail(data);
+        let item = data.applications.find((item) => item.freelancers.accountId === auth.id);
+        if (!data.applications.length) {
+          item = false;
+        }
+        return setStatus(item ? true : false);
       })
       .catch((error) => {
         console.log(error);
@@ -40,7 +47,7 @@ const JobDetail = () => {
 
   return (
     <Layout.Content className={"containerBody"} style={styles.containerBody}>
-      <Details />
+      <Details status={status}  setStatus={setStatus}/>
     </Layout.Content>
   );
 };

@@ -20,8 +20,8 @@ import { Plus } from "components/icon/Icon";
 import React, { useEffect, useState } from "react";
 import css from "./profile.module.css";
 import { ModalPrimary } from "components/Modal/Modal";
-import { useRecoilState } from "recoil";
-import { freelancerState } from "recoil/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState, freelancerState } from "recoil/atom";
 import { post, put, remove } from "utils/APICaller";
 import moment from "moment";
 import { formatDate } from "components/formatter/format";
@@ -284,6 +284,8 @@ const AddCertifications = () => {
 };
 
 const HeaderSection = () => {
+  const auth = useRecoilValue(authState);
+
   return (
     <Row justify={"space-between"} style={{ padding: 25 }}>
       <Col>
@@ -295,9 +297,11 @@ const HeaderSection = () => {
           </CustomCol>
         </Row>
       </Col>
-      <Col>
-        <AddCertifications />
-      </Col>
+      {auth.role === "freelancer" ? (
+        <Col>
+          <AddCertifications />
+        </Col>
+      ) : null}
     </Row>
   );
 };
@@ -311,6 +315,8 @@ const BodySection = () => {
   const [issueDate, setIssueDate] = useState();
   const [expirationDate, setExpirationDate] = useState();
   const [form] = Form.useForm();
+  const auth = useRecoilValue(authState);
+
 
   useEffect(() => {
     setCertificates(informationUser.certificates);
@@ -449,7 +455,7 @@ const BodySection = () => {
             >
               <Col span={0} sm={{ span: 4 }} style={{ paddingRight: 20 }}>
                 <Link to={certificate.credentialUrl} target="_blank">
-                  <Image src="img/certificate-1.png" preview={false}></Image>
+                  <Image src={"https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/resources%2Fimage%2Fcertificate-1.png?alt=media&token=c69c8ae7-24df-4b50-92fa-37b5cc9439e1"} preview={false} alt="certificate"/>
                 </Link>
               </Col>
               <Col span={24} sm={{ span: 20 }}>
@@ -487,21 +493,23 @@ const BodySection = () => {
                       </Col>
                     </CustomRow>
                   </Col>
-                  <Col
-                    span={1}
-                    style={{ display: "flex", alignItems: "flex-start" }}
-                  >
-                    <Dropdown
-                      menu={{
-                        items,
-                        onClick: ({ key }) => {
-                          onClick(certificate.id, key);
-                        },
-                      }}
+                  {auth.role === "freelancer" ? (
+                    <Col
+                      span={1}
+                      style={{ display: "flex", alignItems: "flex-start" }}
                     >
-                      <EllipsisOutlined />
-                    </Dropdown>
-                  </Col>
+                      <Dropdown
+                        menu={{
+                          items,
+                          onClick: ({ key }) => {
+                            onClick(certificate.id, key);
+                          },
+                        }}
+                      >
+                        <EllipsisOutlined />
+                      </Dropdown>
+                    </Col>
+                  ) : null}
                 </Row>
               </Col>
             </Row>
@@ -601,7 +609,6 @@ const BodySection = () => {
                         return current && current.isAfter(dayjs().endOf("day"));
                       }}
                       locale={locale}
-
                     />
                   </Form.Item>
                 </Col>
@@ -656,7 +663,6 @@ const BodySection = () => {
                         );
                       }}
                       locale={locale}
-
                     />
                   </Form.Item>
                 </Col>

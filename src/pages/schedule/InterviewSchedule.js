@@ -201,7 +201,7 @@ const InterviewSchedule = () => {
         setDataTable(res.data);
         const data = generateJobs(res.data);
         setJobList(data[0]);
-        setJobListColor(data[1]);
+        // setJobListColor(data[1]);
         setTimeout(() => {
           setIsLoading(false);
         }, [500]);
@@ -214,21 +214,21 @@ const InterviewSchedule = () => {
   }
 
   const getListData = (value) => {
-    let listData = [];
-    jobListColor.forEach((item) => {
-      const time = new Date(item.time);
-      time.setHours(time.getHours() - 7, 0, 0);
-      if (time.getMonth() === value.month()) {
-        if (time.getDate() === value.date()) {
-          const checkDuplicate = listData.filter(
-            (listData) => listData.color === item.color
-          );
-          if (checkDuplicate.length === 0) {
-            listData.push(item);
-          }
-        }
-      }
-    });
+  let listData = [];  
+    // jobListColor.forEach((item) => {
+    //   const time = new Date(item.time);
+    //   time.setHours(time.getHours() - 7, 0, 0);
+    //   if (time.getMonth() === value.month()) {
+    //     if (time.getDate() === value.date()) {
+    //       const checkDuplicate = listData.filter(
+    //         (listData) => listData.color === item.color
+    //       );
+    //       if (checkDuplicate.length === 0) {
+    //         listData.push(item);
+    //       }
+    //     }
+    //   }
+    // });
     return listData;
   };
 
@@ -416,7 +416,7 @@ const InterviewSchedule = () => {
         title: 'Thời gian',
         dataIndex: 'appointments.time',
         key: 'time',
-        render: (text, record) => record.appointments[0].time,
+        render: (text, record) => formatDateTime(record.appointments[0].time),
       },
       {
         title: 'Địa điểm',

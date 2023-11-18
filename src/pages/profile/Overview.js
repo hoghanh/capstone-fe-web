@@ -270,6 +270,7 @@ const EditWorkingTime = () => {
     </>
   );
 };
+
 const languagesItems = [
   { value: "1", label: "Cơ Bản" },
   { value: "2", label: "Trung cấp" },
@@ -710,7 +711,6 @@ const EditIntroduction = () => {
     setIsModalOpen(false);
   };
   const onChange = (e) => {
-    console.log("Change:", e.target.value);
   };
   return (
     <>
@@ -1036,7 +1036,7 @@ const EditCV = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileName, setFileName] = useState();
-  const [progresspercent, setProgresspercent] = useState(0);
+  const [, setProgresspercent] = useState(0);
 
   const [form] = Form.useForm();
 
@@ -1222,6 +1222,7 @@ const EditCV = () => {
 
 const HeaderSection = () => {
   const informationUser = useRecoilValue(freelancerState);
+  const auth = useRecoilValue(authState);
 
   return (
     <Row justify={"space-between"} style={{ padding: 25 }}>
@@ -1233,7 +1234,7 @@ const HeaderSection = () => {
             <Image
               width={72}
               src={informationUser.accounts.image}
-              alt='Apofoitisi logo'
+              alt="Apofoitisi logo"
               preview={true}
               style={{ borderRadius: "50%" }}
             />
@@ -1253,17 +1254,54 @@ const HeaderSection = () => {
                 </Typography.Title>
               </Col>
               <Col>
-                <EditNameAvatar />
+                {auth.role === "freelancer" ? (
+                  <Col>
+                    <EditNameAvatar />
+                  </Col>
+                ) : null}
               </Col>
             </Row>
           </CustomCol>
         </Row>
       </Col>
-      <Col className={css.btnSubmitCV}>
+      <Col className="btnSubmitCV" style={{display: 'flex', alignItems: 'center'}}>
         <Row gutter={[20, 0]}>
-          <Col>
-            <EditCV />
-          </Col>
+          {auth.role === "freelancer" ? (
+            <Col>
+              <EditCV />
+            </Col>
+          ) : (
+            <Col>
+              {informationUser.cvFile ? (
+                <Typography.Link
+                  href={informationUser.cvFile}
+                  target="_blank"
+                  underline={true}
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 14,
+                    marginLeft: 5,
+                    color: color.colorPrimary,
+                    cursor: "pointer",
+                  }}
+                >
+                  fileCV.pdf
+                </Typography.Link>
+              ) : (
+                <Typography.Text
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 14,
+                    marginLeft: 5,
+                    color: "#ccc",
+                    cursor: "not-allowed",
+                  }}
+                >
+                  fileCV.pdf
+                </Typography.Text>
+              )}
+            </Col>
+          )}
         </Row>
       </Col>
     </Row>
@@ -1272,6 +1310,7 @@ const HeaderSection = () => {
 
 const BodySectionLeft = () => {
   const informationUser = useRecoilValue(freelancerState);
+  const auth = useRecoilValue(authState);
 
   return (
     <Col
@@ -1289,9 +1328,11 @@ const BodySectionLeft = () => {
                     Thông tin cá nhân
                   </Typography.Title>
                 </Col>
-                <Col>
-                  <EditPersonalInformation />
-                </Col>
+                {auth.role === "freelancer" ? (
+                  <Col>
+                    <EditPersonalInformation />
+                  </Col>
+                ) : null}
               </Row>
             </Col>
             <CustomCol span={24}>
@@ -1359,9 +1400,11 @@ const BodySectionLeft = () => {
                         Thời gian làm mỗi tuần
                       </Typography.Title>
                     </Col>
-                    <Col>
-                      <EditWorkingTime />
-                    </Col>
+                    {auth.role === "freelancer" ? (
+                      <Col>
+                        <EditWorkingTime />
+                      </Col>
+                    ) : null}
                   </Row>
                 </Col>
                 <Col>
@@ -1383,12 +1426,16 @@ const BodySectionLeft = () => {
                         Ngôn ngữ
                       </Typography.Title>
                     </Col>
-                    <Col>
-                      <AddLanguage />
-                    </Col>
-                    <Col>
-                      <EditLanguages />
-                    </Col>
+                    {auth.role === "freelancer" ? (
+                      <Col>
+                        <AddLanguage />
+                      </Col>
+                    ) : null}
+                    {auth.role === "freelancer" ? (
+                      <Col>
+                        <EditLanguages />
+                      </Col>
+                    ) : null}
                   </Row>
                 </Col>
                 {informationUser?.language.map((language) => (
@@ -1405,19 +1452,21 @@ const BodySectionLeft = () => {
             </CustomCol>
             <CustomCol>
               <Row gutter={[0, 15]}>
-                <Col>
+                <Col span={24}>
                   <Row align={"middle"} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         Chuyên ngành
                       </Typography.Title>
                     </Col>
-                    <Col>
-                      <EditMajor />
-                    </Col>
+                    {auth.role === "freelancer" ? (
+                      <Col>
+                        <EditMajor />
+                      </Col>
+                    ) : null}
                   </Row>
                 </Col>
-                <Col>
+                <Col span={24}>
                   <Typography.Text>
                     {informationUser.major != null &&
                     informationUser.major !== ""
@@ -1436,6 +1485,7 @@ const BodySectionLeft = () => {
 
 const BodySectionLeftResponsive = () => {
   const informationUser = useRecoilValue(profileState);
+  const auth = useRecoilValue(authState);
 
   return (
     <Col
@@ -1460,9 +1510,11 @@ const BodySectionLeftResponsive = () => {
                     Thông tin cá nhân
                   </Typography.Title>
                 </Col>
-                <Col>
-                  <EditPersonalInformation />
-                </Col>
+                {auth.role === "freelancer" ? (
+                  <Col>
+                    <EditPersonalInformation />
+                  </Col>
+                ) : null}
               </Row>
             </Col>
             <CustomCol span={24}>
@@ -1521,9 +1573,11 @@ const BodySectionLeftResponsive = () => {
                         Thời gian làm mỗi tuần
                       </Typography.Title>
                     </Col>
-                    <Col>
-                      <EditWorkingTime />
-                    </Col>
+                    {auth.role === "freelancer" ? (
+                      <Col>
+                        <EditWorkingTime />
+                      </Col>
+                    ) : null}
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -1540,12 +1594,16 @@ const BodySectionLeftResponsive = () => {
                         Ngôn ngữ
                       </Typography.Title>
                     </Col>
-                    <Col>
-                      <AddLanguage />
-                    </Col>
-                    <Col>
-                      <EditLanguages />
-                    </Col>
+                    {auth.role === "freelancer" ? (
+                      <Col>
+                        <AddLanguage />
+                      </Col>
+                    ) : null}
+                     {auth.role === "freelancer" ? (
+                      <Col>
+                        <EditLanguages />
+                      </Col>
+                    ) : null}
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -1604,6 +1662,7 @@ const BodySectionRight = () => {
   const [value, setValue] = useState(1);
   const [skillList, setSkillList] = useState([]);
   const [idSkill, setIdSkill] = useState(null);
+  const auth = useRecoilValue(authState);
 
   const levelOptions = [
     { label: "Cơ bản", value: 1 },
@@ -1676,9 +1735,11 @@ const BodySectionRight = () => {
                       : "Chưa có thông tin"}
                   </Typography.Title>
                 </Col>
-                <Col>
-                  <EditIntroduction />
-                </Col>
+                {auth.role === "freelancer" ? (
+                  <Col>
+                    <EditIntroduction />
+                  </Col>
+                ) : null}
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
@@ -1704,16 +1765,18 @@ const BodySectionRight = () => {
                     Kỹ năng
                   </Typography.Title>
                 </Col>
-                <Col>
-                  <EditSkills
-                    skillList={skillList}
-                    setSkillList={setSkillList}
-                  />
-                </Col>
+                {auth.role === "freelancer" ? (
+                  <Col>
+                    <EditSkills
+                      skillList={skillList}
+                      setSkillList={setSkillList}
+                    />
+                  </Col>
+                ) : null}
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
-              <Row className='skillArticle' gutter={[0, 10]}>
+              <Row className="skillArticle" gutter={[0, 10]}>
                 <CustomCol span={24}>
                   <List
                     style={{ overflowX: "auto" }}
@@ -1800,26 +1863,28 @@ const BodySectionRight = () => {
           </Row>
         </Col>
       </Row>
-      <ModalPrimary
-        title={"Trình độ"}
-        open={isModalLevel}
-        onOk={handleModaLevel}
-        onCancel={handleModalLevelCancel}
-      >
-        <Row gutter={[0, 10]}>
-          <Col span={24}>
-            <Row>
-              <Radio.Group onChange={onLevelChange} value={value}>
-                {levelOptions.map((item) => (
-                  <Col key={item.value} span={24} style={{ padding: 5 }}>
-                    <Radio value={item.value}>{item.label}</Radio>
-                  </Col>
-                ))}
-              </Radio.Group>
-            </Row>
-          </Col>
-        </Row>
-      </ModalPrimary>
+      {auth.role === "freelancer" ? (
+        <ModalPrimary
+          title={"Trình độ"}
+          open={isModalLevel}
+          onOk={handleModaLevel}
+          onCancel={handleModalLevelCancel}
+        >
+          <Row gutter={[0, 10]}>
+            <Col span={24}>
+              <Row>
+                <Radio.Group onChange={onLevelChange} value={value}>
+                  {levelOptions.map((item) => (
+                    <Col key={item.value} span={24} style={{ padding: 5 }}>
+                      <Radio value={item.value}>{item.label}</Radio>
+                    </Col>
+                  ))}
+                </Radio.Group>
+              </Row>
+            </Col>
+          </Row>
+        </ModalPrimary>
+      ) : null}
     </Col>
   );
 };
