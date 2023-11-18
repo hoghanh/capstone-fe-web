@@ -113,6 +113,7 @@ function EditScheduleModal({
                     <DatePicker
                       style={{ with: '100%' }}
                       showTime
+                      timezone="UTC"
                       showNow={false}
                       disabledDate={(current) => {
                         return (

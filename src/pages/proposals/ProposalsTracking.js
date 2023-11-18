@@ -388,6 +388,7 @@ const ProposalsTracking = () => {
             onCalendarChange={(val) => {
               setDates(val);
             }}
+            timezone="UTC"
             onChange={(val) => {
               setValue(val);
             }}

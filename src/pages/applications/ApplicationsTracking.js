@@ -462,6 +462,7 @@ const ApplicationsTracking = () => {
             format={"DD/MM/YYYY"}
             onOpenChange={onOpenChange}
             changeOnBlur
+            timezone="UTC"
             locale={locale}
           />
         </Col>

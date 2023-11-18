@@ -196,6 +196,7 @@ const AddCertifications = () => {
                       style={{ with: "100%" }}
                       showNow={false}
                       format={"YYYY-MM-DD"}
+                      timezone="UTC"
                       onChange={onIssueDate}
                       disabledDate={(current) => {
                         return current && current > moment().endOf("day");
@@ -218,6 +219,7 @@ const AddCertifications = () => {
                       style={{ with: "100%" }}
                       showNow={false}
                       format={"YYYY-MM-DD"}
+                      timezone="UTC"
                       onChange={onExpDate}
                       disabledDate={(current) => {
                         const issueDate = form.getFieldValue("issueDate");
@@ -604,6 +606,7 @@ const BodySection = () => {
                       style={{ with: "100%" }}
                       showNow={false}
                       format={"YYYY-MM-DD"}
+                      timezone="UTC"
                       onChange={onIssueDate}
                       disabledDate={(current) => {
                         return current && current.isAfter(dayjs().endOf("day"));
@@ -653,6 +656,7 @@ const BodySection = () => {
                       showNow={false}
                       format={"YYYY-MM-DD"}
                       onChange={onExpDate}
+                      timezone="UTC"
                       disabledDate={(current) => {
                         const issueDate = form.getFieldValue("issueDate");
                         return (

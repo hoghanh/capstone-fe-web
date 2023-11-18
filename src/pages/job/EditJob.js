@@ -481,6 +481,7 @@ const EditJob = () => {
                 size='large'
                 format='YYYY-MM-DD HH:mm:ss'
                 placeholder='Chọn ngày giờ'
+                timezone="UTC"
                 locale={locale}
               />
             </Form.Item>

@@ -182,6 +182,7 @@ const EditInterview = ({
                       showTime
                       showNow={false}
                       onChange={onChange}
+                      timezone="UTC"
                       disabledDate={(current) => {
                         return (
                           current && current.isBefore(dayjs().endOf('day'))
@@ -331,6 +332,7 @@ const Interview = ({
                       showTime
                       showNow={false}
                       onChange={onChange}
+                      timezone="UTC"
                       disabledDate={(current) => {
                         return (
                           current && current.isBefore(dayjs().endOf('day'))

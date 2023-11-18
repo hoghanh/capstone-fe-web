@@ -179,6 +179,7 @@ function Billing() {
             <DatePicker
               style={{ marginRight: 20 }}
               onChange={filterDate}
+              timezone="UTC"
               size='middle'
             />
             <Button size='large' type='primary' onClick={showModal}>
