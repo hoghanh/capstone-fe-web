@@ -92,7 +92,7 @@ const HomePage = () => {
       </Layout.Content>
       <Layout.Content style={theme.responseWidth}>
         <Typography.Title level={3} style={{ margin: '20px 30px' }}>
-          Công việc được thuê nhiều nhất
+          Doanh nghiệp nổi bật
         </Typography.Title>
         <Swiper
           style={{

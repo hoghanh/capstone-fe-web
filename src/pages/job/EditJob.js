@@ -21,16 +21,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, put, remove } from 'utils/APICaller';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
-import locale from "antd/es/date-picker/locale/vi_VN";
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
+import { useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 const EditJob = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
   const [remainingCharacters, setRemainingCharacters] = useState(5000);
   const [progresspercent, setProgresspercent] = useState(0);
-  const clientId = LocalStorageUtils.getItem('profile').id;
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +39,8 @@ const EditJob = () => {
   const [props, setProps] = useState({
     defaultFileList: [],
   });
+
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     getJob();
@@ -73,7 +75,7 @@ const EditJob = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `jobs/client-${clientId}/${file.name}`);
+    const storageRef = ref(storage, `jobs/client-${auth.id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -137,7 +139,7 @@ const EditJob = () => {
         applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
-        clientId: clientId,
+        clientId: auth.id,
         status: true,
         subCategory: values.category,
         skill: values.skills,

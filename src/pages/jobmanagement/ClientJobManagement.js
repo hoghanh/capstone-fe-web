@@ -20,8 +20,9 @@ import {
 } from 'components/formatter/format';
 import Loading from 'components/loading/loading';
 import { File } from 'components/icon/Icon';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import { ModalPrimary } from 'components/Modal/Modal';
+import { authState } from 'recoil/atom';
+import { useRecoilValue } from 'recoil';
 
 const tabList = [
   {
@@ -70,6 +71,8 @@ const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
+  const auth = useRecoilValue(authState);
+
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabKey, setActiveTabKey] = useState('');
@@ -80,8 +83,6 @@ const ClientJobManagement = () => {
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [itemIdToClose, setItemIdToClose] = useState(null);
   const [itemIdToExtend, setItemIdToExtend] = useState(null);
-
-  const profileUser = LocalStorageUtils.getItem('profile');
 
   const navigate = useNavigate();
 
@@ -111,7 +112,7 @@ const ClientJobManagement = () => {
 
   function getJobList() {
     get({
-      endpoint: `/job/client/${profileUser.id}`,
+      endpoint: `/job/client/${auth.id}`,
     })
       .then((res) => {
         console.log(res.data);

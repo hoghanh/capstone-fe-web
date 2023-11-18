@@ -14,8 +14,9 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import ModalTopup from './ModalTopup';
+import { useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 const columns = [
   {
@@ -65,10 +66,11 @@ function Billing() {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
+  const auth = useRecoilValue(authState);
+
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
   const [currency, setCurrency] = useState();
-  const id = LocalStorageUtils.getItem('profile').id;
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
@@ -83,7 +85,7 @@ function Billing() {
     setIsLoading(true);
     if (!vnp_Amount) {
       get({
-        endpoint: `/payment/client/${id}`,
+        endpoint: `/payment/client/${auth.id}`,
       })
         .then((res) => {
           setBills(res.data.payment);
@@ -108,7 +110,7 @@ function Billing() {
           transDate: vnp_PayDate,
           transType: '02',
           type: '+',
-          clientId: id,
+          clientId: auth.id,
         },
       })
         .then((res) => {
@@ -155,7 +157,7 @@ function Billing() {
         visible={openModal}
         onCancel={handleCancelModal}
         onOk={handleOkModal}
-        id={id}
+        id={auth.id}
       />
       <Card
         bodyStyle={{ padding: 'unset' }}

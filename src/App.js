@@ -7,12 +7,18 @@ import useAuthActions from 'recoil/action';
 import './App.css';
 import { CLIENTID } from 'config';
 import Loading from 'components/loading/loading';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 function App() {
   const { autoLogin } = useAuthActions();
   const [isLoading, setIsLoading] = useState(true);
+
+  const auth = useRecoilValue(authState);
+
   useEffect(() => {
     autoLogin();
+    console.log(auth);
     function start() {
       gapi.auth2
         .init({

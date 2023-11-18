@@ -37,7 +37,7 @@ export const home = {
     card: {
       width: '100%',
       height: '100%',
-      backgroundImage: `url(https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png)`,
+      backgroundImage: `url('favico.ico')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     },

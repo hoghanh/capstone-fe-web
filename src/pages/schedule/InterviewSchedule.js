@@ -15,7 +15,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { get, put } from 'utils/APICaller';
 import { formatDateTime } from 'components/formatter/format';
@@ -24,6 +23,8 @@ import Loading from 'components/loading/loading';
 import EditScheduleModal from './EditScheduleModal';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import { useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 // Cài đặt ngôn ngữ tiếng Việt cho Day.js
 dayjs.locale('vi');
@@ -64,12 +65,12 @@ const InterviewSchedule = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
-  const clientId = LocalStorageUtils.getItem('profile').id;
+  const auth = useRecoilValue(authState);
+
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
   const [isLoading, setIsLoading] = useState(true);
   const [jobList, setJobList] = useState([]);
-  const [jobListColor, setJobListColor] = useState([]);
   const [appointmentTime, setAppointmentTime] = useState('');
   const [appointmentLocation, setAppointmentLocation] = useState('');
   const [id, setId] = useState('');
@@ -100,7 +101,6 @@ const InterviewSchedule = () => {
     const today = new Date();
     const timeDifference = appointmentTime - today;
 
-    checkStatusApplication(applicationId);
     setIsLoading(true);
     setTimeout(() => {
       if (checkAction.includes('start') || checkAction.includes('decline')) {
@@ -149,17 +149,6 @@ const InterviewSchedule = () => {
     }, 3000);
   };
 
-  const checkStatusApplication = (id) => {
-    get({ endpoint: `/application/detail/${id}` })
-      .then((res) => {
-        statusApplication = res.data.status;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
-  };
-
   function approveApplication(id) {
     put({ endpoint: `/application/approve/${id}` })
       .then((res) => {
@@ -195,12 +184,13 @@ const InterviewSchedule = () => {
   function getInterviewSchedule() {
     setIsLoading(true);
     get({
-      endpoint: `/job/appointment/${clientId}`,
+      endpoint: `/job/appointment/${auth.id}`,
     })
       .then((res) => {
+        console.log(res.data);
         setDataTable(res.data);
-        const data = generateJobs(res.data);
-        setJobList(data[0]);
+        // const data = generateJobs(res.data);
+        // setJobList(data[0]);
         // setJobListColor(data[1]);
         setTimeout(() => {
           setIsLoading(false);
@@ -214,10 +204,9 @@ const InterviewSchedule = () => {
   }
 
   const getListData = (value) => {
-  let listData = [];  
+    let listData = [];
     // jobListColor.forEach((item) => {
     //   const time = new Date(item.time);
-    //   time.setHours(time.getHours() - 7, 0, 0);
     //   if (time.getMonth() === value.month()) {
     //     if (time.getDate() === value.date()) {
     //       const checkDuplicate = listData.filter(
@@ -397,7 +386,7 @@ const InterviewSchedule = () => {
       itemChildren = [];
     });
     setIsLoading(false);
-    return [items, coloritems];
+    return [items];
   }
 
   const capitalizeFirstLetter = (str) => {
