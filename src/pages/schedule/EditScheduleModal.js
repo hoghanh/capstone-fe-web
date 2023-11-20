@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Typography,
   DatePicker,
@@ -7,11 +7,11 @@ import {
   Col,
   Input,
   notification,
-} from 'antd';
-import { ModalPrimary } from 'components/Modal/Modal';
-import { CustomRow } from 'components/customize/Layout';
-import moment from 'moment';
-import { put } from 'utils/APICaller';
+} from "antd";
+import { ModalPrimary } from "components/Modal/Modal";
+import { CustomRow } from "components/customize/Layout";
+import moment from "moment";
+import { put } from "utils/APICaller";
 
 function EditScheduleModal({
   visible,
@@ -30,24 +30,24 @@ function EditScheduleModal({
         put({
           endpoint: `/appointment/detail/${id}`,
           body: {
-            location: checkLink ? '' : values.address,
-            link: checkLink ? values.address : '',
+            location: checkLink ? "" : values.address,
+            link: checkLink ? values.address : "",
             time: values.time,
           },
         })
           .then((res) => {
             notification.success({
-              message: 'Đã chỉnh sửa thành công',
+              message: "Đã chỉnh sửa thành công",
             });
           })
           .catch((err) => {
             notification.error({
-              message: 'Có lỗi xảy ra, vui lòng thử lại',
+              message: "Có lỗi xảy ra, vui lòng thử lại",
             });
           });
       })
       .catch((error) => {
-        console.error('Validation failed:', error);
+        console.error("Validation failed:", error);
       });
   };
 
@@ -59,7 +59,7 @@ function EditScheduleModal({
   return (
     <>
       <ModalPrimary
-        title={'Chỉnh sửa lịch hẹn'}
+        title={"Chỉnh sửa lịch hẹn"}
         open={visible}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
@@ -67,7 +67,7 @@ function EditScheduleModal({
       >
         <Form
           form={form}
-          name='editInterview'
+          name="editInterview"
           initialValues={{
             remember: true,
           }}
@@ -82,16 +82,16 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='address'
+                    name="address"
                     initialValue={appointmentLocation}
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
-                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
+                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -101,23 +101,24 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='time'
+                    name="time"
                     initialValue={moment(appointmentTime)}
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
                     <DatePicker
-                      style={{ with: '100%' }}
+                      timezone="UTC"
+                      style={{ with: "100%" }}
                       showTime
                       showNow={false}
                       disabledDate={(current) => {
                         return (
                           current &&
-                          current < moment().add(1, 'day').endOf('day')
+                          current < moment().add(1, "day").endOf("day")
                         );
                       }}
                     />

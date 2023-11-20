@@ -2,14 +2,18 @@ import React from 'react';
 import { Button, Typography, notification } from 'antd';
 import { ReactSVG } from 'react-svg';
 import GoogleLogin from 'react-google-login';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 import { CLIENTID } from 'config';
 import color from 'styles/color';
 import { post } from 'utils/APICaller';
 import useAuthActions from 'recoil/action';
 
 const GoogleLoginButton = ({ onLogin }) => {
+  const navigate = useNavigate();
   const { login } = useAuthActions();
+  const { pathname } = useLocation();
+  const page = pathname.replace('/', '');
+  console.log(page)
 
   const onSuccess = (res) => {
     const allowedDomain = '@fpt.edu.vn';
@@ -36,6 +40,9 @@ const GoogleLoginButton = ({ onLogin }) => {
     })
       .then((response) => {
         login(response.data.token);
+        if (!page.startsWith('jobs/job-detail/')) {
+          navigate('/');
+        }
         notification.success({ message: response.data.message });
       })
       .catch((err) => {

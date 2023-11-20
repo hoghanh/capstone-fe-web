@@ -178,6 +178,7 @@ const EditInterview = ({
                     ]}
                   >
                     <DatePicker
+                    timezone="UTC"
                       style={{ with: '100%' }}
                       showTime
                       showNow={false}
@@ -283,13 +284,13 @@ const Interview = ({
   return (
     <>
       <ModalPrimary
-        title={'Đặt lịch hẹn'}
+        title={"Đặt lịch hẹn"}
         open={isModalInterview}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form form={form} name='bookingInterview'>
+        <Form form={form} name="bookingInterview">
           <Row gutter={[0, 10]}>
             <Col span={24}>
               <CustomRow gutter={[0, 10]}>
@@ -300,15 +301,15 @@ const Interview = ({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='address'
+                    name="address"
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
-                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
+                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -318,22 +319,23 @@ const Interview = ({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='time'
+                    name="time"
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
                     <DatePicker
-                      style={{ with: '100%' }}
+                      timezone="UTC"
+                      style={{ with: "100%" }}
                       showTime
                       showNow={false}
                       onChange={onChange}
                       disabledDate={(current) => {
                         return (
-                          current && current.isBefore(dayjs().endOf('day'))
+                          current && current.isBefore(dayjs().endOf("day"))
                         );
                       }}
                       locale={locale}

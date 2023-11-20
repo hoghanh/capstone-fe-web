@@ -380,6 +380,7 @@ const PostJob = () => {
               ]}
             >
               <DatePicker
+              timezone="UTC"
                 showTime
                 size='large'
                 format='YYYY-MM-DD HH:mm:ss'
