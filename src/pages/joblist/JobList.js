@@ -251,13 +251,19 @@ const JobList = () => {
                   : "Đề xuất phù hợp"}
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
-                {md
+                {sortOption !== 'Recommend' ? (md
                   ? totalItems > 0
                     ? `${limit * (page - 1) + 1} - ${
                         limit * page < totalItems ? limit * page : totalItems
                       } của ${totalItems} kết quả`
                     : `0 kết quả`
-                  : ''}
+                  : '') : (md
+                    ? totalItemsRecommended > 0
+                      ? `${limit * (page - 1) + 1} - ${
+                          limit * page < totalItemsRecommended ? limit * page : totalItemsRecommended
+                        } của ${totalItemsRecommended} kết quả`
+                      : `0 kết quả`
+                    : '')}
               </Typography.Text>
             </div>
           }
