@@ -1157,6 +1157,12 @@ const EditCV = () => {
                 <Col span={24}>
                   <Form.Item
                     name="files"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
                   >
@@ -1597,6 +1603,75 @@ const BodySectionLeftResponsive = () => {
   );
 };
 
+const ListWithLoadMore = ({ items }) => {
+  const [visible, setVisible] = useState(2);
+  let counts = 3;
+
+  const showMoreItems = () => {
+    setVisible((prevValue) => prevValue + counts);
+  };
+
+  const showLessItems = () => {
+    setVisible((prevValue) =>
+      prevValue > counts ? prevValue - counts : counts
+    );
+  };
+
+  return (
+    <List
+      dataSource={items.slice(0, visible)}
+      renderItem={(item) => (
+        <List.Item>
+          <Col span={24} key={item.id}>
+            <CustomRow
+              gutter={[0, 10]}
+              style={{ paddingRight: 30, paddingLeft: 30 }}
+            >
+              <Col span={24}>
+                <Typography.Title
+                  level={5}
+                  style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
+                >
+                  {item.jobs?.title}
+                </Typography.Title>
+              </Col>
+              <Col span={24}>
+                <Row gutter={10} align={"middle"}>
+                  <Col>
+                    <Typography.Text style={{ color: color.colorDeactivate }}>
+                      Ngày bắt đầu: {formatDate(item.updatedAt)}
+                    </Typography.Text>
+                  </Col>
+                </Row>
+              </Col>
+            </CustomRow>
+          </Col>
+        </List.Item>
+      )}
+      footer={
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {visible < items.length && (
+            <Typography.Text
+              style={{ cursor: "pointer" }}
+              onClick={showMoreItems}
+            >
+              Xem thêm...
+            </Typography.Text>
+          )}
+          {visible > counts && (
+            <Typography.Text
+              style={{ cursor: "pointer" }}
+              onClick={showLessItems}
+            >
+              Thu gọn
+            </Typography.Text>
+          )}
+        </div>
+      }
+    />
+  );
+};
+
 const BodySectionRight = () => {
   const informationUser = useRecoilValue(freelancerState);
   const applications = useRecoilValue(applicationListState);
@@ -1713,7 +1788,7 @@ const BodySectionRight = () => {
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
-              <Row className='skillArticle' gutter={[0, 10]}>
+              <Row className="skillArticle" gutter={[0, 10]}>
                 <CustomCol span={24}>
                   <List
                     style={{ overflowX: "auto" }}
@@ -1766,38 +1841,12 @@ const BodySectionRight = () => {
                 </Col>
               </Row>
             </Col>
-            {applications.map((item, index) => {
-              console.log(item)
-              return (
-                <Col span={24} key={item.id}>
-                  <CustomRow
-                    gutter={[0, 10]}
-                    style={{ paddingRight: 30, paddingLeft: 30 }}
-                  >
-                    <Col span={24}>
-                      <Typography.Title
-                        level={5}
-                        style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
-                      >
-                        {item.jobs?.title}
-                      </Typography.Title>
-                    </Col>
-                    <Col span={24}>
-                      <Row gutter={10} align={"middle"}>
-                        <Col>
-                          <Typography.Text
-                            style={{ color: color.colorDeactivate }}
-                          >
-                            Ngày bắt đầu: {formatDate(item.updatedAt)}
-                          </Typography.Text>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </CustomRow>
-                  {applications.length === index + 1 ? null : <CustomDivider />}
-                </Col>
-              );
-            })}
+            <Col
+              span={24}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <ListWithLoadMore items={applications} />
+            </Col>
           </Row>
         </Col>
       </Row>

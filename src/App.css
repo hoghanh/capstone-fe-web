@@ -267,10 +267,6 @@ body {
   padding-right: 8px;
 }
 
-.modalPrimary .ant-input-number-input-wrap, .modalPrimary .ant-input-number-input{
-  height: 100%;
-}
-
 .modalPrimary .ant-select{
   width: 100% !important;
 }

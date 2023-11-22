@@ -37,7 +37,7 @@ const BodySection = () => {
   const [countApproved, setCountApproved] = useState(0);
   const [countDeclined, setCountDeclined] = useState(0);
   const { id } = useParams();
-  console.log(id);
+
   useEffect(() => {
     getApplications();
   }, []);
