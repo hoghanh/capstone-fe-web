@@ -22,8 +22,7 @@ import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 import { ModalPrimary } from 'components/Modal/Modal';
 
-
-const RemoveFavorite = ({id, getFavorite}) => {
+const RemoveFavorite = ({ id, getFavorite }) => {
   const auth = useRecoilValue(authState);
   const [isModal, setIsModal] = useState(false);
 
@@ -32,7 +31,7 @@ const RemoveFavorite = ({id, getFavorite}) => {
   };
 
   const handleOk = () => {
-    removeFavorite(id)
+    removeFavorite(id);
   };
   const handleCancel = () => {
     setIsModal(false);
@@ -61,7 +60,7 @@ const RemoveFavorite = ({id, getFavorite}) => {
   };
   return (
     <>
-      <div style={{ cursor: "pointer" }} onClick={showModal}>
+      <div style={{ cursor: 'pointer' }} onClick={showModal}>
         <BookMark />
       </div>
       <ModalPrimary
@@ -83,10 +82,10 @@ const FavoriteList = () => {
   const { useBreakpoint } = Grid;
   const { sm, md } = useBreakpoint();
   const [page, setPage] = useState(1);
-  const [jobList, setJobList] = useState([]);
-  const [sortOption, setSortOption] = useState("Latest");
+  const [jobList, setJobList] = useState([])
+  const [sortOption, setSortOption] = useState('Latest');
   const [openSelect, setOpenSelect] = useState();
-  const [pageSize,] = useState(5)
+  const [pageSize,] = useState(5);
   const { subCateId, subCateName } = useParams();
   const auth = useRecoilValue(authState);
 
@@ -106,7 +105,6 @@ const FavoriteList = () => {
       });
   };
 
-
   const handleChange = (value) => {
     setSortOption(value);
   };
@@ -123,42 +121,41 @@ const FavoriteList = () => {
     return sortedJobList.slice(start, end);
   };
 
-
-  if (sortOption === "Latest") {
+  if (sortOption === 'Latest') {
     sortedJobList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  } else if (sortOption === "Oldest") {
+  } else if (sortOption === 'Oldest') {
     sortedJobList.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
-  } else if (sortOption === "Lowest Price") {
+  } else if (sortOption === 'Lowest Price') {
     sortedJobList.sort((a, b) => a.lowestIncome - b.lowestIncome);
-  } else if (sortOption === "Highest Price") {
+  } else if (sortOption === 'Highest Price') {
     sortedJobList.sort((a, b) => b.highestIncome - a.highestIncome);
-  } else if (sortOption === "Most Applications") {
+  } else if (sortOption === 'Most Applications') {
     sortedJobList.sort((a, b) => b.applied - a.applied);
-  } else if (sortOption === "Lest Applications") {
+  } else if (sortOption === 'Lest Applications') {
     sortedJobList.sort((a, b) => a.applied - b.applied);
   }
 
   return (
     <>
-      <Layout.Content style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
         {sortedJobList && (
           <Typography.Title
             level={3}
-            style={{ padding: "10px 20px", marginBottom: 20 }}
+            style={{ padding: '10px 20px', marginBottom: 20 }}
           >
             {subCateName}
           </Typography.Title>
         )}
 
         <Card
-          bodyStyle={{ padding: "unset" }}
+          bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
           className="card-jobs"
           title={
             <div
               style={{
-                display: "flex",
-                alignItems: "baseline",
+                display: 'flex',
+                alignItems: 'baseline',
               }}
             >
               <Typography.Title level={md ? 3 : 5}>
@@ -170,11 +167,11 @@ const FavoriteList = () => {
             <div>
               <Typography.Text
                 style={{
-                  display: md ? "" : "none",
+                  display: md ? '' : 'none',
                   fontSize: 14,
-                  fontStyle: "normal",
+                  fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: "normal",
+                  lineHeight: 'normal',
                   paddingRight: 14,
                 }}
               >
@@ -187,10 +184,10 @@ const FavoriteList = () => {
                   style={{
                     borderRadius: 8,
                     width: md ? 200 : sm ? 150 : 100,
-                    backgroundColor: "#FFFFFF",
-                    boxShadow: "0px 4px 14px 0px rgba(0, 0, 0, 0.10)",
-                    border: "1px solid #000",
-                    visibility: md ? "" : "hidden",
+                    backgroundColor: '#FFFFFF',
+                    boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
+                    border: '1px solid #000',
+                    visibility: md ? '' : 'hidden',
                   }}
                   bordered={false}
                   onChange={handleChange}
@@ -199,28 +196,28 @@ const FavoriteList = () => {
                   onClick={() => setOpenSelect(!openSelect)}
                   options={[
                     {
-                      value: "Latest",
-                      label: "Mới Nhất",
+                      value: 'Latest',
+                      label: 'Mới Nhất',
                     },
                     {
-                      value: "Oldest",
-                      label: "Cũ Nhất",
+                      value: 'Oldest',
+                      label: 'Cũ Nhất',
                     },
                     {
-                      value: "Lowest Price",
-                      label: "Giá Thấp",
+                      value: 'Lowest Price',
+                      label: 'Giá Thấp',
                     },
                     {
-                      value: "Highest Price",
-                      label: "Giá Cao",
+                      value: 'Highest Price',
+                      label: 'Giá Cao',
                     },
                     {
-                      value: "Most Applications",
-                      label: "Nhiều Lượt Đăng Ký",
+                      value: 'Most Applications',
+                      label: 'Nhiều Lượt Đăng Ký',
                     },
                     {
-                      value: "Lest Applications",
-                      label: "Ít Lượt Đăng Ký",
+                      value: 'Lest Applications',
+                      label: 'Ít Lượt Đăng Ký',
                     },
                   ]}
                 />
@@ -242,18 +239,18 @@ const FavoriteList = () => {
               <div
                 key={job.id}
                 style={{
-                  display: " flex",
-                  alignItems: "center",
+                  display: ' flex',
+                  alignItems: 'center',
                   padding: 10,
-                  borderBottom: "0.5px solid #000",
+                  borderBottom: '0.5px solid #000',
                 }}
               >
                 <div
                   style={{
-                    display: md ? "flex" : "none",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
+                    display: md ? 'flex' : 'none',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
                     gap: 5,
                     padding: 30,
                     height: 209,
@@ -264,21 +261,21 @@ const FavoriteList = () => {
                     src={job.clients?.accounts?.image}
                     alt="Apofoitisi logo"
                     preview={false}
-                    style={{ borderRadius: "50%" }}
+                    style={{ borderRadius: '50%' }}
                   />
                   <Typography.Title
                     level={4}
-                    style={{ width: 144, margin: 0, textAlign: "center" }}
+                    style={{ width: 144, margin: 0, textAlign: 'center' }}
                   >
                     {job.clients?.accounts?.name.toUpperCase()}
                   </Typography.Title>
                 </div>
-                <div style={{ padding: 10, overflow: "auto", width: "100%" }}>
+                <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
                   <div
                     style={{
-                      display: " flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      display: ' flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
                       padding: 10,
                       gap: 15,
                     }}
@@ -293,8 +290,8 @@ const FavoriteList = () => {
                         </Typography.Title>
                       </Link>
                       <Typography.Text level={4}>
-                        Lương thoả thuận: {FormatVND(job.lowestIncome)} -{" "}
-                        {FormatVND(job.highestIncome)} /{" "}
+                        Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
+                        {FormatVND(job.highestIncome)} /{' '}
                         {CalculateDaysLeft(job.applicationSubmitDeadline)}
                       </Typography.Text>
                     </div>
@@ -313,12 +310,12 @@ const FavoriteList = () => {
                   </Link>
                   <div
                     style={{
-                      display: "flex",
-                      padding: "0px 10px",
-                      alignItems: "flex-start",
-                      gap: "15px",
-                      alignSelf: "stretch",
-                      overflow: "auto",
+                      display: 'flex',
+                      padding: '0px 10px',
+                      alignItems: 'flex-start',
+                      gap: '15px',
+                      alignSelf: 'stretch',
+                      overflow: 'auto',
                     }}
                   >
                     {job.skills?.map((skill) => (
@@ -347,7 +344,7 @@ const FavoriteList = () => {
             onChange={onChange}
             pageSize={pageSize}
             showSizeChanger={false}
-            style={{ padding: 20, display: "flex", justifyContent: "center" }}
+            style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
           />
         </Card>
       </Layout.Content>

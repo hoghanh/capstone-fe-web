@@ -10,15 +10,19 @@ import {
   Pagination,
   Grid,
   Spin,
-} from "antd";
-import { Link, useParams } from "react-router-dom";
-import { FileTextFilled, MenuUnfoldOutlined } from "@ant-design/icons";
-import joblist from "styles/joblist";
-import { get, post, remove } from "utils/APICaller";
-import { CalculateDaysLeft, FormatVND, formatDate } from "components/formatter/format";
-import { BookMark, BookMarkOutlined } from "components/icon/Icon";
-import { useRecoilValue } from "recoil";
-import { authState } from "recoil/atom";
+} from 'antd';
+import { Link, useParams } from 'react-router-dom';
+import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
+import joblist from 'styles/joblist';
+import { get, post, remove } from 'utils/APICaller';
+import {
+  CalculateDaysLeft,
+  FormatVND,
+  formatDate,
+} from 'components/formatter/format';
+import { BookMark, BookMarkOutlined } from 'components/icon/Icon';
+import { useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 const JobList = () => {
   const { useBreakpoint } = Grid;
@@ -34,16 +38,20 @@ const JobList = () => {
   const [openSelect, setOpenSelect] = useState();
   const [favoriteList, setFavoriteList] = useState([]);
   const auth = useRecoilValue(authState);
-  const [sortOption, setSortOption] = useState(auth.id ? "Recommend" : "Latest");
+  const [sortOption, setSortOption] = useState(
+    auth.id ? 'Recommend' : 'Latest',
+  );
   const [isLoading, setIsLoading] = useState(false);
   const { subCateId, subCateName } = useParams();
-  
+
   useEffect(() => {
     changePage(page);
-    console.log(auth)
-    if (auth.role === "freelancer") {
+    console.log(auth);
+    if (auth.role === 'freelancer') {
       getFavorite();
-      get({ endpoint: `/job/recommended/${auth.id}?limit=${limitRecommended}&page=${pageRecommended}` })
+      get({
+        endpoint: `/job/recommended/${auth.id}?limit=${limitRecommended}&page=${pageRecommended}`,
+      })
         .then((res) => {
           setRecommendedList(res.data.recommendeds);
           setTotalItemsRecommended(res.data.pagination.totalItems);
@@ -161,7 +169,7 @@ const JobList = () => {
   };
 
   const onChange = (pageNumber) => {
-    if (sortOption === "Recommend") {
+    if (sortOption === 'Recommend') {
       console.log(sortOption);
       setPageRecommended(pageNumber);
     } else {
@@ -175,34 +183,34 @@ const JobList = () => {
 
   const options = [
     {
-      value: "Recommend",
-      label: "Đề xuất",
+      value: 'Recommend',
+      label: 'Đề xuất',
     },
     {
-      value: "Latest",
-      label: "Mới Nhất",
+      value: 'Latest',
+      label: 'Mới Nhất',
     },
     {
-      value: "Oldest",
-      label: "Cũ Nhất",
+      value: 'Oldest',
+      label: 'Cũ Nhất',
     },
     {
-      value: "Lowest Price",
-      label: "Giá Thấp",
+      value: 'Lowest Price',
+      label: 'Giá Thấp',
     },
     {
-      value: "Highest Price",
-      label: "Giá Cao",
+      value: 'Highest Price',
+      label: 'Giá Cao',
     },
     {
-      value: "Most Applications",
-      label: "Nhiều Lượt Đăng Ký",
+      value: 'Most Applications',
+      label: 'Nhiều Lượt Đăng Ký',
     },
     {
-      value: "Lest Applications",
-      label: "Ít Lượt Đăng Ký",
+      value: 'Lest Applications',
+      label: 'Ít Lượt Đăng Ký',
     },
-  ]
+  ];
 
   let sortedJobList = [...jobList];
 
@@ -218,7 +226,7 @@ const JobList = () => {
     sortedJobList.sort((a, b) => b.applied - a.applied);
   } else if (sortOption === 'Lest Applications') {
     sortedJobList.sort((a, b) => a.applied - b.applied);
-  } else if (sortOption === "Recommend") {
+  } else if (sortOption === 'Recommend') {
     recommendedList.sort((a, b) => b.point - a.point);
   }
 
@@ -237,7 +245,7 @@ const JobList = () => {
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className='card-jobs'
+          className="card-jobs"
           title={
             <div
               style={{
@@ -246,24 +254,28 @@ const JobList = () => {
               }}
             >
               <Typography.Title level={md ? 3 : 5}>
-                {sortOption !== "Recommend"
-                  ? "Kết quả tìm kiếm"
-                  : "Đề xuất phù hợp"}
+                {sortOption !== 'Recommend'
+                  ? 'Kết quả tìm kiếm'
+                  : 'Đề xuất phù hợp'}
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
-                {sortOption !== 'Recommend' ? (md
-                  ? totalItems > 0
-                    ? `${limit * (page - 1) + 1} - ${
-                        limit * page < totalItems ? limit * page : totalItems
-                      } của ${totalItems} kết quả`
-                    : `0 kết quả`
-                  : '') : (md
-                    ? totalItemsRecommended > 0
+                {sortOption !== 'Recommend'
+                  ? md
+                    ? totalItems > 0
                       ? `${limit * (page - 1) + 1} - ${
-                          limit * page < totalItemsRecommended ? limit * page : totalItemsRecommended
-                        } của ${totalItemsRecommended} kết quả`
+                          limit * page < totalItems ? limit * page : totalItems
+                        } của ${totalItems} kết quả`
                       : `0 kết quả`
-                    : '')}
+                    : ''
+                  : md
+                  ? totalItemsRecommended > 0
+                    ? `${limit * (page - 1) + 1} - ${
+                        limit * page < totalItemsRecommended
+                          ? limit * page
+                          : totalItemsRecommended
+                      } của ${totalItemsRecommended} kết quả`
+                    : `0 kết quả`
+                  : ''}
               </Typography.Text>
             </div>
           }
@@ -283,8 +295,8 @@ const JobList = () => {
               </Typography.Text>
               <>
                 <Select
-                  placeholder=''
-                  size='large'
+                  placeholder=""
+                  size="large"
                   style={{
                     borderRadius: 8,
                     width: md ? 200 : sm ? 150 : 100,
@@ -295,13 +307,13 @@ const JobList = () => {
                   }}
                   bordered={false}
                   onChange={handleChange}
-                  defaultValue={auth.id ? "Recommend" : "Latest"}
+                  defaultValue={auth.id ? 'Recommend' : 'Latest'}
                   open={openSelect}
                   onClick={() => setOpenSelect(!openSelect)}
                   options={
                     auth.id
                       ? options
-                      : options.filter((option) => option.value !== "Recommend")
+                      : options.filter((option) => option.value !== 'Recommend')
                   }
                 />
                 {md ? null : (
@@ -313,23 +325,23 @@ const JobList = () => {
             </div>
           }
         >
-          {sortOption !== "Recommend"
+          {sortOption !== 'Recommend'
             ? sortedJobList?.map((job) => (
                 <div
                   key={job.id}
                   style={{
-                    display: " flex",
-                    alignItems: "center",
+                    display: ' flex',
+                    alignItems: 'center',
                     padding: 10,
-                    borderBottom: "0.5px solid #000",
+                    borderBottom: '0.5px solid #000',
                   }}
                 >
                   <div
                     style={{
-                      display: md ? "flex" : "none",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexDirection: "column",
+                      display: md ? 'flex' : 'none',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'column',
                       gap: 5,
                       padding: 30,
                       height: 209,
@@ -340,21 +352,21 @@ const JobList = () => {
                       src={job.clients?.accounts?.image}
                       alt="Apofoitisi logo"
                       preview={false}
-                      style={{ borderRadius: "50%" }}
+                      style={{ borderRadius: '50%' }}
                     />
                     <Typography.Title
                       level={4}
-                      style={{ width: 144, margin: 0, textAlign: "center" }}
+                      style={{ width: 144, margin: 0, textAlign: 'center' }}
                     >
                       {job.clients?.accounts?.name.toUpperCase()}
                     </Typography.Title>
                   </div>
-                  <div style={{ padding: 10, overflow: "auto", width: "100%" }}>
+                  <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
                     <div
                       style={{
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        display: ' flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                         padding: 10,
                         gap: 15,
                       }}
@@ -369,19 +381,19 @@ const JobList = () => {
                           </Typography.Title>
                         </Link>
                         <Typography.Text level={4}>
-                          Lương thoả thuận: {FormatVND(job.lowestIncome)} -{" "}
-                          {FormatVND(job.highestIncome)} /{" "}
+                          Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
+                          {FormatVND(job.highestIncome)} /{' '}
                           {CalculateDaysLeft(job.applicationSubmitDeadline)}
                         </Typography.Text>
-                        <Typography.Text level={4} style={{ display: "block" }}>
+                        <Typography.Text level={4} style={{ display: 'block' }}>
                           Ngày đăng bài: {formatDate(job.updatedAt)}
                         </Typography.Text>
                       </div>
                       <div
                         style={{
-                          cursor: "pointer",
-                          alignSelf: md ? " " : "flex-start",
-                          display: "flex",
+                          cursor: 'pointer',
+                          alignSelf: md ? ' ' : 'flex-start',
+                          display: 'flex',
                         }}
                         onClick={() => handleFavoriteChange(job.id)}
                       >
@@ -407,12 +419,12 @@ const JobList = () => {
                     </Link>
                     <div
                       style={{
-                        display: "flex",
-                        padding: "0px 10px",
-                        alignItems: "flex-start",
-                        gap: "15px",
-                        alignSelf: "stretch",
-                        overflow: "auto",
+                        display: 'flex',
+                        padding: '0px 10px',
+                        alignItems: 'flex-start',
+                        gap: '15px',
+                        alignSelf: 'stretch',
+                        overflow: 'auto',
                       }}
                     >
                       {job.skills?.map((skill) => (
@@ -427,7 +439,7 @@ const JobList = () => {
                     </div>
                     <div style={joblist.applied}>
                       <Typography.Title level={5} style={joblist.applied.text}>
-                        {job.applied ? job.applied : 0} ứng tuyển{" "}
+                        {job.applied ? job.applied : 0} ứng tuyển{' '}
                         <FileTextFilled />
                       </Typography.Title>
                     </div>
@@ -438,18 +450,18 @@ const JobList = () => {
                 <div
                   key={job.jobs.id}
                   style={{
-                    display: " flex",
-                    alignItems: "center",
+                    display: ' flex',
+                    alignItems: 'center',
                     padding: 10,
-                    borderBottom: "0.5px solid #000",
+                    borderBottom: '0.5px solid #000',
                   }}
                 >
                   <div
                     style={{
-                      display: md ? "flex" : "none",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexDirection: "column",
+                      display: md ? 'flex' : 'none',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'column',
                       gap: 5,
                       padding: 30,
                       height: 209,
@@ -460,21 +472,21 @@ const JobList = () => {
                       src={job.jobs.clients?.accounts?.image}
                       alt="Apofoitisi logo"
                       preview={false}
-                      style={{ borderRadius: "50%" }}
+                      style={{ borderRadius: '50%' }}
                     />
                     <Typography.Title
                       level={4}
-                      style={{ width: 144, margin: 0, textAlign: "center" }}
+                      style={{ width: 144, margin: 0, textAlign: 'center' }}
                     >
                       {job.jobs.clients?.accounts?.name.toUpperCase()}
                     </Typography.Title>
                   </div>
-                  <div style={{ padding: 10, overflow: "auto", width: "100%" }}>
+                  <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
                     <div
                       style={{
-                        display: " flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        display: ' flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                         padding: 10,
                         gap: 15,
                       }}
@@ -492,21 +504,21 @@ const JobList = () => {
                           </Typography.Title>
                         </Link>
                         <Typography.Text level={4}>
-                          Lương thoả thuận: {FormatVND(job.jobs.lowestIncome)} -{" "}
-                          {FormatVND(job.jobs.highestIncome)} /{" "}
+                          Lương thoả thuận: {FormatVND(job.jobs.lowestIncome)} -{' '}
+                          {FormatVND(job.jobs.highestIncome)} /{' '}
                           {CalculateDaysLeft(
-                            job.jobs.applicationSubmitDeadline
+                            job.jobs.applicationSubmitDeadline,
                           )}
                         </Typography.Text>
-                        <Typography.Text level={4} style={{ display: "block" }}>
+                        <Typography.Text level={4} style={{ display: 'block' }}>
                           Ngày đăng bài: {formatDate(job.jobs.updatedAt)}
                         </Typography.Text>
                       </div>
                       <div
                         style={{
-                          cursor: "pointer",
-                          alignSelf: md ? " " : "flex-start",
-                          display: "flex",
+                          cursor: 'pointer',
+                          alignSelf: md ? ' ' : 'flex-start',
+                          display: 'flex',
                         }}
                         onClick={() => handleFavoriteChange(job.jobs.id)}
                       >
@@ -535,12 +547,12 @@ const JobList = () => {
                     </Link>
                     <div
                       style={{
-                        display: "flex",
-                        padding: "0px 10px",
-                        alignItems: "flex-start",
-                        gap: "15px",
-                        alignSelf: "stretch",
-                        overflow: "auto",
+                        display: 'flex',
+                        padding: '0px 10px',
+                        alignItems: 'flex-start',
+                        gap: '15px',
+                        alignSelf: 'stretch',
+                        overflow: 'auto',
                       }}
                     >
                       {job.jobs.skills?.map((skill) => (
@@ -555,7 +567,7 @@ const JobList = () => {
                     </div>
                     <div style={joblist.applied}>
                       <Typography.Title level={5} style={joblist.applied.text}>
-                        {job.jobs.applied ? job.jobs.applied : 0} ứng tuyển{" "}
+                        {job.jobs.applied ? job.jobs.applied : 0} ứng tuyển{' '}
                         <FileTextFilled />
                       </Typography.Title>
                     </div>
@@ -565,7 +577,7 @@ const JobList = () => {
           <Pagination
             current={1}
             total={
-              sortOption === "Recommend" ? totalItemsRecommended : totalItems
+              sortOption === 'Recommend' ? totalItemsRecommended : totalItems
             }
             onChange={onChange}
             showSizeChanger={false}
