@@ -247,7 +247,7 @@ const JobList = () => {
             >
               <Typography.Title level={md ? 3 : 5}>
                 {sortOption !== "Recommend"
-                  ? "Kết quả hàng đầu"
+                  ? "Kết quả tìm kiếm"
                   : "Đề xuất phù hợp"}
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
