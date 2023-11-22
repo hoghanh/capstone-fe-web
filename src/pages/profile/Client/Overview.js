@@ -63,7 +63,7 @@ const HeaderSection = () => {
             <Image
               width={72}
               src={informationUser.image}
-              alt="Apofoitisi logo"
+              alt='Apofoitisi logo'
               preview={true}
               style={{ borderRadius: '50%' }}
             />
@@ -422,7 +422,7 @@ const BodySectionRight = () => {
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
-              <Row className="skillArticle" gutter={[0, 10]}>
+              <Row className='skillArticle' gutter={[0, 10]}>
                 <CustomCol span={24}>
                   <List
                     style={{ overflowX: 'auto' }}

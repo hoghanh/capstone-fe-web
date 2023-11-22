@@ -8,37 +8,37 @@ import {
   Row,
   Typography,
   notification,
-} from "antd";
-import { ButtonIcon } from "components/customize/GlobalCustomize";
+} from 'antd';
+import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import {
   CustomCard,
   CustomCol,
   CustomDivider,
   CustomRow,
-} from "components/customize/Layout";
-import { Plus } from "components/icon/Icon";
-import React, { useEffect, useState } from "react";
-import css from "./profile.module.css";
-import { ModalPrimary } from "components/Modal/Modal";
-import { useRecoilState } from "recoil";
-import { freelancerState } from "recoil/atom";
-import { post, put, remove } from "utils/APICaller";
-import moment from "moment";
-import { formatDate } from "components/formatter/format";
-import { Link } from "react-router-dom";
-import { EllipsisOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
-import locale from "antd/es/date-picker/locale/vi_VN";
+} from 'components/customize/Layout';
+import { Plus } from 'components/icon/Icon';
+import React, { useEffect, useState } from 'react';
+import css from './profile.module.css';
+import { ModalPrimary } from 'components/Modal/Modal';
+import { useRecoilState } from 'recoil';
+import { freelancerState } from 'recoil/atom';
+import { post, put, remove } from 'utils/APICaller';
+import moment from 'moment';
+import { formatDate } from 'components/formatter/format';
+import { Link } from 'react-router-dom';
+import { EllipsisOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 
 const items = [
   {
-    key: "edit",
-    label: "Chỉnh sửa",
+    key: 'edit',
+    label: 'Chỉnh sửa',
   },
   {
-    key: "remove",
-    label: "Xóa",
+    key: 'remove',
+    label: 'Xóa',
     danger: true,
   },
 ];
@@ -70,7 +70,7 @@ const AddCertifications = () => {
         name,
         issuingOrganization,
         issueDate,
-        expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
+        expirationDate: expirationDate ? dayjs(expirationDate).format('YYYY-MM-DD') : null,
         credentialId,
         credentialUrl,
         accountId: informationUser.accountId,
@@ -83,7 +83,7 @@ const AddCertifications = () => {
           certificates: [...informationUser.certificates, certificate],
         });
         notification.success({
-          message: "Cập nhật thành công!",
+          message: 'Cập nhật thành công!',
         });
       })
       .catch((error) => {
@@ -101,7 +101,7 @@ const AddCertifications = () => {
         setIsModalOpen(false);
       })
       .catch((error) => {
-        notification.error("Validation failed:", error);
+        notification.error('Validation failed:', error);
       });
   };
 
@@ -115,7 +115,7 @@ const AddCertifications = () => {
         <Plus />
       </ButtonIcon>
       <ModalPrimary
-        title={"Thêm chứng chỉ mới"}
+        title={'Thêm chứng chỉ mới'}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
@@ -123,7 +123,7 @@ const AddCertifications = () => {
       >
         <Form
           form={form}
-          name="submitCertificate"
+          name='submitCertificate'
           initialValues={{
             remember: false,
           }}
@@ -136,16 +136,16 @@ const AddCertifications = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="name"
+                    name='name'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
                     <Input
-                      placeholder="VD: Certified Scrum Master (CSM)"
+                      placeholder='VD: Certified Scrum Master (CSM)'
                       controls={false}
                     />
                   </Form.Item>
@@ -159,17 +159,17 @@ const AddCertifications = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="issuingOrganization"
+                    name='issuingOrganization'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
                     <Input
-                      style={{ width: "40%" }}
-                      placeholder="VD: Scrum Alliance"
+                      style={{ width: '40%' }}
+                      placeholder='VD: Scrum Alliance'
                       controls={false}
                     />
                   </Form.Item>
@@ -184,21 +184,21 @@ const AddCertifications = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="issueDate"
+                    name='issueDate'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
                     <DatePicker
-                      style={{ with: "100%" }}
+                      style={{ with: '100%' }}
                       showNow={false}
-                      format={"YYYY-MM-DD"}
+                      format={'YYYY-MM-DD'}
                       onChange={onIssueDate}
                       disabledDate={(current) => {
-                        return current && current > moment().endOf("day");
+                        return current && current > moment().endOf('day');
                       }}
                       locale={locale}
                     />
@@ -213,18 +213,18 @@ const AddCertifications = () => {
                   <Typography.Text>Ngày Hết hạn</Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <Form.Item name="expirationDate">
+                  <Form.Item name='expirationDate'>
                     <DatePicker
-                      style={{ with: "100%" }}
+                      style={{ with: '100%' }}
                       showNow={false}
-                      format={"YYYY-MM-DD"}
+                      format={'YYYY-MM-DD'}
                       onChange={onExpDate}
                       disabledDate={(current) => {
-                        const issueDate = form.getFieldValue("issueDate");
+                        const issueDate = form.getFieldValue('issueDate');
                         return (
                           !issueDate || (current &&
                             issueDate &&
-                            current.isBefore(issueDate.clone().add(30, "days")))
+                            current.isBefore(issueDate.clone().add(30, 'days')))
                         );
                       }}
                       locale={locale}
@@ -242,15 +242,15 @@ const AddCertifications = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="credentialId"
+                    name='credentialId'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
-                    <Input placeholder="VD: CSM-123456789A" />
+                    <Input placeholder='VD: CSM-123456789A' />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -263,15 +263,15 @@ const AddCertifications = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="credentialUrl"
+                    name='credentialUrl'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
-                    <Input placeholder="VD: https://certificate.com/csm-123456789a" />
+                    <Input placeholder='VD: https://certificate.com/csm-123456789a' />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -285,7 +285,7 @@ const AddCertifications = () => {
 
 const HeaderSection = () => {
   return (
-    <Row justify={"space-between"} style={{ padding: 25 }}>
+    <Row justify={'space-between'} style={{ padding: 25 }}>
       <Col>
         <Row>
           <CustomCol>
@@ -321,7 +321,7 @@ const BodySection = () => {
   };
 
   const onExpDate = (date, dateString) => {
-    if (dateString === "") {
+    if (dateString === '') {
       return setExpirationDate(null);
     } else {
       setExpirationDate(dateString);
@@ -330,10 +330,10 @@ const BodySection = () => {
 
   const onClick = (id, key) => {
     const checkAction = key.toString();
-    if (checkAction.includes("remove")) {
+    if (checkAction.includes('remove')) {
       setIsIdItem(id);
       setIsModalRemove(true);
-    } else if (checkAction.includes("edit")) {
+    } else if (checkAction.includes('edit')) {
       setIsIdItem(id);
       const item = certificates.find((c) => c.id === id);
       if (item) {
@@ -390,7 +390,7 @@ const BodySection = () => {
           name,
           issuingOrganization,
           issueDate: dayjs(issueDate).format('YYYY-MM-DD'),
-          expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
+          expirationDate: expirationDate ? dayjs(expirationDate).format('YYYY-MM-DD') : null,
           credentialId,
           credentialUrl,
         };
@@ -399,8 +399,8 @@ const BodySection = () => {
           body: {
             name,
             issuingOrganization,
-            issueDate: dayjs(issueDate).format("YYYY-MM-DD"),
-            expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
+            issueDate: dayjs(issueDate).format('YYYY-MM-DD'),
+            expirationDate: expirationDate ? dayjs(expirationDate).format('YYYY-MM-DD') : null,
             credentialId,
             credentialUrl,
           },
@@ -415,7 +415,7 @@ const BodySection = () => {
             });
             setCertificates(item);
             notification.success({
-              message: "Cập nhật thành công!",
+              message: 'Cập nhật thành công!',
             });
             setIsModalEdit(false);
             setIsIdItem(null);
@@ -427,7 +427,7 @@ const BodySection = () => {
           });
       })
       .catch((error) => {
-        notification.error("Validation failed:", error);
+        notification.error('Validation failed:', error);
       });
     
   };
@@ -440,16 +440,16 @@ const BodySection = () => {
   return (
     <Row style={{ marginRight: 30, marginLeft: 30 }}>
       {certificates.map((certificate, index) => (
-        <div key={certificate.id} style={{ width: "100%" }}>
+        <div key={certificate.id} style={{ width: '100%' }}>
           <Col span={24}>
             <Row
               className={css.certificate}
-              style={{ padding: "20px 30px" }}
-              align={"middle"}
+              style={{ padding: '20px 30px' }}
+              align={'middle'}
             >
               <Col span={0} sm={{ span: 4 }} style={{ paddingRight: 20 }}>
-                <Link to={certificate.credentialUrl} target="_blank">
-                  <Image src="img/certificate-1.png" preview={false}></Image>
+                <Link to={certificate.credentialUrl} target='_blank'>
+                  <Image src='img/certificate-1.png' preview={false}></Image>
                 </Link>
               </Col>
               <Col span={24} sm={{ span: 20 }}>
@@ -457,7 +457,7 @@ const BodySection = () => {
                   <Col span={23}>
                     <CustomRow>
                       <Col span={24}>
-                        <Link to={certificate.credentialUrl} target="_blank">
+                        <Link to={certificate.credentialUrl} target='_blank'>
                           <Typography.Title level={3} style={{ margin: 0 }}>
                             {certificate.name}
                           </Typography.Title>
@@ -477,8 +477,8 @@ const BodySection = () => {
                         span={24}
                         style={{
                           display: certificate.expirationDate
-                            ? "block"
-                            : "none",
+                            ? 'block'
+                            : 'none',
                         }}
                       >
                         <Typography.Text>
@@ -489,7 +489,7 @@ const BodySection = () => {
                   </Col>
                   <Col
                     span={1}
-                    style={{ display: "flex", alignItems: "flex-start" }}
+                    style={{ display: 'flex', alignItems: 'flex-start' }}
                   >
                     <Dropdown
                       menu={{
@@ -512,19 +512,19 @@ const BodySection = () => {
         </div>
       ))}
       <ModalPrimary
-        title="Cảnh báo"
+        title='Cảnh báo'
         open={isModalRemove}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleRemove}
         onCancel={handleCancelRemove}
-        okText="Xóa"
-        okType="danger"
+        okText='Xóa'
+        okType='danger'
       >
         Bạn có chắc muốn xóa chứng chỉ này?
       </ModalPrimary>
 
       <ModalPrimary
-        title={"Chỉnh sửa chứng chỉ"}
+        title={'Chỉnh sửa chứng chỉ'}
         open={isModalEdit}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleEdit}
@@ -532,7 +532,7 @@ const BodySection = () => {
       >
         <Form
           form={form}
-          name="editCertificate"
+          name='editCertificate'
           initialValues={{
             remember: true,
           }}
@@ -544,9 +544,9 @@ const BodySection = () => {
                   <Typography.Text>Tên chứng chỉ</Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <Form.Item name="name">
+                  <Form.Item name='name'>
                     <Input
-                      placeholder="VD: Certified Scrum Master (CSM)"
+                      placeholder='VD: Certified Scrum Master (CSM)'
                       controls={false}
                     />
                   </Form.Item>
@@ -560,17 +560,17 @@ const BodySection = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="issuingOrganization"
+                    name='issuingOrganization'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
                     <Input
-                      style={{ width: "40%" }}
-                      placeholder="VD: Scrum Alliance"
+                      style={{ width: '40%' }}
+                      placeholder='VD: Scrum Alliance'
                       controls={false}
                     />
                   </Form.Item>
@@ -584,21 +584,21 @@ const BodySection = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="issueDate"
+                    name='issueDate'
                     rules={[
                       {
                         required: true,
-                        message: "Không được để trống ô này!",
+                        message: 'Không được để trống ô này!',
                       },
                     ]}
                   >
                     <DatePicker
-                      style={{ with: "100%" }}
+                      style={{ with: '100%' }}
                       showNow={false}
-                      format={"YYYY-MM-DD"}
+                      format={'YYYY-MM-DD'}
                       onChange={onIssueDate}
                       disabledDate={(current) => {
-                        return current && current.isAfter(dayjs().endOf("day"));
+                        return current && current.isAfter(dayjs().endOf('day'));
                       }}
                       locale={locale}
 
@@ -614,24 +614,24 @@ const BodySection = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="expirationDate"
+                    name='expirationDate'
                     rules={[
                       {
                         validator: async (_, value) => {
-                          const issueDate = form.getFieldValue("issueDate");
+                          const issueDate = form.getFieldValue('issueDate');
                           if (!issueDate) {
                             return Promise.reject(
-                              new Error("Vui lòng chọn ngày phát hành")
+                              new Error('Vui lòng chọn ngày phát hành')
                             );
                           }
 
                           if (value || null) {
                             if (
-                              value.isBefore(issueDate.clone().add(30, "days"))
+                              value.isBefore(issueDate.clone().add(30, 'days'))
                             ) {
                               return Promise.reject(
                                 new Error(
-                                  "Ngày hết hạn phải cách cấp ít nhất 30 ngày"
+                                  'Ngày hết hạn phải cách cấp ít nhất 30 ngày'
                                 )
                               );
                             }
@@ -642,17 +642,17 @@ const BodySection = () => {
                     ]}
                   >
                     <DatePicker
-                      style={{ with: "100%" }}
+                      style={{ with: '100%' }}
                       showNow={false}
-                      format={"YYYY-MM-DD"}
+                      format={'YYYY-MM-DD'}
                       onChange={onExpDate}
                       disabledDate={(current) => {
-                        const issueDate = form.getFieldValue("issueDate");
+                        const issueDate = form.getFieldValue('issueDate');
                         return (
                           !issueDate ||
                           (current &&
                             issueDate &&
-                            current.isBefore(issueDate.clone().add(30, "days")))
+                            current.isBefore(issueDate.clone().add(30, 'days')))
                         );
                       }}
                       locale={locale}
@@ -669,15 +669,15 @@ const BodySection = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="credentialId"
+                    name='credentialId'
                     // rules={[
                     //   {
                     //     required: true,
-                    //     message: "Không được để trống ô này!",
+                    //     message: 'Không được để trống ô này!',
                     //   },
                     // ]}
                   >
-                    <Input placeholder="VD: CSM-123456789A" />
+                    <Input placeholder='VD: CSM-123456789A' />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -689,15 +689,15 @@ const BodySection = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="credentialUrl"
+                    name='credentialUrl'
                     // rules={[
                     //   {
                     //     required: true,
-                    //     message: "Không được để trống ô này!",
+                    //     message: 'Không được để trống ô này!',
                     //   },
                     // ]}
                   >
-                    <Input placeholder="VD: https://certificate.com/csm-123456789a" />
+                    <Input placeholder='VD: https://certificate.com/csm-123456789a' />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -726,7 +726,7 @@ const styles = {
   },
 
   address: {
-    color: "#656565",
+    color: '#656565',
     paddingLeft: 10,
     marginBottom: 20,
   },

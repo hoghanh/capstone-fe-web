@@ -27,7 +27,7 @@ const BodySection = () => {
       <Col span={24}>
         <Row className={css.certificate} style={{ padding: '20px 30px' }} align={'middle'}>
           <Col span={0} sm={{span: 4}} style={{ paddingRight: 20 }}>
-            <Image src="img/certificate-1.png" preview={false}></Image>
+            <Image src='img/certificate-1.png' preview={false}></Image>
           </Col>
           <Col span={24} sm={{span: 20}}>
             <CustomRow>
@@ -50,7 +50,7 @@ const BodySection = () => {
       <Col span={24}>
         <Row className={css.certificate} style={{ padding: '20px 30px' }} align={'middle'}>
           <Col span={0} sm={{span: 4}} style={{ paddingRight: 20 }}>
-            <Image src="img/certificate-1.png" preview={false}></Image>
+            <Image src='img/certificate-1.png' preview={false}></Image>
           </Col>
           <Col span={24} sm={{span: 20}}>
             <CustomRow>

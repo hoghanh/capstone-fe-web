@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { get } from "utils/APICaller";
 import Overview from "./Overview";
 import Certificates from "./Certificates";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {  useRecoilValue, useSetRecoilState } from "recoil";
 import {
   applicationListState,
   authState,
@@ -11,8 +11,8 @@ import {
 } from "recoil/atom";
 
 const Profile = () => {
-  const [, setFreelancer] = useRecoilState(freelancerState);
-  const [, setApplications] = useRecoilState(applicationListState);
+  const setFreelancer = useSetRecoilState(freelancerState);
+  const setApplications = useSetRecoilState(applicationListState);
 
   const auth = useRecoilValue(authState);
 

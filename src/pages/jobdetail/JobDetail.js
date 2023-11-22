@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { Layout } from 'antd';
 import Details from './Details';
 import { get } from 'utils/APICaller';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authState, freelancerState, jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
 
 const JobDetail = () => {
-  const [, setJobDetail] = useRecoilState(jobDetailState);
-  const [, setFreelancer] = useRecoilState(freelancerState);
+  const setJobDetail = useSetRecoilState(jobDetailState);
+  const setFreelancer = useSetRecoilState(freelancerState);
   const auth = useRecoilValue(authState);
   let { id } = useParams();
   useEffect(() => {
@@ -46,7 +46,6 @@ const JobDetail = () => {
 };
 
 const styles = {
-  //Toàn trang
   containerBody: { maxWidth: 1080, margin: '0 auto' },
 };
 

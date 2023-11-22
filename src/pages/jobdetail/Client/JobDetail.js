@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Layout, notification } from 'antd';
 import Details from './Details';
 import { get } from 'utils/APICaller';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authState, clientProfile, jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
 import Application from './Application';
 
 const JobDetail = () => {
-  const [, setJobDetail] = useRecoilState(jobDetailState);
-  const [, setClient] = useRecoilState(clientProfile);
+  const setJobDetail = useSetRecoilState(jobDetailState);
+  const setClient = useSetRecoilState(clientProfile);
   const auth = useRecoilValue(authState);
   let { id } = useParams();
   useEffect(() => {

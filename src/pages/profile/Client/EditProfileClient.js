@@ -36,7 +36,7 @@ const getBase64 = (file) =>
 const BasicInformation = () => {
   const [form] = Form.useForm();
   const [informationUser, setInformationUser] = useRecoilState(clientProfile);
-  const [, setProgresspercent] = useState(0);
+  const [progresspercent, setProgresspercent] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');

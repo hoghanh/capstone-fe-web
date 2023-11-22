@@ -194,7 +194,7 @@ const SkillArticle = () => {
   };
 
   return (
-    <CustomRow className="skillArticle" gutter={[0, 10]}>
+    <CustomRow className='skillArticle' gutter={[0, 10]}>
       <Col span={24}>
         <Typography.Title level={5} style={{ margin: 0 }}>
           Yêu cầu kỹ năng

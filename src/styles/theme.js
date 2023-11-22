@@ -1,6 +1,6 @@
 const theme = {
   responseWidth: {
-    margin: "0 auto",
+    margin: '0 auto',
     maxWidth: 1080,
   },
 };
