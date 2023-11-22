@@ -20,7 +20,7 @@ import {
 import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { authState, valueSearchState } from 'recoil/atom';
 import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
@@ -733,7 +733,7 @@ const TabSent = ({ activeTabKey }) => {
 
 const ApplicationsTracking = () => {
   const [activeTabKey, setActiveTabKey] = useState('Sent');
-  const [, setSearch] = useRecoilState(valueSearchState);
+  const setSearch = useSetRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
   const [value, setValue] = useState(null);
   const { RangePicker } = DatePicker;

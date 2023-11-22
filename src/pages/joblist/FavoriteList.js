@@ -64,13 +64,13 @@ const RemoveFavorite = ({ id, getFavorite }) => {
         <BookMark />
       </div>
       <ModalPrimary
-        title="Xóa khỏi yêu thích"
+        title='Xóa khỏi yêu thích'
         open={isModal}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Xoá"
-        okType="danger"
+        okText='Xoá'
+        okType='danger'
       >
         Bạn có chắc muốn xóa khỏi danh sách yêu thích
       </ModalPrimary>
@@ -150,7 +150,7 @@ const FavoriteList = () => {
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className="card-jobs"
+          className='card-jobs'
           title={
             <div
               style={{
@@ -179,8 +179,8 @@ const FavoriteList = () => {
               </Typography.Text>
               <>
                 <Select
-                  placeholder=""
-                  size="large"
+                  placeholder=''
+                  size='large'
                   style={{
                     borderRadius: 8,
                     width: md ? 200 : sm ? 150 : 100,
@@ -191,7 +191,7 @@ const FavoriteList = () => {
                   }}
                   bordered={false}
                   onChange={handleChange}
-                  defaultValue="Latest"
+                  defaultValue='Latest'
                   open={openSelect}
                   onClick={() => setOpenSelect(!openSelect)}
                   options={[
@@ -259,7 +259,7 @@ const FavoriteList = () => {
                   <Image
                     width={100}
                     src={job.clients?.accounts?.image}
-                    alt="Apofoitisi logo"
+                    alt='Apofoitisi logo'
                     preview={false}
                     style={{ borderRadius: '50%' }}
                   />
@@ -281,7 +281,7 @@ const FavoriteList = () => {
                     }}
                   >
                     <div>
-                      <Link to={`/jobs/job-detail/${job.id}`} target="_blank">
+                      <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                         <Typography.Title
                           style={{ margin: 0 }}
                           level={md ? 4 : 5}
@@ -297,7 +297,7 @@ const FavoriteList = () => {
                     </div>
                     <RemoveFavorite id={job.id} getFavorite={getFavorite} />
                   </div>
-                  <Link to={`/jobs/job-detail/${job.id}`} target="_blank">
+                  <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                     <Typography.Paragraph
                       ellipsis={{
                         rows: 3,
@@ -320,7 +320,7 @@ const FavoriteList = () => {
                   >
                     {job.skills?.map((skill) => (
                       <Button
-                        type="primary"
+                        type='primary'
                         style={joblist.button}
                         key={skill.id}
                       >

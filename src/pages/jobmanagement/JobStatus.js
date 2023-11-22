@@ -197,7 +197,7 @@ const ContentAccomplished = () =>{
                 </Col>
                 <Col>
                   <Typography.Text style={{ fontSize: 14, marginLeft: 5, fontStyle: 'italic' }}>
-                    "Great work!"
+                    'Great work!'
                   </Typography.Text>
                 </Col>
               </CustomRow>
@@ -261,7 +261,7 @@ const ContentAccomplished = () =>{
                 </Col>
                 <Col>
                   <Typography.Text style={{ fontSize: 14, marginLeft: 5, fontStyle: 'italic' }}>
-                    "Great work!"
+                    'Great work!'
                   </Typography.Text>
                 </Col>
               </CustomRow>
@@ -325,7 +325,7 @@ const ContentAccomplished = () =>{
                 </Col>
                 <Col>
                   <Typography.Text style={{ fontSize: 14, marginLeft: 5, fontStyle: 'italic' }}>
-                    "Great work!"
+                    'Great work!'
                   </Typography.Text>
                 </Col>
               </CustomRow>
@@ -367,7 +367,7 @@ const JobStatus = () => {
             Các Công Việc của Tôi
           </Typography.Title>
         </Col>
-        <Col className="trackingJobs" span={24}>
+        <Col className='trackingJobs' span={24}>
           <Card
             style={{
               width: '100%',

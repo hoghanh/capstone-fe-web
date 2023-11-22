@@ -15,17 +15,21 @@ function ClientProfile() {
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    function fetchProfile() {
-      get({ endpoint: `/client/profile/${auth.id}` })
-        .then((response) => {
-          setUser(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    setIsLoading(true);
+    fetchProfile();
   }, []);
 
+  function fetchProfile() {
+    get({ endpoint: `/client/profile/${auth.id}` })
+      .then((response) => {
+        setUser(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
   return isLoading ? (
     <Loading />
   ) : (
