@@ -549,7 +549,7 @@ const AboutCustomer = () => {
         <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
           Công ty
         </Typography.Text>
-        <Link to={`/profile-client/${jobDetail?.clients.accountId}`}>
+        <Link to={`/profile-client/${jobDetail?.clients.accountId}`} state={{clientId: jobDetail?.clientId}}>
           <Typography.Title
             className={css.titleAboutCustomer}
             level={5}
@@ -561,24 +561,6 @@ const AboutCustomer = () => {
             {jobDetail?.clients.accounts.name.toUpperCase()}
           </Typography.Title>
         </Link>
-      </CustomCol>
-      <CustomCol
-        span={24}
-        style={{ display: "flex", gap: 10, flexDirection: "column" }}
-      >
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
-          Bài viết đã đăng
-        </Typography.Text>
-        <Typography.Title
-          className={css.titleAboutCustomer}
-          level={5}
-          style={{
-            margin: "0 0 10px 0",
-            textAlign: "center",
-          }}
-        >
-          3 bài viết đã đăng
-        </Typography.Title>
       </CustomCol>
     </CustomRow>
   );

@@ -1,10 +1,7 @@
 import {  Layout } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { get } from 'utils/APICaller';
+import React from 'react'
 import Overview from './Overview';
 import ListPosts from './ListPosts.js';
-
-
 
 const ProfileClient = () => {
 

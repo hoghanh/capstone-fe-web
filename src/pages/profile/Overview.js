@@ -1157,6 +1157,12 @@ const EditCV = () => {
                 <Col span={24}>
                   <Form.Item
                     name="files"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Không được để trống ô này!",
+                      },
+                    ]}
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
                   >
@@ -1835,8 +1841,11 @@ const BodySectionRight = () => {
                 </Col>
               </Row>
             </Col>
-            <Col>
-              <ListWithLoadMore items={applications} />{" "}
+            <Col
+              span={24}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <ListWithLoadMore items={applications} />
             </Col>
           </Row>
         </Col>

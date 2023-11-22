@@ -7,13 +7,15 @@ import { CLIENTID } from 'config';
 import color from 'styles/color';
 import { post } from 'utils/APICaller';
 import useAuthActions from 'recoil/action';
+import { useRecoilValue } from 'recoil';
+import { authState } from 'recoil/atom';
 
 const GoogleLoginButton = ({ onLogin }) => {
   const navigate = useNavigate();
   const { login } = useAuthActions();
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
-  console.log(page)
+  const auth = useRecoilValue(authState);
 
   const onSuccess = (res) => {
     const allowedDomain = '@fpt.edu.vn';
@@ -40,8 +42,8 @@ const GoogleLoginButton = ({ onLogin }) => {
     })
       .then((response) => {
         login(response.data.token);
-        if (!page.startsWith('jobs/job-detail/')) {
-          navigate('/');
+        if (!page.startsWith("jobs/job-detail/")) {
+          navigate("/jobs/recommended");
         }
         notification.success({ message: response.data.message });
       })
