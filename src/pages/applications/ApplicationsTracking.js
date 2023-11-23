@@ -1,38 +1,38 @@
-import { Card, Col, Input, Row, Typography, DatePicker, Empty } from "antd";
-import { CustomDivider, CustomRow } from "components/customize/Layout";
-import { PaperClipOutlined } from "components/icon/Icon";
-import React, { useState } from "react";
-import color from "styles/color";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { applicationListState, valueSearchState } from "recoil/atom";
-import locale from "antd/es/date-picker/locale/vi_VN";
+import { Card, Col, Input, Row, Typography, DatePicker, Empty } from 'antd';
+import { CustomDivider, CustomRow } from 'components/customize/Layout';
+import { PaperClipOutlined } from 'components/icon/Icon';
+import React, { useState } from 'react';
+import color from 'styles/color';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { applicationListState, valueSearchState } from 'recoil/atom';
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import { formatDate } from "components/formatter/format";
 import { Link, Navigate } from "react-router-dom";
 
 const tabListNoTitle = [
   {
-    key: "Sent",
-    label: "Đã gửi",
+    key: 'Sent',
+    label: 'Đã gửi',
   },
   {
-    key: "Approved",
-    label: "Đã nhận",
+    key: 'Approved',
+    label: 'Đã nhận',
   },
   {
-    key: "Declined",
-    label: "Từ chối",
+    key: 'Declined',
+    label: 'Từ chối',
   },
 ];
 
 const TabSent = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = applicationList.filter((item) => {
-    return search === ""
-      ? item.status === "Sent"
+  const list = applicationList.filter(item => {
+    return search === ''
+      ? item.status === 'Sent'
       : item.jobs.title.toLowerCase().includes(search) &&
-          item.status === "Sent";
+          item.status === 'Sent';
   });
   return (
     <Row>
@@ -54,7 +54,7 @@ const TabSent = () => {
                 gutter={[0, 5]}
               >
                 <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                  <Row justify={"space-between"}>
+                  <Row justify={'space-between'}>
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
@@ -82,7 +82,7 @@ const TabSent = () => {
                 <Col span={24}>
                   <Typography.Text
                     style={{
-                      display: "flex",
+                      display: 'flex',
                       margin: 0,
                       paddingLeft: 10,
                       paddingRight: 10,
@@ -92,7 +92,7 @@ const TabSent = () => {
                   </Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <CustomRow align={"middle"}>
+                  <CustomRow align={'middle'}>
                     <Col>
                       <PaperClipOutlined />
                     </Col>
@@ -141,11 +141,11 @@ const TabSent = () => {
 const TabApproved = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = applicationList.filter((item) => {
-    return search === ""
-      ? item.status === "approved"
+  const list = applicationList.filter(item => {
+    return search === ''
+      ? item.status === 'approved'
       : item.jobs.title.toLowerCase().includes(search) &&
-          item.status === "approved";
+          item.status === 'approved';
   });
   return (
     <>
@@ -168,7 +168,7 @@ const TabApproved = () => {
                   gutter={[0, 5]}
                 >
                   <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={"space-between"}>
+                    <Row justify={'space-between'}>
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
@@ -199,7 +199,7 @@ const TabApproved = () => {
                   <Col span={24}>
                     <Typography.Text
                       style={{
-                        display: "flex",
+                        display: 'flex',
                         margin: 0,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -209,7 +209,7 @@ const TabApproved = () => {
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={"middle"}>
+                    <CustomRow align={'middle'}>
                       <Col>
                         <Typography.Title
                           level={5}
@@ -267,11 +267,11 @@ const TabApproved = () => {
 const TabDeclined = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = applicationList.filter((item) => {
-    return search === ""
-      ? item.status === "declined"
+  const list = applicationList.filter(item => {
+    return search === ''
+      ? item.status === 'declined'
       : item.jobs.title.toLowerCase().includes(search) &&
-          item.status === "declined";
+          item.status === 'declined';
   });
   return (
     <>
@@ -294,7 +294,7 @@ const TabDeclined = () => {
                   gutter={[0, 5]}
                 >
                   <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={"space-between"}>
+                    <Row justify={'space-between'}>
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
@@ -321,7 +321,7 @@ const TabDeclined = () => {
                   <Col span={24}>
                     <Typography.Text
                       style={{
-                        display: "flex",
+                        display: 'flex',
                         margin: 0,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -331,7 +331,7 @@ const TabDeclined = () => {
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={"middle"}>
+                    <CustomRow align={'middle'}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
@@ -385,28 +385,28 @@ const contentListNoTitle = {
 };
 
 const ApplicationsTracking = () => {
-  const [activeTabKey2, setActiveTabKey2] = useState("Sent");
+  const [activeTabKey2, setActiveTabKey2] = useState('Sent');
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
   const [value, setValue] = useState(null);
   const { RangePicker } = DatePicker;
   const { Search } = Input;
 
-  const onTab2Change = (key) => {
+  const onTab2Change = key => {
     setActiveTabKey2(key);
   };
 
   const onSearch = (value, _e, info) => setSearch(value.toLowerCase());
 
-  const disabledDate = (current) => {
+  const disabledDate = current => {
     if (!dates) {
       return false;
     }
-    const tooLate = dates[0] && current.diff(dates[0], "days") >= 7;
-    const tooEarly = dates[1] && dates[1].diff(current, "days") >= 7;
+    const tooLate = dates[0] && current.diff(dates[0], 'days') >= 7;
+    const tooEarly = dates[1] && dates[1].diff(current, 'days') >= 7;
     return !!tooEarly || !!tooLate;
   };
-  const onOpenChange = (open) => {
+  const onOpenChange = open => {
     if (open) {
       setDates([null, null]);
     } else {
@@ -417,7 +417,7 @@ const ApplicationsTracking = () => {
     <Card style={{ marginBottom: 30 }}>
       <Row gutter={[0, 10]}>
         <Col span={24}>
-          <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
+          <Typography.Title level={3} style={{ margin: '20px 30px 10px' }}>
             Công việc của tôi
           </Typography.Title>
         </Col>
@@ -435,7 +435,7 @@ const ApplicationsTracking = () => {
             allowClear
             onSearch={onSearch}
             style={{
-              width: "100%",
+              width: '100%',
             }}
           />
         </Col>
@@ -446,20 +446,20 @@ const ApplicationsTracking = () => {
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 20,
-            display: "flex",
-            justifyContent: "flex-end",
+            display: 'flex',
+            justifyContent: 'flex-end',
           }}
         >
           <RangePicker
             value={dates || value}
             disabledDate={disabledDate}
-            onCalendarChange={(val) => {
+            onCalendarChange={val => {
               setDates(val);
             }}
-            onChange={(val) => {
+            onChange={val => {
               setValue(val);
             }}
-            format={"DD/MM/YYYY"}
+            format={'DD/MM/YYYY'}
             onOpenChange={onOpenChange}
             changeOnBlur
             locale={locale}
@@ -468,16 +468,16 @@ const ApplicationsTracking = () => {
         <Col className="trackingJobs" span={24}>
           <Card
             style={{
-              width: "100%",
-              border: "transparent",
+              width: '100%',
+              border: 'transparent',
             }}
             headStyle={{
               color: color.colorBlack,
-              fontWeight: "bold",
+              fontWeight: 'bold',
               paddingLeft: 30,
               paddingRight: 30,
-              margin: "10px 0",
-              borderBottom: "0.5px solid #000 !important",
+              margin: '10px 0',
+              borderBottom: '0.5px solid #000 !important',
             }}
             tabList={tabListNoTitle}
             activeTabKey={activeTabKey2}

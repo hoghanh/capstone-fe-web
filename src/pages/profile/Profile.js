@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import React, { useEffect } from "react";
 import { get } from "utils/APICaller";
 import Certificates from "./Certificates";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {  useRecoilValue, useSetRecoilState } from "recoil";
 import {
   applicationListState,
   authState,
@@ -12,8 +12,8 @@ import Overview from "./Overview";
 import { useParams } from "react-router-dom";
 
 const Profile = () => {
-  const [, setFreelancer] = useRecoilState(freelancerState);
-  const [, setApplications] = useRecoilState(applicationListState);
+  const setFreelancer = useSetRecoilState(freelancerState);
+  const setApplications = useSetRecoilState(applicationListState);
   const { id } = useParams();
 
   const auth = useRecoilValue(authState);
