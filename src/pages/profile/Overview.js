@@ -1843,38 +1843,6 @@ const BodySectionRight = () => {
                 </Col>
               </Row>
             </Col>
-            {applications.map((item, index) => {
-              console.log(item)
-              return (
-                <Col span={24} key={item.id}>
-                  <CustomRow
-                    gutter={[0, 10]}
-                    style={{ paddingRight: 30, paddingLeft: 30 }}
-                  >
-                    <Col span={24}>
-                      <Typography.Title
-                        level={5}
-                        style={{ margin: 0, paddingTop: 10, paddingBottom: 10 }}
-                      >
-                        {item.jobs?.title}
-                      </Typography.Title>
-                    </Col>
-                    <Col span={24}>
-                      <Row gutter={10} align={'middle'}>
-                        <Col>
-                          <Typography.Text
-                            style={{ color: color.colorDeactivate }}
-                          >
-                            Ngày bắt đầu: {formatDate(item.updatedAt)}
-                          </Typography.Text>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </CustomRow>
-                  {applications.length === index + 1 ? null : <CustomDivider />}
-                </Col>
-              );
-            })}
             <Col
               span={24}
               style={{ display: "flex", justifyContent: "center" }}
