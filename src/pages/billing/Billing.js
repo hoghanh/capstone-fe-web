@@ -152,7 +152,7 @@ function Billing() {
   return isLoading ? (
     <Loading />
   ) : (
-    <Layout.Content style={{ maxWidth: 1080, margin: "0 auto" }}>
+    <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
       <ModalTopup
         visible={openModal}
         onCancel={handleCancelModal}
@@ -160,12 +160,12 @@ function Billing() {
         id={user.id}
       />
       <Card
-        bodyStyle={{ padding: "unset" }}
+        bodyStyle={{ padding: 'unset' }}
         style={joblist.card}
-        className="card-jobs"
+        className='card-jobs'
         headStyle={{ paddingLeft: 0 }}
         title={
-          <div className="trackingJobs">
+          <div className='trackingJobs'>
             <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
               Tra cứu giao dịch
             </Typography.Title>
@@ -177,12 +177,11 @@ function Billing() {
         extra={
           <>
             <DatePicker
-              timezone="UTC"
               style={{ marginRight: 20 }}
               onChange={filterDate}
-              size="middle"
+              size='middle'
             />
-            <Button size="large" type="primary" onClick={showModal}>
+            <Button size='large' type='primary' onClick={showModal}>
               Nạp tiền
             </Button>
           </>

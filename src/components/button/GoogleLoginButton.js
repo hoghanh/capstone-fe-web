@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Typography, notification } from 'antd';
 import { ReactSVG } from 'react-svg';
 import GoogleLogin from 'react-google-login';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 import { CLIENTID } from 'config';
 import color from 'styles/color';
 import { post } from 'utils/APICaller';
@@ -11,11 +12,11 @@ import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 
 const GoogleLoginButton = ({ onLogin }) => {
-  const navigate = useNavigate();
   const { login } = useAuthActions();
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
   const auth = useRecoilValue(authState);
+  const navigate = useLocation();
 
   const onSuccess = (res) => {
     const allowedDomain = '@fpt.edu.vn';

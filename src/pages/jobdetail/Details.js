@@ -9,7 +9,6 @@ import {
   Skeleton,
   notification,
   Spin,
-  Grid,
 } from "antd";
 import {
   CustomCard,
@@ -642,6 +641,7 @@ const InformationRight = ({ showModalLogin, status, setStatus }) => {
       }}
     >
       <Row style={{ justifyContent: "center" }}>
+        {/* Đăng nhập và phân quyền nếu đăng nhập  */}
         {auth.email ? (
           status ? null : (
             <>
@@ -727,56 +727,12 @@ const InformationResponsive = ({ showModalLogin }) => {
   );
 };
 
-const SubmitApplicationButton = ({showModalLogin, status, setStatus }) => {
-  const { useBreakpoint } = Grid;
-  const { md } = useBreakpoint();
-  const auth = useRecoilValue(authState);
-
-
-  if (md) {
-    return null;
-  }
-
-  return (
-    <>
-      {auth.email ? (
-        status ? null : (
-          <>
-            <Col
-              style={{
-                margin: "20px 0",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <SubmitApplication status={status} setStatus={setStatus} />
-            </Col>
-          </>
-        )
-      ) : (
-        <>
-          <Col
-            style={{
-              margin: "20px 0",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
-          </Col>
-        </>
-      )}
-    </>
-  );
-};
-
 const Details = ({ status, setStatus }) => {
   const jobDetail = useRecoilValue(jobDetailState);
   const [, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
-
+  const auth = useRecoilValue(authState);
+  
   const showModalLogin = () => {
     setOpenLogin(true);
   };
@@ -799,6 +755,7 @@ const Details = ({ status, setStatus }) => {
         visible={openLogin}
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
+        // handleMove={handleMove}
       />
       <Typography.Title level={2} style={styles.titlePost}>
         {jobDetail.title}
@@ -806,19 +763,41 @@ const Details = ({ status, setStatus }) => {
       <CustomCard style={{ marginBottom: 30 }}>
         <CustomRow gutter={[20, 0]}>
           <ArticleLeft jobDetail={jobDetail} />
-          <InformationRight
-            showModalLogin={showModalLogin}
-            status={status}
-            setStatus={setStatus}
-          />
+          <InformationRight showModalLogin={showModalLogin} status={status} setStatus={setStatus} />
         </CustomRow>
       </CustomCard>
       <InformationResponsive />
-      <SubmitApplicationButton
-        showModalLogin={showModalLogin}
-        status={status}
-        setStatus={setStatus}
-      />
+      {auth.email ? (
+          status ? null : (
+            <>
+              <Col
+                style={{
+                  margin: "20px 0",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <SubmitApplication status={status} setStatus={setStatus} />
+              </Col>
+              <CustomDivider/>
+            </>
+          )
+        ) : (
+          <>
+            <Col
+              style={{
+                margin: "20px 0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+            </Col>
+            <CustomDivider/>
+          </>
+        )}
     </>
   );
 };
