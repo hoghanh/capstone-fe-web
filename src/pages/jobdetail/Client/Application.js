@@ -42,7 +42,6 @@ const BodySection = () => {
     getApplications();
   }, []);
 
-  // console.log(countTotal)
   const getApplications = () => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {

@@ -339,9 +339,6 @@ const TabSent = ({ activeTabKey }) => {
     return list.slice(start, end);
   };
 
-  console.log(getPagedList())
-
-
   return (
     <Row>
       {list.length === 0 || list === null ? (

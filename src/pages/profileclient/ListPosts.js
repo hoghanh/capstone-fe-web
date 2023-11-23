@@ -32,7 +32,6 @@ const ListPosts = () => {
 
   console.log(clientId);
   useEffect(() => {
-    console.log("hello");
     changePage(clientId);
   }, [clientId]);
 

@@ -42,7 +42,6 @@ const TabSent = () => {
         </Col>
       ) : (
         list.map((application, index) => {
-          console.log(application);
           return (
             <Col key={index} span={24}>
               <Row

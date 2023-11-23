@@ -44,8 +44,6 @@ const BasicInformation = () => {
   const [avatar, setAvatar] = useState([]);
   const navigate = useNavigate();
 
-  console.log(informationUser);
-
   const handlePreview = async file => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -57,7 +55,7 @@ const BasicInformation = () => {
     );
   };
 
-  const uploadFile = event => {
+  const uploadFile = (event) => {
     const file = event.image[0].originFileObj;
 
     if (!file) return;
@@ -67,17 +65,17 @@ const BasicInformation = () => {
 
     uploadTask.on(
       'state_changed',
-      snapshot => {
+      (snapshot) => {
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
         setProgresspercent(progress);
       },
-      error => {
+      (error) => {
         alert(error);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           updateClientInfo(event, downloadURL);
         });
       }
@@ -85,7 +83,6 @@ const BasicInformation = () => {
   };
 
   const updateClientInfo = (values, image) => {
-    console.log(image)
     const {
       name,
       introduction,
@@ -110,7 +107,7 @@ const BasicInformation = () => {
         },
       },
     })
-      .then(res => {
+      .then((res) => {
         setInformationUser({
           ...informationUser,
           taxCode,
@@ -129,7 +126,7 @@ const BasicInformation = () => {
           message: 'Cập nhật thành công!',
         });
       })
-      .catch(error => {
+      .catch((error) => {
         notification.error({
           message: error.response.data.message,
         });
@@ -483,7 +480,6 @@ const ChangePassword = () => {
     form
       .validateFields()
       .then(values => {
-        console.log('Received values:', values);
         changePassword(values);
       })
       .catch(error => {
@@ -636,9 +632,7 @@ const getItems = panelStyle => [
 
 const EditProfileClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const onChange = key => {
-    console.log(key);
-  };
+
   useEffect(() => {}, []);
 
   const panelStyle = {
@@ -657,7 +651,6 @@ const EditProfileClient = () => {
         <Collapse
           items={getItems(panelStyle)}
           defaultActiveKey={['1']}
-          onChange={onChange}
           expandIconPosition={'end'}
           size="large"
           style={{

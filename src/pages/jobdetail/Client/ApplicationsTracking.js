@@ -49,8 +49,6 @@ const TabRecommend = () => {
           item.status === 'Sent';
   });
   const [ellipsis, setEllipsis] = useState(true);
-  console.log(applicationList);
-  console.log(list);
   return (
     <>
       <Row>
