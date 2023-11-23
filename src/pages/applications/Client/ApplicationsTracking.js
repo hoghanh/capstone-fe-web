@@ -20,9 +20,9 @@ import {
 import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { authState, valueSearchState } from 'recoil/atom';
-import { Link } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { clientProfile, valueSearchState } from 'recoil/atom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post, put } from 'utils/APICaller';
 import { EllipsisOutlined } from '@ant-design/icons';
@@ -59,146 +59,7 @@ const interviewItems = [
     key: 'edit',
     label: 'Chỉnh sửa lịch hẹn',
   },
-  {
-    key: 'accept',
-    label: 'Nhận ứng viên',
-  },
-  {
-    key: 'decline',
-    label: 'Từ chối',
-    danger: true,
-  },
 ];
-
-const EditInterview = ({
-  isModalEdit,
-  setIsModalEdit,
-  appointmentId,
-  isIdItem,
-  setIsIdItem,
-  form,
-}) => {
-  const [timeBooking, setTimeBooking] = useState('');
-  const onChange = (value, dateString) => {
-    setTimeBooking(dateString);
-  };
-
-  const editAppointment = (values) => {
-    const { editAddress } = values;
-    let location = null;
-    let link = null;
-    if (checkIfIsUrl(editAddress)) {
-      location = null;
-      link = editAddress;
-    } else {
-      location = editAddress;
-      link = null;
-    }
-    put({
-      endpoint: `/appointment/detail/${appointmentId}`,
-      body: {
-        location,
-        link,
-        time: dayjs(values.editTime),
-      },
-    })
-      .then((res) => {
-        setIsIdItem(null);
-        notification.success({
-          message: 'Đã thay đổi lịch phỏng vấn!',
-        });
-        setIsModalEdit(false);
-      })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
-      });
-  };
-
-  const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        editAppointment(values);
-      })
-      .catch((error) => {
-        console.error('Validation failed:', error);
-      });
-  };
-
-  const handleCancel = () => {
-    setIsModalEdit(false);
-  };
-
-  return (
-    <>
-      <ModalPrimary
-        title={'Chỉnh sửa lịch hẹn'}
-        open={isModalEdit}
-        bodyStyle={{ paddingTop: 20 }}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Form form={form} name='editInterview'>
-          <Row gutter={[0, 10]}>
-            <Col span={24}>
-              <CustomRow gutter={[0, 10]}>
-                <Col span={24}>
-                  <Typography.Title level={4}>
-                    Link phỏng vấn (hoặc địa điểm)
-                  </Typography.Title>
-                </Col>
-                <Col span={24}>
-                  <Form.Item
-                    name='editAddress'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Không được để trống ô này!',
-                      },
-                    ]}
-                  >
-                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
-                  </Form.Item>
-                </Col>
-                <Col span={24}>
-                  <Typography.Title level={4}>
-                    Thời gian phỏng vấn
-                  </Typography.Title>
-                </Col>
-                <Col span={24}>
-                  <Form.Item
-                    name='editTime'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Không được để trống ô này!',
-                      },
-                    ]}
-                  >
-                    <DatePicker
-                      style={{ with: '100%' }}
-                      showTime
-                      showNow={false}
-                      onChange={onChange}
-                      disabledDate={(current) => {
-                        return (
-                          current && current.isBefore(dayjs().endOf('day'))
-                        );
-                      }}
-                      locale={locale}
-                    />
-                  </Form.Item>
-                </Col>
-              </CustomRow>
-            </Col>
-          </Row>
-        </Form>
-      </ModalPrimary>
-    </>
-  );
-};
 
 const Interview = ({
   isModalInterview,
@@ -207,7 +68,7 @@ const Interview = ({
   setIsIdItem,
 }) => {
   const [timeBooking, setTimeBooking] = useState('');
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
   const [form] = Form.useForm();
 
   const onChange = (value, dateString) => {
@@ -250,7 +111,7 @@ const Interview = ({
         location,
         link,
         time: timeBooking,
-        clientId: auth.id,
+        clientId: user.id,
         applicationId: isIdItem,
       },
     })
@@ -398,49 +259,6 @@ const DeclineInterview = ({
   );
 };
 
-const AcceptInterview = ({
-  isModalAccept,
-  setIsModalAccept,
-  isIdItem,
-  setIsIdItem,
-}) => {
-  const handleOk = () => {
-    put({
-      endpoint: `/application/approve/${isIdItem}`,
-    })
-      .then((res) => {
-        setIsIdItem(null);
-        notification.success({
-          message: 'Đã tuyển dụng',
-        });
-        setIsModalAccept(false);
-      })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
-      });
-  };
-
-  const handleCancel = () => {
-    setIsModalAccept(false);
-  };
-
-  return (
-    <>
-      <ModalPrimary
-        title='Tuyển dụng'
-        open={isModalAccept}
-        bodyStyle={{ paddingTop: 20 }}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText='Tuyển dụng'
-      >
-        Bạn muốn tuyển dụng ứng viên này?
-      </ModalPrimary>
-    </>
-  );
-};
 
 const TabSent = ({ activeTabKey }) => {
   const [applicationList, setApplicationList] = useState([]);
@@ -449,33 +267,19 @@ const TabSent = ({ activeTabKey }) => {
   const [ellipsis] = useState(true);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
-  const [isModalEdit, setIsModalEdit] = useState(false);
-  const [isModalAccept, setIsModalAccept] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(5);
-  const [appointment, setAppointment] = useState([]);
-  const [appointmentId, setAppointmentId] = useState();
-  const [form] = Form.useForm();
 
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile)
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     getApplications();
-    getAppointment();
-  }, [isIdItem]);
+  }, [user, isIdItem]);
 
-  const getAppointment = () => {
-    get({ endpoint: `/appointment/client/${auth.id}` })
-      .then((res) => {
-        const data = res.data.filter((item) => item.applicationId != null);
-        setAppointment(data);
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
-  };
+
 
   useEffect(() => {
     const filtered = applicationList.filter((item) => {
@@ -495,8 +299,8 @@ const TabSent = ({ activeTabKey }) => {
     setList(filtered);
   }, [search, activeTabKey, applicationList]);
 
-  const getApplications = async () => {
-    get({ endpoint: `/application/client/${auth.id}` })
+  const getApplications = () => {
+    get({ endpoint: `/application/client/${user.id}` })
       .then((response) => {
         const data = response.data;
         let applications = data.filter(
@@ -519,19 +323,9 @@ const TabSent = ({ activeTabKey }) => {
       setIsIdItem(id);
       setIsModalInterview(true);
     } else if (checkAction.includes('edit')) {
-      setIsIdItem(id);
-      const item = appointment.find((c) => c.applicationId === id);
-      setAppointmentId(item.appointmentId);
-      if (item) {
-        form.setFieldsValue({
-          editAddress: item.location === null ? item.link : item.location,
-          editTime: dayjs(item.time),
-        });
-      }
-      setIsModalEdit(true);
-    } else if (checkAction.includes('accept')) {
-      setIsIdItem(id);
-      setIsModalAccept(true);
+    //  <Link to={'/client/schedule'}/>
+      navigate('/client/schedule');
+
     }
   };
 
@@ -589,7 +383,7 @@ const TabSent = ({ activeTabKey }) => {
                         <CustomCol>
                           <Row gutter={10}>
                             <Col>
-                              <Link to='/client/applications/freelancer-profile'>
+                              <Link to={`/client/applications/freelancer-profile/${application?.freelancers.accounts.id}`}>
                                 <Typography.Title
                                   level={4}
                                   style={{ margin: 0 }}
@@ -632,7 +426,7 @@ const TabSent = ({ activeTabKey }) => {
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Link to={`/jobs/job-detail/${application.id}`}>
+                          <Link to={`/client/jobs-management/job-detail/${application.jobId}`}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs?.title}
                             </Typography.Title>
@@ -695,26 +489,13 @@ const TabSent = ({ activeTabKey }) => {
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
       />
-      <EditInterview
-        isModalEdit={isModalEdit}
-        setIsModalEdit={setIsModalEdit}
-        appointmentId={appointmentId}
-        isIdItem={isIdItem}
-        setIsIdItem={setIsIdItem}
-        form={form}
-      />
       <DeclineInterview
         isModalDecline={isModalDecline}
         setIsModalDecline={setIsModalDecline}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
       />
-      <AcceptInterview
-        isModalAccept={isModalAccept}
-        setIsModalAccept={setIsModalAccept}
-        isIdItem={isIdItem}
-        setIsIdItem={setIsIdItem}
-      />
+
       <Col span={24}>
         <Pagination
           current={page}

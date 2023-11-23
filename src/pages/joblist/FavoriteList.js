@@ -22,8 +22,7 @@ import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
 import { ModalPrimary } from 'components/Modal/Modal';
 
-
-const RemoveFavorite = ({id, getFavorite}) => {
+const RemoveFavorite = ({ id, getFavorite }) => {
   const auth = useRecoilValue(authState);
   const [isModal, setIsModal] = useState(false);
 
@@ -32,7 +31,7 @@ const RemoveFavorite = ({id, getFavorite}) => {
   };
 
   const handleOk = () => {
-    removeFavorite(id)
+    removeFavorite(id);
   };
   const handleCancel = () => {
     setIsModal(false);
@@ -83,10 +82,10 @@ const FavoriteList = () => {
   const { useBreakpoint } = Grid;
   const { sm, md } = useBreakpoint();
   const [page, setPage] = useState(1);
-  const [jobList, setJobList] = useState([]);
+  const [jobList, setJobList] = useState([])
   const [sortOption, setSortOption] = useState('Latest');
   const [openSelect, setOpenSelect] = useState();
-  const [pageSize,] = useState(5)
+  const [pageSize,] = useState(5);
   const { subCateId, subCateName } = useParams();
   const auth = useRecoilValue(authState);
 
@@ -106,7 +105,6 @@ const FavoriteList = () => {
       });
   };
 
-
   const handleChange = (value) => {
     setSortOption(value);
   };
@@ -122,7 +120,6 @@ const FavoriteList = () => {
     const end = start + pageSize;
     return sortedJobList.slice(start, end);
   };
-
 
   if (sortOption === 'Latest') {
     sortedJobList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));

@@ -37,16 +37,16 @@ const BodySection = () => {
   const [countApproved, setCountApproved] = useState(0);
   const [countDeclined, setCountDeclined] = useState(0);
   const { id } = useParams();
-  console.log(id);
+
   useEffect(() => {
     getApplications();
   }, []);
 
-  // console.log(countTotal)
-  const getApplications = async () => {
-    await get({ endpoint: `/application/job/${id}` })
+  const getApplications = () => {
+    get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         const data = response.data;
+        console.log(data)
         let applications = data.filter(
           (application) =>
             application.jobId !== null && application.jobs !== null
@@ -199,9 +199,7 @@ const Applications = () => {
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 20 }}>
-        {/* Header section */}
         <HeaderSection />
-        {/* Body Section */}
         <BodySection />
       </CustomCard>
     </>

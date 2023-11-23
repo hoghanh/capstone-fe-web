@@ -7,6 +7,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { applicationListState, valueSearchState } from 'recoil/atom';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
+import { formatDate } from 'components/formatter/format';
+import { Link } from 'react-router-dom';
 
 const tabListNoTitle = [
   {
@@ -26,7 +28,7 @@ const tabListNoTitle = [
 const TabSent = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = applicationList.filter(item => {
+  const list = applicationList.filter((item) => {
     return search === ''
       ? item.status === 'Sent'
       : item.jobs.title.toLowerCase().includes(search) &&
@@ -56,13 +58,23 @@ const TabSent = () => {
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Typography.Title level={4} style={{ margin: 0 }}>
-                            {application.jobs.title}
-                          </Typography.Title>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
+                            <Typography.Title level={4} style={{ margin: 0 }}>
+                              {application.jobs.title}
+                            </Typography.Title>
+                          </Link>
                         </Col>
                         <Col span={24}>
                           <Typography.Text style={{ margin: 0 }}>
-                            Công ty cổ phần Foody
+                            Tổ chức: {application.jobs.clients?.accounts?.name}
+                          </Typography.Text>
+                        </Col>
+                        <Col span={24}>
+                          <Typography.Text style={{ margin: 0 }}>
+                            Ngày gửi: {formatDate(application.sendDate)}
                           </Typography.Text>
                         </Col>
                       </Row>
@@ -88,17 +100,34 @@ const TabSent = () => {
                       <PaperClipOutlined />
                     </Col>
                     <Col>
-                      <Typography.Text
-                        underline={true}
-                        style={{
-                          fontWeight: 700,
-                          fontSize: 14,
-                          marginLeft: 5,
-                          color: color.colorPrimary,
-                        }}
-                      >
-                        fileAttachName.doc
-                      </Typography.Text>
+                      {application.fileAttach ? (
+                        <Typography.Link
+                          href={application.fileAttach}
+                          target="_blank"
+                          underline={true}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Link>
+                      ) : (
+                        <Typography.Text
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: '#ccc',
+                            cursor: 'not-allowed',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Text>
+                      )}
                     </Col>
                   </CustomRow>
                 </Col>
@@ -115,7 +144,7 @@ const TabSent = () => {
 const TabApproved = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = applicationList.filter(item => {
+  const list = applicationList.filter((item) => {
     return search === ''
       ? item.status === 'approved'
       : item.jobs.title.toLowerCase().includes(search) &&
@@ -146,23 +175,29 @@ const TabApproved = () => {
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs.title}
                             </Typography.Title>
+                          </Link>
                           </Col>
                           <Col span={24}>
                             <Typography.Text style={{ margin: 0 }}>
-                              Lương: 400.000VND
+                              Tổ chức:{' '}
+                              {application.jobs.clients?.accounts?.name}
                             </Typography.Text>
                           </Col>
                           <Col span={24}>
                             <Typography.Text
                               style={{ margin: 0, paddingRight: 15 }}
                             >
-                              Ngày bắt đầu: 23/7/2023
+                              Ngày gửi: {formatDate(application.sendDate)}
                             </Typography.Text>
                             <Typography.Text style={{ margin: 0 }}>
-                              Ngày kết thúc: 24/7/2023
+                              Ngày nhận: {formatDate(application.updatedAt)}
                             </Typography.Text>
                           </Col>
                         </Row>
@@ -196,17 +231,34 @@ const TabApproved = () => {
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-                        <Typography.Text
-                          underline={true}
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: color.colorPrimary,
-                          }}
-                        >
-                          fileAttachName.doc
-                        </Typography.Text>
+                        {application.fileAttach ? (
+                          <Typography.Link
+                            href={application.fileAttach}
+                            target="_blank"
+                            underline={true}
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: color.colorPrimary,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Link>
+                        ) : (
+                          <Typography.Text
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: '#ccc',
+                              cursor: 'not-allowed',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Text>
+                        )}
                       </Col>
                     </CustomRow>
                   </Col>
@@ -224,7 +276,7 @@ const TabApproved = () => {
 const TabDeclined = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
-  const list = applicationList.filter(item => {
+  const list = applicationList.filter((item) => {
     return search === ''
       ? item.status === 'declined'
       : item.jobs.title.toLowerCase().includes(search) &&
@@ -255,13 +307,25 @@ const TabDeclined = () => {
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs.title}
                             </Typography.Title>
+                          </Link>
                           </Col>
                           <Col span={24}>
                             <Typography.Text style={{ margin: 0 }}>
-                              Công ty cổ phần Foody
+                              Tổ chức:{' '}
+                              {application.jobs.clients?.accounts?.name}
+                            </Typography.Text>
+                          </Col>
+                          <Col span={24}>
+                            <Typography.Text style={{ margin: 0 }}>
+                              Ngày gửi: {formatDate(application.sendDate)}
+                              Ngày từ chối: {formatDate(application.updatedAt)}
                             </Typography.Text>
                           </Col>
                         </Row>
@@ -287,17 +351,34 @@ const TabDeclined = () => {
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-                        <Typography.Text
-                          underline={true}
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: color.colorPrimary,
-                          }}
-                        >
-                          fileAttachName.doc
-                        </Typography.Text>
+                        {application.fileAttach ? (
+                          <Typography.Link
+                            href={application.fileAttach}
+                            target="_blank"
+                            underline={true}
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: color.colorPrimary,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Link>
+                        ) : (
+                          <Typography.Text
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: '#ccc',
+                              cursor: 'not-allowed',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Text>
+                        )}
                       </Col>
                     </CustomRow>
                   </Col>
@@ -326,13 +407,13 @@ const ApplicationsTracking = () => {
   const { RangePicker } = DatePicker;
   const { Search } = Input;
 
-  const onTab2Change = key => {
+  const onTab2Change = (key) => {
     setActiveTabKey2(key);
   };
 
   const onSearch = (value, _e, info) => setSearch(value.toLowerCase());
 
-  const disabledDate = current => {
+  const disabledDate = (current) => {
     if (!dates) {
       return false;
     }
@@ -340,7 +421,7 @@ const ApplicationsTracking = () => {
     const tooEarly = dates[1] && dates[1].diff(current, 'days') >= 7;
     return !!tooEarly || !!tooLate;
   };
-  const onOpenChange = open => {
+  const onOpenChange = (open) => {
     if (open) {
       setDates([null, null]);
     } else {
@@ -387,10 +468,10 @@ const ApplicationsTracking = () => {
           <RangePicker
             value={dates || value}
             disabledDate={disabledDate}
-            onCalendarChange={val => {
+            onCalendarChange={(val) => {
               setDates(val);
             }}
-            onChange={val => {
+            onChange={(val) => {
               setValue(val);
             }}
             format={'DD/MM/YYYY'}
