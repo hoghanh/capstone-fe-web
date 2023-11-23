@@ -270,6 +270,7 @@ const EditWorkingTime = () => {
     </>
   );
 };
+
 const languagesItems = [
   { value: '1', label: 'Cơ Bản' },
   { value: '2', label: 'Trung cấp' },
@@ -1280,6 +1281,8 @@ const HeaderSection = () => {
 
 const BodySectionLeft = () => {
   const informationUser = useRecoilValue(freelancerState);
+  const auth = useRecoilValue(authState)
+  console.log(auth);
 
   return (
     <Col
@@ -1368,7 +1371,7 @@ const BodySectionLeft = () => {
                       </Typography.Title>
                     </Col>
                     <Col>
-                      <EditWorkingTime />
+                      {auth.role !== 'client' ? <EditWorkingTime /> : null}
                     </Col>
                   </Row>
                 </Col>

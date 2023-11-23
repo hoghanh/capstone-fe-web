@@ -7,6 +7,8 @@ import {
   notification,
   Grid,
   Dropdown,
+  Pagination,
+  Empty,
 } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { EllipsisOutlined } from '@ant-design/icons';
@@ -21,7 +23,7 @@ import {
 import Loading from 'components/loading/loading';
 import { File } from 'components/icon/Icon';
 import { ModalPrimary } from 'components/Modal/Modal';
-import { authState } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 import { useRecoilValue } from 'recoil';
 
 const tabList = [
@@ -71,7 +73,7 @@ const ClientJobManagement = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
 
   const [jobList, setJobList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -83,6 +85,8 @@ const ClientJobManagement = () => {
   const [itemIdToDelete, setItemIdToDelete] = useState(null);
   const [itemIdToClose, setItemIdToClose] = useState(null);
   const [itemIdToExtend, setItemIdToExtend] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
 
   const navigate = useNavigate();
 
@@ -95,6 +99,10 @@ const ClientJobManagement = () => {
     getJobList();
     setActiveTabKey('hiring');
   }, []);
+
+  useEffect(() => {
+    getJobList();
+  }, [user]);
 
   useEffect(() => {
     const currentTime = new Date().getTime();
@@ -112,10 +120,9 @@ const ClientJobManagement = () => {
 
   function getJobList() {
     get({
-      endpoint: `/job/client/${auth.id}`,
+      endpoint: `/job/client/${user.id}`,
     })
       .then((res) => {
-        console.log(res.data);
         const filtered = res.data.filter((job) => {
           return job.status === 'open';
         });
@@ -234,16 +241,27 @@ const ClientJobManagement = () => {
     setItemIdToExtend(null);
   };
 
+  const handleChange = (page) => {
+    setPage(page);
+  };
+
+  const getPagedList = () => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return filteredJobList.slice(start, end);
+  };
+
+
   return (
     <>
       <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className='card-jobs'
+          className="card-jobs"
           headStyle={{ paddingLeft: 0 }}
           title={
-            <div className='trackingJobs'>
+            <div className="trackingJobs">
               <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
                 Bài viết đã đăng
               </Typography.Title>
@@ -257,111 +275,128 @@ const ClientJobManagement = () => {
           }
           extra={
             <Link to={`/client/jobs-management/post-job`}>
-              <Button type='primary' size='large'>
+              <Button type="primary" size="large">
                 Đăng bài
-              </Button>{' '}
+              </Button>
             </Link>
           }
         >
           {isLoading && <Loading />}
-          {filteredJobList?.map((job) => (
-            <div
-              key={job.id}
-              style={{
-                alignItems: 'center',
-                padding: '20px 30px',
-                borderBottom: '0.5px solid #000',
-              }}
-            >
+          {getPagedList().length === 0 || getPagedList() === null ? (
+            <div>
+              <Empty />
+            </div>
+          ) : (
+            getPagedList()?.map((job) => (
               <div
+                key={job.id}
                 style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  gap: 15,
+                  alignItems: 'center',
+                  padding: '20px 30px',
+                  borderBottom: '0.5px solid #000',
                 }}
               >
-                <div>
-                  <Link
-                    to={`/client/jobs-management/job-detail/${job.id}`}
-                    target='_blank'
-                  >
-                    <Typography.Title style={{ margin: 0 }} level={md ? 4 : 5}>
-                      {job.title}
-                    </Typography.Title>
-                  </Link>
-                  <Typography.Text level={4}>
-                    Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
-                    {FormatVND(job.highestIncome)}
-                  </Typography.Text>
-                </div>
-                <Dropdown
-                  menu={{
-                    items:
-                      activeTabKey === 'hiring'
-                        ? hiringItems.map((item) => ({
-                            ...item,
-                            key: item.key + '_' + job.id.toString(),
-                          }))
-                        : closingItems.map((item) => ({
-                            ...item,
-                            key: item.key + '_' + job.id.toString(),
-                          })),
-                    onClick,
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: 15,
                   }}
                 >
-                  <EllipsisOutlined />
-                </Dropdown>
+                  <div>
+                    <Link
+                      to={`/client/jobs-management/job-detail/${job.id}`}
+                      target="_blank"
+                    >
+                      <Typography.Title
+                        style={{ margin: 0 }}
+                        level={md ? 4 : 5}
+                      >
+                        {job.title}
+                      </Typography.Title>
+                    </Link>
+                    <Typography.Text level={4}>
+                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
+                      {FormatVND(job.highestIncome)}
+                    </Typography.Text>
+                  </div>
+                  <Dropdown
+                    menu={{
+                      items:
+                        activeTabKey === 'hiring'
+                          ? hiringItems.map((item) => ({
+                              ...item,
+                              key: item.key + '_' + job.id.toString(),
+                            }))
+                          : closingItems.map((item) => ({
+                              ...item,
+                              key: item.key + '_' + job.id.toString(),
+                            })),
+                      onClick,
+                    }}
+                  >
+                    <EllipsisOutlined />
+                  </Dropdown>
+                </div>
+                <Typography.Text level={4}>
+                  Ngày đăng: {formatDate(job.createdAt)} -{' '}
+                  {CalculateDaysLeft(job.applicationSubmitDeadline)}
+                </Typography.Text>
+                <br />
+                <Typography.Text
+                  level={4}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px 0',
+                    gap: 10,
+                  }}
+                >
+                  <File size={20} />
+                  {job.applied ? job.applied : '0'} đã đăng kí
+                </Typography.Text>
               </div>
-              <Typography.Text level={4}>
-                Ngày đăng: {formatDate(job.createdAt)} -{' '}
-                {CalculateDaysLeft(job.applicationSubmitDeadline)}
-              </Typography.Text>
-              <br />
-              <Typography.Text
-                level={4}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '10px 0',
-                  gap: 10,
-                }}
-              >
-                <File size={20} />
-                {job.applied ? job.applied : '0'} đã đăng kí
-              </Typography.Text>
-            </div>
-          ))}
+            ))
+          )}
+          <Pagination
+            current={page}
+            total={filteredJobList.length}
+            showSizeChanger={false}
+            pageSize={pageSize}
+            onChange={handleChange}
+            style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+          />
         </Card>
         <ModalPrimary
-          title='Hoàn thành công việc'
+          title="Hoàn thành công việc"
           open={isModalDelete}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleDelete}
           onCancel={handleCancelDeleteModal}
-          okText='Xoá'
-          okType='danger'
+          okText="Xoá"
+          okType="danger"
         >
           Bạn có chắc muốn xoá công việc
         </ModalPrimary>
         <ModalPrimary
-          title='Đóng công việc'
+          title="Đóng công việc"
           open={isModalClose}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleClose}
           onCancel={handleCancelCloseModal}
-          okText='Đóng công việc'
-          okType='danger'
+          okText="Đóng công việc"
+          okType="danger"
         >
           Bạn có chắc muốn đóng công việc
         </ModalPrimary>
         <ModalPrimary
-          title='Gia hạn công việc'
+          title="Gia hạn công việc"
           open={isModalExtend}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleExtend}
           onCancel={handleCancelExtendModal}
-          okText='Gia hạn công việc'
+          okText="Gia hạn công việc"
         >
           Bạn có chắc muốn gia hạn công việc
         </ModalPrimary>

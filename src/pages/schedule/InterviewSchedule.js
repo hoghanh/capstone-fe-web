@@ -24,7 +24,7 @@ import EditScheduleModal from './EditScheduleModal';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useRecoilValue } from 'recoil';
-import { authState } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 
 // Cài đặt ngôn ngữ tiếng Việt cho Day.js
 dayjs.locale('vi');
@@ -64,13 +64,10 @@ const getMonthData = (value) => {
 const InterviewSchedule = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
-
-  const auth = useRecoilValue(authState);
-
+  const user = useRecoilValue(clientProfile);
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
   const [isLoading, setIsLoading] = useState(true);
-  const [jobList, setJobList] = useState([]);
   const [appointmentTime, setAppointmentTime] = useState('');
   const [appointmentLocation, setAppointmentLocation] = useState('');
   const [id, setId] = useState('');
@@ -184,7 +181,7 @@ const InterviewSchedule = () => {
   function getInterviewSchedule() {
     setIsLoading(true);
     get({
-      endpoint: `/job/appointment/${auth.id}`,
+      endpoint: `/job/appointment/${user.id}`,
     })
       .then((res) => {
         console.log(res.data);

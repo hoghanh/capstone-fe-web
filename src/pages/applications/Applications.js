@@ -31,6 +31,8 @@ const Applications = () => {
     await get({ endpoint: `/application/freelancer/${freelancerId}` })
       .then((response) => {
         const data = response.data;
+        console.log(data)
+
         let applications = data.filter(application => application.jobId !== null && application.jobs !== null)
         setApplications(applications);
       })

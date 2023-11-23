@@ -20,8 +20,8 @@ import {
 import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { authState, valueSearchState } from 'recoil/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { clientProfile, valueSearchState } from 'recoil/atom';
 import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post, put } from 'utils/APICaller';
@@ -208,7 +208,7 @@ const Interview = ({
   setIsIdItem,
 }) => {
   const [timeBooking, setTimeBooking] = useState('');
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
   const [form] = Form.useForm();
 
   const onChange = (value, dateString) => {
@@ -251,7 +251,7 @@ const Interview = ({
         location,
         link,
         time: timeBooking,
-        clientId: auth.id,
+        clientId: user.id,
         applicationId: isIdItem,
       },
     })
@@ -459,16 +459,15 @@ const TabSent = ({ activeTabKey }) => {
   const [appointment, setAppointment] = useState([]);
   const [appointmentId, setAppointmentId] = useState();
   const [form] = Form.useForm();
-
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile)
 
   useEffect(() => {
     getApplications();
     getAppointment();
-  }, [isIdItem]);
+  }, [user, isIdItem]);
 
   const getAppointment = () => {
-    get({ endpoint: `/appointment/client/${auth.id}` })
+    get({ endpoint: `/appointment/client/${user.id}` })
       .then((res) => {
         const data = res.data.filter((item) => item.applicationId != null);
         setAppointment(data);
@@ -498,7 +497,7 @@ const TabSent = ({ activeTabKey }) => {
   }, [search, activeTabKey, applicationList]);
 
   const getApplications = async () => {
-    get({ endpoint: `/application/client/${auth.id}` })
+    get({ endpoint: `/application/client/${user.id}` })
       .then((response) => {
         const data = response.data;
         let applications = data.filter(

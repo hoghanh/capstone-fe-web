@@ -16,7 +16,7 @@ import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import ModalTopup from './ModalTopup';
 import { useRecoilValue } from 'recoil';
-import { authState } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 
 const columns = [
   {
@@ -66,7 +66,7 @@ function Billing() {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
 
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
@@ -85,7 +85,7 @@ function Billing() {
     setIsLoading(true);
     if (!vnp_Amount) {
       get({
-        endpoint: `/payment/client/${auth.id}`,
+        endpoint: `/payment/client/${user.id}`,
       })
         .then((res) => {
           setBills(res.data.payment);
@@ -110,7 +110,7 @@ function Billing() {
           transDate: vnp_PayDate,
           transType: '02',
           type: '+',
-          clientId: auth.id,
+          clientId: user.id,
         },
       })
         .then((res) => {
@@ -157,7 +157,7 @@ function Billing() {
         visible={openModal}
         onCancel={handleCancelModal}
         onOk={handleOkModal}
-        id={auth.id}
+        id={user.id}
       />
       <Card
         bodyStyle={{ padding: "unset" }}

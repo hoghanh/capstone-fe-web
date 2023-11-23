@@ -558,7 +558,7 @@ const AboutCustomer = () => {
               textAlign: "center",
             }}
           >
-            {jobDetail?.clients.accounts.name.toUpperCase()}
+            {jobDetail?.clients?.accounts?.name.toUpperCase()}
           </Typography.Title>
         </Link>
       </CustomCol>
@@ -581,8 +581,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.address != null
-            ? jobDetail.clients.accounts.address
+          {jobDetail?.clients?.accounts?.address != null
+            ? jobDetail?.clients?.accounts?.address
             : "Chưa xác minh"}
         </Typography.Text>
       </Col>
