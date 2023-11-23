@@ -8,27 +8,27 @@ import {
   Row,
   Typography,
   notification,
-} from 'antd';
-import { ButtonIcon } from 'components/customize/GlobalCustomize';
+} from "antd";
+import { ButtonIcon } from "components/customize/GlobalCustomize";
 import {
   CustomCard,
   CustomCol,
   CustomDivider,
   CustomRow,
-} from 'components/customize/Layout';
-import { Plus } from 'components/icon/Icon';
-import React, { useEffect, useState } from 'react';
-import css from './profile.module.css';
-import { ModalPrimary } from 'components/Modal/Modal';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { authState, freelancerState } from 'recoil/atom';
-import { post, put, remove } from 'utils/APICaller';
-import moment from 'moment';
-import { formatDate } from 'components/formatter/format';
-import { Link } from 'react-router-dom';
-import { EllipsisOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
-import locale from 'antd/es/date-picker/locale/vi_VN';
+} from "components/customize/Layout";
+import { Plus } from "components/icon/Icon";
+import React, { useEffect, useState } from "react";
+import css from "./profile.module.css";
+import { ModalPrimary } from "components/Modal/Modal";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState, freelancerState } from "recoil/atom";
+import { post, put, remove } from "utils/APICaller";
+import moment from "moment";
+import { formatDate } from "components/formatter/format";
+import { Link } from "react-router-dom";
+import { EllipsisOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+import locale from "antd/es/date-picker/locale/vi_VN";
 import 'dayjs/locale/vi';
 
 const items = [
@@ -70,9 +70,7 @@ const AddCertifications = () => {
         name,
         issuingOrganization,
         issueDate,
-        expirationDate: expirationDate
-          ? dayjs(expirationDate).format('YYYY-MM-DD')
-          : null,
+        expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
         credentialId,
         credentialUrl,
         accountId: informationUser.accountId,
@@ -85,7 +83,7 @@ const AddCertifications = () => {
           certificates: [...informationUser.certificates, certificate],
         });
         notification.success({
-          message: 'Cập nhật thành công!',
+          message: "Cập nhật thành công!",
         });
       })
       .catch((error) => {
@@ -195,7 +193,8 @@ const AddCertifications = () => {
                     ]}
                   >
                     <DatePicker
-                      style={{ with: '100%' }}
+                    timezone="UTC"
+                      style={{ with: "100%" }}
                       showNow={false}
                       format={'YYYY-MM-DD'}
                       onChange={onIssueDate}
@@ -217,20 +216,21 @@ const AddCertifications = () => {
                 <Col span={24}>
                   <Form.Item name="expirationDate">
                     <DatePicker
-                      style={{ with: '100%' }}
+                    timezone="UTC"
+                      style={{ with: "100%" }}
                       showNow={false}
                       format={'YYYY-MM-DD'}
                       onChange={onExpDate}
                       disabledDate={(current) => {
                         const issueDate = form.getFieldValue('issueDate');
                         return (
-                          !issueDate ||
-                          (current &&
+                          !issueDate || (current &&
                             issueDate &&
                             current.isBefore(issueDate.clone().add(30, 'days')))
                         );
                       }}
                       locale={locale}
+
                     />
                   </Form.Item>
                 </Col>
@@ -269,7 +269,7 @@ const AddCertifications = () => {
                     rules={[
                       {
                         required: true,
-                        message: 'Không được để trống ô này!',
+                        message: "Không được để trống ô này!",
                       },
                     ]}
                   >
@@ -390,16 +390,13 @@ const BodySection = () => {
     form
       .validateFields()
       .then((values) => {
-        const { name, issuingOrganization, credentialId, credentialUrl } =
-          values;
+        const {name, issuingOrganization, credentialId, credentialUrl} = values;
         const newCertificate = {
           id: isIdItem,
           name,
           issuingOrganization,
           issueDate: dayjs(issueDate).format('YYYY-MM-DD'),
-          expirationDate: expirationDate
-            ? dayjs(expirationDate).format('YYYY-MM-DD')
-            : null,
+          expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
           credentialId,
           credentialUrl,
         };
@@ -408,10 +405,8 @@ const BodySection = () => {
           body: {
             name,
             issuingOrganization,
-            issueDate: dayjs(issueDate).format('YYYY-MM-DD'),
-            expirationDate: expirationDate
-              ? dayjs(expirationDate).format('YYYY-MM-DD')
-              : null,
+            issueDate: dayjs(issueDate).format("YYYY-MM-DD"),
+            expirationDate: expirationDate ? dayjs(expirationDate).format("YYYY-MM-DD") : null,
             credentialId,
             credentialUrl,
           },
@@ -426,7 +421,7 @@ const BodySection = () => {
             });
             setCertificates(item);
             notification.success({
-              message: 'Cập nhật thành công!',
+              message: "Cập nhật thành công!",
             });
             setIsModalEdit(false);
             setIsIdItem(null);
@@ -438,7 +433,7 @@ const BodySection = () => {
           });
       })
       .catch((error) => {
-        notification.error('Validation failed:', error);
+        notification.error("Validation failed:", error);
       });
   };
 
