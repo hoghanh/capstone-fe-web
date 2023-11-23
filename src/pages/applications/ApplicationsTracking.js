@@ -451,7 +451,6 @@ const ApplicationsTracking = () => {
           }}
         >
           <RangePicker
-            timezone="UTC"
             value={dates || value}
             disabledDate={disabledDate}
             onCalendarChange={(val) => {

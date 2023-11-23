@@ -641,13 +641,7 @@ const BodySection = () => {
             >
               <Col span={0} sm={{ span: 4 }} style={{ paddingRight: 20 }}>
                 <Link to={certificate.credentialUrl} target="_blank">
-                  <Image
-                    src={
-                      "https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/resources%2Fimage%2Fcertificate-1.png?alt=media&token=c69c8ae7-24df-4b50-92fa-37b5cc9439e1"
-                    }
-                    preview={false}
-                    alt="certificate"
-                  />
+                  <Image src={"https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/resources%2Fimage%2Fcertificate-1.png?alt=media&token=c69c8ae7-24df-4b50-92fa-37b5cc9439e1"} preview={false} alt="certificate"/>
                 </Link>
               </Col>
               <Col span={24} sm={{ span: 20 }}>
@@ -793,7 +787,6 @@ const BodySection = () => {
                     ]}
                   >
                     <DatePicker
-                      timezone="UTC"
                       style={{ with: "100%" }}
                       showNow={false}
                       format={"YYYY-MM-DD"}
@@ -842,7 +835,6 @@ const BodySection = () => {
                     ]}
                   >
                     <DatePicker
-                      timezone="UTC"
                       style={{ with: "100%" }}
                       showNow={false}
                       format={"YYYY-MM-DD"}
