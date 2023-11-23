@@ -39,6 +39,7 @@ import { get, post, remove } from 'utils/APICaller';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'config/firebase';
 import { useParams } from 'react-router-dom';
+import socket from 'config';
 
 const { Dragger } = Upload;
 
@@ -48,6 +49,15 @@ const SubmitApplication = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setProgresspercent] = useState(0);
   let { id } = useParams();
+  const jobDetail = useRecoilValue(jobDetailState);
+
+  const auth = useRecoilValue(authState);
+
+  const [notificationData, setNotificationData] = useState({
+    accountId: auth.id,
+    notificationName: 'Đơn ứng tuyển mới',
+    notificationDescription: `Bạn vừa nhận 1 đơn ứng tuyển từ ${auth.name}`,
+  });
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -95,9 +105,20 @@ const SubmitApplication = () => {
       },
     })
       .then((res) => {
+        //Gửi notification [thông tin] - đến [email người nhận]
+        socket.emit(
+          'sendNotification',
+          notificationData,
+          'caohanh1711@gmail.com'
+        );
+
         notification.success({
           message: 'Ứng tuyển thành công',
         });
+
+        return () => {
+          socket.disconnect();
+        };
       })
       .catch((error) => {
         notification.error({
@@ -217,6 +238,7 @@ const HeaderArticle = () => {
   const [favoriteList, setFavoriteList] = useState([]);
   const auth = useRecoilValue(authState);
   const [isLoading, setIsLoading] = useState(false);
+  const jobDetail = useRecoilValue(jobDetailState);
 
   useEffect(() => {
     if (auth.role === 'freelancer') {
@@ -298,7 +320,6 @@ const HeaderArticle = () => {
     }
   };
 
-  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <>
       <Row>
