@@ -791,6 +791,7 @@ const BodySection = () => {
                     ]}
                   >
                     <DatePicker
+                      timezone="UTC"
                       style={{ with: '100%' }}
                       showNow={false}
                       format={'YYYY-MM-DD'}
@@ -839,6 +840,7 @@ const BodySection = () => {
                     ]}
                   >
                     <DatePicker
+                      timezone="UTC"
                       style={{ with: '100%' }}
                       showNow={false}
                       format={'YYYY-MM-DD'}

@@ -176,7 +176,7 @@ const InterviewSchedule = () => {
 
   useEffect(() => {
     getInterviewSchedule();
-  }, []);
+  }, [user]);
 
   function getInterviewSchedule() {
     setIsLoading(true);

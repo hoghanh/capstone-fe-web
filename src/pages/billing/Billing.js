@@ -17,6 +17,8 @@ import { get, post } from 'utils/APICaller';
 import ModalTopup from './ModalTopup';
 import { useRecoilValue } from 'recoil';
 import { clientProfile } from 'recoil/atom';
+import locale from 'antd/es/date-picker/locale/vi_VN';
+import 'dayjs/locale/vi';
 
 const columns = [
   {
@@ -122,7 +124,7 @@ function Billing() {
           console.log(err);
         });
     }
-  }, [vnp_Amount]);
+  }, [vnp_Amount, user]);
 
   function filterDate(date, dateString) {
     if (dateString) {
@@ -162,10 +164,10 @@ function Billing() {
       <Card
         bodyStyle={{ padding: 'unset' }}
         style={joblist.card}
-        className='card-jobs'
+        className="card-jobs"
         headStyle={{ paddingLeft: 0 }}
         title={
-          <div className='trackingJobs'>
+          <div className="trackingJobs">
             <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
               Tra cứu giao dịch
             </Typography.Title>
@@ -177,11 +179,13 @@ function Billing() {
         extra={
           <>
             <DatePicker
+              timezone="UTC"
               style={{ marginRight: 20 }}
               onChange={filterDate}
-              size='middle'
+              size="middle"
+              locale={locale}
             />
-            <Button size='large' type='primary' onClick={showModal}>
+            <Button size="large" type="primary" onClick={showModal}>
               Nạp tiền
             </Button>
           </>
