@@ -552,6 +552,7 @@ const TabSent = ({ activeTabKey }) => {
         </Col>
       ) : (
         getPagedList()?.map((application, index) => {
+          console.log(application)
           return (
             <Col key={index} span={24}>
               <Row
@@ -588,7 +589,7 @@ const TabSent = ({ activeTabKey }) => {
                         <CustomCol>
                           <Row gutter={10}>
                             <Col>
-                              <Link to={`/client/applications/freelancer-profile/38`}>
+                              <Link to={`/client/applications/freelancer-profile/${application?.freelancers.accounts.id}`}>
                                 <Typography.Title
                                   level={4}
                                   style={{ margin: 0 }}
@@ -631,7 +632,7 @@ const TabSent = ({ activeTabKey }) => {
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Link to={`/jobs/job-detail/${application.id}`}>
+                          <Link to={`/client/jobs-management/job-detail/${application.id}`}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs?.title}
                             </Typography.Title>

@@ -15,7 +15,6 @@ const GoogleLoginButton = ({ onLogin }) => {
   const { login } = useAuthActions();
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
-  const auth = useRecoilValue(authState);
   const navigate = useLocation();
 
   const onSuccess = (res) => {
