@@ -101,7 +101,9 @@ const ClientJobManagement = () => {
   }, []);
 
   useEffect(() => {
-    getJobList();
+    if (user) {
+      getJobList();
+    }
   }, [user]);
 
   useEffect(() => {

@@ -3,18 +3,18 @@ import React, { useEffect } from 'react';
 import ApplicationsTracking from './ApplicationsTracking';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
-import { applicationListState, authState } from 'recoil/atom';
+import { applicationListState, clientProfile } from 'recoil/atom';
 
 const Applications = () => {
   const setApplications = useSetRecoilState(applicationListState);
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
 
   useEffect(() => {
     getApplications();
   }, []);
 
   const getApplications = async () => {
-    get({ endpoint: `/application/client/${auth.id}` })
+    get({ endpoint: `/application/client/${user.id}` })
       .then((response) => {
         const data = response.data;
         let applications = data.filter(

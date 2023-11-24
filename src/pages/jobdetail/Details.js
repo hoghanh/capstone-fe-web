@@ -644,7 +644,6 @@ const InformationRight = ({ showModalLogin, status, setStatus }) => {
       }}
     >
       <Row style={{ justifyContent: "center" }}>
-        {/* Đăng nhập và phân quyền nếu đăng nhập  */}
         {auth.email ? (
           status ? null : (
             <>

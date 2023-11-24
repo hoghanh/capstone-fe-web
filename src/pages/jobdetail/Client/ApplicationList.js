@@ -12,7 +12,7 @@ const Applications = () => {
   useEffect(() => {
     getApplications();
   }, []);
-  const getApplications = async () => {
+  const getApplications = () => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         const data = response.data;

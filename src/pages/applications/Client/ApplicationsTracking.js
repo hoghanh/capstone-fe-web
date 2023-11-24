@@ -22,11 +22,11 @@ import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { clientProfile, valueSearchState } from 'recoil/atom';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post, put } from 'utils/APICaller';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { checkIfIsUrl } from 'components/formatter/format';
+import { checkIfIsUrl, formatDate } from 'components/formatter/format';
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
@@ -34,7 +34,7 @@ import 'dayjs/locale/vi';
 const tabList = [
   {
     key: 'Sent',
-    label: 'Được gửi đến',
+    label: 'Ứng tuyển',
   },
   {
     key: 'interview',
@@ -54,12 +54,6 @@ const sentItems = [
   },
 ];
 
-const interviewItems = [
-  {
-    key: 'edit',
-    label: 'Chỉnh sửa lịch hẹn',
-  },
-];
 
 const Interview = ({
   isModalInterview,
@@ -260,44 +254,68 @@ const DeclineInterview = ({
 };
 
 
-const TabSent = ({ activeTabKey }) => {
+const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis] = useState(true);
+  const [ellipsis, setEllipsis] = useState(false);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(5);
-
-  const user = useRecoilValue(clientProfile)
-  const navigate = useNavigate();
+  const [pageSize] = useState(10);
+  const user = useRecoilValue(clientProfile); 
   
 
   useEffect(() => {
-    getApplications();
+    if(user){
+      getApplications();
+    }
   }, [user, isIdItem]);
 
 
 
   useEffect(() => {
-    const filtered = applicationList.filter((item) => {
-      if (activeTabKey === 'Sent') {
-        return search === ''
-          ? item.status === 'Sent'
-          : item.jobs?.title.toLowerCase().includes(search) &&
-              item.status === 'Sent';
-      } else if (activeTabKey === 'interview') {
-        return search === ''
-          ? item.status === 'interview'
-          : item.jobs?.title.toLowerCase().includes(search) &&
-              item.status === 'interview';
-      }
-      return true;
-    });
-    setList(filtered);
-  }, [search, activeTabKey, applicationList]);
+    if (value) {
+      const start = new Date(value[0]);
+      const end = new Date(value[1]);
+      const filteredDate = applicationList.filter((item) => {
+        const sendDate = new Date(item.sendDate);
+        return sendDate >= start && sendDate <= end;
+      });
+      const filtered = filteredDate.filter((item) => {
+        if (activeTabKey === 'Sent') {
+          return search === ''
+            ? item.status === 'Sent'
+            : item.jobs?.title.toLowerCase().includes(search) &&
+                item.status === 'Sent';
+        } else if (activeTabKey === 'interview') {
+          return search === ''
+            ? item.status === 'interview'
+            : item.jobs?.title.toLowerCase().includes(search) &&
+                item.status === 'interview';
+        }
+        return true;
+      });
+      setList(filtered);
+    } else {
+      const filtered = applicationList.filter((item) => {
+        if (activeTabKey === 'Sent') {
+          return search === ''
+            ? item.status === 'Sent'
+            : item.jobs?.title.toLowerCase().includes(search) &&
+                item.status === 'Sent';
+        } else if (activeTabKey === 'interview') {
+          return search === ''
+            ? item.status === 'interview'
+            : item.jobs?.title.toLowerCase().includes(search) &&
+                item.status === 'interview';
+        }
+        return true;
+      });
+      setList(filtered);
+    }
+  }, [search, activeTabKey, applicationList, value]);
 
   const getApplications = () => {
     get({ endpoint: `/application/client/${user.id}` })
@@ -322,10 +340,6 @@ const TabSent = ({ activeTabKey }) => {
     } else if (checkAction.includes('interview')) {
       setIsIdItem(id);
       setIsModalInterview(true);
-    } else if (checkAction.includes('edit')) {
-    //  <Link to={'/client/schedule'}/>
-      navigate('/client/schedule');
-
     }
   };
 
@@ -375,7 +389,7 @@ const TabSent = ({ activeTabKey }) => {
                           <Image
                             width={72}
                             src={application?.freelancers.accounts.image}
-                            alt='Apofoitisi logo'
+                            alt="Apofoitisi logo"
                             preview={true}
                             style={{ borderRadius: '50%' }}
                           />
@@ -383,7 +397,9 @@ const TabSent = ({ activeTabKey }) => {
                         <CustomCol>
                           <Row gutter={10}>
                             <Col>
-                              <Link to={`/client/applications/freelancer-profile/${application?.freelancers.accounts.id}`}>
+                              <Link
+                                to={`/client/applications/freelancer-profile/${application?.freelancers.accounts.id}`}
+                              >
                                 <Typography.Title
                                   level={4}
                                   style={{ margin: 0 }}
@@ -397,27 +413,21 @@ const TabSent = ({ activeTabKey }) => {
                       </Row>
                     </Col>
                     <Col>
-                      <Dropdown
-                        menu={{
-                          items:
-                            activeTabKey === 'Sent'
-                              ? sentItems.map((item) => ({
-                                  ...item,
-                                  key:
-                                    item.key + '_' + application.id.toString(),
-                                }))
-                              : interviewItems.map((item) => ({
-                                  ...item,
-                                  key:
-                                    item.key + '_' + application.id.toString(),
-                                })),
-                          onClick: ({ key }) => {
-                            onClick(application.id, key);
-                          },
-                        }}
-                      >
-                        <EllipsisOutlined />
-                      </Dropdown>
+                      {activeTabKey === 'Sent' ? (
+                        <Dropdown
+                          menu={{
+                            items: sentItems.map((item) => ({
+                              ...item,
+                              key: item.key + '_' + application.id.toString(),
+                            })),
+                            onClick: ({ key }) => {
+                              onClick(application.id, key);
+                            },
+                          }}
+                        >
+                          <EllipsisOutlined />
+                        </Dropdown>
+                      ) : null}
                     </Col>
                   </Row>
                 </Col>
@@ -426,11 +436,18 @@ const TabSent = ({ activeTabKey }) => {
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Link to={`/client/jobs-management/job-detail/${application.jobId}`}>
+                          <Link
+                            to={`/client/jobs-management/job-detail/${application.jobId}`}
+                          >
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs?.title}
                             </Typography.Title>
                           </Link>
+                        </Col>
+                        <Col span={24}>
+                          <Typography.Text style={{ margin: 0 }}>
+                            Ngày ứng tuyển: {formatDate(application.sendDate)}
+                          </Typography.Text>
                         </Col>
                       </Row>
                     </Col>
@@ -438,24 +455,26 @@ const TabSent = ({ activeTabKey }) => {
                 </Col>
 
                 <Col span={24}>
-                  <Link to={`/jobs/job-detail/${application?.id}`}>
-                    <Typography.Paragraph
-                      style={{
-                        margin: 0,
-                        paddingLeft: 10,
-                        paddingRight: 10,
-                      }}
-                      ellipsis={
-                        ellipsis
-                          ? {
-                              rows: 3,
-                            }
-                          : false
-                      }
-                    >
-                      {application.description}
-                    </Typography.Paragraph>
-                  </Link>
+                  <Typography.Paragraph
+                    key={index}
+                    style={{
+                      margin: 0,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      cursor: 'pointer',
+                      textAlign: 'justify',
+                    }}
+                    ellipsis={
+                      ellipsis
+                        ? {
+                            rows: 3,
+                          }
+                        : false
+                    }
+                    onClick={() => setEllipsis(!ellipsis)}
+                  >
+                    {application.description}
+                  </Typography.Paragraph>
                 </Col>
                 <Col span={24}>
                   <CustomRow align={'middle'}>
@@ -463,17 +482,34 @@ const TabSent = ({ activeTabKey }) => {
                       <PaperClipOutlined />
                     </Col>
                     <Col>
-                      <Typography.Text
-                        underline={true}
-                        style={{
-                          fontWeight: 700,
-                          fontSize: 14,
-                          marginLeft: 5,
-                          color: color.colorPrimary,
-                        }}
-                      >
-                        fileAttachName.doc
-                      </Typography.Text>
+                      {application?.fileAttach ? (
+                        <Typography.Link
+                          href={application.fileAttach}
+                          target="_blank"
+                          underline={true}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Link>
+                      ) : (
+                        <Typography.Text
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: '#ccc',
+                            cursor: 'not-allowed',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Text>
+                      )}
                     </Col>
                   </CustomRow>
                 </Col>
@@ -528,8 +564,8 @@ const ApplicationsTracking = () => {
     if (!dates) {
       return false;
     }
-    const tooLate = dates[0] && current.diff(dates[0], 'days') >= 7;
-    const tooEarly = dates[1] && dates[1].diff(current, 'days') >= 7;
+    const tooLate = dates[0] && current.diff(dates[0], 'days') >= 30;
+    const tooEarly = dates[1] && dates[1].diff(current, 'days') >= 30;
     return !!tooEarly || !!tooLate;
   };
 
@@ -579,6 +615,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <RangePicker
+            timezone="UTC"
             value={dates || value}
             disabledDate={disabledDate}
             onCalendarChange={(val) => {
@@ -611,7 +648,7 @@ const ApplicationsTracking = () => {
             activeTabKey={activeTabKey}
             onTabChange={onTabChange}
           >
-            <TabSent activeTabKey={activeTabKey} />
+            <TabSent activeTabKey={activeTabKey} value={value} />
           </Card>
         </Col>
       </Row>

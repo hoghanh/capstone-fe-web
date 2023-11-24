@@ -84,45 +84,47 @@ function Billing() {
     Object.fromEntries(queryParams.entries());
 
   useEffect(() => {
-    setIsLoading(true);
-    if (!vnp_Amount) {
-      get({
-        endpoint: `/payment/client/${user.id}`,
-      })
-        .then((res) => {
-          setBills(res.data.payment);
-          setFilterList(res.data.payment);
-          setCurrency(res.data.clientCurrency);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
+    if (user) {
       setIsLoading(true);
-      let amount = parseFloat(vnp_Amount) / 100;
-      post({
-        endpoint: `/payment`,
-        body: {
-          status: 'success',
-          name: vnp_BankTranNo,
-          description: 'Giao dịch ' + vnp_BankTranNo,
-          amount: amount.toString(),
-          orderId: vnp_TransactionNo,
-          transDate: vnp_PayDate,
-          transType: '02',
-          type: '+',
-          clientId: user.id,
-        },
-      })
-        .then((res) => {
-          setIsLoading(false);
-          navigate('/client/billing');
+      if (!vnp_Amount) {
+        get({
+          endpoint: `/payment/client/${user.id}`,
         })
-        .catch((err) => {
-          setIsLoading(false);
-          console.log(err);
-        });
+          .then((res) => {
+            setBills(res.data.payment);
+            setFilterList(res.data.payment);
+            setCurrency(res.data.clientCurrency);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        setIsLoading(true);
+        let amount = parseFloat(vnp_Amount) / 100;
+        post({
+          endpoint: `/payment`,
+          body: {
+            status: 'success',
+            name: vnp_BankTranNo,
+            description: 'Giao dịch ' + vnp_BankTranNo,
+            amount: amount.toString(),
+            orderId: vnp_TransactionNo,
+            transDate: vnp_PayDate,
+            transType: '02',
+            type: '+',
+            clientId: user.id,
+          },
+        })
+          .then((res) => {
+            setIsLoading(false);
+            navigate('/client/billing');
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            console.log(err);
+          });
+      }
     }
   }, [vnp_Amount, user]);
 

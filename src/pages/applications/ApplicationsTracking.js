@@ -1,4 +1,4 @@
-import { Card, Col, Input, Row, Typography, DatePicker, Empty } from 'antd';
+import { Card, Col, Input, Row, Typography, DatePicker, Empty, Pagination } from 'antd';
 import { CustomDivider, CustomRow } from 'components/customize/Layout';
 import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useState } from 'react';
@@ -9,6 +9,7 @@ import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import { formatDate } from 'components/formatter/format';
 import { Link } from 'react-router-dom';
+
 
 const tabListNoTitle = [
   {
@@ -28,12 +29,23 @@ const tabListNoTitle = [
 const TabSent = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
   const list = applicationList.filter((item) => {
     return search === ''
       ? item.status === 'Sent'
       : item.jobs.title.toLowerCase().includes(search) &&
           item.status === 'Sent';
   });
+  const handleChange = (page) => {
+    setPage(page);
+  };
+
+  const getPagedList = () => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return list.slice(start, end);
+  };
   return (
     <Row>
       {list.length === 0 || list === null ? (
@@ -41,7 +53,7 @@ const TabSent = () => {
           <Empty />
         </Col>
       ) : (
-        list.map((application, index) => {
+        getPagedList().map((application, index) => {
           return (
             <Col key={index} span={24}>
               <Row
@@ -69,7 +81,7 @@ const TabSent = () => {
                         </Col>
                         <Col span={24}>
                           <Typography.Text style={{ margin: 0 }}>
-                            Tổ chức: {application.jobs.clients?.accounts?.name}
+                            Công ty: {application.jobs.clients?.accounts?.name}
                           </Typography.Text>
                         </Col>
                         <Col span={24}>
@@ -132,11 +144,21 @@ const TabSent = () => {
                   </CustomRow>
                 </Col>
               </Row>
-              {list.length === index + 1 ? null : <CustomDivider />}
+              <CustomDivider />
             </Col>
           );
         })
       )}
+      <Col span={24}>
+        <Pagination
+          current={page}
+          total={list.length}
+          showSizeChanger={false}
+          pageSize={pageSize}
+          onChange={handleChange}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+        />
+      </Col>
     </Row>
   );
 };
@@ -144,12 +166,23 @@ const TabSent = () => {
 const TabApproved = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
   const list = applicationList.filter((item) => {
     return search === ''
       ? item.status === 'approved'
       : item.jobs.title.toLowerCase().includes(search) &&
           item.status === 'approved';
   });
+  const handleChange = (page) => {
+    setPage(page);
+  };
+
+  const getPagedList = () => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return list.slice(start, end);
+  };
   return (
     <>
       <Row>
@@ -158,7 +191,7 @@ const TabApproved = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((application, index) => {
+          getPagedList().map((application, index) => {
             return (
               <Col key={index} span={24}>
                 <Row
@@ -186,7 +219,7 @@ const TabApproved = () => {
                           </Col>
                           <Col span={24}>
                             <Typography.Text style={{ margin: 0 }}>
-                              Tổ chức:{' '}
+                              Công ty:{' '}
                               {application.jobs.clients?.accounts?.name}
                             </Typography.Text>
                           </Col>
@@ -263,11 +296,21 @@ const TabApproved = () => {
                     </CustomRow>
                   </Col>
                 </Row>
-                {list.length === index + 1 ? null : <CustomDivider />}
+               <CustomDivider />
               </Col>
             );
           })
         )}
+        <Col span={24}>
+        <Pagination
+          current={page}
+          total={list.length}
+          showSizeChanger={false}
+          pageSize={pageSize}
+          onChange={handleChange}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+        />
+      </Col>
       </Row>
     </>
   );
@@ -276,12 +319,23 @@ const TabApproved = () => {
 const TabDeclined = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
   const list = applicationList.filter((item) => {
     return search === ''
       ? item.status === 'declined'
       : item.jobs.title.toLowerCase().includes(search) &&
           item.status === 'declined';
   });
+  const handleChange = (page) => {
+    setPage(page);
+  };
+
+  const getPagedList = () => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return list.slice(start, end);
+  };
   return (
     <>
       <Row>
@@ -290,7 +344,7 @@ const TabDeclined = () => {
             <Empty />
           </Col>
         ) : (
-          list.map((application, index) => {
+          getPagedList().map((application, index) => {
             return (
               <Col key={index} span={24}>
                 <Row
@@ -318,7 +372,7 @@ const TabDeclined = () => {
                           </Col>
                           <Col span={24}>
                             <Typography.Text style={{ margin: 0 }}>
-                              Tổ chức:{' '}
+                              Công ty:{' '}
                               {application.jobs.clients?.accounts?.name}
                             </Typography.Text>
                           </Col>
@@ -383,11 +437,21 @@ const TabDeclined = () => {
                     </CustomRow>
                   </Col>
                 </Row>
-                {list.length === index + 1 ? null : <CustomDivider />}
+                <CustomDivider />
               </Col>
             );
           })
         )}
+        <Col span={24}>
+        <Pagination
+          current={page}
+          total={list.length}
+          showSizeChanger={false}
+          pageSize={pageSize}
+          onChange={handleChange}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+        />
+      </Col>
       </Row>
     </>
   );
