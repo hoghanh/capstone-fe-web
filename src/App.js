@@ -17,6 +17,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const auth = useRecoilValue(authState);
+  const setUser = useSetRecoilState(clientProfile);
 
   useEffect(() => {
     autoLogin();
@@ -43,13 +44,25 @@ function App() {
       socket?.emit('newUser', auth.email);
       socket.on('getNotification', (data) => {
         console.log('Received notification:', data.notification);
+
+		fetchProfile();
       });
 
       return () => {
         socket.disconnect();
       };
-    }
   }, [auth]);
+
+  function fetchProfile() {
+    get({ endpoint: `/client/profile/${auth.id}` })
+      .then((response) => {
+        setUser(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <React.Fragment>

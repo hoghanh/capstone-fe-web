@@ -10,6 +10,7 @@ import {
   Typography,
   Upload,
   notification,
+  Avatar,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ModalAlert, ModalPrimary } from 'components/Modal/Modal';
@@ -25,12 +26,12 @@ import { authState, clientProfile } from 'recoil/atom';
 import color from 'styles/color';
 import { put, remove } from 'utils/APICaller';
 
-const getBase64 = (file) =>
+const getBase64 = file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
+    reader.onerror = error => reject(error);
   });
 
 const BasicInformation = () => {
@@ -40,16 +41,10 @@ const BasicInformation = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [avatar, setAvatar] = useState([
-    {
-      uid: Math.random(),
-      name: 'avatar.png',
-      status: 'done',
-      url: `${informationUser?.accounts.image}`,
-    },
-  ]);
+  const [avatar, setAvatar] = useState([]);
+  const navigate = useNavigate();
 
-  const handlePreview = async (file) => {
+  const handlePreview = async file => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -97,7 +92,6 @@ const BasicInformation = () => {
       companyWebsite,
       taxCode,
     } = values;
-    console.log(image);
     put({
       endpoint: `/client/profile/${informationUser.accountId}`,
       body: {
@@ -142,7 +136,6 @@ const BasicInformation = () => {
   const handleChange = ({ avatar: newAvatar }) => setAvatar(newAvatar);
 
   const normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -152,18 +145,30 @@ const BasicInformation = () => {
   const handleOk = () => {
     form
       .validateFields()
-      .then((values) => {
-        console.log('Received values:', values);
-        uploadFile(values);
+      .then(values => {
+         if (
+          values.image !== undefined &&
+          values.image !== null &&
+          values.image !== ''
+        ) {
+          if (values.image.length > 0) {
+            uploadFile(values);
+          } else {
+            updateClientInfo(values);
+          }
+        } else {
+          updateClientInfo(values, informationUser?.accounts.image);
+        }
+        navigate(`/client/profile`)
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Validation failed:', error);
       });
   };
 
   const props = {
     listType: 'picture-card',
-    fileList: avatar,
+    fileList: {avatar},
     maxCount: 1,
     beforeUpload: () => false,
     onRemove: () => false,
@@ -193,7 +198,7 @@ const BasicInformation = () => {
     <>
       <Form
         form={form}
-        name='editProfile'
+        name="editProfile"
         initialValues={{
           remember: true,
           introduction: informationUser?.introduction
@@ -223,7 +228,7 @@ const BasicInformation = () => {
           <Col span={24}>
             <Typography.Title level={4}>Tên doanh nghiệp</Typography.Title>
             <Form.Item
-              name='name'
+              name="name"
               rules={[
                 {
                   required: true,
@@ -233,7 +238,7 @@ const BasicInformation = () => {
             >
               <Input
                 style={{ width: '100%' }}
-                placeholder='VD: Công ty TNHH Foody'
+                placeholder="VD: Công ty TNHH Foody"
                 controls={false}
               />
             </Form.Item>
@@ -241,9 +246,16 @@ const BasicInformation = () => {
           <Col span={24}>
             <Typography.Title level={4}>Ảnh đại diện</Typography.Title>
             <Row>
+              <Avatar
+                size={100}
+                style={{ border: '1px solid #ccc' }}
+                shape="square"
+                src={informationUser?.accounts.image}
+              />
               <Form.Item
-                name='image'
-                valuePropName='fileList'
+                style={{ paddingLeft: 10 }}
+                name="image"
+                valuePropName="fileList"
                 getValueFromEvent={normFile}
               >
                 <Upload {...props}>{uploadButton}</Upload>
@@ -255,7 +267,7 @@ const BasicInformation = () => {
                 onCancel={handleCancel}
               >
                 <img
-                  alt='example'
+                  alt="example"
                   style={{
                     width: '100%',
                   }}
@@ -280,7 +292,7 @@ const BasicInformation = () => {
               ]}
             >
               <TextArea
-                className='introText'
+                className="introText"
                 showCount
                 allowClear={true}
                 minLength={100}
@@ -289,7 +301,7 @@ const BasicInformation = () => {
                   minHeight: 120,
                   resize: 'none',
                 }}
-                placeholder='textarea'
+                placeholder="textarea"
               />
             </Form.Item>
           </Col>
@@ -298,7 +310,7 @@ const BasicInformation = () => {
               <Col span={12}>
                 <Typography.Title level={4}>Email</Typography.Title>
                 <Form.Item
-                  name='email'
+                  name="email"
                   rules={[
                     {
                       required: true,
@@ -306,13 +318,13 @@ const BasicInformation = () => {
                     },
                   ]}
                 >
-                  <Input placeholder='VD: foody@gmail.com' />
+                  <Input placeholder="VD: foody@gmail.com" />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Typography.Title level={4}>Số điện thoại</Typography.Title>
                 <Form.Item
-                  name='phone'
+                  name="phone"
                   rules={[
                     {
                       required: true,
@@ -326,7 +338,7 @@ const BasicInformation = () => {
                 >
                   <Input
                     style={{ width: '100%' }}
-                    placeholder='Ex: 0123456789'
+                    placeholder="Ex: 0123456789"
                     controls={false}
                   />
                 </Form.Item>
@@ -344,7 +356,7 @@ const BasicInformation = () => {
                 },
               ]}
             >
-              <Input placeholder='VD: Lầu G, Tòa nhà Jabes 1, số 244 đường Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam' />
+              <Input placeholder="VD: Lầu G, Tòa nhà Jabes 1, số 244 đường Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam" />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -360,7 +372,7 @@ const BasicInformation = () => {
                     },
                   ]}
                 >
-                  <Input placeholder='VD: Foody.com.vn' />
+                  <Input placeholder="VD: Foody.com.vn" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -376,7 +388,7 @@ const BasicInformation = () => {
                 >
                   <InputNumber
                     style={{ width: '100%' }}
-                    placeholder='VD: 0123456789'
+                    placeholder="VD: 0123456789"
                     controls={false}
                   />
                 </Form.Item>
@@ -388,11 +400,11 @@ const BasicInformation = () => {
               <ButtonPrimary
                 style={{ marginRight: 10 }}
                 $primary
-                htmlType='reset'
+                htmlType="reset"
               >
                 Hủy
               </ButtonPrimary>
-              <ButtonPrimary onClick={handleOk} htmlType='submit'>
+              <ButtonPrimary onClick={handleOk} htmlType="submit">
                 Lưu
               </ButtonPrimary>
             </Form.Item>
@@ -406,17 +418,17 @@ const BasicInformation = () => {
 const RemoveAlert = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
 
   const removeItem = () => {
-    remove({ endpoint: `/accounts/profile/${auth.id}` })
-      .then((res) => {
+    remove({ endpoint: `/accounts/profile/${user.id}` })
+      .then(res => {
         notification.success({
           message: 'Tài khoản đã bị xóa',
         });
         navigate('/');
       })
-      .catch((error) => {
+      .catch(error => {
         notification.error({
           message: 'Có lỗi xảy ra trong quá trình xoá',
         });
@@ -443,7 +455,7 @@ const RemoveAlert = () => {
           color: color.colorWhite,
           backgroundColor: color.colorWarning,
         }}
-        htmlType='submit'
+        htmlType="submit"
       >
         Xóa tài khoản
       </ButtonPrimary>
@@ -462,21 +474,20 @@ const RemoveAlert = () => {
 const ChangePassword = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [informationUser, setInformationUser] = useRecoilState(clientProfile);
+  const informationUser = useRecoilValue(clientProfile);
 
   const handleOk = () => {
     form
       .validateFields()
-      .then((values) => {
-        console.log('Received values:', values);
+      .then(values => {
         changePassword(values);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Validation failed:', error);
       });
   };
 
-  const changePassword = (values) => {
+  const changePassword = values => {
     const { password, confirmPassword } = values;
     put({
       endpoint: `/accounts/password/${informationUser.accountId}`,
@@ -485,13 +496,13 @@ const ChangePassword = () => {
         newPassword: confirmPassword,
       },
     })
-      .then((res) => {
+      .then(res => {
         notification.success({
           message: 'Đổi mật khẩu thành công!',
         });
         navigate(-1);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error.response.data.message);
 
         if (error.response.status === 403) {
@@ -508,7 +519,7 @@ const ChangePassword = () => {
 
   return (
     <>
-      <Form form={form} name='changePassword'>
+      <Form form={form} name="changePassword">
         <Row gutter={[10, 10]} style={{ padding: 5 }}>
           <Col span={24}>
             <Typography.Title level={4}>Mật khẩu hiện tại</Typography.Title>
@@ -523,8 +534,8 @@ const ChangePassword = () => {
             >
               <Input
                 style={{ width: '100%' }}
-                type='password'
-                placeholder='Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường'
+                type="password"
+                placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
                 controls={false}
               />
             </Form.Item>
@@ -542,8 +553,8 @@ const ChangePassword = () => {
             >
               <Input
                 style={{ width: '100%' }}
-                type='password'
-                placeholder='Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường'
+                type="password"
+                placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
                 controls={false}
               />
             </Form.Item>
@@ -570,8 +581,8 @@ const ChangePassword = () => {
             >
               <Input
                 style={{ width: '100%' }}
-                type='password'
-                placeholder='Giống với mật khẩu mới'
+                type="password"
+                placeholder="Giống với mật khẩu mới"
                 controls={false}
               />
             </Form.Item>
@@ -581,11 +592,11 @@ const ChangePassword = () => {
               <ButtonPrimary
                 style={{ marginRight: 10 }}
                 $primary
-                htmlType='reset'
+                htmlType="reset"
               >
                 Hủy
               </ButtonPrimary>
-              <ButtonPrimary htmlType='submit' onClick={handleOk}>
+              <ButtonPrimary htmlType="submit" onClick={handleOk}>
                 Lưu
               </ButtonPrimary>
             </Form.Item>
@@ -596,7 +607,7 @@ const ChangePassword = () => {
   );
 };
 
-const getItems = (panelStyle) => [
+const getItems = panelStyle => [
   {
     key: '1',
     label: (
@@ -621,9 +632,7 @@ const getItems = (panelStyle) => [
 
 const EditProfileClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const onChange = (key) => {
-    console.log(key);
-  };
+
   useEffect(() => {}, []);
 
   const panelStyle = {
@@ -642,9 +651,8 @@ const EditProfileClient = () => {
         <Collapse
           items={getItems(panelStyle)}
           defaultActiveKey={['1']}
-          onChange={onChange}
           expandIconPosition={'end'}
-          size='large'
+          size="large"
           style={{
             border: 'none',
             background: '#f7f8f9',

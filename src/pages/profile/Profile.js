@@ -1,7 +1,6 @@
 import { Layout } from "antd";
 import React, { useEffect } from "react";
 import { get } from "utils/APICaller";
-import Overview from "./Overview";
 import Certificates from "./Certificates";
 import {  useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -9,19 +8,28 @@ import {
   authState,
   freelancerState,
 } from "recoil/atom";
+import Overview from "./Overview";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const setFreelancer = useSetRecoilState(freelancerState);
   const setApplications = useSetRecoilState(applicationListState);
+  const { id } = useParams();
 
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    getFreelancer();
+    let freelancerId = "";
+    if (auth.role === "freelancer") {
+      freelancerId = auth.id;
+    } else if (auth.role === "client") {
+      freelancerId = id;
+    }
+    getFreelancer(freelancerId);
   }, []);
 
-  const getFreelancer = () => {
-    get({ endpoint: `/freelancer/profile/${auth.id}` })
+  const getFreelancer = (freelancerId) => {
+    get({ endpoint: `/freelancer/profile/${freelancerId}` })
       .then((response) => {
         const data = response.data;
         setFreelancer(data);
@@ -36,7 +44,9 @@ const Profile = () => {
     get({ endpoint: `/application/freelancer/${freelancerId}` })
       .then((response) => {
         const data = response.data;
-        let applications = data.filter(application => application.status === 'approved')
+        let applications = data.filter(
+          (application) => application.status === "approved"
+        );
         setApplications(applications);
       })
       .catch((error) => {

@@ -9,12 +9,9 @@ import Application from './Application';
 
 const JobDetail = () => {
   const setJobDetail = useSetRecoilState(jobDetailState);
-  const setClient = useSetRecoilState(clientProfile);
-  const auth = useRecoilValue(authState);
   let { id } = useParams();
   useEffect(() => {
     getJobDetail();
-    getClient();
   }, []);
 
   const getJobDetail = async () => {
@@ -22,19 +19,6 @@ const JobDetail = () => {
       .then((response) => {
         const data = response.data;
         setJobDetail(data);
-      })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
-      });
-  };
-
-  const getClient = async () => {
-    await get({ endpoint: `/client/profile/${auth.id}` })
-      .then((response) => {
-        const data = response.data;
-        setClient(data);
       })
       .catch((error) => {
         notification.error({

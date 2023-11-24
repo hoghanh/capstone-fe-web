@@ -1,4 +1,4 @@
-import { ClockCircleFilled, InboxOutlined } from '@ant-design/icons';
+import { ClockCircleFilled, InboxOutlined } from "@ant-design/icons";
 import {
   Col,
   List,
@@ -9,13 +9,13 @@ import {
   Skeleton,
   notification,
   Spin,
-} from 'antd';
+} from "antd";
 import {
   CustomCard,
   CustomCol,
   CustomDivider,
   CustomRow,
-} from 'components/customize/Layout';
+} from "components/customize/Layout";
 import {
   BookMark,
   BookMarkOutlined,
@@ -43,7 +43,7 @@ import socket from 'config';
 
 const { Dragger } = Upload;
 
-const SubmitApplication = () => {
+const SubmitApplication = ({status, setStatus}) => {
   const freelancer = useRecoilValue(freelancerState);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,12 +67,10 @@ const SubmitApplication = () => {
     const file = event.dragger[0].originFileObj;
 
     if (!file) return;
-
     const storageRef = ref(storage, `applications/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
@@ -90,10 +88,9 @@ const SubmitApplication = () => {
     );
   };
 
-  const createApplication = async (values, url) => {
+  const createApplication = (values, url) => {
     const { description } = values;
     const time = new Date();
-    console.log(url, description, time, freelancer.id, id);
     post({
       endpoint: `/application`,
       body: {
@@ -113,7 +110,7 @@ const SubmitApplication = () => {
         );
 
         notification.success({
-          message: 'Ứng tuyển thành công',
+          message: "Ứng tuyển thành công",
         });
 
         return () => {
@@ -131,11 +128,19 @@ const SubmitApplication = () => {
     form
       .validateFields()
       .then((values) => {
-        uploadFile(values);
+        if (
+          values.dragger !== undefined &&
+          values.dragger !== null &&
+          values.dragger !== ""
+        ) {
+          uploadFile(values);
+        } else {
+          createApplication(values);
+        }
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.error('Validation failed:', error);
+        console.error("Validation failed:", error);
       });
   };
 
@@ -151,7 +156,7 @@ const SubmitApplication = () => {
   };
 
   const props = {
-    name: 'files',
+    name: "files",
     maxCount: 1,
     beforeUpload: () => false,
   };
@@ -160,16 +165,16 @@ const SubmitApplication = () => {
     <>
       <ButtonPrimary onClick={showModal}>Gửi CV/Resume</ButtonPrimary>
       <ModalPrimary
-        title={'Chi tiết ứng tuyển'}
+        title={"Chi tiết ứng tuyển"}
         open={isModalOpen}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText={'Gửi đi'}
+        okText={"Gửi đi"}
       >
         <Form
           form={form}
-          name='submitApplication'
+          name="submitApplication"
           initialValues={{ remember: true }}
         >
           <Row gutter={[0, 10]}>
@@ -182,21 +187,21 @@ const SubmitApplication = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='description'
+                    name="description"
                     rules={[
                       {
                         required: true,
-                        message: 'Xin không để trường nhập trống!',
+                        message: "Xin không để trường nhập trống!",
                       },
                     ]}
                   >
                     <TextArea
-                      className='introText'
+                      className="introText"
                       showCount
                       allowClear={true}
                       maxLength={1000}
                       rows={5}
-                      placeholder='textarea'
+                      placeholder="textarea"
                     />
                   </Form.Item>
                 </Col>
@@ -211,16 +216,15 @@ const SubmitApplication = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='dragger'
-                    valuePropName='fileList'
+                    name="dragger"
+                    valuePropName="fileList"
                     getValueFromEvent={normFile}
-                    rules={[{ required: true, message: 'Xin hãy tải tệp lên' }]}
                   >
                     <Dragger {...props}>
-                      <p className='ant-upload-drag-icon'>
+                      <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                       </p>
-                      <p className='ant-upload-text'>Kéo hoặc chọn tệp</p>
+                      <p className="ant-upload-text">Kéo hoặc chọn tệp</p>
                     </Dragger>
                   </Form.Item>
                 </Col>
@@ -241,7 +245,7 @@ const HeaderArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
 
   useEffect(() => {
-    if (auth.role === 'freelancer') {
+    if (auth.role === "freelancer") {
       getFavorite();
     } else {
       setFavoriteList([]);
@@ -255,9 +259,7 @@ const HeaderArticle = () => {
         setFavoriteList(idList);
       })
       .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
+        console.log(error);
       });
   };
 
@@ -302,19 +304,19 @@ const HeaderArticle = () => {
   const handleFavoriteChange = (id) => {
     setIsLoading(true);
     switch (auth.role) {
-      case 'freelancer':
+      case "freelancer":
         if (!favoriteList.includes(id)) {
           addFavorite(id);
         } else {
           removeFavorite(id);
         }
         break;
-      case 'client':
-        notification.error('Bạn không thể thêm hoặc xóa job yêu thích');
+      case "client":
+        notification.error("Bạn không thể thêm hoặc xóa job yêu thích");
         setIsLoading(false);
         break;
       default:
-        notification.error('Hãy đăng nhập!');
+        notification.error("Hãy đăng nhập!");
         setIsLoading(false);
         break;
     }
@@ -337,11 +339,11 @@ const HeaderArticle = () => {
               span={11}
               style={{
                 ...styles.headerRight,
-                alignItems: 'flex-end',
+                alignItems: "flex-end",
               }}
             >
               <Typography.Title level={4} style={styles.headerTitleRight}>
-                {FormatVND(jobDetail.lowestIncome)} -{' '}
+                {FormatVND(jobDetail.lowestIncome)} -{" "}
                 {FormatVND(jobDetail.highestIncome)}
               </Typography.Title>
               <div>
@@ -356,10 +358,10 @@ const HeaderArticle = () => {
             <Col
               span={2}
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
               }}
               onClick={() => handleFavoriteChange(jobDetail.id)}
             >
@@ -384,7 +386,7 @@ const HeaderArticle = () => {
                 </Col>
                 <Col span={24}>
                   <Typography.Title level={4} style={styles.headerTitleRight}>
-                    {FormatVND(jobDetail.lowestIncome)} -{' '}
+                    {FormatVND(jobDetail.lowestIncome)} -{" "}
                     {FormatVND(jobDetail.highestIncome)}
                   </Typography.Title>
                 </Col>
@@ -392,7 +394,7 @@ const HeaderArticle = () => {
                   <Typography.Text style={styles.headerTextRight}>
                     {jobDetail.applied} Freelancer đã ứng tuyển
                   </Typography.Text>
-                </Col>{' '}
+                </Col>{" "}
                 <Col span={24}>
                   <div>
                     <ClockCircleFilled />
@@ -408,11 +410,11 @@ const HeaderArticle = () => {
             <Col
               span={2}
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                padding: '10px 0px',
-                cursor: 'pointer',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                padding: "10px 0px",
+                cursor: "pointer",
               }}
               onClick={() => handleFavoriteChange(jobDetail.id)}
             >
@@ -450,6 +452,7 @@ const DescriptionsArticle = ({ description }) => {
 
 //Attachment
 const AttachmentArticle = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <CustomRow>
       <Col span={24}>
@@ -457,41 +460,62 @@ const AttachmentArticle = () => {
           Tệp tin đính kèm
         </Typography.Title>
       </Col>
-      <CustomCol span={24} style={{ display: 'flex' }}>
+      <CustomCol span={24} style={{ display: "flex" }}>
         <PaperClipOutlined />
-        <Typography.Text
-          underline={true}
-          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}
-        >
-          fileAttachName.doc
-        </Typography.Text>
+        {jobDetail.fileAttachment ? (
+          <Typography.Link
+            href={jobDetail.fileAttachment}
+            target="_blank"
+            underline={true}
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: color.colorPrimary,
+              cursor: "pointer",
+            }}
+          >
+            fileCV.pdf
+          </Typography.Link>
+        ) : (
+          <Typography.Text
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: "#ccc",
+              cursor: "not-allowed",
+            }}
+          >
+            fileCV.pdf
+          </Typography.Text>
+        )}
       </CustomCol>
     </CustomRow>
   );
 };
 
-//Skill
 const SkillArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
   const SkeletonSkills = () => {
     const skeletonButtons = Array.from({ length: 5 }, (_, index) => (
-      <Skeleton.Button key={index} active shape={'round'} />
+      <Skeleton.Button key={index} active shape={"round"} />
     ));
 
-    return <div style={{ display: 'flex', gap: 15 }}>{skeletonButtons}</div>;
+    return <div style={{ display: "flex", gap: 15 }}>{skeletonButtons}</div>;
   };
 
   return (
-    <CustomRow className='skillArticle' gutter={[0, 10]}>
+    <CustomRow className="skillArticle" gutter={[0, 10]}>
       <Col span={24}>
         <Typography.Title level={5} style={{ margin: 0 }}>
           Yêu cầu kỹ năng
         </Typography.Title>
       </Col>
       <CustomCol span={24}>
-        {jobDetail.skills.id !== '' ? (
+        {jobDetail.skills.id !== "" ? (
           <List
-            style={{ overflowX: 'auto' }}
+            style={{ overflowX: "auto" }}
             grid={{
               gutter: 15,
             }}
@@ -502,10 +526,10 @@ const SkillArticle = () => {
                 style={{
                   fontWeight: 700,
                   fontSize: 14,
-                  padding: '5px 10px',
+                  padding: "5px 10px",
                   backgroundColor: color.colorBluishCyan,
                   borderRadius: 25,
-                  whiteSpace: 'nowrap',
+                  whiteSpace: "nowrap",
                 }}
               >
                 {item.name}
@@ -529,8 +553,8 @@ const AboutCustomer = () => {
         <Typography.Title
           level={4}
           style={{
-            fontStyle: 'normal',
-            margin: '0 0 0 -10px',
+            fontStyle: "normal",
+            margin: "0 0 0 -10px",
             paddingBottom: 20,
           }}
         >
@@ -539,39 +563,23 @@ const AboutCustomer = () => {
       </Col>
       <CustomCol
         span={24}
-        style={{ display: 'flex', gap: 10, flexDirection: 'column' }}
+        style={{ display: "flex", gap: 10, flexDirection: "column" }}
       >
         <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
           Công ty
         </Typography.Text>
-        <Typography.Title
-          className={css.titleAboutCustomer}
-          level={5}
-          style={{
-            margin: '0 0 10px 0',
-            textAlign: 'center',
-          }}
-        >
-          {jobDetail.clients.accounts.name.toUpperCase()}
-        </Typography.Title>
-      </CustomCol>
-      <CustomCol
-        span={24}
-        style={{ display: 'flex', gap: 10, flexDirection: 'column' }}
-      >
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
-          Bài viết đã đăng
-        </Typography.Text>
-        <Typography.Title
-          className={css.titleAboutCustomer}
-          level={5}
-          style={{
-            margin: '0 0 10px 0',
-            textAlign: 'center',
-          }}
-        >
-          3 bài viết đã đăng
-        </Typography.Title>
+        <Link to={`/profile-client/${jobDetail?.clients.accountId}`} state={{clientId: jobDetail?.clientId}}>
+          <Typography.Title
+            className={css.titleAboutCustomer}
+            level={5}
+            style={{
+              margin: "0 0 10px 0",
+              textAlign: "center",
+            }}
+          >
+            {jobDetail?.clients?.accounts?.name.toUpperCase()}
+          </Typography.Title>
+        </Link>
       </CustomCol>
     </CustomRow>
   );
@@ -583,38 +591,38 @@ const ContactInfo = () => {
   return (
     <CustomRow gutter={[0, 10]}>
       <Col span={24}>
-        <Typography.Title level={5} style={{ margin: '0 0 0 -5px' }}>
+        <Typography.Title level={5} style={{ margin: "0 0 0 -5px" }}>
           Thông tin sơ bộ
         </Typography.Title>
       </Col>
-      <Col span={24} style={{ display: 'flex' }}>
+      <Col span={24} style={{ display: "flex" }}>
         <MapMarkerAlt />
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.address != null
-            ? jobDetail.clients.accounts.address
-            : 'Chưa xác minh'}
+          {jobDetail?.clients?.accounts?.address != null
+            ? jobDetail?.clients?.accounts?.address
+            : "Chưa xác minh"}
         </Typography.Text>
       </Col>
-      <Col span={24} style={{ display: 'flex' }}>
+      <Col span={24} style={{ display: "flex" }}>
         <Envelope />
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
           {jobDetail.clients.accounts.email != null
             ? jobDetail.clients.accounts.email
-            : 'Chưa xác minh'}
+            : "Chưa xác minh"}
         </Typography.Text>
       </Col>
-      <Col span={24} style={{ display: 'flex' }}>
+      <Col span={24} style={{ display: "flex" }}>
         <PhoneAlt />
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
           {jobDetail.clients.accounts.phone != null
             ? jobDetail.clients.accounts.phone
-            : 'Chưa xác minh'}
+            : "Chưa xác minh"}
         </Typography.Text>
       </Col>
     </CustomRow>
@@ -641,7 +649,7 @@ const ArticleLeft = () => {
   );
 };
 
-const InformationRight = ({ showModalLogin }) => {
+const InformationRight = ({ showModalLogin, status, setStatus }) => {
   const auth = useRecoilValue(authState);
   return (
     <Col
@@ -652,42 +660,39 @@ const InformationRight = ({ showModalLogin }) => {
         borderLeft: `1px solid ${color.colorBlueWhale}`,
       }}
     >
-      <Row style={{ justifyContent: 'center' }}>
+      <Row style={{ justifyContent: "center" }}>
         {/* Đăng nhập và phân quyền nếu đăng nhập  */}
-        <Col
-          style={{
-            margin: '20px 0',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {auth.email ? (
-            <SubmitApplication />
-          ) : (
-            <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
-          )}
-        </Col>
-        {/* Sau khi được nhận việc  */}
-        {/* <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Row>
-            <Col span={24}>
-              <Typography.Title level={5} style={styles.titleSection}>
-                Hợp đồng
-              </Typography.Title>
-            </Col>
-            <CustomCol span={24} style={{ display: 'flex' }}>
-              <PaperClipOutlined />
-              <Typography.Text
-                underline={false}
-                style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+        {auth.email ? (
+          status ? null : (
+            <>
+              <Col
+                style={{
+                  margin: "20px 0",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                HopDongLamViec.pdf
-              </Typography.Text>
-            </CustomCol>
-          </Row>
-        </Col> */}
-        <CustomDivider />
+                <SubmitApplication status={status} setStatus={setStatus} />
+              </Col>
+              <CustomDivider/>
+            </>
+          )
+        ) : (
+          <>
+            <Col
+              style={{
+                margin: "20px 0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+            </Col>
+            <CustomDivider/>
+          </>
+        )}
         <AboutCustomer />
         <CustomDivider />
         <ContactInfo />
@@ -704,7 +709,7 @@ const InformationResponsive = ({ showModalLogin }) => {
       xs={{ span: 24 }}
       style={{
         padding: 10,
-        boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
+        boxShadow: "2px 6px 4px 0px rgba(0, 0, 0, 0.25)",
         marginBottom: 30,
         borderRadius: 20,
         backgroundColor: color.colorWhite,
@@ -712,7 +717,7 @@ const InformationResponsive = ({ showModalLogin }) => {
     >
       <Row
         className={css.containerInfoRes}
-        style={{ justifyContent: 'center' }}
+        style={{ justifyContent: "center" }}
       >
         {/* Sau khi được nhận việc  */}
         {/* <Col className={css.cardContract} style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -742,15 +747,16 @@ const InformationResponsive = ({ showModalLogin }) => {
   );
 };
 
-const Details = () => {
+const Details = ({ status, setStatus }) => {
   const jobDetail = useRecoilValue(jobDetailState);
   const [, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const auth = useRecoilValue(authState);
-
+  
   const showModalLogin = () => {
     setOpenLogin(true);
   };
+
   const handleOkLogin = () => {
     setLoading(false);
     setTimeout(() => {
@@ -758,6 +764,7 @@ const Details = () => {
       setOpenLogin(false);
     }, 3000);
   };
+
   const handleCancelLogin = () => {
     setOpenLogin(false);
   };
@@ -776,60 +783,74 @@ const Details = () => {
       <CustomCard style={{ marginBottom: 30 }}>
         <CustomRow gutter={[20, 0]}>
           <ArticleLeft jobDetail={jobDetail} />
-          <InformationRight showModalLogin={showModalLogin} />
+          <InformationRight showModalLogin={showModalLogin} status={status} setStatus={setStatus} />
         </CustomRow>
       </CustomCard>
       <InformationResponsive />
-
-      {/* Đăng nhập và phân quyền nếu đăng nhập  */}
-      <div
-        className={css.buttonLogin}
-        style={{
-          margin: '20px 0',
-          display: 'none',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        }}
-      >
-        {auth.email ? (
-          <SubmitApplication />
+      {auth.email ? (
+          status ? null : (
+            <>
+              <Col
+                style={{
+                  margin: "20px 0",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <SubmitApplication status={status} setStatus={setStatus} />
+              </Col>
+              <CustomDivider/>
+            </>
+          )
         ) : (
-          <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+          <>
+            <Col
+              style={{
+                margin: "20px 0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+            </Col>
+            <CustomDivider/>
+          </>
         )}
-      </div>
     </>
   );
 };
 
 const styles = {
-  titlePost: { padding: '10px 30px', margin: '20px 0' },
+  titlePost: { padding: "10px 30px", margin: "20px 0" },
 
   //Article Right
   headerRight: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
 
   headerTitleRight: {
-    lineHeight: 'normal',
+    lineHeight: "normal",
     margin: 0,
   },
 
   headerTextRight: {
-    color: '#000',
-    fontFamily: 'Montserrat',
+    color: "#000",
+    fontFamily: "Montserrat",
     fontSize: 14,
-    fontStyle: 'normal',
+    fontStyle: "normal",
     fontWeight: 400,
   },
 
-  titleSection: { margin: '0 0 10px 0' },
+  titleSection: { margin: "0 0 10px 0" },
 
   iconBookmark: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 };
 
