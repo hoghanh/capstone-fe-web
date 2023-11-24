@@ -49,64 +49,9 @@ const accounts = {
   updatedAt: '',
 };
 
-const jobskill = {
-  jobSkillId: 0,
-  createdAt: '',
-  updatedAt: '',
-  jobId: 0,
-  skillId: 0,
-};
-
-const skills = {
-  id: '',
-  name: '',
-  description: '',
-  jobskill: jobskill,
-};
-
-const clients = {
-  accountId: 0,
-  accounts: accounts,
-  companyWebsite: '',
-  id: 0,
-  status: '',
-  taxCode: null,
-  applied: 0,
-  createAt: '',
-  updateAt: '',
-};
-
-const applications = {
-  id: '',
-  description: '',
-  fileAttach: '',
-  sendDate: '',
-  status: '',
-  createdAt: '',
-  updatedAt: '',
-  freelancerId: '',
-  jobId: '',
-};
-
 export const jobDetailState = atom({
   key: 'jobDetailState',
-  default: {
-    id: '',
-    title: '',
-    description: '',
-    fileAttachment: '',
-    applicationSubmitDeadline: '',
-    lowestIncome: 0,
-    highestIncome: 0,
-    applied: 0,
-    status: '',
-    createdAt: '',
-    updatedAt: '',
-    clientId: 0,
-    clients: clients,
-    skills: skills,
-    applications: applications,
-  },
+  default: {},
 });
 
 export const freelancerState = atom({
