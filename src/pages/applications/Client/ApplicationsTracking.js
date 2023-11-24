@@ -11,6 +11,7 @@ import {
   notification,
   Dropdown,
   Pagination,
+  Tag
 } from 'antd';
 import {
   CustomCol,
@@ -405,6 +406,14 @@ const TabSent = ({ activeTabKey, value }) => {
                                   style={{ margin: 0 }}
                                 >
                                   {application?.freelancers.accounts.name}
+                                  {application?.freelancers.hired ? (
+                                    <Tag
+                                      style={{ marginLeft: 10 }}
+                                      color="green"
+                                    >
+                                      Nhân lực cũ
+                                    </Tag>
+                                  ) : null}
                                 </Typography.Title>
                               </Link>
                             </Col>
