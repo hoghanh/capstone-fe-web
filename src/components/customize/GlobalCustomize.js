@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { Button } from 'antd';
 import color from 'styles/color';
 
+
 const ButtonPrimary = styled(Button)`
   font-weight: 700;
   font-size: 16px;
