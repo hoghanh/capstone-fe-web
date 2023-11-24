@@ -324,7 +324,7 @@ const TabSent = ({ activeTabKey, value }) => {
     });
     setList(filtered);
   }
-  }, [search, activeTabKey, applicationList]);
+  }, [search, activeTabKey, applicationList, value]);
 
   const getApplications = () => {
     get({ endpoint: `/application/job/1` })

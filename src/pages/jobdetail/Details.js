@@ -593,8 +593,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.email != null
-            ? jobDetail.clients.accounts.email
+          {jobDetail.clients.accounts?.email != null
+            ? jobDetail.clients.accounts?.email
             : "Chưa xác minh"}
         </Typography.Text>
       </Col>
@@ -603,8 +603,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.phone != null
-            ? jobDetail.clients.accounts.phone
+          {jobDetail.clients.accounts?.phone != null
+            ? jobDetail.clients.accounts?.phone
             : "Chưa xác minh"}
         </Typography.Text>
       </Col>
