@@ -22,7 +22,9 @@ import { get, post } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import { useRecoilValue } from 'recoil';
-import { authState } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
+import dayjs from 'dayjs';
+
 
 const PostJob = () => {
   const { useBreakpoint } = Grid;
@@ -32,12 +34,14 @@ const PostJob = () => {
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
 
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
 
   useEffect(() => {
-    getCategory();
-    getSkill();
-  }, []);
+    if (user) {
+      getCategory();
+      getSkill();
+    }
+  }, [user]);
 
   const navigate = useNavigate();
 
@@ -64,7 +68,7 @@ const PostJob = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `jobs/client-${auth.id}/${file.name}`);
+    const storageRef = ref(storage, `jobs/client-${user.id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -112,8 +116,8 @@ const PostJob = () => {
         applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
-        clientId: auth.id,
-        status: true,
+        clientId: user.id,
+        status: 'open',
         subCategory: values.category,
         skill: values.skills,
       },
@@ -386,6 +390,12 @@ const PostJob = () => {
                 format="YYYY-MM-DD HH:mm:ss"
                 placeholder="Chọn ngày giờ"
                 locale={locale}
+                showNow={false}
+                disabledDate={(current) => {
+                  return (
+                    current && current.isBefore(dayjs().endOf('day'))
+                  );
+                }}
               />
             </Form.Item>
             <Form.Item style={{ textAlign: "right" }}>

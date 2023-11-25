@@ -22,7 +22,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { authState, clientProfile } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 import color from 'styles/color';
 import { put, remove } from 'utils/APICaller';
 

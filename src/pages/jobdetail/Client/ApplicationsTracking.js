@@ -23,7 +23,7 @@ import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { clientProfile, valueSearchState } from 'recoil/atom';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post, put } from 'utils/APICaller';
 import { EllipsisOutlined } from '@ant-design/icons';
@@ -267,8 +267,8 @@ const TabSent = ({ activeTabKey, value }) => {
   const [isIdItem, setIsIdItem] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
-
   const user = useRecoilValue(clientProfile);
+  const { id } = useParams();
 
   useEffect(() => {
     getApplications();
@@ -327,10 +327,9 @@ const TabSent = ({ activeTabKey, value }) => {
   }, [search, activeTabKey, applicationList, value]);
 
   const getApplications = () => {
-    get({ endpoint: `/application/job/1` })
+    get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         let applications = response.data;
-        console.log(applications);
         setApplicationList(applications);
       })
       .catch((error) => {

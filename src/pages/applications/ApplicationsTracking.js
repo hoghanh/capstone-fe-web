@@ -8,10 +8,7 @@ import {
   Empty,
   Pagination,
 } from 'antd';
-import {
-  CustomDivider,
-  CustomRow,
-} from 'components/customize/Layout';
+import { CustomDivider, CustomRow } from 'components/customize/Layout';
 import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
@@ -32,13 +29,16 @@ const tabList = [
     key: 'interview',
     label: 'Phỏng vấn',
   },
+  {
+    key: 'approved',
+    label: 'Đã nhận',
+  },
 
   {
     key: 'declined',
     label: 'Từ chối',
   },
 ];
-
 
 const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
@@ -47,16 +47,13 @@ const TabSent = ({ activeTabKey, value }) => {
   const [ellipsis, setEllipsis] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
-  const user = useRecoilValue(freelancerState); 
-  
+  const user = useRecoilValue(freelancerState);
 
   useEffect(() => {
-    if(user){
+    if (user) {
       getApplications(user);
     }
   }, [user]);
-
-
 
   useEffect(() => {
     if (value) {
@@ -77,6 +74,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.status === 'interview'
             : item.jobs.title.toLowerCase().includes(search) &&
                 item.status === 'interview';
+        } else if (activeTabKey === 'approved') {
+          return search === ''
+            ? item.status === 'approved'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'approved';
         } else if (activeTabKey === 'declined') {
           return search === ''
             ? item.status === 'declined'
@@ -87,27 +89,32 @@ const TabSent = ({ activeTabKey, value }) => {
       });
       setList(filtered);
     } else {
-    const filtered = applicationList.filter((item) => {
-      if (activeTabKey === 'Sent') {
-        return search === ''
-          ? item.status === 'Sent'
-          : item.jobs.title.toLowerCase().includes(search) &&
-              item.status === 'Sent';
-      } else if (activeTabKey === 'interview') {
-        return search === ''
-          ? item.status === 'interview'
-          : item.jobs.title.toLowerCase().includes(search) &&
-              item.status === 'interview';
-      } else if (activeTabKey === 'declined') {
-        return search === ''
-          ? item.status === 'declined'
-          : item.jobs.title.toLowerCase().includes(search) &&
-              item.status === 'declined';
-      }
-      return true;
-    });
-    setList(filtered);
-  }
+      const filtered = applicationList.filter((item) => {
+        if (activeTabKey === 'Sent') {
+          return search === ''
+            ? item.status === 'Sent'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'Sent';
+        } else if (activeTabKey === 'interview') {
+          return search === ''
+            ? item.status === 'interview'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'interview';
+        } else if (activeTabKey === 'approved') {
+          return search === ''
+            ? item.status === 'approved'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.status === 'declined'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'declined';
+        }
+        return true;
+      });
+      setList(filtered);
+    }
   }, [search, activeTabKey, applicationList, value]);
 
   const getApplications = (user) => {
@@ -137,127 +144,127 @@ const TabSent = ({ activeTabKey, value }) => {
 
   return (
     <Row>
-    {list.length === 0 || list === null ? (
-      <Col span={24}>
-        <Empty />
-      </Col>
-    ) : (
-      getPagedList().map((application, index) => {
-        return (
-          <Col key={index} span={24}>
-            <Row
-              style={{
-                paddingTop: 20,
-                paddingBottom: 20,
-                paddingLeft: 20,
-                paddingRight: 20,
-              }}
-              gutter={[0, 5]}
-            >
-              <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                <Row justify={'space-between'}>
-                  <Col>
-                    <Row gutter={[0, 10]}>
-                      <Col span={24}>
-                        <Link
-                          to={`/jobs/job-detail/${application.jobId}`}
-                          target="_blank"
-                        >
-                          <Typography.Title level={4} style={{ margin: 0 }}>
-                            {application.jobs.title}
-                          </Typography.Title>
-                        </Link>
-                      </Col>
-                      <Col span={24}>
-                        <Typography.Text style={{ margin: 0 }}>
-                          Công ty: {application.jobs.clients?.accounts?.name}
-                        </Typography.Text>
-                      </Col>
-                      <Col span={24}>
-                        <Typography.Text style={{ margin: 0 }}>
-                          Ngày gửi: {formatDate(application.sendDate)}
-                        </Typography.Text>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-              </Col>
+      {list.length === 0 || list === null ? (
+        <Col span={24}>
+          <Empty />
+        </Col>
+      ) : (
+        getPagedList().map((application, index) => {
+          return (
+            <Col key={index} span={24}>
+              <Row
+                style={{
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                }}
+                gutter={[0, 5]}
+              >
+                <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
+                  <Row justify={'space-between'}>
+                    <Col>
+                      <Row gutter={[0, 10]}>
+                        <Col span={24}>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
+                            <Typography.Title level={4} style={{ margin: 0 }}>
+                              {application.jobs.title}
+                            </Typography.Title>
+                          </Link>
+                        </Col>
+                        <Col span={24}>
+                          <Typography.Text style={{ margin: 0 }}>
+                            Công ty: {application.jobs.clients?.accounts?.name}
+                          </Typography.Text>
+                        </Col>
+                        <Col span={24}>
+                          <Typography.Text style={{ margin: 0 }}>
+                            Ngày gửi: {formatDate(application.sendDate)}
+                          </Typography.Text>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </Col>
 
-              <Col span={24}>
-                <Typography.Paragraph
-                  style={{
-                    margin: 0,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    cursor: 'pointer',
-                    textAlign: 'justify',
-                  }}
-                  ellipsis={
-                    ellipsis
-                      ? {
-                          rows: 3,
-                        }
-                      : false
-                  }
-                  onClick={() => setEllipsis(!ellipsis)}
-                >
-                  {application.description}
-                </Typography.Paragraph>
-              </Col>
-              <Col span={24}>
-                <CustomRow align={'middle'}>
-                  <Col>
-                    <PaperClipOutlined />
-                  </Col>
-                  <Col>
-                    {application.fileAttach ? (
-                      <Typography.Link
-                        href={application.fileAttach}
-                        target="_blank"
-                        underline={true}
-                        style={{
-                          fontWeight: 700,
-                          fontSize: 14,
-                          marginLeft: 5,
-                          color: color.colorPrimary,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        fileCV.pdf
-                      </Typography.Link>
-                    ) : (
-                      <Typography.Text
-                        style={{
-                          fontWeight: 700,
-                          fontSize: 14,
-                          marginLeft: 5,
-                          color: '#ccc',
-                          cursor: 'not-allowed',
-                        }}
-                      >
-                        fileCV.pdf
-                      </Typography.Text>
-                    )}
-                  </Col>
-                </CustomRow>
-              </Col>
-            </Row>
-            <CustomDivider />
-          </Col>
-        );
-      })
-    )}
-    <Col span={24}>
-      <Pagination
-        current={page}
-        total={list.length}
-        showSizeChanger={false}
-        pageSize={pageSize}
-        onChange={handleChange}
-        style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
-      />
-    </Col>
-  </Row>
+                <Col span={24}>
+                  <Typography.Paragraph
+                    style={{
+                      margin: 0,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      cursor: 'pointer',
+                      textAlign: 'justify',
+                    }}
+                    ellipsis={
+                      ellipsis
+                        ? {
+                            rows: 3,
+                          }
+                        : false
+                    }
+                    onClick={() => setEllipsis(!ellipsis)}
+                  >
+                    {application.description}
+                  </Typography.Paragraph>
+                </Col>
+                <Col span={24}>
+                  <CustomRow align={'middle'}>
+                    <Col>
+                      <PaperClipOutlined />
+                    </Col>
+                    <Col>
+                      {application.fileAttach ? (
+                        <Typography.Link
+                          href={application.fileAttach}
+                          target="_blank"
+                          underline={true}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Link>
+                      ) : (
+                        <Typography.Text
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: '#ccc',
+                            cursor: 'not-allowed',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Text>
+                      )}
+                    </Col>
+                  </CustomRow>
+                </Col>
+              </Row>
+              <CustomDivider />
+            </Col>
+          );
+        })
+      )}
+      <Col span={24}>
+        <Pagination
+          current={page}
+          total={list.length}
+          showSizeChanger={false}
+          pageSize={pageSize}
+          onChange={handleChange}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+        />
+      </Col>
+    </Row>
   );
 };
 
@@ -310,7 +317,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <Search
-            placeholder='Tìm kiếm...'
+            placeholder="Tìm kiếm..."
             allowClear
             onSearch={onSearch}
             style={{
@@ -345,7 +352,7 @@ const ApplicationsTracking = () => {
             locale={locale}
           />
         </Col>
-        <Col className='trackingJobs' span={24}>
+        <Col className="trackingJobs" span={24}>
           <Card
             style={{
               width: '100%',

@@ -183,6 +183,7 @@ const Interview = ({
                     ]}
                   >
                     <DatePicker
+                      timezone="UTC"
                       style={{ with: '100%' }}
                       showTime
                       showNow={false}
