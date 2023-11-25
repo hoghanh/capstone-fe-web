@@ -172,9 +172,6 @@ const JobList = () => {
 
   const onChange = (pageNumber) => {
     if (sortOption === 'Recommend') {
-
-
-
       setPageRecommended(pageNumber);
     } else {
       setPage(pageNumber);

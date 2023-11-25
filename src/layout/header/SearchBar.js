@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Input,
   Image,
@@ -16,7 +16,6 @@ import {
 import { MenuOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { useRecoilState, useRecoilValue } from 'recoil';
-
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import useAuthActions from 'recoil/action';
@@ -62,34 +61,34 @@ const Search = () => {
 
   const items = results.length
     ? results.map((result, index) => ({
-        label: (
-          <Link
-            to={
-              result.tag === 'freelancer'
-                ? `/profile/${result.id}`
-                : result.tag === 'client'
+      label: (
+        <Link
+          to={
+            result.tag === 'freelancer'
+              ? `/profile/${result.id}`
+              : result.tag === 'client'
                 ? `/profile-client/${result.id}`
                 : `/jobs/job-detail/${result.id}`
-            }
-            state={{
-              clientId: result.tag === 'client' ? result.referId : null,
-            }}
-          >
-            <Typography.Text style={{ padding: 10 }}>
-              {result.name || result.title}
-            </Typography.Text>
-          </Link>
+          }
+          state={{
+            clientId: result.tag === 'client' ? result.referId : null,
+          }}
+        >
+          <Typography.Text style={{ padding: 10 }}>
+            {result.name || result.title}
+          </Typography.Text>
+        </Link>
+      ),
+      key: index,
+      icon:
+        result.tag === 'freelancer' ? (
+          <User />
+        ) : result.tag === 'client' ? (
+          <Company />
+        ) : (
+          <Job />
         ),
-        key: index,
-        icon:
-          result.tag === 'freelancer' ? (
-            <User />
-          ) : result.tag === 'client' ? (
-            <Company />
-          ) : (
-            <Job />
-          ),
-      }))
+    }))
     : [{ label: <Empty />, key: '1' }];
 
   return (
@@ -429,7 +428,7 @@ function SearchBar() {
           </div>
         </Col>
         <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to='/'>
+          <Link to={auth.role === 'freelancer' ? '/recommended' : '/'}>
             <Image
               width={34}
               src='/icon/logo.svg'
@@ -439,7 +438,7 @@ function SearchBar() {
           </Link>
         </Col>
         <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to='/'>
+          <Link to={auth.role === 'freelancer' ? '/recommended' : '/'}>
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>

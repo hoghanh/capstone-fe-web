@@ -40,10 +40,11 @@ export const routes = [
     layout: 'breadcrumb',
   },
   {
-    path: '/jobs/recommended',
-    element: lazy(() => import('pages/joblist/JobList')),
+    path: '/recommended',
+    element: lazy(() => import('pages/joblist/RecommendJobs')),
     name: 'recommended',
     layout: 'breadcrumb',
+    title: 'Danh sách đề xuất',
     role: ['freelancer'],
   },
   {
