@@ -27,6 +27,10 @@ import { authState } from 'recoil/atom';
 const JobList = () => {
   const { useBreakpoint } = Grid;
   const { sm, md } = useBreakpoint();
+
+  const auth = useRecoilValue(authState);
+  const { subCateId, subCateName } = useParams();
+
   const [limit, setLimit] = useState(10);
   const [limitRecommended, setLimitRecommended] = useState(10);
   const [page, setPage] = useState(1);
@@ -37,12 +41,11 @@ const JobList = () => {
   const [totalItemsRecommended, setTotalItemsRecommended] = useState(0);
   const [openSelect, setOpenSelect] = useState();
   const [favoriteList, setFavoriteList] = useState([]);
-  const auth = useRecoilValue(authState);
+
   const [sortOption, setSortOption] = useState(
-    auth.id ? 'Recommend' : 'Latest',
+    auth.id ? 'Recommend' : 'Latest'
   );
   const [isLoading, setIsLoading] = useState(false);
-  const { subCateId, subCateName } = useParams();
 
   useEffect(() => {
     changePage(page);
@@ -244,7 +247,7 @@ const JobList = () => {
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className="card-jobs"
+          className='card-jobs'
           title={
             <div
               style={{
@@ -294,8 +297,8 @@ const JobList = () => {
               </Typography.Text>
               <>
                 <Select
-                  placeholder=""
-                  size="large"
+                  placeholder=''
+                  size='large'
                   style={{
                     borderRadius: 8,
                     width: md ? 200 : sm ? 150 : 100,
@@ -331,25 +334,37 @@ const JobList = () => {
                   style={{
                     display: ' flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                     padding: 10,
                     borderBottom: '0.5px solid #000',
                   }}
                 >
+                  <div>
+                    <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
+                      <Typography.Title
+                        style={{ margin: 0 }}
+                        level={md ? 4 : 5}
+                      >
+                        {job.title}
+                      </Typography.Title>
+                    </Link>
+                    <Typography.Text level={4}>
+                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -
+                      {FormatVND(job.highestIncome)} /
+                      {CalculateDaysLeft(job.applicationSubmitDeadline)}
+                    </Typography.Text>
+                  </div>
                   <div
                     style={{
-                      display: md ? 'flex' : 'none',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'column',
-                      gap: 5,
-                      padding: 30,
-                      height: 209,
+                      cursor: 'pointer',
+                      alignSelf: md ? ' ' : 'flex-start',
+                      display: 'flex',
                     }}
                   >
                     <Image
                       width={100}
                       src={job.clients?.accounts?.image}
-                      alt="Apofoitisi logo"
+                      alt='Apofoitisi logo'
                       preview={false}
                       style={{ borderRadius: '50%' }}
                     />
@@ -371,7 +386,7 @@ const JobList = () => {
                       }}
                     >
                       <div>
-                        <Link to={`/jobs/job-detail/${job.id}`} target="_blank">
+                        <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                           <Typography.Title
                             style={{ margin: 0 }}
                             level={md ? 4 : 5}
@@ -405,7 +420,7 @@ const JobList = () => {
                         )}
                       </div>
                     </div>
-                    <Link to={`/jobs/job-detail/${job.id}`} target="_blank">
+                    <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                       <Typography.Paragraph
                         ellipsis={{
                           rows: 3,
@@ -428,7 +443,7 @@ const JobList = () => {
                     >
                       {job.skills?.map((skill) => (
                         <Button
-                          type="primary"
+                          type='primary'
                           style={joblist.button}
                           key={skill.id}
                         >
@@ -469,7 +484,7 @@ const JobList = () => {
                     <Image
                       width={100}
                       src={job.jobs.clients?.accounts?.image}
-                      alt="Apofoitisi logo"
+                      alt='Apofoitisi logo'
                       preview={false}
                       style={{ borderRadius: '50%' }}
                     />
@@ -493,7 +508,7 @@ const JobList = () => {
                       <div>
                         <Link
                           to={`/jobs/job-detail/${job.jobs.id}`}
-                          target="_blank"
+                          target='_blank'
                         >
                           <Typography.Title
                             style={{ margin: 0 }}
@@ -506,7 +521,7 @@ const JobList = () => {
                           Lương thoả thuận: {FormatVND(job.jobs.lowestIncome)} -{' '}
                           {FormatVND(job.jobs.highestIncome)} /{' '}
                           {CalculateDaysLeft(
-                            job.jobs.applicationSubmitDeadline,
+                            job.jobs.applicationSubmitDeadline
                           )}
                         </Typography.Text>
                         <Typography.Text level={4} style={{ display: 'block' }}>
@@ -532,7 +547,7 @@ const JobList = () => {
                     </div>
                     <Link
                       to={`/jobs/job-detail/${job.jobs.id}`}
-                      target="_blank"
+                      target='_blank'
                     >
                       <Typography.Paragraph
                         ellipsis={{
@@ -556,7 +571,7 @@ const JobList = () => {
                     >
                       {job.jobs.skills?.map((skill) => (
                         <Button
-                          type="primary"
+                          type='primary'
                           style={joblist.button}
                           key={skill.id}
                         >

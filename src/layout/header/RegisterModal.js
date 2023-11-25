@@ -6,12 +6,16 @@ import { home } from 'styles/homepage';
 import GoogleLoginButton from 'components/button/GoogleLoginButton';
 import Link from 'antd/es/typography/Link';
 import { post } from 'utils/APICaller';
+import { useSetRecoilState } from 'recoil';
+import { otp, registerInfo } from 'recoil/atom';
 
 function RegisterModal({ visible, onCancel, onOk, handleMove }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const setRegisterInfo = useSetRecoilState(registerInfo);
+  const setOTP = useSetRecoilState(otp);
 
   const handleOk = () => {
     setTimeout(() => {
@@ -47,18 +51,26 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
       },
     })
       .then((res) => {
+        setOTP(res.data.otp);
+
         onCancel();
+
+        setRegisterInfo({
+          email: email,
+          name: name,
+          password: password,
+        });
+
         setEmail('');
         setPassword('');
         setConfirmPassword('');
         setName('');
-        notification.success({
-          message: 'Đăng ký tài khoản thành công',
-        });
+
+        handleMove('otp');
       })
       .catch((error) => {
         notification.error({
-          message: error.response.data.message,
+          message: 'Đăng ký không thành công, vui lòng thử lại sau',
         });
       });
   };
