@@ -25,7 +25,7 @@ const ListPosts = () => {
   const { sm, md } = useBreakpoint();
   const [page, setPage] = useState(1);
   const [jobList, setJobList] = useState([]);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(10);
   const [sortOption, setSortOption] = useState("Latest");
   const [openSelect, setOpenSelect] = useState();
   const { clientId } = useLocation().state;

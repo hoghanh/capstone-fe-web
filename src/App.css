@@ -329,8 +329,4 @@ body {
 
 /* Đối với màn hình có độ rộng < 576px */
 @media (max-width: 575.98px) {
-  .containerBody {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
 }

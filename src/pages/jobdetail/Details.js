@@ -9,6 +9,7 @@ import {
   Skeleton,
   notification,
   Spin,
+  Grid
 } from "antd";
 import {
   CustomCard,
@@ -48,6 +49,8 @@ const SubmitApplication = ({status, setStatus}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setProgresspercent] = useState(0);
   let { id } = useParams();
+  const { useBreakpoint } = Grid;
+  const { lg } = useBreakpoint();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -143,7 +146,7 @@ const SubmitApplication = ({status, setStatus}) => {
 
   return (
     <>
-      <ButtonPrimary onClick={showModal}>Gửi CV/Resume</ButtonPrimary>
+      <ButtonPrimary style={{fontSize: lg ? 16 : 11}} onClick={showModal}>Gửi CV/Resume</ButtonPrimary>
       <ModalPrimary
         title={"Chi tiết ứng tuyển"}
         open={isModalOpen}
@@ -590,8 +593,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.email != null
-            ? jobDetail.clients.accounts.email
+          {jobDetail.clients.accounts?.email != null
+            ? jobDetail.clients.accounts?.email
             : "Chưa xác minh"}
         </Typography.Text>
       </Col>
@@ -600,8 +603,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.phone != null
-            ? jobDetail.clients.accounts.phone
+          {jobDetail.clients.accounts?.phone != null
+            ? jobDetail.clients.accounts?.phone
             : "Chưa xác minh"}
         </Typography.Text>
       </Col>
@@ -641,7 +644,6 @@ const InformationRight = ({ showModalLogin, status, setStatus }) => {
       }}
     >
       <Row style={{ justifyContent: "center" }}>
-        {/* Đăng nhập và phân quyền nếu đăng nhập  */}
         {auth.email ? (
           status ? null : (
             <>
@@ -699,26 +701,6 @@ const InformationResponsive = ({ showModalLogin }) => {
         className={css.containerInfoRes}
         style={{ justifyContent: "center" }}
       >
-        {/* Sau khi được nhận việc  */}
-        {/* <Col className={css.cardContract} style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Row>
-                  <Col span={24}>
-                    <Typography.Title level={5} style={styles.titleSection}>
-                      Hợp đồng
-                    </Typography.Title>
-                  </Col>
-                  <CustomCol span={24} style={{ display: 'flex' }}>
-                    <PaperClipOutlined />
-                    <Typography.Text
-                      underline={false}
-                      style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
-                    >
-                      HopDongLamViec.pdf
-                    </Typography.Text>
-                  </CustomCol>
-                </Row>
-              </Col> */}
-        {/* <CustomDivider /> */}
         <AboutCustomer />
         <CustomDivider />
         <ContactInfo />
@@ -729,10 +711,12 @@ const InformationResponsive = ({ showModalLogin }) => {
 
 const Details = ({ status, setStatus }) => {
   const jobDetail = useRecoilValue(jobDetailState);
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const auth = useRecoilValue(authState);
-  
+  const { useBreakpoint } = Grid;
+  const { md } = useBreakpoint();
+
   const showModalLogin = () => {
     setOpenLogin(true);
   };
@@ -767,7 +751,7 @@ const Details = ({ status, setStatus }) => {
         </CustomRow>
       </CustomCard>
       <InformationResponsive />
-      {auth.email ? (
+      {!md ? (auth.email ? (
           status ? null : (
             <>
               <Col
@@ -780,7 +764,6 @@ const Details = ({ status, setStatus }) => {
               >
                 <SubmitApplication status={status} setStatus={setStatus} />
               </Col>
-              <CustomDivider/>
             </>
           )
         ) : (
@@ -795,9 +778,8 @@ const Details = ({ status, setStatus }) => {
             >
               <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
             </Col>
-            <CustomDivider/>
           </>
-        )}
+        )): null}
     </>
   );
 };
@@ -805,7 +787,6 @@ const Details = ({ status, setStatus }) => {
 const styles = {
   titlePost: { padding: "10px 30px", margin: "20px 0" },
 
-  //Article Right
   headerRight: {
     display: "flex",
     flexDirection: "column",

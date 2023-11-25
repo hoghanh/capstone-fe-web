@@ -175,7 +175,9 @@ const InterviewSchedule = () => {
   }
 
   useEffect(() => {
-    getInterviewSchedule();
+    if (user) {
+      getInterviewSchedule();
+    }
   }, [user]);
 
   function getInterviewSchedule() {

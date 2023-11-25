@@ -85,7 +85,7 @@ const FavoriteList = () => {
   const [jobList, setJobList] = useState([])
   const [sortOption, setSortOption] = useState('Latest');
   const [openSelect, setOpenSelect] = useState();
-  const [pageSize,] = useState(5);
+  const [pageSize,] = useState(10);
   const { subCateId, subCateName } = useParams();
   const auth = useRecoilValue(authState);
 

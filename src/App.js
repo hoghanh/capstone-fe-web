@@ -8,7 +8,7 @@ import './App.css';
 import { CLIENTID } from 'config';
 import Loading from 'components/loading/loading';
 import { get } from 'utils/APICaller';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authState, clientProfile } from 'recoil/atom';
 
 function App() {

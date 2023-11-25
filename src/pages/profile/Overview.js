@@ -25,7 +25,13 @@ import {
   CustomDivider,
   CustomRow,
 } from 'components/customize/Layout';
-import { Flag, PaperClipOutlined, Pen, Plus, Trash } from 'components/icon/Icon';
+import {
+  Flag,
+  PaperClipOutlined,
+  Pen,
+  Plus,
+  Trash,
+} from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
 import css from './profile.module.css';
@@ -108,7 +114,7 @@ const EditPersonalInformation = () => {
       >
         <Form
           form={form}
-          name='submitInformation'
+          name="submitInformation"
           initialValues={{
             remember: true,
             phone: informationUser.accounts.phone,
@@ -123,7 +129,7 @@ const EditPersonalInformation = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='phone'
+                    name="phone"
                     rules={[
                       {
                         required: true,
@@ -138,7 +144,7 @@ const EditPersonalInformation = () => {
                     <Input
                       style={{ width: '40%' }}
                       prefix={<Flag />}
-                      placeholder='0123456789'
+                      placeholder="0123456789"
                       controls={false}
                     />
                   </Form.Item>
@@ -152,7 +158,7 @@ const EditPersonalInformation = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='address'
+                    name="address"
                     rules={[
                       {
                         required: true,
@@ -160,7 +166,7 @@ const EditPersonalInformation = () => {
                       },
                     ]}
                   >
-                    <Input placeholder='Địa chỉ' />
+                    <Input placeholder="Địa chỉ" />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -346,7 +352,7 @@ const AddLanguage = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form form={form} name='addLanguage' initialValues={{ level: '2' }}>
+        <Form form={form} name="addLanguage" initialValues={{ level: '2' }}>
           <Row gutter={[0, 10]}>
             <Col span={12}>
               <CustomRow gutter={[0, 10]}>
@@ -355,7 +361,7 @@ const AddLanguage = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='name'
+                    name="name"
                     rules={[
                       {
                         required: true,
@@ -363,7 +369,7 @@ const AddLanguage = () => {
                       },
                     ]}
                   >
-                    <Input placeholder='VD: Tiếng Anh' />
+                    <Input placeholder="VD: Tiếng Anh" />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -374,11 +380,11 @@ const AddLanguage = () => {
                   <Typography.Text>Trình độ</Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <Form.Item name='level'>
+                  <Form.Item name="level">
                     <Select
                       style={{ width: 120 }}
                       suffixIcon={<DownOutlined />}
-                      placement='bottomLeft'
+                      placement="bottomLeft"
                       options={languagesItems}
                     />
                   </Form.Item>
@@ -499,7 +505,7 @@ const EditLanguages = () => {
         <Form
           form={form}
           onValuesChange={handleLanguageChange}
-          name='editLanguage'
+          name="editLanguage"
           initialValues={{ remember: false }}
         >
           <Row>
@@ -528,7 +534,7 @@ const EditLanguages = () => {
                           },
                         ]}
                       >
-                        <Input placeholder='VD: Tiếng Anh' />
+                        <Input placeholder="VD: Tiếng Anh" />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
@@ -539,7 +545,7 @@ const EditLanguages = () => {
                         <Select
                           style={{ width: 120 }}
                           suffixIcon={<DownOutlined />}
-                          placement='bottomLeft'
+                          placement="bottomLeft"
                           options={languagesItems}
                         />
                       </Form.Item>
@@ -586,36 +592,36 @@ const EditMajor = () => {
   };
   const handleOk = () => {
     form
-    .validateFields()
-    .then((values) => {
-      const { major } = values;
-      put({
-        endpoint: `/freelancer/major/${informationUser.id}`,
-        body: {
-          major,
-        },
-      })
-        .then((res) => {
-          setInformationUser({
-            ...informationUser,
+      .validateFields()
+      .then((values) => {
+        const { major } = values;
+        put({
+          endpoint: `/freelancer/major/${informationUser.id}`,
+          body: {
             major,
-          });
-          notification.success({
-            message: 'Cập nhật thành công!',
-          });
+          },
         })
-        .catch((error) => {
-          notification.error({
-            message: error.response.data.message,
+          .then((res) => {
+            setInformationUser({
+              ...informationUser,
+              major,
+            });
+            notification.success({
+              message: 'Cập nhật thành công!',
+            });
+          })
+          .catch((error) => {
+            notification.error({
+              message: error.response.data.message,
+            });
           });
-        });
 
-      setIsModalOpen(false);
-    })
-    .catch((error) => {
-      console.error('Validation failed:', error);
-    });
-     };
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Validation failed:', error);
+      });
+  };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -641,7 +647,7 @@ const EditMajor = () => {
               <CustomRow gutter={[0, 10]}>
                 <Col span={24}>
                   <Form.Item
-                    name='major'
+                    name="major"
                     initialValue={informationUser.major}
                     rules={[
                       {
@@ -653,7 +659,7 @@ const EditMajor = () => {
                     <Input
                       onChange={onChange}
                       style={{ width: '100%' }}
-                      placeholder='Nhập chuyên ngành của bạn tại đây ...'
+                      placeholder="Nhập chuyên ngành của bạn tại đây ..."
                     />
                   </Form.Item>
                 </Col>
@@ -726,7 +732,7 @@ const EditIntroduction = () => {
       >
         <Form
           form={form}
-          name='submitApplication'
+          name="submitApplication"
           initialValues={{
             remember: true,
             title: informationUser.title,
@@ -743,7 +749,7 @@ const EditIntroduction = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='title'
+                    name="title"
                     rules={[
                       {
                         required: true,
@@ -751,7 +757,7 @@ const EditIntroduction = () => {
                       },
                     ]}
                   >
-                    <Input placeholder='Software Engineer | Javascript' />
+                    <Input placeholder="Software Engineer | Javascript" />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -765,8 +771,8 @@ const EditIntroduction = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    className='introText'
-                    name='introduction'
+                    className="introText"
+                    name="introduction"
                     rules={[
                       {
                         required: true,
@@ -783,7 +789,7 @@ const EditIntroduction = () => {
                         resize: 'none',
                       }}
                       onChange={onChange}
-                      placeholder='textarea'
+                      placeholder="textarea"
                     />
                   </Form.Item>
                 </Col>
@@ -810,7 +816,7 @@ const EditSkills = ({ skillList }) => {
 
   useEffect(() => {
     getFreelancer();
-    setFlat(false)
+    setFlat(false);
   }, [flat]);
 
   const getFreelancer = () => {
@@ -974,7 +980,7 @@ const EditNameAvatar = () => {
       >
         <Form
           form={form}
-          name='submitNameAvatar'
+          name="submitNameAvatar"
           initialValues={{
             remember: true,
             name: informationUser.accounts.name,
@@ -991,7 +997,7 @@ const EditNameAvatar = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='name'
+                    name="name"
                     rules={[
                       {
                         required: true,
@@ -999,7 +1005,7 @@ const EditNameAvatar = () => {
                       },
                     ]}
                   >
-                    <Input placeholder='Nguyen Van A' />
+                    <Input placeholder="Nguyen Van A" />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -1013,7 +1019,7 @@ const EditNameAvatar = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='image'
+                    name="image"
                     rules={[
                       {
                         required: true,
@@ -1021,7 +1027,7 @@ const EditNameAvatar = () => {
                       },
                     ]}
                   >
-                    <Input placeholder='URL' />
+                    <Input placeholder="URL" />
                   </Form.Item>
                 </Col>
               </CustomRow>
@@ -1058,7 +1064,10 @@ const EditCV = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `CV/freelancer-${informationUser.id}/${file.name}`);
+    const storageRef = ref(
+      storage,
+      `CV/freelancer-${informationUser.id}/${file.name}`
+    );
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -1080,7 +1089,7 @@ const EditCV = () => {
     );
   };
 
-  const submitCV = (url) =>{
+  const submitCV = (url) => {
     put({
       endpoint: `/freelancer/cvFile/${informationUser.id}`,
       body: {
@@ -1088,7 +1097,7 @@ const EditCV = () => {
       },
     })
       .then((res) => {
-        setInformationUser({...informationUser, cvFile: url})
+        setInformationUser({ ...informationUser, cvFile: url });
         notification.success({
           message: 'Tải tệp thành công!',
         });
@@ -1098,7 +1107,7 @@ const EditCV = () => {
           message: 'Có lỗi xảy ra',
         });
       });
-  }
+  };
 
   const handleOk = () => {
     form
@@ -1119,7 +1128,7 @@ const EditCV = () => {
         }
         setIsModalOpen(false);
       })
-      
+
       .catch((error) => {
         console.error('Validation failed:', error);
       });
@@ -1261,7 +1270,7 @@ const HeaderSection = () => {
                 </Typography.Title>
               </Col>
               <Col>
-                {auth.role === "freelancer" ? (
+                {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                   <Col>
                     <EditNameAvatar />
                   </Col>
@@ -1271,9 +1280,12 @@ const HeaderSection = () => {
           </CustomCol>
         </Row>
       </Col>
-      <Col className="btnSubmitCV" style={{display: 'flex', alignItems: 'center'}}>
+      <Col
+        className="btnSubmitCV"
+        style={{ display: 'flex', alignItems: 'center' }}
+      >
         <Row gutter={[20, 0]}>
-          {auth.role === "freelancer" ? (
+          {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
             <Col>
               <EditCV />
             </Col>
@@ -1289,7 +1301,7 @@ const HeaderSection = () => {
                     fontSize: 14,
                     marginLeft: 5,
                     color: color.colorPrimary,
-                    cursor: "pointer",
+                    cursor: 'pointer',
                   }}
                 >
                   fileCV.pdf
@@ -1300,8 +1312,8 @@ const HeaderSection = () => {
                     fontWeight: 700,
                     fontSize: 14,
                     marginLeft: 5,
-                    color: "#ccc",
-                    cursor: "not-allowed",
+                    color: '#ccc',
+                    cursor: 'not-allowed',
                   }}
                 >
                   fileCV.pdf
@@ -1335,7 +1347,7 @@ const BodySectionLeft = () => {
                     Thông tin cá nhân
                   </Typography.Title>
                 </Col>
-                {auth.role === "freelancer" ? (
+                {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                   <Col>
                     <EditPersonalInformation />
                   </Col>
@@ -1407,7 +1419,7 @@ const BodySectionLeft = () => {
                         Thời gian làm mỗi tuần
                       </Typography.Title>
                     </Col>
-                    {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <EditWorkingTime />
                       </Col>
@@ -1433,12 +1445,12 @@ const BodySectionLeft = () => {
                         Ngôn ngữ
                       </Typography.Title>
                     </Col>
-                    {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <AddLanguage />
                       </Col>
                     ) : null}
-                    {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <EditLanguages />
                       </Col>
@@ -1466,7 +1478,7 @@ const BodySectionLeft = () => {
                         Chuyên ngành
                       </Typography.Title>
                     </Col>
-                    {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <EditMajor />
                       </Col>
@@ -1517,7 +1529,7 @@ const BodySectionLeftResponsive = () => {
                     Thông tin cá nhân
                   </Typography.Title>
                 </Col>
-                {auth.role === "freelancer" ? (
+                {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                   <Col>
                     <EditPersonalInformation />
                   </Col>
@@ -1580,7 +1592,7 @@ const BodySectionLeftResponsive = () => {
                         Thời gian làm mỗi tuần
                       </Typography.Title>
                     </Col>
-                    {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <EditWorkingTime />
                       </Col>
@@ -1601,12 +1613,12 @@ const BodySectionLeftResponsive = () => {
                         Ngôn ngữ
                       </Typography.Title>
                     </Col>
-                    {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <AddLanguage />
                       </Col>
                     ) : null}
-                     {auth.role === "freelancer" ? (
+                    {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                       <Col>
                         <EditLanguages />
                       </Col>
@@ -1695,7 +1707,7 @@ const ListWithLoadMore = ({ items }) => {
                 </Typography.Title>
               </Col>
               <Col span={24}>
-                <Row gutter={10} align={"middle"}>
+                <Row gutter={10} align={'middle'}>
                   <Col>
                     <Typography.Text style={{ color: color.colorDeactivate }}>
                       Ngày bắt đầu: {formatDate(item.updatedAt)}
@@ -1708,10 +1720,10 @@ const ListWithLoadMore = ({ items }) => {
         </List.Item>
       )}
       footer={
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           {visible < items.length && (
             <Typography.Text
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={showMoreItems}
             >
               Xem thêm...
@@ -1719,7 +1731,7 @@ const ListWithLoadMore = ({ items }) => {
           )}
           {visible > counts && (
             <Typography.Text
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={showLessItems}
             >
               Thu gọn
@@ -1811,7 +1823,7 @@ const BodySectionRight = () => {
                       : 'Chưa có thông tin'}
                   </Typography.Title>
                 </Col>
-                {auth.role === "freelancer" ? (
+                {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                   <Col>
                     <EditIntroduction />
                   </Col>
@@ -1841,7 +1853,7 @@ const BodySectionRight = () => {
                     Kỹ năng
                   </Typography.Title>
                 </Col>
-                {auth.role === "freelancer" ? (
+                {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                   <Col>
                     <EditSkills
                       skillList={skillList}
@@ -1864,29 +1876,48 @@ const BodySectionRight = () => {
                       level: item.level,
                       id: item.id,
                     }))}
-                    renderItem={(item) => (
-                      <List.Item
-                        onClick={() => {
-                          setIsModalLevel(true);
-                          setValue(
-                            levelOptions.find((l) => l.label === item.level)
-                              .value
-                          );
-                          setIdSkill(item.id);
-                        }}
-                        style={{
-                          fontWeight: 700,
-                          fontSize: 14,
-                          padding: '5px 10px',
-                          backgroundColor: color.colorBluishCyan,
-                          borderRadius: 25,
-                          textWrap: 'nowrap',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {item.title}
-                      </List.Item>
-                    )}
+                    renderItem={(item) => {
+                      if (auth.role === 'freelancer' && auth.id === informationUser.accountId) {
+                        return (
+                          <List.Item
+                            onClick={() => {
+                              setIsModalLevel(true);
+                              setValue(
+                                levelOptions.find((l) => l.label === item.level)
+                                  .value
+                              );
+                              setIdSkill(item.id);
+                            }}
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              padding: '5px 10px',
+                              backgroundColor: color.colorBluishCyan,
+                              borderRadius: 25,
+                              textWrap: 'nowrap',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {item.title}
+                          </List.Item>
+                        );
+                      } else {
+                        return (
+                          <List.Item
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              padding: '5px 10px',
+                              backgroundColor: color.colorBluishCyan,
+                              borderRadius: 25,
+                              textWrap: 'nowrap',
+                            }}
+                          >
+                            {item.title}
+                          </List.Item>
+                        );
+                      }
+                    }}
                   />
                 </CustomCol>
               </Row>
@@ -1907,7 +1938,7 @@ const BodySectionRight = () => {
             </Col>
             <Col
               span={24}
-              style={{ display: "flex", justifyContent: "center" }}
+              style={{ display: 'flex', justifyContent: 'center' }}
             >
               <ListWithLoadMore items={applications} />
             </Col>
