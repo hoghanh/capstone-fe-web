@@ -22,7 +22,7 @@ import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState } from 'recoil/atom';
 import { GoogleLogout } from 'react-google-login';
 import { CLIENTID } from 'config';
-import { Heart, Logout, Manage, User } from 'components/icon/Icon';
+import { Company, Heart, Job, Logout, Manage, User } from 'components/icon/Icon';
 import { Link } from 'react-router-dom';
 import { post } from 'utils/APICaller';
 
@@ -51,20 +51,7 @@ const Search =() =>{
     })
       .then((res) => {
         const data = res.data.searchList;
-        const jobs = data
-          .filter((item) => item.title)
-          .map((job) => ({
-            ...job,
-            icon: <Manage />,
-          }));
-        const accounts = data
-          .filter((item) => item.name)
-          .map((account) => ({
-            ...account,
-            icon: <User />,
-          }));
-        const items = [...accounts, ...jobs];
-        setResults(items);
+        setResults(data);
       })
       .catch((error) => {
         console.error({
@@ -78,10 +65,15 @@ const Search =() =>{
         label: (
           <Link
             to={
-              result.name
+              result.tag === 'freelancer'
                 ? `/profile/${result.id}`
+                : result.tag === 'client'
+                ? `/profile-client/${result.id}`
                 : `/jobs/job-detail/${result.id}`
             }
+            state={{
+              clientId: result.tag === 'client' ? result.referId : null,
+            }}
           >
             <Typography.Text style={{ padding: 10 }}>
               {result.name || result.title}
@@ -89,9 +81,16 @@ const Search =() =>{
           </Link>
         ),
         key: index,
-        icon: result.icon,
+        icon:
+          result.tag === 'freelancer' ? (
+            <User />
+          ) : result.tag === 'client' ? (
+            <Company />
+          ) : (
+            <Job />
+          ),
       }))
-    : [{ label: <Empty />, key: '1' }]
+    : [{ label: <Empty />, key: '1' }];
 
   return (
     <Dropdown
@@ -134,7 +133,6 @@ function SearchBar() {
       key: '1',
       label: <Link to='/applications'><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
       icon: <Manage size={14} color='#222222'/>,
-  
     },
     {
       key: '2',

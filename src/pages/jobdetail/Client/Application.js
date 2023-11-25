@@ -1,6 +1,6 @@
 import { Card, Col, Row, Typography } from 'antd';
 import { CustomCard, CustomCol, CustomRow } from 'components/customize/Layout';
-import { File, User } from 'components/icon/Icon';
+import { User } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import color from 'styles/color';

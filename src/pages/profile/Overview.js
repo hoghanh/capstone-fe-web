@@ -46,6 +46,8 @@ import { get, post, put, remove } from 'utils/APICaller';
 import { formatDate } from 'components/formatter/format';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'config/firebase';
+import { PlusOutlined } from '@ant-design/icons';
+
 
 const EditPersonalInformation = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
@@ -920,53 +922,156 @@ const EditSkills = ({ skillList }) => {
   );
 };
 
+
+const getBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
+
 const EditNameAvatar = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [progresspercent, setProgresspercent] = useState(0);
+  const [avatar, setAvatar] = useState([]);
   const [form] = Form.useForm();
   const showModal = () => {
     setIsModalOpen(true);
   };
+
+
+  const uploadFile = (event) => {
+    const file = event.image[0].originFileObj;
+    console.log(file)
+    if (!file) return;
+
+    const storageRef = ref(storage, `images/avatars/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          updateInfo(event, downloadURL);
+        });
+      }
+    );
+  };
+
+
+
+  const updateInfo = (values, image) => {
+    const { name } = values;
+    console.log(image)
+    put({
+      endpoint: `/freelancer/nameImage/${informationUser.id}`,
+      body: {
+        name,
+        image,
+      },
+    })
+      .then((res) => {
+        setInformationUser({
+          ...informationUser,
+          accounts: {
+            ...informationUser.accounts,
+            name,
+            image,
+          },
+        });
+        notification.success({
+          message: res.data,
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+
+  };
+
+ 
+
+  const handleChange = ({ avatar: newAvatar }) => setAvatar(newAvatar);
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
   const handleOk = () => {
     form
       .validateFields()
       .then((values) => {
-        const { name, image } = values;
-        put({
-          endpoint: `/freelancer/nameImage/${informationUser.id}`,
-          body: {
-            name,
-            image,
-          },
-        })
-          .then((res) => {
-            setInformationUser({
-              ...informationUser,
-              accounts: {
-                ...informationUser.accounts,
-                name,
-                image,
-              },
-            });
-            notification.success({
-              message: res.data,
-            });
-          })
-          .catch((error) => {
-            notification.error({
-              message: error.response.data.message,
-            });
-          });
-
+        console.log(values.image)
+        if (
+          values.image !== undefined &&
+          values.image !== null &&
+          values.image !== ''
+        ) {
+          if (values.image.length > 0) {
+            uploadFile(values);
+          } else {
+            updateInfo(values);
+          }
+        } else {
+          updateInfo(values, informationUser?.accounts.image);
+        }
         setIsModalOpen(false);
       })
       .catch((error) => {
         console.error('Validation failed:', error);
       });
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+
+  const props = {
+    listType: 'picture-card',
+    fileList: {avatar},
+    maxCount: 1,
+    beforeUpload: () => false,
+    onRemove: () => false,
+    showUploadList: {
+      showRemoveIcon: false,
+    },
+    onChange: handleChange,
+  };
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Tải ảnh lên
+      </div>
+    </div>
+  );
+
+
+
+  
   return (
     <>
       <ButtonIcon onClick={showModal}>
@@ -984,7 +1089,6 @@ const EditNameAvatar = () => {
           initialValues={{
             remember: true,
             name: informationUser.accounts.name,
-            image: informationUser.accounts.image,
           }}
         >
           <Row gutter={[0, 10]}>
@@ -1019,15 +1123,12 @@ const EditNameAvatar = () => {
                 </Col>
                 <Col span={24}>
                   <Form.Item
+                    style={{ paddingLeft: 10 }}
                     name="image"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Không được để trống ô này!',
-                      },
-                    ]}
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
                   >
-                    <Input placeholder="URL" />
+                    <Upload {...props}>{uploadButton}</Upload>
                   </Form.Item>
                 </Col>
               </CustomRow>
