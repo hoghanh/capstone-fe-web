@@ -54,6 +54,22 @@ export const jobDetailState = atom({
   default: {},
 });
 
+const language = {
+  id: '',
+  name: '',
+  level: '',
+  freelancerId: 0,
+};
+
+const certificates = {
+  name: '',
+  issuingOrganization: '',
+  issueDate: '',
+  expirationDate: '',
+  credentialId: '',
+  credentialUrl: '',
+};
+
 export const freelancerState = atom({
   key: 'freelancerState',
   default: {
@@ -124,4 +140,14 @@ export const authState = atom({
 export const appoinmentState = atom({
   key: 'appointmentList',
   default: [],
+});
+
+export const otp = atom({
+  key: 'otp',
+  default: '',
+});
+
+export const registerInfo = atom({
+  key: 'registerInfo',
+  default: {},
 });
