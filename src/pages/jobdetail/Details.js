@@ -106,12 +106,8 @@ const SubmitApplication = ({ status, setStatus }) => {
       },
     })
       .then((res) => {
-        //Gửi notification [thông tin] - đến [email người nhận]
-        socket.emit(
-          'sendNotification',
-          notificationData,
-          'caohanh1711@gmail.com'
-        );
+        //Gửi notification [thông tin] - đến [accountID người nhận]
+        socket.emit('sendNotification', notificationData, jobDetail.clients.id);
 
         notification.success({
           message: 'Ứng tuyển thành công',

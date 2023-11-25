@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { gapi } from 'gapi-script';
-import { io } from 'socket.io-client';
+import { notification } from 'antd';
 
 import Router from './routes/router';
 import useAuthActions from 'recoil/action';
-import './App.css';
-import { CLIENTID, FPTSEP } from 'config';
 import Loading from 'components/loading/loading';
 import { get } from 'utils/APICaller';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authState, clientProfile } from 'recoil/atom';
-import socket from 'config';
+import socket, { CLIENTID } from 'config';
+
+import './App.css';
 
 function App() {
   const { autoLogin } = useAuthActions();
@@ -41,14 +41,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (auth.email) {
-      socket?.emit('newUser', auth.email);
+    if (auth.id) {
+      socket?.emit('newUser', auth.id);
       socket.on('getNotification', (data) => {
-        console.log('Received notification:', data.notification);
-
-        fetchProfile();
+        notification.info({ message: data.notification });
+        console.log(data.notification);
       });
 
+      fetchProfile();
       return () => {
         socket.disconnect();
       };

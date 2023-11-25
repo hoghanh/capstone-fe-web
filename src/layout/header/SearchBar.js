@@ -233,9 +233,11 @@ function SearchBar() {
     if (type === 'register') {
       setOpenRegister(true);
       setOpenLogin(false);
+      setOpenOTP(false);
     } else if (type === 'login') {
       setOpenLogin(true);
       setOpenRegister(false);
+      setOpenOTP(false);
     } else {
       setOpenLogin(false);
       setOpenRegister(false);

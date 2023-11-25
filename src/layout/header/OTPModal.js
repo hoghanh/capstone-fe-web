@@ -28,8 +28,7 @@ function OTPModal({ visible, onCancel, onOk, handleMove }) {
         },
       })
         .then((res) => {
-          console.log(res);
-          notification.success({ message: res.data.message });
+          notification.success({ message: 'Đăng ký thành công' });
         })
         .catch((error) => {
           notification.error({
