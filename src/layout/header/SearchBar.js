@@ -11,8 +11,9 @@ import {
   Menu,
   Dropdown,
   notification,
+  Empty,
 } from 'antd';
-import { SearchOutlined, MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -36,14 +37,10 @@ const onFail = () => {
   console.log('Fail');
 };
 
-
-function SearchBar() {
-
-const Search =() =>{
+const Search = () => {
   const { useBreakpoint } = Grid;
   const { md, lg } = useBreakpoint();
   const [results, setResults] = useState([]);
-
 
   const onSearch = (value) => {
     post({
@@ -94,7 +91,7 @@ const Search =() =>{
         key: index,
         icon: result.icon,
       }))
-    : [{ label: <Empty />, key: '1' }]
+    : [{ label: <Empty />, key: '1' }];
 
   return (
     <Dropdown
@@ -111,7 +108,7 @@ const Search =() =>{
       trigger={['click']}
     >
       <Input.Search
-        placeholder="Tìm kiếm"
+        placeholder='Tìm kiếm'
         onSearch={onSearch}
         style={{
           padding: 10,
@@ -121,7 +118,7 @@ const Search =() =>{
       />
     </Dropdown>
   );
-}
+};
 
 function SearchBar() {
   const categoriesNavbar = useRecoilValue(categoriesNavbarState);
@@ -145,19 +142,36 @@ function SearchBar() {
   const items = [
     {
       key: '1',
-      label: <Link to='/applications'><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
-      icon: <Manage size={14} color='#222222'/>,
-  
+      label: (
+        <Link to='/applications'>
+          <Typography.Text style={{ marginLeft: 10 }}>
+            Quản lý công việc
+          </Typography.Text>
+        </Link>
+      ),
+      icon: <Manage size={14} color='#222222' />,
     },
     {
       key: '2',
-      label: <Link to={`/profile/${auth.id}`}><Typography.Text style={{marginLeft: 10}}>Trang cá nhân</Typography.Text></Link>,
-      icon: <User size={14} color='#222222'/>,
+      label: (
+        <Link to={`/profile/${auth.id}`}>
+          <Typography.Text style={{ marginLeft: 10 }}>
+            Trang cá nhân
+          </Typography.Text>
+        </Link>
+      ),
+      icon: <User size={14} color='#222222' />,
     },
     {
       key: '4',
-      label: <Link to='/favorite'><Typography.Text style={{marginLeft: 10}}>Danh sách yêu thích</Typography.Text></Link>,
-      icon: <Heart size={14}/>
+      label: (
+        <Link to='/favorite'>
+          <Typography.Text style={{ marginLeft: 10 }}>
+            Danh sách yêu thích
+          </Typography.Text>
+        </Link>
+      ),
+      icon: <Heart size={14} />,
     },
     {
       key: '3',
@@ -167,7 +181,10 @@ function SearchBar() {
           onLogoutSuccess={onSuccess}
           onFailure={onFail}
           render={(renderProps) => (
-            <Typography.Text onClick={renderProps.onClick} style={{marginLeft: 10}}>
+            <Typography.Text
+              onClick={renderProps.onClick}
+              style={{ marginLeft: 10 }}
+            >
               Đăng xuất
             </Typography.Text>
           )}
@@ -176,7 +193,6 @@ function SearchBar() {
       icon: <Logout size={14} />,
     },
   ];
- 
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -390,8 +406,8 @@ function SearchBar() {
       </ModalPrimary>
 
       <Row
-        align="middle"
-        justify="space-between"
+        align='middle'
+        justify='space-between'
         style={{
           maxWidth: 1080,
           margin: '0 auto',
@@ -401,7 +417,7 @@ function SearchBar() {
           <div>
             <MenuOutlined onClick={toggleCollapsed} />
             <Menu
-              mode="inline"
+              mode='inline'
               inlineCollapsed={collapsed}
               items={categoriesNavbar}
               style={{
@@ -414,17 +430,17 @@ function SearchBar() {
           </div>
         </Col>
         <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to="/">
+          <Link to='/'>
             <Image
               width={34}
-              src="/icon/logo.svg"
-              alt="Apofoitisi logo"
+              src='/icon/logo.svg'
+              alt='Apofoitisi logo'
               preview={false}
             />
           </Link>
         </Col>
         <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to="/">
+          <Link to='/'>
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>
@@ -440,7 +456,7 @@ function SearchBar() {
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
               <ReactSVG
                 style={{ height: 40 }}
-                src="/icon/notification.svg"
+                src='/icon/notification.svg'
                 beforeInjection={(svg) => {
                   svg.setAttribute('width', '32');
                   svg.setAttribute('height', '32');
@@ -452,7 +468,7 @@ function SearchBar() {
                 <div>
                   <ReactSVG
                     style={{ height: 40 }}
-                    src="/icon/user.svg"
+                    src='/icon/user.svg'
                     beforeInjection={(svg) => {
                       svg.setAttribute('width', '32');
                       svg.setAttribute('height', '32');
