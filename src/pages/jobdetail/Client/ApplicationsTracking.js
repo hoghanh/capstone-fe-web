@@ -330,7 +330,6 @@ const TabSent = ({ activeTabKey, value }) => {
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
   const { id } = useParams();
-  console.log(user);
 
   useEffect(() => {
     if (user) {
@@ -394,7 +393,6 @@ const TabSent = ({ activeTabKey, value }) => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         let applications = response.data;
-        console.log(applications)
         setApplicationList(applications);
       })
       .catch((error) => {

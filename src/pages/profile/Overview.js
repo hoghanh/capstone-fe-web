@@ -719,7 +719,7 @@ const EditIntroduction = () => {
     setIsModalOpen(false);
   };
   const onChange = (e) => {
-    console.log('Change:', e.target.value);
+    console.log('hi');
   };
   return (
     <>
@@ -1018,7 +1018,6 @@ const EditNameAvatar = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values.image)
         if (
           values.image !== undefined &&
           values.image !== null &&
