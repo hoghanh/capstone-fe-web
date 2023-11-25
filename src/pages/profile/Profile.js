@@ -14,19 +14,21 @@ import { useParams } from "react-router-dom";
 const Profile = () => {
   const setFreelancer = useSetRecoilState(freelancerState);
   const setApplications = useSetRecoilState(applicationListState);
-  const { id } = useParams();
+  const { id, profileId } = useParams();
 
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    let freelancerId = "";
-    if (auth.role === "freelancer") {
+    let freelancerId = '';
+    if (auth.role === 'freelancer' && auth.id === profileId) {
       freelancerId = auth.id;
-    } else if (auth.role === "client") {
+    } else if (auth.role === 'freelancer' && auth.id !== profileId) {
+      freelancerId = profileId;
+    } else if (auth.role === 'client') {
       freelancerId = id;
     }
     getFreelancer(freelancerId);
-  }, []);
+  }, [profileId, auth]);
 
   const getFreelancer = (freelancerId) => {
     get({ endpoint: `/freelancer/profile/${freelancerId}` })

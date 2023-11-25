@@ -3,23 +3,25 @@ import React, { useEffect } from 'react'
 import ApplicationsTracking from './ApplicationsTracking'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
-import { authState, applicationListState } from 'recoil/atom';
+import { authState, applicationListState, freelancerState } from 'recoil/atom';
 
 
 
 
 const Applications = () => {
   const setApplications = useSetRecoilState(applicationListState);
+  const setFreelancer = useSetRecoilState(freelancerState);
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
     getFreelancer();
   },[]);
 
-  const getFreelancer = async () => {
-    await get({ endpoint: `/freelancer/profile/${auth.id}` })
+  const getFreelancer = () => {
+    get({ endpoint: `/freelancer/profile/${auth.id}` })
       .then((response) => {
         const data = response.data;
+        setFreelancer(data)
         getApplications(data.id);
       })
       .catch((error) => {
@@ -27,8 +29,8 @@ const Applications = () => {
       });
   };
 
-  const getApplications = async (freelancerId) => {
-    await get({ endpoint: `/application/freelancer/${freelancerId}` })
+  const getApplications = (freelancerId) => {
+    get({ endpoint: `/application/freelancer/${freelancerId}` })
       .then((response) => {
         const data = response.data;
         let applications = data.filter(application => application.jobId !== null && application.jobs !== null)

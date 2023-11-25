@@ -14,9 +14,11 @@ const JobDetail = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    getJobDetail();
-    getFreelancer();
-  }, []);
+    if (id){
+      getJobDetail();
+      getFreelancer();
+    }
+  }, [id]);
 
   const getJobDetail = () => {
     get({ endpoint: `/job/detail/${id}` })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Input,
   Image,
@@ -10,8 +10,9 @@ import {
   Grid,
   Menu,
   Dropdown,
+  Empty,
 } from 'antd';
-import { SearchOutlined, MenuOutlined, SettingFilled } from '@ant-design/icons';
+import { SearchOutlined, MenuOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { useRecoilValue } from 'recoil';
 
@@ -23,6 +24,7 @@ import { GoogleLogout } from 'react-google-login';
 import { CLIENTID } from 'config';
 import { Heart, Logout, Manage, User } from 'components/icon/Icon';
 import { Link } from 'react-router-dom';
+import { post } from 'utils/APICaller';
 
 const onSuccess = () => {
   console.log('Logout success');
@@ -32,45 +34,93 @@ const onFail = () => {
   console.log('Fail');
 };
 
-const items = [
-  {
-    key: '1',
-    label: <Link to='/applications'><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
-    icon: <Manage size={14} color='#222222'/>,
 
-  },
-  {
-    key: '2',
-    label: <Link to='/profile'><Typography.Text style={{marginLeft: 10}}>Trang cá nhân</Typography.Text></Link>,
-    icon: <User size={14} color='#222222'/>,
-  },
-  {
-    key: '4',
-    label: <Link to='/favorite'><Typography.Text style={{marginLeft: 10}}>Danh sách yêu thích</Typography.Text></Link>,
-    icon: <Heart size={14}/>
-  },
-  {
-    key: '3',
-    label: (
-      <GoogleLogout
-        clientId={CLIENTID}
-        onLogoutSuccess={onSuccess}
-        onFailure={onFail}
-        render={(renderProps) => (
-          <Typography.Text onClick={renderProps.onClick} style={{marginLeft: 10}}>
-            Đăng xuất
-          </Typography.Text>
-        )}
-      ></GoogleLogout>
-    ),
-    icon: <Logout size={14} />,
-  },
-];
 
-function SearchBar() {
+const Search =() =>{
   const { useBreakpoint } = Grid;
   const { md, lg } = useBreakpoint();
+  const [results, setResults] = useState([]);
 
+
+  const onSearch = (value) => {
+    post({
+      endpoint: `/accounts/`,
+      body: {
+        searchInput: value,
+      },
+    })
+      .then((res) => {
+        const data = res.data.searchList;
+        const jobs = data
+          .filter((item) => item.title)
+          .map((job) => ({
+            ...job,
+            icon: <Manage />,
+          }));
+        const accounts = data
+          .filter((item) => item.name)
+          .map((account) => ({
+            ...account,
+            icon: <User />,
+          }));
+        const items = [...accounts, ...jobs];
+        setResults(items);
+      })
+      .catch((error) => {
+        console.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const items = results.length
+    ? results.map((result, index) => ({
+        label: (
+          <Link
+            to={
+              result.name
+                ? `/profile/${result.id}`
+                : `/jobs/job-detail/${result.id}`
+            }
+          >
+            <Typography.Text style={{ padding: 10 }}>
+              {result.name || result.title}
+            </Typography.Text>
+          </Link>
+        ),
+        key: index,
+        icon: result.icon,
+      }))
+    : [{ label: <Empty />, key: '1' }]
+
+  return (
+    <Dropdown
+      overlayStyle={{
+        maxHeight: '300px',
+        overflow: 'auto',
+        boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
+        borderRadius: 10,
+        border: '1px solid #ccc',
+      }}
+      menu={{
+        items,
+      }}
+      trigger={['click']}
+    >
+      <Input.Search
+        placeholder="Tìm kiếm"
+        onSearch={onSearch}
+        style={{
+          padding: 10,
+          borderRadius: 8,
+          width: lg ? 477 : md ? 325 : 250,
+        }}
+      />
+    </Dropdown>
+  );
+}
+
+function SearchBar() {
   const categoriesNavbar = useRecoilValue(categoriesNavbarState);
   const auth = useRecoilValue(authState);
   const { logout } = useAuthActions();
@@ -78,6 +128,42 @@ function SearchBar() {
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
+
+  const items = [
+    {
+      key: '1',
+      label: <Link to='/applications'><Typography.Text style={{marginLeft: 10}}>Quản lý công việc</Typography.Text></Link>,
+      icon: <Manage size={14} color='#222222'/>,
+  
+    },
+    {
+      key: '2',
+      label: <Link to={`/profile/${auth.id}`}><Typography.Text style={{marginLeft: 10}}>Trang cá nhân</Typography.Text></Link>,
+      icon: <User size={14} color='#222222'/>,
+    },
+    {
+      key: '4',
+      label: <Link to='/favorite'><Typography.Text style={{marginLeft: 10}}>Danh sách yêu thích</Typography.Text></Link>,
+      icon: <Heart size={14}/>
+    },
+    {
+      key: '3',
+      label: (
+        <GoogleLogout
+          clientId={CLIENTID}
+          onLogoutSuccess={onSuccess}
+          onFailure={onFail}
+          render={(renderProps) => (
+            <Typography.Text onClick={renderProps.onClick} style={{marginLeft: 10}}>
+              Đăng xuất
+            </Typography.Text>
+          )}
+        ></GoogleLogout>
+      ),
+      icon: <Logout size={14} />,
+    },
+  ];
+ 
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -142,8 +228,8 @@ function SearchBar() {
       />
 
       <Row
-        align='middle'
-        justify='space-between'
+        align="middle"
+        justify="space-between"
         style={{
           maxWidth: 1080,
           margin: '0 auto',
@@ -153,7 +239,7 @@ function SearchBar() {
           <div>
             <MenuOutlined onClick={toggleCollapsed} />
             <Menu
-              mode='inline'
+              mode="inline"
               inlineCollapsed={collapsed}
               items={categoriesNavbar}
               style={{
@@ -166,17 +252,17 @@ function SearchBar() {
           </div>
         </Col>
         <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to='/'>
+          <Link to="/">
             <Image
               width={34}
-              src='/icon/logo.svg'
-              alt='Apofoitisi logo'
+              src="/icon/logo.svg"
+              alt="Apofoitisi logo"
               preview={false}
             />
           </Link>
         </Col>
         <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to='/'>
+          <Link to="/">
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>
@@ -184,15 +270,7 @@ function SearchBar() {
         </Col>
 
         <Col xs={0} sm={12} md={11} lg={13} xl={13}>
-          <Input
-            placeholder='Tìm kiếm'
-            prefix={<SearchOutlined style={{ color: '#828282' }} />}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              width: lg ? 477 : md ? 325 : 250,
-            }}
-          />
+          <Search />
         </Col>
 
         {auth.email ? (
@@ -200,7 +278,7 @@ function SearchBar() {
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
               <ReactSVG
                 style={{ height: 40 }}
-                src='/icon/notification.svg'
+                src="/icon/notification.svg"
                 beforeInjection={(svg) => {
                   svg.setAttribute('width', '32');
                   svg.setAttribute('height', '32');
@@ -212,7 +290,7 @@ function SearchBar() {
                 <div>
                   <ReactSVG
                     style={{ height: 40 }}
-                    src='/icon/user.svg'
+                    src="/icon/user.svg"
                     beforeInjection={(svg) => {
                       svg.setAttribute('width', '32');
                       svg.setAttribute('height', '32');

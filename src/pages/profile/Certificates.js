@@ -10,6 +10,7 @@ import {
   notification,
   Select,
   Upload,
+  Empty,
 } from 'antd';
 import { ButtonIcon } from 'components/customize/GlobalCustomize';
 import { PaperClipOutlined, Plus } from 'components/icon/Icon';
@@ -403,6 +404,7 @@ const AddCertifications = () => {
 };
 
 const HeaderSection = () => {
+  const informationUser = useRecoilValue(freelancerState);
   const auth = useRecoilValue(authState);
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
@@ -415,7 +417,7 @@ const HeaderSection = () => {
           </CustomCol>
         </Row>
       </Col>
-      {auth.role === 'freelancer' ? (
+      {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
         <Col>
           <AddCertifications />
         </Col>
@@ -629,7 +631,11 @@ const BodySection = () => {
 
   return (
     <Row style={{ marginRight: 30, marginLeft: 30 }}>
-      {certificates.map((certificate, index) => (
+      {certificates.length === 0 || certificates === null ? (
+        <Col span={24}>
+          <Empty />
+        </Col>
+      ):(certificates.map((certificate, index) => (
         <div key={certificate.id} style={{ width: '100%' }}>
           <Col span={24}>
             <Row
@@ -683,7 +689,7 @@ const BodySection = () => {
                       </Col>
                     </CustomRow>
                   </Col>
-                  {auth.role === 'freelancer' ? (
+                  {auth.role === 'freelancer' && auth.id === informationUser.accountId ? (
                     <Col
                       span={1}
                       style={{ display: 'flex', alignItems: 'flex-start' }}
@@ -708,7 +714,7 @@ const BodySection = () => {
             <CustomDivider $primary />
           )}
         </div>
-      ))}
+      )))}
       <ModalPrimary
         title="Cảnh báo"
         open={isModalRemove}
