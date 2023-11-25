@@ -46,7 +46,6 @@ const JobList = () => {
 
   useEffect(() => {
     changePage(page);
-    console.log(auth);
     if (auth.role === 'freelancer') {
       getFavorite();
       get({

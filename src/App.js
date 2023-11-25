@@ -8,8 +8,9 @@ import useAuthActions from 'recoil/action';
 import './App.css';
 import { CLIENTID, FPTSEP } from 'config';
 import Loading from 'components/loading/loading';
-import { useRecoilValue } from 'recoil';
-import { authState } from 'recoil/atom';
+import { get } from 'utils/APICaller';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { authState, clientProfile } from 'recoil/atom';
 import socket from 'config';
 
 function App() {
@@ -45,12 +46,13 @@ function App() {
       socket.on('getNotification', (data) => {
         console.log('Received notification:', data.notification);
 
-		fetchProfile();
+        fetchProfile();
       });
 
       return () => {
         socket.disconnect();
       };
+    }
   }, [auth]);
 
   function fetchProfile() {
