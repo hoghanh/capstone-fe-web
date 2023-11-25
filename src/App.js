@@ -40,11 +40,11 @@ function App() {
 
   useEffect(() => {
     if (auth) {
-      fetchProfile();
+      fetchProfile(auth);
     }
   }, [auth]);
 
-  function fetchProfile() {
+  function fetchProfile(auth) {
     get({ endpoint: `/client/profile/${auth.id}` })
       .then((response) => {
         setUser(response.data);

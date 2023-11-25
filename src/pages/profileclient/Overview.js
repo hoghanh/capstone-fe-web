@@ -12,8 +12,10 @@ const Overview = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getClient();
-  }, []);
+    if (id) {
+      getClient();
+    }
+  }, [id]);
 
   const getClient = () => {
     get({ endpoint: `/client/profile/${id}}` })

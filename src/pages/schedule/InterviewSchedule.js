@@ -186,7 +186,6 @@ const InterviewSchedule = () => {
       endpoint: `/job/appointment/${user.id}`,
     })
       .then((res) => {
-        console.log(res.data);
         setDataTable(res.data);
         // const data = generateJobs(res.data);
         // setJobList(data[0]);

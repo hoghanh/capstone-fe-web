@@ -1,6 +1,6 @@
 import { Card, Col, Row, Typography } from 'antd';
 import { CustomCard, CustomCol, CustomRow } from 'components/customize/Layout';
-import { File, User } from 'components/icon/Icon';
+import { User } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import color from 'styles/color';
@@ -39,17 +39,19 @@ const BodySection = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getApplications();
-  }, []);
+    getApplications(id);
+    console.log(id)
+  }, [id]);
 
-  const getApplications = () => {
+  const getApplications = (id) => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         let applications = response.data;
+        console.log(applications)
         setCountTotal(applications.length);
         let listSent = applications.filter(
           (application) =>
-            application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'Sent'
+            application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'sent'
         );
         setCountSent(listSent.length);
         let listInterview = applications.filter(
