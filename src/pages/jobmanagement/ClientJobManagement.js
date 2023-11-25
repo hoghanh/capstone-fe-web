@@ -252,7 +252,7 @@ const ClientJobManagement = () => {
     const end = start + pageSize;
     return filteredJobList.slice(start, end);
   };
-
+ console.log(getPagedList());
 
   return (
     <>

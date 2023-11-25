@@ -339,21 +339,6 @@ const JobList = () => {
                     borderBottom: '0.5px solid #000',
                   }}
                 >
-                  <div>
-                    <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
-                      <Typography.Title
-                        style={{ margin: 0 }}
-                        level={md ? 4 : 5}
-                      >
-                        {job.title}
-                      </Typography.Title>
-                    </Link>
-                    <Typography.Text level={4}>
-                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -
-                      {FormatVND(job.highestIncome)} /
-                      {CalculateDaysLeft(job.applicationSubmitDeadline)}
-                    </Typography.Text>
-                  </div>
                   <div
                     style={{
                       cursor: 'pointer',

@@ -34,7 +34,7 @@ import 'dayjs/locale/vi';
 
 const tabList = [
   {
-    key: 'Sent',
+    key: 'sent',
     label: 'Ứng tuyển',
   },
   {
@@ -51,6 +51,10 @@ const sentItems = [
   {
     key: 'interview',
     label: 'Phỏng vấn',
+  },
+  {
+    key: 'approved',
+    label: 'Nhận việc',
   },
   {
     key: 'decline',
@@ -96,6 +100,13 @@ const Interview = ({
     const { address } = values;
     let location = null;
     let link = null;
+    console.log({
+      location,
+      link,
+      time: timeBooking,
+      clientId: user.id,
+      applicationId: isIdItem,
+    });
     if (checkIfIsUrl(address)) {
       location = null;
       link = address;
@@ -257,22 +268,75 @@ const DeclineInterview = ({
   );
 };
 
+const Approved = ({
+  isModalApproved,
+  setIsModalApproved,
+  isIdItem,
+  setIsIdItem,
+}) => {
+  const approved = () => {
+    put({
+      endpoint: `/application/approve/${isIdItem}`,
+    })
+      .then((res) => {
+        setIsIdItem(null);
+        notification.success({
+          message: 'Nhận việc thành công',
+        });
+        setIsModalApproved(false);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  };
+
+  const handleOk = () => {
+    approved();
+  };
+
+  const handleCancel = () => {
+    setIsModalApproved(false);
+  };
+
+  return (
+    <>
+      <ModalPrimary
+        title="Đồng ý"
+        open={isModalApproved}
+        bodyStyle={{ paddingTop: 20 }}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Đồng ý"
+      >
+        Bạn có chắc muốn nhận hồ sơ này?
+      </ModalPrimary>
+    </>
+  );
+};
+
+
 const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
   const [ellipsis, setEllipsis] = useState(false);
   const [isModalInterview, setIsModalInterview] = useState(false);
+  const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
   const { id } = useParams();
+  console.log(user);
 
   useEffect(() => {
-    getApplications();
-  }, [user, isIdItem]);
+    if (user) {
+      getApplications(id);
+    }
+  }, [user, isIdItem, id]);
 
   useEffect(() => {
     if (value) {
@@ -283,11 +347,11 @@ const TabSent = ({ activeTabKey, value }) => {
         return sendDate >= start && sendDate <= end;
       });
       const filtered = filteredDate.filter((item) => {
-        if (activeTabKey === 'Sent') {
+        if (activeTabKey === 'sent') {
           return search === ''
-            ? item.freelancers.applications[0].status === 'Sent'
+            ? item.freelancers.applications[0].status === 'sent'
             : item.freelancers.accounts.name.toLowerCase().includes(search) &&
-                item.freelancers.applications[0].status === 'Sent';
+                item.freelancers.applications[0].status === 'sent';
         } else if (activeTabKey === 'interview') {
           return search === ''
             ? item.freelancers.applications[0].status === 'interview'
@@ -303,33 +367,34 @@ const TabSent = ({ activeTabKey, value }) => {
       });
       setList(filtered);
     } else {
-    const filtered = applicationList.filter((item) => {
-      if (activeTabKey === 'Sent') {
-        return search === ''
-          ? item.freelancers.applications[0].status === 'Sent'
-          : item.freelancers.accounts.name.toLowerCase().includes(search) &&
-              item.freelancers.applications[0].status === 'Sent';
-      } else if (activeTabKey === 'interview') {
-        return search === ''
-          ? item.freelancers.applications[0].status === 'interview'
-          : item.freelancers.accounts.name.toLowerCase().includes(search) &&
-              item.freelancers.applications[0].status === 'interview';
-      } else if (activeTabKey === 'approved') {
-        return search === ''
-          ? item.freelancers.applications[0].status === 'approved'
-          : item.freelancers.accounts.name.toLowerCase().includes(search) &&
-              item.freelancers.applications[0].status === 'approved';
-      }
-      return true;
-    });
-    setList(filtered);
-  }
+      const filtered = applicationList.filter((item) => {
+        if (activeTabKey === 'sent') {
+          return search === ''
+            ? item.freelancers.applications[0].status === 'sent'
+            : item.freelancers.accounts.name.toLowerCase().includes(search) &&
+                item.freelancers.applications[0].status === 'sent';
+        } else if (activeTabKey === 'interview') {
+          return search === ''
+            ? item.freelancers.applications[0].status === 'interview'
+            : item.freelancers.accounts.name.toLowerCase().includes(search) &&
+                item.freelancers.applications[0].status === 'interview';
+        } else if (activeTabKey === 'approved') {
+          return search === ''
+            ? item.freelancers.applications[0].status === 'approved'
+            : item.freelancers.accounts.name.toLowerCase().includes(search) &&
+                item.freelancers.applications[0].status === 'approved';
+        }
+        return true;
+      });
+      setList(filtered);
+    }
   }, [search, activeTabKey, applicationList, value]);
 
-  const getApplications = () => {
+  const getApplications = (id) => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         let applications = response.data;
+        console.log(applications)
         setApplicationList(applications);
       })
       .catch((error) => {
@@ -345,6 +410,10 @@ const TabSent = ({ activeTabKey, value }) => {
     } else if (checkAction.includes('interview')) {
       setIsIdItem(id);
       setIsModalInterview(true);
+    } else if (checkAction.includes('approved')) {
+      console.log(id)
+      setIsIdItem(id);
+      setIsModalApproved(true);
     }
   };
 
@@ -426,18 +495,29 @@ const TabSent = ({ activeTabKey, value }) => {
                       </Row>
                     </Col>
                     <Col>
-                      {activeTabKey === 'Sent' ? (
+                      {activeTabKey === 'sent' ? (
                         <Dropdown
                           menu={{
-                            items: sentItems.map((item) => ({
-                              ...item,
-                              key:
-                                item.key +
-                                '_' +
-                                application?.freelancers.applications[0].id,
-                            })),
+                            items:
+                              application?.hired !== true
+                                ? sentItems
+                                    .filter((item) => item.key !== 'approved')
+                                    .map((item) => ({
+                                      ...item,
+                                      key:
+                                        item.key +
+                                        '_' +
+                                        application?.freelancers.applications[0].id.toString(),
+                                    }))
+                                : sentItems.map((item) => ({
+                                    ...item,
+                                    key:
+                                      item.key +
+                                      '_' +
+                                      application?.freelancers.applications[0].id.toString(),
+                                  })),
                             onClick: ({ key }) => {
-                              onClick(application.id, key);
+                              onClick(application?.freelancers.applications[0].id, key);
                             },
                           }}
                         >
@@ -541,6 +621,13 @@ const TabSent = ({ activeTabKey, value }) => {
         setIsIdItem={setIsIdItem}
       />
 
+      <Approved
+        isModalApproved={isModalApproved}
+        setIsModalApproved={setIsModalApproved}
+        isIdItem={isIdItem}
+        setIsIdItem={setIsIdItem}
+      />
+
       <Col span={24}>
         <Pagination
           current={page}
@@ -556,7 +643,7 @@ const TabSent = ({ activeTabKey, value }) => {
 };
 
 const ApplicationsTracking = () => {
-  const [activeTabKey, setActiveTabKey] = useState('Sent');
+  const [activeTabKey, setActiveTabKey] = useState('sent');
   const setSearch = useSetRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
   const [value, setValue] = useState(null);

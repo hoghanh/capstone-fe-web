@@ -22,7 +22,7 @@ import 'dayjs/locale/vi';
 
 const tabList = [
   {
-    key: 'Sent',
+    key: 'sent',
     label: 'Ứng tuyển',
   },
   {
@@ -64,11 +64,11 @@ const TabSent = ({ activeTabKey, value }) => {
         return sendDate >= start && sendDate <= end;
       });
       const filtered = filteredDate.filter((item) => {
-        if (activeTabKey === 'Sent') {
+        if (activeTabKey === 'sent') {
           return search === ''
-            ? item.status === 'Sent'
+            ? item.status === 'sent'
             : item.jobs.title.toLowerCase().includes(search) &&
-                item.status === 'Sent';
+                item.status === 'sent';
         } else if (activeTabKey === 'interview') {
           return search === ''
             ? item.status === 'interview'
@@ -90,11 +90,11 @@ const TabSent = ({ activeTabKey, value }) => {
       setList(filtered);
     } else {
       const filtered = applicationList.filter((item) => {
-        if (activeTabKey === 'Sent') {
+        if (activeTabKey === 'sent') {
           return search === ''
-            ? item.status === 'Sent'
+            ? item.status === 'sent'
             : item.jobs.title.toLowerCase().includes(search) &&
-                item.status === 'Sent';
+                item.status === 'sent';
         } else if (activeTabKey === 'interview') {
           return search === ''
             ? item.status === 'interview'
@@ -269,7 +269,7 @@ const TabSent = ({ activeTabKey, value }) => {
 };
 
 const ApplicationsTracking = () => {
-  const [activeTabKey, setActiveTabKey] = useState('Sent');
+  const [activeTabKey, setActiveTabKey] = useState('sent');
   const setSearch = useSetRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
   const [value, setValue] = useState(null);
