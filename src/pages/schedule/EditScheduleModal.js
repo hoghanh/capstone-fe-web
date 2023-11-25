@@ -12,6 +12,9 @@ import { ModalPrimary } from 'components/Modal/Modal';
 import { CustomRow } from 'components/customize/Layout';
 import moment from 'moment';
 import { put } from 'utils/APICaller';
+import locale from 'antd/es/date-picker/locale/vi_VN';
+import 'dayjs/locale/vi';
+import dayjs from 'dayjs';
 
 function EditScheduleModal({
   visible,
@@ -32,7 +35,7 @@ function EditScheduleModal({
           body: {
             location: checkLink ? '' : values.address,
             link: checkLink ? values.address : '',
-            time: values.time,
+            time: dayjs(values.time),
           },
         })
           .then((res) => {
@@ -67,7 +70,7 @@ function EditScheduleModal({
       >
         <Form
           form={form}
-          name='editInterview'
+          name="editInterview"
           initialValues={{
             remember: true,
           }}
@@ -82,7 +85,7 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='address'
+                    name="address"
                     initialValue={appointmentLocation}
                     rules={[
                       {
@@ -91,7 +94,7 @@ function EditScheduleModal({
                       },
                     ]}
                   >
-                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
+                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -101,8 +104,8 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name='time'
-                    initialValue={moment(appointmentTime)}
+                    name="time"
+                    initialValue={dayjs(appointmentTime)}
                     rules={[
                       {
                         required: true,
@@ -111,13 +114,15 @@ function EditScheduleModal({
                     ]}
                   >
                     <DatePicker
+                      timezone="UTC"
+                      locale={locale}
                       style={{ with: '100%' }}
                       showTime
                       showNow={false}
                       disabledDate={(current) => {
                         return (
                           current &&
-                          current < moment().add(1, 'day').endOf('day')
+                          current < dayjs().add(1, 'day').endOf('day')
                         );
                       }}
                     />

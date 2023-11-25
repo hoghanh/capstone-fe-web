@@ -165,6 +165,7 @@ const DescriptionsArticle = ({ description }) => {
 
 //Attachment
 const AttachmentArticle = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <CustomRow>
       <Col span={24}>
@@ -174,9 +175,34 @@ const AttachmentArticle = () => {
       </Col>
       <CustomCol span={24} style={{ display: 'flex' }}>
         <PaperClipOutlined />
-        <Typography.Text underline={true} style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}>
-          fileAttachName.doc
-        </Typography.Text>
+        {jobDetail.fileAttachment ? (
+          <Typography.Link
+            href={jobDetail.fileAttachment}
+            target="_blank"
+            underline={true}
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: color.colorPrimary,
+              cursor: "pointer",
+            }}
+          >
+            fileCV.pdf
+          </Typography.Link>
+        ) : (
+          <Typography.Text
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: "#ccc",
+              cursor: "not-allowed",
+            }}
+          >
+            fileCV.pdf
+          </Typography.Text>
+        )}
       </CustomCol>
     </CustomRow>
   );
@@ -194,7 +220,7 @@ const SkillArticle = () => {
   };
 
   return (
-    <CustomRow className="skillArticle" gutter={[0, 10]}>
+    <CustomRow className='skillArticle' gutter={[0, 10]}>
       <Col span={24}>
         <Typography.Title level={5} style={{ margin: 0 }}>
           Yêu cầu kỹ năng

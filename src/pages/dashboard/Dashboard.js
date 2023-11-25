@@ -5,14 +5,10 @@ import Billing from 'pages/billing/Billing';
 
 const Dashboard = () => {
   return (
-    <Row>
-      <Col span={12}>
-        <InterviewSchedule />
-      </Col>
-      <Col span={12}>
-        <Billing />
-      </Col>
-    </Row>
+    <>
+      <InterviewSchedule />
+      <Billing />
+    </>
   );
 };
 

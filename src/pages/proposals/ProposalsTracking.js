@@ -363,7 +363,7 @@ const ProposalsTracking = () => {
           }}
         >
           <Search
-            placeholder='Tìm kiếm...'
+            placeholder="Tìm kiếm..."
             allowClear
             onSearch={onSearch}
             style={{
@@ -383,6 +383,7 @@ const ProposalsTracking = () => {
           }}
         >
           <RangePicker
+            timezone="UTC"
             value={dates || value}
             disabledDate={disabledDate}
             onCalendarChange={(val) => {
@@ -396,7 +397,7 @@ const ProposalsTracking = () => {
             changeOnBlur
           />
         </Col>
-        <Col className='trackingJobs' span={24}>
+        <Col className="trackingJobs" span={24}>
           <Card
             style={{
               width: '100%',

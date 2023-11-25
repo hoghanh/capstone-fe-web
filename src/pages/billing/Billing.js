@@ -14,8 +14,11 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import ModalTopup from './ModalTopup';
+import { useRecoilValue } from 'recoil';
+import { clientProfile } from 'recoil/atom';
+import locale from 'antd/es/date-picker/locale/vi_VN';
+import 'dayjs/locale/vi';
 
 const columns = [
   {
@@ -65,10 +68,11 @@ function Billing() {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
 
+  const user = useRecoilValue(clientProfile);
+
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
   const [currency, setCurrency] = useState();
-  const id = LocalStorageUtils.getItem('profile').id;
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
@@ -83,7 +87,7 @@ function Billing() {
     setIsLoading(true);
     if (!vnp_Amount) {
       get({
-        endpoint: `/payment/client/${id}`,
+        endpoint: `/payment/client/${user.id}`,
       })
         .then((res) => {
           setBills(res.data.payment);
@@ -108,7 +112,7 @@ function Billing() {
           transDate: vnp_PayDate,
           transType: '02',
           type: '+',
-          clientId: id,
+          clientId: user.id,
         },
       })
         .then((res) => {
@@ -120,7 +124,7 @@ function Billing() {
           console.log(err);
         });
     }
-  }, [vnp_Amount]);
+  }, [vnp_Amount, user]);
 
   function filterDate(date, dateString) {
     if (dateString) {
@@ -155,15 +159,15 @@ function Billing() {
         visible={openModal}
         onCancel={handleCancelModal}
         onOk={handleOkModal}
-        id={id}
+        id={user.id}
       />
       <Card
         bodyStyle={{ padding: 'unset' }}
         style={joblist.card}
-        className='card-jobs'
+        className="card-jobs"
         headStyle={{ paddingLeft: 0 }}
         title={
-          <div className='trackingJobs'>
+          <div className="trackingJobs">
             <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
               Tra cứu giao dịch
             </Typography.Title>
@@ -175,11 +179,13 @@ function Billing() {
         extra={
           <>
             <DatePicker
+              timezone="UTC"
               style={{ marginRight: 20 }}
               onChange={filterDate}
-              size='middle'
+              size="middle"
+              locale={locale}
             />
-            <Button size='large' type='primary' onClick={showModal}>
+            <Button size="large" type="primary" onClick={showModal}>
               Nạp tiền
             </Button>
           </>

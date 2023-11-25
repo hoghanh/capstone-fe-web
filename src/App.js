@@ -7,10 +7,17 @@ import useAuthActions from 'recoil/action';
 import './App.css';
 import { CLIENTID } from 'config';
 import Loading from 'components/loading/loading';
+import { get } from 'utils/APICaller';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { authState, clientProfile } from 'recoil/atom';
 
 function App() {
   const { autoLogin } = useAuthActions();
   const [isLoading, setIsLoading] = useState(true);
+
+  const auth = useRecoilValue(authState);
+  const setUser = useSetRecoilState(clientProfile);
+
   useEffect(() => {
     autoLogin();
     function start() {
@@ -30,6 +37,23 @@ function App() {
     gapi.load('client:auth2', start);
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (auth) {
+      fetchProfile();
+    }
+  }, [auth]);
+
+  function fetchProfile() {
+    get({ endpoint: `/client/profile/${auth.id}` })
+      .then((response) => {
+        setUser(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <React.Fragment>

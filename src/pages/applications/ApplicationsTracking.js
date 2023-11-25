@@ -1,23 +1,27 @@
-import { Card, Col, Input, Row, Typography, DatePicker, Empty } from "antd";
-import { CustomDivider, CustomRow } from "components/customize/Layout";
-import { PaperClipOutlined } from "components/icon/Icon";
-import React, { useState } from "react";
-import color from "styles/color";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { applicationListState, valueSearchState } from "recoil/atom";
+import { Card, Col, Input, Row, Typography, DatePicker, Empty } from 'antd';
+import { CustomDivider, CustomRow } from 'components/customize/Layout';
+import { PaperClipOutlined } from 'components/icon/Icon';
+import React, { useState } from 'react';
+import color from 'styles/color';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { applicationListState, valueSearchState } from 'recoil/atom';
+import locale from 'antd/es/date-picker/locale/vi_VN';
+import 'dayjs/locale/vi';
+import { formatDate } from 'components/formatter/format';
+import { Link } from 'react-router-dom';
 
 const tabListNoTitle = [
   {
-    key: "Sent",
-    label: "Đã gửi",
+    key: 'Sent',
+    label: 'Đã gửi',
   },
   {
-    key: "Approved",
-    label: "Đã nhận",
+    key: 'Approved',
+    label: 'Đã nhận',
   },
   {
-    key: "Declined",
-    label: "Từ chối",
+    key: 'Declined',
+    label: 'Từ chối',
   },
 ];
 
@@ -25,10 +29,10 @@ const TabSent = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
   const list = applicationList.filter((item) => {
-    return search === ""
-      ? item.status === "Sent"
+    return search === ''
+      ? item.status === 'Sent'
       : item.jobs.title.toLowerCase().includes(search) &&
-          item.status === "Sent";
+          item.status === 'Sent';
   });
   return (
     <Row>
@@ -50,17 +54,27 @@ const TabSent = () => {
                 gutter={[0, 5]}
               >
                 <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                  <Row justify={"space-between"}>
+                  <Row justify={'space-between'}>
                     <Col>
                       <Row gutter={[0, 10]}>
                         <Col span={24}>
-                          <Typography.Title level={4} style={{ margin: 0 }}>
-                            {application.jobs.title}
-                          </Typography.Title>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
+                            <Typography.Title level={4} style={{ margin: 0 }}>
+                              {application.jobs.title}
+                            </Typography.Title>
+                          </Link>
                         </Col>
                         <Col span={24}>
                           <Typography.Text style={{ margin: 0 }}>
-                            Công ty cổ phần Foody
+                            Tổ chức: {application.jobs.clients?.accounts?.name}
+                          </Typography.Text>
+                        </Col>
+                        <Col span={24}>
+                          <Typography.Text style={{ margin: 0 }}>
+                            Ngày gửi: {formatDate(application.sendDate)}
                           </Typography.Text>
                         </Col>
                       </Row>
@@ -71,7 +85,7 @@ const TabSent = () => {
                 <Col span={24}>
                   <Typography.Text
                     style={{
-                      display: "flex",
+                      display: 'flex',
                       margin: 0,
                       paddingLeft: 10,
                       paddingRight: 10,
@@ -81,22 +95,39 @@ const TabSent = () => {
                   </Typography.Text>
                 </Col>
                 <Col span={24}>
-                  <CustomRow align={"middle"}>
+                  <CustomRow align={'middle'}>
                     <Col>
                       <PaperClipOutlined />
                     </Col>
                     <Col>
-                      <Typography.Text
-                        underline={true}
-                        style={{
-                          fontWeight: 700,
-                          fontSize: 14,
-                          marginLeft: 5,
-                          color: color.colorPrimary,
-                        }}
-                      >
-                        fileAttachName.doc
-                      </Typography.Text>
+                      {application.fileAttach ? (
+                        <Typography.Link
+                          href={application.fileAttach}
+                          target="_blank"
+                          underline={true}
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: color.colorPrimary,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Link>
+                      ) : (
+                        <Typography.Text
+                          style={{
+                            fontWeight: 700,
+                            fontSize: 14,
+                            marginLeft: 5,
+                            color: '#ccc',
+                            cursor: 'not-allowed',
+                          }}
+                        >
+                          fileCV.pdf
+                        </Typography.Text>
+                      )}
                     </Col>
                   </CustomRow>
                 </Col>
@@ -114,10 +145,10 @@ const TabApproved = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
   const list = applicationList.filter((item) => {
-    return search === ""
-      ? item.status === "approved"
+    return search === ''
+      ? item.status === 'approved'
       : item.jobs.title.toLowerCase().includes(search) &&
-          item.status === "approved";
+          item.status === 'approved';
   });
   return (
     <>
@@ -140,27 +171,33 @@ const TabApproved = () => {
                   gutter={[0, 5]}
                 >
                   <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={"space-between"}>
+                    <Row justify={'space-between'}>
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs.title}
                             </Typography.Title>
+                          </Link>
                           </Col>
                           <Col span={24}>
                             <Typography.Text style={{ margin: 0 }}>
-                              Lương: 400.000VND
+                              Tổ chức:{' '}
+                              {application.jobs.clients?.accounts?.name}
                             </Typography.Text>
                           </Col>
                           <Col span={24}>
                             <Typography.Text
                               style={{ margin: 0, paddingRight: 15 }}
                             >
-                              Ngày bắt đầu: 23/7/2023
+                              Ngày gửi: {formatDate(application.sendDate)}
                             </Typography.Text>
                             <Typography.Text style={{ margin: 0 }}>
-                              Ngày kết thúc: 24/7/2023
+                              Ngày nhận: {formatDate(application.updatedAt)}
                             </Typography.Text>
                           </Col>
                         </Row>
@@ -171,7 +208,7 @@ const TabApproved = () => {
                   <Col span={24}>
                     <Typography.Text
                       style={{
-                        display: "flex",
+                        display: 'flex',
                         margin: 0,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -181,7 +218,7 @@ const TabApproved = () => {
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={"middle"}>
+                    <CustomRow align={'middle'}>
                       <Col>
                         <Typography.Title
                           level={5}
@@ -194,17 +231,34 @@ const TabApproved = () => {
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-                        <Typography.Text
-                          underline={true}
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: color.colorPrimary,
-                          }}
-                        >
-                          fileAttachName.doc
-                        </Typography.Text>
+                        {application.fileAttach ? (
+                          <Typography.Link
+                            href={application.fileAttach}
+                            target="_blank"
+                            underline={true}
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: color.colorPrimary,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Link>
+                        ) : (
+                          <Typography.Text
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: '#ccc',
+                              cursor: 'not-allowed',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Text>
+                        )}
                       </Col>
                     </CustomRow>
                   </Col>
@@ -223,10 +277,10 @@ const TabDeclined = () => {
   const applicationList = useRecoilValue(applicationListState);
   const search = useRecoilValue(valueSearchState);
   const list = applicationList.filter((item) => {
-    return search === ""
-      ? item.status === "declined"
+    return search === ''
+      ? item.status === 'declined'
       : item.jobs.title.toLowerCase().includes(search) &&
-          item.status === "declined";
+          item.status === 'declined';
   });
   return (
     <>
@@ -249,17 +303,29 @@ const TabDeclined = () => {
                   gutter={[0, 5]}
                 >
                   <Col span={24} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Row justify={"space-between"}>
+                    <Row justify={'space-between'}>
                       <Col>
                         <Row gutter={[0, 10]}>
                           <Col span={24}>
+                          <Link
+                            to={`/jobs/job-detail/${application.jobId}`}
+                            target="_blank"
+                          >
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs.title}
                             </Typography.Title>
+                          </Link>
                           </Col>
                           <Col span={24}>
                             <Typography.Text style={{ margin: 0 }}>
-                              Công ty cổ phần Foody
+                              Tổ chức:{' '}
+                              {application.jobs.clients?.accounts?.name}
+                            </Typography.Text>
+                          </Col>
+                          <Col span={24}>
+                            <Typography.Text style={{ margin: 0 }}>
+                              Ngày gửi: {formatDate(application.sendDate)}
+                              Ngày từ chối: {formatDate(application.updatedAt)}
                             </Typography.Text>
                           </Col>
                         </Row>
@@ -270,7 +336,7 @@ const TabDeclined = () => {
                   <Col span={24}>
                     <Typography.Text
                       style={{
-                        display: "flex",
+                        display: 'flex',
                         margin: 0,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -280,22 +346,39 @@ const TabDeclined = () => {
                     </Typography.Text>
                   </Col>
                   <Col span={24}>
-                    <CustomRow align={"middle"}>
+                    <CustomRow align={'middle'}>
                       <Col>
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-                        <Typography.Text
-                          underline={true}
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: color.colorPrimary,
-                          }}
-                        >
-                          fileAttachName.doc
-                        </Typography.Text>
+                        {application.fileAttach ? (
+                          <Typography.Link
+                            href={application.fileAttach}
+                            target="_blank"
+                            underline={true}
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: color.colorPrimary,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Link>
+                        ) : (
+                          <Typography.Text
+                            style={{
+                              fontWeight: 700,
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: '#ccc',
+                              cursor: 'not-allowed',
+                            }}
+                          >
+                            fileCV.pdf
+                          </Typography.Text>
+                        )}
                       </Col>
                     </CustomRow>
                   </Col>
@@ -317,7 +400,7 @@ const contentListNoTitle = {
 };
 
 const ApplicationsTracking = () => {
-  const [activeTabKey2, setActiveTabKey2] = useState("Sent");
+  const [activeTabKey2, setActiveTabKey2] = useState('Sent');
   const [, setSearch] = useRecoilState(valueSearchState);
   const [dates, setDates] = useState(null);
   const [value, setValue] = useState(null);
@@ -334,8 +417,8 @@ const ApplicationsTracking = () => {
     if (!dates) {
       return false;
     }
-    const tooLate = dates[0] && current.diff(dates[0], "days") >= 7;
-    const tooEarly = dates[1] && dates[1].diff(current, "days") >= 7;
+    const tooLate = dates[0] && current.diff(dates[0], 'days') >= 7;
+    const tooEarly = dates[1] && dates[1].diff(current, 'days') >= 7;
     return !!tooEarly || !!tooLate;
   };
   const onOpenChange = (open) => {
@@ -349,7 +432,7 @@ const ApplicationsTracking = () => {
     <Card style={{ marginBottom: 30 }}>
       <Row gutter={[0, 10]}>
         <Col span={24}>
-          <Typography.Title level={3} style={{ margin: "20px 30px 10px" }}>
+          <Typography.Title level={3} style={{ margin: '20px 30px 10px' }}>
             Công việc của tôi
           </Typography.Title>
         </Col>
@@ -367,7 +450,7 @@ const ApplicationsTracking = () => {
             allowClear
             onSearch={onSearch}
             style={{
-              width: "100%",
+              width: '100%',
             }}
           />
         </Col>
@@ -378,8 +461,8 @@ const ApplicationsTracking = () => {
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 20,
-            display: "flex",
-            justifyContent: "flex-end",
+            display: 'flex',
+            justifyContent: 'flex-end',
           }}
         >
           <RangePicker
@@ -391,24 +474,25 @@ const ApplicationsTracking = () => {
             onChange={(val) => {
               setValue(val);
             }}
-            format={"DD/MM/YYYY"}
+            format={'DD/MM/YYYY'}
             onOpenChange={onOpenChange}
             changeOnBlur
+            locale={locale}
           />
         </Col>
         <Col className="trackingJobs" span={24}>
           <Card
             style={{
-              width: "100%",
-              border: "transparent",
+              width: '100%',
+              border: 'transparent',
             }}
             headStyle={{
               color: color.colorBlack,
-              fontWeight: "bold",
+              fontWeight: 'bold',
               paddingLeft: 30,
               paddingRight: 30,
-              margin: "10px 0",
-              borderBottom: "0.5px solid #000 !important",
+              margin: '10px 0',
+              borderBottom: '0.5px solid #000 !important',
             }}
             tabList={tabListNoTitle}
             activeTabKey={activeTabKey2}

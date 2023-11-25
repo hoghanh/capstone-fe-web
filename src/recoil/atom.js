@@ -189,20 +189,7 @@ export const listSkillsState = atom({
 
 export const authState = atom({
   key: 'auth',
-  default: {
-    token: null,
-    id: '',
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
-    image: '',
-    password: '',
-    role: '',
-    currency: '',
-    status: 0,
-    exp: 0,
-  },
+  default: {},
 });
 
 export const appoinmentState = atom({
