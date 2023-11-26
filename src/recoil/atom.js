@@ -1,6 +1,60 @@
 // recoilAtoms.js
 import { atom } from 'recoil';
 
+const jobskill = {
+  jobSkillId: 0,
+  createdAt: '',
+  updatedAt: '',
+  jobId: 0,
+  skillId: 0,
+};
+
+const skills = {
+  id: '',
+  name: '',
+  description: '',
+  jobskill: jobskill,
+};
+
+const accounts = {
+  id: 0,
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  image: '',
+  password: '',
+  role: '',
+  currency: 0,
+  status: false,
+  createdAt: '',
+  updatedAt: '',
+};
+
+const clients = {
+  accountId: 0,
+  accounts: accounts,
+  companyWebsite: '',
+  id: 0,
+  status: '',
+  taxCode: null,
+  applied: 0,
+  createAt: '',
+  updateAt: '',
+};
+
+const applications = {
+  id: '',
+  description: '',
+  fileAttach: '',
+  sendDate: '',
+  status: '',
+  createdAt: '',
+  updatedAt: '',
+  freelancerId: '',
+  jobId: '',
+};
+
 export const categoriesNavbarState = atom({
   key: 'categoriesNavbarState',
   default: [],
@@ -33,60 +87,6 @@ export const profileState = atom({
     updatedAt: '',
   },
 });
-
-const accounts = {
-  id: 0,
-  name: '',
-  phone: '',
-  email: '',
-  address: '',
-  image: '',
-  password: '',
-  role: '',
-  currency: 0,
-  status: false,
-  createdAt: '',
-  updatedAt: '',
-};
-
-const jobskill = {
-  jobSkillId: 0,
-  createdAt: '',
-  updatedAt: '',
-  jobId: 0,
-  skillId: 0,
-};
-
-const skills = {
-  id: '',
-  name: '',
-  description: '',
-  jobskill: jobskill,
-};
-
-const clients = {
-  accountId: 0,
-  accounts: accounts,
-  companyWebsite: '',
-  id: 0,
-  status: '',
-  taxCode: null,
-  applied: 0,
-  createAt: '',
-  updateAt: '',
-};
-
-const applications = {
-  id: '',
-  description: '',
-  fileAttach: '',
-  sendDate: '',
-  status: '',
-  createdAt: '',
-  updatedAt: '',
-  freelancerId: '',
-  jobId: '',
-};
 
 export const jobDetailState = atom({
   key: 'jobDetailState',

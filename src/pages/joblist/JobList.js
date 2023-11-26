@@ -192,10 +192,9 @@ const JobList = () => {
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
                 {totalItems > 0
-                  ? `${limit * (page - 1) + 1} - ${limit * page < totalItems
-                    ? limit * page
-                    : totalItems
-                  } của ${totalItems} kết quả `
+                  ? `${limit * (page - 1) + 1} - ${
+                      limit * page < totalItems ? limit * page : totalItems
+                    } của ${totalItems} kết quả `
                   : `0 kết quả`}
               </Typography.Text>
             </div>
@@ -277,7 +276,8 @@ const JobList = () => {
                 borderBottom: '0.5px solid #000',
               }}
             >
-              <Col span={5}
+              <Col
+                span={5}
                 style={{
                   display: md ? 'flex' : 'none',
                   alignItems: 'center',
@@ -302,7 +302,11 @@ const JobList = () => {
                   {job.clients?.accounts?.name.toUpperCase()}
                 </Typography.Title>
               </Col>
-              <Col span={24} md={{ span: 19 }} style={{ padding: 10, overflow: 'auto' }}>
+              <Col
+                span={24}
+                md={{ span: 19 }}
+                style={{ padding: 10, overflow: 'auto' }}
+              >
                 <div
                   style={{
                     display: ' flex',
@@ -327,22 +331,24 @@ const JobList = () => {
                       {CalculateDaysLeft(job.proposalSubmitDeadline)}
                     </Typography.Text>
                   </div>
-                  {auth.role === 'freelancer' ? <div
-                    style={{
-                      cursor: 'pointer',
-                      alignSelf: md ? ' ' : 'flex-start',
-                      display: 'flex',
-                    }}
-                    onClick={() => handleFavoriteChange(job.id)}
-                  >
-                    {isLoading ? (
-                      <Spin />
-                    ) : favoriteList.includes(job.id) ? (
-                      <BookMark />
-                    ) : (
-                      <BookMarkOutlined />
-                    )}
-                  </div> : null}
+                  {auth.role === 'freelancer' ? (
+                    <div
+                      style={{
+                        cursor: 'pointer',
+                        alignSelf: md ? ' ' : 'flex-start',
+                        display: 'flex',
+                      }}
+                      onClick={() => handleFavoriteChange(job.id)}
+                    >
+                      {isLoading ? (
+                        <Spin />
+                      ) : favoriteList.includes(job.id) ? (
+                        <BookMark />
+                      ) : (
+                        <BookMarkOutlined />
+                      )}
+                    </div>
+                  ) : null}
                 </div>
                 <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                   <Typography.Paragraph
