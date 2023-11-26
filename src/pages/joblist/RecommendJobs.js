@@ -9,6 +9,7 @@ import {
   Pagination,
   Grid,
   Spin,
+  Row, Col,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
@@ -55,7 +56,7 @@ const JobList = () => {
       setFavoriteList([]);
     }
   }, [auth, page]);
-  
+
   const getFavorite = () => {
     get({ endpoint: `/accounts/favorite/${auth.id}` })
       .then((res) => {
@@ -118,7 +119,7 @@ const JobList = () => {
 
   const onChange = (pageNumber) => {
     setPage(pageNumber);
-  };  
+  };
 
   return (
     <>
@@ -139,18 +140,17 @@ const JobList = () => {
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
                 {totalItems > 0
-                  ? `${limit * (page - 1) + 1} - ${
-                      limit * page < totalItems
-                        ? limit * page
-                        : totalItems
-                    } của ${totalItems} kết quả`
+                  ? `${limit * (page - 1) + 1} - ${limit * page < totalItems
+                    ? limit * page
+                    : totalItems
+                  } của ${totalItems} kết quả`
                   : `0 kết quả`}
               </Typography.Text>
             </div>
           }
         >
           {recommendedList?.map((job) => (
-            <div
+            <Row
               key={job.jobs.id}
               style={{
                 display: ' flex',
@@ -159,7 +159,7 @@ const JobList = () => {
                 borderBottom: '0.5px solid #000',
               }}
             >
-              <div
+              <Col span={5}
                 style={{
                   display: md ? 'flex' : 'none',
                   alignItems: 'center',
@@ -183,8 +183,8 @@ const JobList = () => {
                 >
                   {job.jobs.clients?.accounts?.name.toUpperCase()}
                 </Typography.Title>
-              </div>
-              <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
+              </Col>
+              <Col span={24} md={{ span: 19 }} style={{ padding: 10, overflow: 'auto', width: '100%' }}>
                 <div
                   style={{
                     display: ' flex',
@@ -269,8 +269,8 @@ const JobList = () => {
                     <FileTextFilled />
                   </Typography.Title>
                 </div>
-              </div>
-            </div>
+              </Col>
+            </Row>
           ))}
           <Pagination
             current={1}

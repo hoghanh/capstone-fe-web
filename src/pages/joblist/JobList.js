@@ -9,7 +9,9 @@ import {
   notification,
   Pagination,
   Grid,
-  Spin
+  Spin,
+  Row,
+  Col,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
@@ -266,7 +268,7 @@ const JobList = () => {
           }
         >
           {sortedJobList?.map((job) => (
-            <div
+            <Row
               key={job.id}
               style={{
                 display: ' flex',
@@ -275,7 +277,7 @@ const JobList = () => {
                 borderBottom: '0.5px solid #000',
               }}
             >
-              <div
+              <Col span={5}
                 style={{
                   display: md ? 'flex' : 'none',
                   alignItems: 'center',
@@ -299,8 +301,8 @@ const JobList = () => {
                 >
                   {job.clients?.accounts?.name.toUpperCase()}
                 </Typography.Title>
-              </div>
-              <div style={{ padding: 10, overflow: 'auto' }}>
+              </Col>
+              <Col span={24} md={{ span: 19 }} style={{ padding: 10, overflow: 'auto' }}>
                 <div
                   style={{
                     display: ' flex',
@@ -378,8 +380,8 @@ const JobList = () => {
                     {job.applied ? job.applied : 0} applied <FileTextFilled />
                   </Typography.Title>
                 </div>
-              </div>
-            </div>
+              </Col>
+            </Row>
           ))}
           <Pagination
             current={1}
