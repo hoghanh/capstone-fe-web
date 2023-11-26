@@ -102,14 +102,16 @@ function ClientHeader({ name, subName, onPress }) {
           ),
         }));
 
-        if (res.data) {
+        if (res.data.notification) {
           setNotifications(arr);
           setCount(res.data.unreadNotifications);
         } else {
           setNotifications([
             {
               id: 'no-data',
-              label: <Empty />,
+              label: (
+                <Empty description={<span>Không có thông báo nào</span>} />
+              ),
             },
           ]);
         }

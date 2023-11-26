@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Input,
   Image,
@@ -12,6 +12,7 @@ import {
   Dropdown,
   notification,
   Empty,
+  Badge,
 } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
@@ -21,7 +22,7 @@ import LoginModal from './LoginModal';
 import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState, otp } from 'recoil/atom';
 import { GoogleLogout } from 'react-google-login';
-import { CLIENTID } from 'config';
+import socket, { CLIENTID } from 'config';
 import {
   Company,
   Heart,
@@ -32,7 +33,7 @@ import {
 } from 'components/icon/Icon';
 import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
-import { post } from 'utils/APICaller';
+import { post, put, get } from 'utils/APICaller';
 import OTPModal from './OTPModal';
 
 const onSuccess = () => {
@@ -145,7 +146,10 @@ function SearchBar() {
   const [OTPInput, setOTPInput] = useState('');
   const [password, setPassword] = useState('');
   const [rePassWord, setRePassword] = useState('');
+
   const [notifications, setNotifications] = useState([]);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [count, setCount] = useState(0);
 
   const items = [
     {
@@ -339,6 +343,89 @@ function SearchBar() {
     }
   };
 
+  useEffect(() => {
+    changeNotification();
+  }, []);
+
+  useEffect(() => {
+    if (auth) {
+      socket?.emit('newUser', auth.id);
+      socket.on('getNotification', (data) => {
+        notification.info({
+          message:
+            data.notification.name + ': ' + data.notification.description,
+        });
+        changeNotification();
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [auth]);
+
+  const handleMenuClick = ({ key }) => {
+    put({ endpoint: `/notification/${key}` })
+      .then((res) => {
+        changeNotification();
+      })
+      .catch((err) => {});
+  };
+
+  const changeNotification = () => {
+    get({ endpoint: `/notification/account/${auth.id}` })
+      .then((res) => {
+        const arr = res.data.notifications.map((item) => ({
+          key: item.id.toString(),
+          label: (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography.Text
+                style={{
+                  textWrap: 'wrap',
+                }}
+              >
+                {item.status === 'unread' ? (
+                  <Badge
+                    status='processing'
+                    style={{ marginRight: '8px', fontSize: '20px' }}
+                  />
+                ) : (
+                  ''
+                )}
+                {item.description}
+              </Typography.Text>
+            </div>
+          ),
+        }));
+
+        if (res.data.notification) {
+          setNotifications(arr);
+          setCount(res.data.unreadNotifications);
+        } else {
+          setNotifications([
+            {
+              id: 'no-data',
+              label: (
+                <Empty description={<span>Không có thông báo nào</span>} />
+              ),
+            },
+          ]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const toggleMenuVisibility = () => {
+    setMenuVisible(!menuVisible);
+  };
+
   return (
     <Layout.Header style={{ background: '#FFFFFF', padding: '0 20px' }}>
       {/* Modal Register */}
@@ -463,15 +550,33 @@ function SearchBar() {
 
         {auth.email ? (
           <>
-            <Col xs={0} sm={0} md={3} lg={3} xl={3}>
-              <ReactSVG
-                style={{ height: 40 }}
-                src='/icon/notification.svg'
-                beforeInjection={(svg) => {
-                  svg.setAttribute('width', '32');
-                  svg.setAttribute('height', '32');
-                }}
-              />
+            <Col xs={0} sm={0} md={3} lg={3} xl={3} style={{ display: 'flex' }}>
+              <Badge count={count}>
+                <ReactSVG
+                  onClick={toggleMenuVisibility}
+                  src='/icon/notification.svg'
+                  beforeInjection={(svg) => {
+                    svg.setAttribute('width', '32');
+                    svg.setAttribute('height', '32');
+                  }}
+                />
+                {menuVisible && (
+                  <Menu
+                    className='notification'
+                    items={notifications}
+                    onClick={handleMenuClick}
+                    style={{
+                      backgroundColor: '#ffffff',
+                      position: 'absolute',
+                      top: 48,
+                      width: 350,
+                      right: 10,
+                      zIndex: 1,
+                      border: '1px solid #f5f5f5',
+                    }}
+                  ></Menu>
+                )}
+              </Badge>
             </Col>
             <Col xs={7} sm={5} md={4} lg={4} xl={3}>
               <Dropdown menu={{ items, onClick }}>
