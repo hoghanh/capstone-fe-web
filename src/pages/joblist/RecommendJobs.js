@@ -109,22 +109,10 @@ const JobList = () => {
 
   const handleFavoriteChange = (id) => {
     setIsLoading(true);
-    switch (auth.role) {
-      case 'freelancer':
-        if (!favoriteList.includes(id)) {
-          addFavorite(id);
-        } else {
-          removeFavorite(id);
-        }
-        break;
-      case 'client':
-        notification.error('Bạn không thể thêm hoặc xóa job yêu thích');
-        setIsLoading(false);
-        break;
-      default:
-        notification.error('Hãy đăng nhập!');
-        setIsLoading(false);
-        break;
+    if (!favoriteList.includes(id)) {
+      addFavorite(id);
+    } else {
+      removeFavorite(id);
     }
   };
 
@@ -227,22 +215,22 @@ const JobList = () => {
                       Ngày đăng bài: {formatDate(job.jobs.updatedAt)}
                     </Typography.Text>
                   </div>
-                  <div
+                  {auth.role === 'freelancer' ? <div
                     style={{
                       cursor: 'pointer',
                       alignSelf: md ? ' ' : 'flex-start',
                       display: 'flex',
                     }}
-                    onClick={() => handleFavoriteChange(job.jobs.id)}
+                    onClick={() => handleFavoriteChange(job.id)}
                   >
                     {isLoading ? (
                       <Spin />
-                    ) : favoriteList.includes(job.jobs.id) ? (
+                    ) : favoriteList.includes(job.id) ? (
                       <BookMark />
                     ) : (
                       <BookMarkOutlined />
                     )}
-                  </div>
+                  </div> : null}
                 </div>
                 <Link to={`/jobs/job-detail/${job.jobs.id}`} target="_blank">
                   <Typography.Paragraph
