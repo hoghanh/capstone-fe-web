@@ -22,8 +22,10 @@ export const CalculateDaysLeft = (endDate) => {
     } else {
       output = 'Sắp hết hạn';
     }
-    return output;
+  }else{
+    output ='Hết hạn';
   }
+  return output;
 };
 
 export const formatDate = (dateInput) => {

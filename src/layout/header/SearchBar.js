@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Input,
   Image,
@@ -16,14 +16,13 @@ import {
 import { MenuOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { useRecoilState, useRecoilValue } from 'recoil';
-
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState, otp } from 'recoil/atom';
 import { GoogleLogout } from 'react-google-login';
 import { CLIENTID } from 'config';
-import { Heart, Logout, Manage, User } from 'components/icon/Icon';
+import { Company, Heart, Job, Logout, Manage, User } from 'components/icon/Icon';
 import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { post } from 'utils/APICaller';
@@ -41,6 +40,8 @@ const Search = () => {
   const { useBreakpoint } = Grid;
   const { md, lg } = useBreakpoint();
   const [results, setResults] = useState([]);
+  const auth = useRecoilValue(authState);
+
 
   const onSearch = (value) => {
     post({
@@ -51,20 +52,7 @@ const Search = () => {
     })
       .then((res) => {
         const data = res.data.searchList;
-        const jobs = data
-          .filter((item) => item.title)
-          .map((job) => ({
-            ...job,
-            icon: <Manage />,
-          }));
-        const accounts = data
-          .filter((item) => item.name)
-          .map((account) => ({
-            ...account,
-            icon: <User />,
-          }));
-        const items = [...accounts, ...jobs];
-        setResults(items);
+        setResults(data);
       })
       .catch((error) => {
         console.error({
@@ -75,22 +63,35 @@ const Search = () => {
 
   const items = results.length
     ? results.map((result, index) => ({
-        label: (
-          <Link
-            to={
-              result.name
-                ? `/profile/${result.id}`
+      label: (
+        <Link
+          to={
+            result.tag === 'freelancer'
+              ? `/profile/${result.id}`
+              : result.tag === 'client'
+                ? `/profile-client/${result.id}`
                 : `/jobs/job-detail/${result.id}`
-            }
-          >
-            <Typography.Text style={{ padding: 10 }}>
-              {result.name || result.title}
-            </Typography.Text>
-          </Link>
+          }
+          state={{
+            clientId: result.tag === 'client' ? result.referId : null,
+          }}
+        >
+          <Typography.Text style={{ padding: 10 }}>
+            {result.name || result.title}{' '}
+            {result.id === auth.id ? '(Bạn)' : ''}
+          </Typography.Text>
+        </Link>
+      ),
+      key: index,
+      icon:
+        result.tag === 'freelancer' ? (
+          <User />
+        ) : result.tag === 'client' ? (
+          <Company />
+        ) : (
+          <Job />
         ),
-        key: index,
-        icon: result.icon,
-      }))
+    }))
     : [{ label: <Empty />, key: '1' }];
 
   return (
@@ -433,7 +434,7 @@ function SearchBar() {
           </div>
         </Col>
         <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to='/'>
+          <Link to={auth.role === 'freelancer' ? '/recommended' : '/'}>
             <Image
               width={34}
               src='/icon/logo.svg'
@@ -443,7 +444,7 @@ function SearchBar() {
           </Link>
         </Col>
         <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to='/'>
+          <Link to={auth.role === 'freelancer' ? '/recommended' : '/'}>
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>

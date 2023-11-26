@@ -24,7 +24,9 @@ import { get, put, remove } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import { useRecoilValue } from 'recoil';
-import { authState } from 'recoil/atom';
+import { authState, clientProfile } from 'recoil/atom';
+import dayjs from 'dayjs';
+
 
 
 const EditJob = () => {
@@ -41,13 +43,15 @@ const EditJob = () => {
     defaultFileList: [],
   });
 
-  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(clientProfile);
 
   useEffect(() => {
-    getJob();
-    getCategory();
-    getSkill();
-  }, []);
+    if (user) {
+      getJob();
+      getCategory();
+      getSkill();
+    }
+  }, [user]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -75,7 +79,7 @@ const EditJob = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `jobs/client-${auth.id}/${file.name}`);
+    const storageRef = ref(storage, `jobs/client-${user.id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -139,8 +143,8 @@ const EditJob = () => {
         applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
-        clientId: auth.id,
-        status: true,
+        clientId: user.id,
+        status: 'open',
         subCategory: values.category,
         skill: values.skills,
       },
@@ -342,6 +346,7 @@ const EditJob = () => {
               <Upload.Dragger
                 {...props}
                 name="file-upload"
+                accept='.pdf'
                 maxCount={1}
                 beforeUpload={() => false}
               >
@@ -483,6 +488,12 @@ const EditJob = () => {
                 format="YYYY-MM-DD HH:mm:ss"
                 placeholder="Chọn ngày giờ"
                 locale={locale}
+                showNow={false}
+                disabledDate={(current) => {
+                  return (
+                    current && current.isBefore(dayjs().endOf('day'))
+                  );
+                }}
               />
             </Form.Item>
             <Form.Item style={{ textAlign: 'right' }}>

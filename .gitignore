@@ -9,6 +9,9 @@
 # prettierrc
 .prettierrc
 
+# vscode
+.vscode
+
 # testing
 /coverage
 

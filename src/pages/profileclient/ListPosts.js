@@ -30,7 +30,6 @@ const ListPosts = () => {
   const [openSelect, setOpenSelect] = useState();
   const { clientId } = useLocation().state;
 
-  console.log(clientId);
   useEffect(() => {
     changePage(clientId);
   }, [clientId]);

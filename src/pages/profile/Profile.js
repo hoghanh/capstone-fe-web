@@ -28,7 +28,7 @@ const Profile = () => {
       freelancerId = id;
     }
     getFreelancer(freelancerId);
-  }, [profileId, auth]);
+  }, [profileId, auth, id]);
 
   const getFreelancer = (freelancerId) => {
     get({ endpoint: `/freelancer/profile/${freelancerId}` })

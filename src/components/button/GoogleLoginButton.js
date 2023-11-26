@@ -42,7 +42,7 @@ const GoogleLoginButton = ({ onLogin }) => {
       .then((response) => {
         login(response.data.token);
         if (!page.startsWith("jobs/job-detail/")) {
-          navigate("/jobs/recommended");
+          navigate("/recommended");
         }
         notification.success({ message: response.data.message });
       })

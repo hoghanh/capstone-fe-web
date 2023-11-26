@@ -22,7 +22,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { authState, clientProfile } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 import color from 'styles/color';
 import { put, remove } from 'utils/APICaller';
 
@@ -169,6 +169,7 @@ const BasicInformation = () => {
   const props = {
     listType: 'picture-card',
     fileList: {avatar},
+    accept: '.png, .jpg, .jpeg',
     maxCount: 1,
     beforeUpload: () => false,
     onRemove: () => false,
@@ -250,7 +251,8 @@ const BasicInformation = () => {
                 size={100}
                 style={{ border: '1px solid #ccc' }}
                 shape="square"
-                src={informationUser?.accounts.image}
+                alt='logo'
+                src={informationUser?.accounts?.image}
               />
               <Form.Item
                 style={{ paddingLeft: 10 }}
