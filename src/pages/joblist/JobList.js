@@ -32,8 +32,9 @@ const JobList = () => {
   const { subCateId, subCateName } = useParams();
 
   const [limit, setLimit] = useState(10);
-  const [limitRecommended, setLimitRecommended] = useState(10);
   const [page, setPage] = useState(1);
+
+  const [limitRecommended, setLimitRecommended] = useState(10);
   const [pageRecommended, setPageRecommended] = useState(1);
   const [jobList, setJobList] = useState([]);
   const [recommendedList, setRecommendedList] = useState([]);

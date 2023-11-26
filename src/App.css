@@ -300,7 +300,12 @@ body {
   color: var(--White, #FFF) !important;
 } */
 
-
+.notification.ant-menu-inline >.ant-menu-item, 
+.ant-menu-vertical >.ant-menu-item, 
+.ant-menu-inline >.ant-menu-submenu>.ant-menu-submenu-title, 
+.ant-menu-vertical >.ant-menu-submenu>.ant-menu-submenu-title {
+  height: fit-content
+}
 
 .ant-collapse-content {
   border-bottom-left-radius: 20px !important;

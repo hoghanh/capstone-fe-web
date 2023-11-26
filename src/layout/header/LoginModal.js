@@ -10,19 +10,23 @@ import { useSetRecoilState } from 'recoil';
 import { clientProfile } from 'recoil/atom';
 import { useNavigate } from 'react-router-dom';
 
-function LoginModal({ visible, onCancel, onOk, handleMove, openForgotPasswordModal }) {
+function LoginModal({
+  visible,
+  onCancel,
+  onOk,
+  handleMove,
+  openForgotPasswordModal,
+}) {
   const navigate = useNavigate();
   const setInformationUser = useSetRecoilState(clientProfile);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { saveProfile } = useAuthActions();
 
   function fetchProfile(id) {
     get({ endpoint: `/client/profile/${id}` })
       .then((response) => {
         const data = response.data;
         setInformationUser(data);
-        saveProfile(data);
         navigate('/client');
       })
       .catch((error) => {

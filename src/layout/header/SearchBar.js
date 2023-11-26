@@ -138,6 +138,7 @@ function SearchBar() {
   const [OTPInput, setOTPInput] = useState('');
   const [password, setPassword] = useState('');
   const [rePassWord, setRePassword] = useState('');
+  const [notifications, setNotifications] = useState([]);
 
   const items = [
     {
@@ -456,14 +457,19 @@ function SearchBar() {
         {auth.email ? (
           <>
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
-              <ReactSVG
-                style={{ height: 40 }}
-                src='/icon/notification.svg'
-                beforeInjection={(svg) => {
-                  svg.setAttribute('width', '32');
-                  svg.setAttribute('height', '32');
-                }}
-              />
+              {/* <Dropdown
+                menu={{ notifications, handleNotification }}
+                style={{ height: 200 }}
+              >
+                <ReactSVG
+                  style={{ height: 40 }}
+                  src='/icon/notification.svg'
+                  beforeInjection={(svg) => {
+                    svg.setAttribute('width', '32');
+                    svg.setAttribute('height', '32');
+                  }}
+                />
+              </Dropdown> */}
             </Col>
             <Col xs={7} sm={5} md={4} lg={4} xl={3}>
               <Dropdown menu={{ items, onClick }}>

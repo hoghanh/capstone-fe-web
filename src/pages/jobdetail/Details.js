@@ -58,7 +58,6 @@ const SubmitApplication = ({ status, setStatus }) => {
   let { id } = useParams();
 
   const [notificationData, setNotificationData] = useState({
-    accountId: auth.id,
     notificationName: 'Đơn ứng tuyển mới',
     notificationDescription: `Bạn vừa nhận 1 đơn ứng tuyển từ ${auth.name}`,
   });
@@ -107,7 +106,11 @@ const SubmitApplication = ({ status, setStatus }) => {
     })
       .then((res) => {
         //Gửi notification [thông tin] - đến [accountID người nhận]
-        socket.emit('sendNotification', notificationData, jobDetail.clients.id);
+        socket.emit(
+          'sendNotification',
+          notificationData,
+          jobDetail.clients.accounts.id
+        );
 
         notification.success({
           message: 'Ứng tuyển thành công',
@@ -666,6 +669,7 @@ const InformationRight = ({ showModalLogin, status, setStatus }) => {
       }}
     >
       <Row style={{ justifyContent: 'center' }}>
+        {/* Đăng nhập và phân quyền nếu đăng nhập  */}
         {auth.email ? (
           status ? null : (
             <>
@@ -803,11 +807,26 @@ const Details = ({ status, setStatus }) => {
                 alignItems: 'center',
               }}
             >
-              <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+              <SubmitApplication status={status} setStatus={setStatus} />
             </Col>
+            <CustomDivider />
           </>
         )
-      ) : null}
+      ) : (
+        <>
+          <Col
+            style={{
+              margin: '20px 0',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+          </Col>
+          <CustomDivider />
+        </>
+      )}
     </>
   );
 };

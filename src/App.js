@@ -42,16 +42,7 @@ function App() {
 
   useEffect(() => {
     if (auth.id) {
-      socket?.emit('newUser', auth.id);
-      socket.on('getNotification', (data) => {
-        notification.info({ message: data.notification });
-        console.log(data.notification);
-      });
-
       fetchProfile();
-      return () => {
-        socket.disconnect();
-      };
     }
   }, [auth]);
 
