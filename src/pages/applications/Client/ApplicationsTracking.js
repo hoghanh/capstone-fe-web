@@ -389,7 +389,6 @@ const TabSent = ({ activeTabKey, value }) => {
           (application) =>
             application.jobId !== null && application.jobs !== null
         );
-        console.log(applications);
         setApplicationList(applications);
       })
       .catch((error) => {

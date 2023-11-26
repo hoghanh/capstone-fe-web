@@ -382,6 +382,7 @@ const AddCertifications = () => {
                       <Upload.Dragger
                         name="file-upload"
                         maxCount={1}
+                        accept='.pdf, .png, .jpg, .jpeg'
                         beforeUpload={() => false}
                       >
                         <p className="ant-upload-drag-icon">
@@ -945,6 +946,7 @@ const BodySection = () => {
                       <Upload.Dragger
                         name="file-upload"
                         maxCount={1}
+                        accept='.pdf, .png, .jpg, .jpeg'
                         beforeUpload={() => false}
                       >
                         <p className="ant-upload-drag-icon">

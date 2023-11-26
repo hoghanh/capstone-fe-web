@@ -346,6 +346,7 @@ const EditJob = () => {
               <Upload.Dragger
                 {...props}
                 name="file-upload"
+                accept='.pdf'
                 maxCount={1}
                 beforeUpload={() => false}
               >

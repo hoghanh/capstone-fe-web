@@ -47,7 +47,6 @@ const BodySection = () => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         let applications = response.data;
-        console.log(applications)
         setCountTotal(applications.length);
         let listSent = applications.filter(
           (application) =>

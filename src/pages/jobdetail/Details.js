@@ -141,6 +141,7 @@ const SubmitApplication = ({status, setStatus}) => {
   const props = {
     name: "files",
     maxCount: 1,
+    accept:'.pdf',
     beforeUpload: () => false,
   };
 
@@ -458,7 +459,7 @@ const AttachmentArticle = () => {
               cursor: "pointer",
             }}
           >
-            fileCV.pdf
+            Tệp đính kèm
           </Typography.Link>
         ) : (
           <Typography.Text
@@ -470,7 +471,7 @@ const AttachmentArticle = () => {
               cursor: "not-allowed",
             }}
           >
-            fileCV.pdf
+            Tệp đính kèm
           </Typography.Text>
         )}
       </CustomCol>
