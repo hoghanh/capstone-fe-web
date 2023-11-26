@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
-import { ReactSVG } from 'react-svg';
 
 import joblist from 'styles/joblist';
 import { get, post, remove } from 'utils/APICaller';
@@ -26,7 +25,7 @@ import { BookMark, BookMarkOutlined } from 'components/icon/Icon';
 
 const JobList = () => {
   const { useBreakpoint } = Grid;
-  const { sm, md, lg, xl } = useBreakpoint();
+  const { sm, md } = useBreakpoint();
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -383,7 +382,8 @@ const JobList = () => {
                 </div>
                 <div style={joblist.applied}>
                   <Typography.Title level={5} style={joblist.applied.text}>
-                    {job.applied ? job.applied : 0} applied <FileTextFilled />
+                    {job.applied ? job.applied : 0} đã ứng tuyển{' '}
+                    <FileTextFilled />
                   </Typography.Title>
                 </div>
               </Col>
