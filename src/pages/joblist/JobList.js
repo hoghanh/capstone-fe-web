@@ -189,7 +189,12 @@ const JobList = () => {
                 Kết quả hàng đầu
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
-                {md ? '1-10 of 200 kết quả' : ''}
+                {totalItems > 0
+                  ? `${limit * (page - 1) + 1} - ${limit * page < totalItems
+                    ? limit * page
+                    : totalItems
+                  } của ${totalItems} kết quả `
+                  : `0 kết quả`}
               </Typography.Text>
             </div>
           }

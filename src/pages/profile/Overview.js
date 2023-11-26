@@ -1046,6 +1046,7 @@ const EditNameAvatar = () => {
   const props = {
     listType: 'picture-card',
     fileList: {avatar},
+    accept: '.png, .jpg, .jpeg',
     maxCount: 1,
     beforeUpload: () => false,
     onRemove: () => false,
@@ -1279,6 +1280,7 @@ const EditCV = () => {
                     <Upload.Dragger
                       name="file-upload"
                       maxCount={1}
+                      accept='.pdf, .png, .jpg, .jpeg'
                       beforeUpload={() => false}
                     >
                       <p className="ant-upload-drag-icon">
