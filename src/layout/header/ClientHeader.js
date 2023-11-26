@@ -29,6 +29,7 @@ function ClientHeader({ name, subName, onPress }) {
 
   const [notifications, setNotifications] = useState([]);
   const [menuVisible, setMenuVisible] = useState(false);
+  const [count, setCount] = useState(0);
 
   const { logout } = useAuthActions();
   function handleLogout() {
@@ -65,7 +66,7 @@ function ClientHeader({ name, subName, onPress }) {
   const changeNotification = () => {
     get({ endpoint: `/notification/account/${auth.id}` })
       .then((res) => {
-        const arr = res.data.map((item) => ({
+        const arr = res.data.notifications.map((item) => ({
           key: item.id.toString(),
           label: (
             <div
@@ -93,14 +94,17 @@ function ClientHeader({ name, subName, onPress }) {
           ),
         }));
 
-        res.data
-          ? setNotifications(arr)
-          : setNotifications([
-              {
-                id: 'no-data',
-                label: <Empty />,
-              },
-            ]);
+        if (res.data) {
+          setNotifications(arr);
+          setCount(res.data.unreadNotifications);
+        } else {
+          setNotifications([
+            {
+              id: 'no-data',
+              label: <Empty />,
+            },
+          ]);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -123,30 +127,32 @@ function ClientHeader({ name, subName, onPress }) {
             <Logout size={24} />
           </div>
           <div>
-            <ReactSVG
-              onClick={toggleMenuVisibility}
-              src='/icon/notification.svg'
-              beforeInjection={(svg) => {
-                svg.setAttribute('width', '24');
-                svg.setAttribute('height', '24');
-              }}
-            />
-            {menuVisible && (
-              <Menu
-                className='notification'
-                items={notifications}
-                onClick={handleMenuClick}
-                style={{
-                  backgroundColor: '#ffffff',
-                  position: 'absolute',
-                  top: 40,
-                  width: 350,
-                  right: 10,
-                  zIndex: 1,
-                  border: '1px solid #f5f5f5',
+            <Badge count={count}>
+              <ReactSVG
+                onClick={toggleMenuVisibility}
+                src='/icon/notification.svg'
+                beforeInjection={(svg) => {
+                  svg.setAttribute('width', '24');
+                  svg.setAttribute('height', '24');
                 }}
-              ></Menu>
-            )}
+              />
+              {menuVisible && (
+                <Menu
+                  className='notification'
+                  items={notifications}
+                  onClick={handleMenuClick}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    position: 'absolute',
+                    top: 40,
+                    width: 350,
+                    right: 10,
+                    zIndex: 1,
+                    border: '1px solid #f5f5f5',
+                  }}
+                ></Menu>
+              )}
+            </Badge>
           </div>
 
           <Button

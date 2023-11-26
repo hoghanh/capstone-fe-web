@@ -57,10 +57,10 @@ const SubmitApplication = ({ status, setStatus }) => {
   const [, setProgresspercent] = useState(0);
   let { id } = useParams();
 
-  const [notificationData, setNotificationData] = useState({
+  const notificationData = {
     notificationName: 'Đơn ứng tuyển mới',
-    notificationDescription: `Bạn vừa nhận 1 đơn ứng tuyển từ ${auth.name}`,
-  });
+    notificationDescription: `${auth.name} ứng tuyển từ ${jobDetail.title}`,
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
