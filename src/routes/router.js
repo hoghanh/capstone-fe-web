@@ -162,7 +162,7 @@ export const routes = [
     path: '/client/applications/freelancer-profile/:id',
     element: lazy(() => import('pages/profile/Profile')),
     name: 'freelancerProfile',
-    title: 'Hồ sơ ứng cử viên',
+    title: 'Hồ sơ freelancer',
     role: ['client'],
   },
   {

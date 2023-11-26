@@ -40,6 +40,8 @@ const Search = () => {
   const { useBreakpoint } = Grid;
   const { md, lg } = useBreakpoint();
   const [results, setResults] = useState([]);
+  const auth = useRecoilValue(authState);
+
 
   const onSearch = (value) => {
     post({
@@ -75,7 +77,8 @@ const Search = () => {
           }}
         >
           <Typography.Text style={{ padding: 10 }}>
-            {result.name || result.title}
+            {result.name || result.title}{' '}
+            {result.id === auth.id ? '(Bạn)' : ''}
           </Typography.Text>
         </Link>
       ),
