@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, Dropdown, Typography, Empty, Grid } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
 import { ReactSVG } from 'react-svg';
 import { Company, Job, Logout, Toggler, User } from 'components/icon/Icon';
 import useAuthActions from 'recoil/action';
@@ -56,7 +55,7 @@ function ClientHeader({ name, subName, onPress }) {
                 ? result.id === auth.id
                   ? `/client/profile`
                   : `/profile-client/${result.id}`
-                : `/jobs/job-detail/${result.id}`
+                : `/client/jobs-management/job-detail/${result.id}`
             }
             state={{
               clientId: result.tag === 'client' ? result.referId : null,
