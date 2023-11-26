@@ -204,7 +204,7 @@ const EditJob = () => {
             from: res.data.lowestIncome,
             to: res.data.highestIncome,
           },
-          deadline: moment(res.data.applicationSubmitDeadline),
+          deadline: dayjs(res.data.applicationSubmitDeadline),
         });
         setIsLoading(false);
       })
@@ -425,6 +425,7 @@ const EditJob = () => {
                   formatter={(value) =>
                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
+                  step={10000}
                 />
               </Form.Item>
               <Form.Item
