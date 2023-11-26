@@ -2,20 +2,21 @@ import React, { useEffect } from 'react';
 import { Layout, notification } from 'antd';
 import Details from './Details';
 import { get } from 'utils/APICaller';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { authState, clientProfile, jobDetailState } from 'recoil/atom';
+import { useSetRecoilState } from 'recoil';
+import { jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
 import Application from './Application';
 
 const JobDetail = () => {
   const setJobDetail = useSetRecoilState(jobDetailState);
   let { id } = useParams();
+  
   useEffect(() => {
-    getJobDetail();
-  }, []);
+    if(id){ getJobDetail(id); }
+  }, [id]);
 
-  const getJobDetail = async () => {
-    await get({ endpoint: `/job/detail/${id}` })
+  const getJobDetail = (id) => {
+    get({ endpoint: `/job/detail/${id}` })
       .then((response) => {
         const data = response.data;
         setJobDetail(data);

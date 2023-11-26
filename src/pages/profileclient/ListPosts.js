@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Select,
@@ -7,18 +7,18 @@ import {
   Pagination,
   Grid,
   Empty,
-} from "antd";
-import { Link } from "react-router-dom";
-import { FileTextFilled, MenuUnfoldOutlined } from "@ant-design/icons";
-import joblist from "styles/joblist";
-import { get } from "utils/APICaller";
+} from 'antd';
+import { Link } from 'react-router-dom';
+import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
+import joblist from 'styles/joblist';
+import { get } from 'utils/APICaller';
 import {
   CalculateDaysLeft,
   FormatVND,
   formatDate,
-} from "components/formatter/format";
-import { CustomCard } from "components/customize/Layout";
-import { useLocation } from "react-router-dom";
+} from 'components/formatter/format';
+import { CustomCard } from 'components/customize/Layout';
+import { useLocation } from 'react-router-dom';
 
 const ListPosts = () => {
   const { useBreakpoint } = Grid;
@@ -26,7 +26,7 @@ const ListPosts = () => {
   const [page, setPage] = useState(1);
   const [jobList, setJobList] = useState([]);
   const [pageSize] = useState(10);
-  const [sortOption, setSortOption] = useState("Latest");
+  const [sortOption, setSortOption] = useState('Latest');
   const [openSelect, setOpenSelect] = useState();
   const { clientId } = useLocation().state;
 
@@ -56,22 +56,22 @@ const ListPosts = () => {
 
   let sortedJobList = [];
 
-  if (sortOption === "Latest") {
+  if (sortOption === 'Latest') {
     sortedJobList = [...jobList];
     sortedJobList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  } else if (sortOption === "Oldest") {
+  } else if (sortOption === 'Oldest') {
     sortedJobList = [...jobList];
     sortedJobList.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
-  } else if (sortOption === "Lowest Price") {
+  } else if (sortOption === 'Lowest Price') {
     sortedJobList = [...jobList];
     sortedJobList.sort((a, b) => a.lowestIncome - b.lowestIncome);
-  } else if (sortOption === "Highest Price") {
+  } else if (sortOption === 'Highest Price') {
     sortedJobList = [...jobList];
     sortedJobList.sort((a, b) => b.highestIncome - a.highestIncome);
-  } else if (sortOption === "Most Applications") {
+  } else if (sortOption === 'Most Applications') {
     sortedJobList = [...jobList];
     sortedJobList.sort((a, b) => b.applied - a.applied);
-  } else if (sortOption === "Lest Applications") {
+  } else if (sortOption === 'Lest Applications') {
     sortedJobList = [...jobList];
     sortedJobList.sort((a, b) => a.applied - b.applied);
   }
@@ -85,16 +85,16 @@ const ListPosts = () => {
   return (
     <>
       <CustomCard
-        bodyStyle={{ padding: "unset" }}
+        bodyStyle={{ padding: 'unset' }}
         title={
           <div
             style={{
-              display: "flex",
-              alignItems: "baseline",
+              display: 'flex',
+              alignItems: 'baseline',
             }}
           >
             <Typography.Title level={md ? 3 : 5}>
-              {"Danh sách bài đăng"}
+              {'Danh sách bài đăng'}
             </Typography.Title>
             <Typography.Text style={joblist.textResult}></Typography.Text>
           </div>
@@ -103,11 +103,11 @@ const ListPosts = () => {
           <div>
             <Typography.Text
               style={{
-                display: md ? "" : "none",
+                display: md ? '' : 'none',
                 fontSize: 14,
-                fontStyle: "normal",
+                fontStyle: 'normal',
                 fontWeight: 400,
-                lineHeight: "normal",
+                lineHeight: 'normal',
                 paddingRight: 14,
               }}
             >
@@ -115,45 +115,45 @@ const ListPosts = () => {
             </Typography.Text>
             <>
               <Select
-                placeholder=""
-                size="large"
+                placeholder=''
+                size='large'
                 style={{
                   borderRadius: 8,
                   width: md ? 200 : sm ? 150 : 100,
-                  backgroundColor: "#FFFFFF",
-                  boxShadow: "0px 4px 14px 0px rgba(0, 0, 0, 0.10)",
-                  border: "1px solid #000",
-                  visibility: md ? "" : "hidden",
+                  backgroundColor: '#FFFFFF',
+                  boxShadow: '0px 4px 14px 0px rgba(0, 0, 0, 0.10)',
+                  border: '1px solid #000',
+                  visibility: md ? '' : 'hidden',
                 }}
                 bordered={false}
                 onChange={handleChange}
-                defaultValue={"Latest"}
+                defaultValue={'Latest'}
                 open={openSelect}
                 onClick={() => setOpenSelect(!openSelect)}
                 options={[
                   {
-                    value: "Latest",
-                    label: "Mới Nhất",
+                    value: 'Latest',
+                    label: 'Mới Nhất',
                   },
                   {
-                    value: "Oldest",
-                    label: "Cũ Nhất",
+                    value: 'Oldest',
+                    label: 'Cũ Nhất',
                   },
                   {
-                    value: "Lowest Price",
-                    label: "Giá Thấp",
+                    value: 'Lowest Price',
+                    label: 'Giá Thấp',
                   },
                   {
-                    value: "Highest Price",
-                    label: "Giá Cao",
+                    value: 'Highest Price',
+                    label: 'Giá Cao',
                   },
                   {
-                    value: "Most Applications",
-                    label: "Nhiều Lượt Đăng Ký",
+                    value: 'Most Applications',
+                    label: 'Nhiều Lượt Đăng Ký',
                   },
                   {
-                    value: "Lest Applications",
-                    label: "Ít Lượt Đăng Ký",
+                    value: 'Lest Applications',
+                    label: 'Ít Lượt Đăng Ký',
                   },
                 ]}
               />
@@ -167,7 +167,7 @@ const ListPosts = () => {
         }
       >
         {sortedJobList.length === 0 || sortedJobList === null ? (
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Empty />
           </div>
         ) : (
@@ -175,24 +175,24 @@ const ListPosts = () => {
             <div
               key={job.id}
               style={{
-                display: " flex",
-                alignItems: "center",
+                display: ' flex',
+                alignItems: 'center',
                 padding: 10,
-                borderBottom: "0.5px solid #000",
+                borderBottom: '0.5px solid #000',
               }}
             >
-              <div style={{ padding: 10, overflow: "auto", width: "100%" }}>
+              <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
                 <div
                   style={{
-                    display: " flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    display: ' flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                     padding: 10,
                     gap: 15,
                   }}
                 >
                   <div>
-                    <Link to={`/jobs/job-detail/${job.id}`} target="_blank">
+                    <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                       <Typography.Title
                         style={{ margin: 0 }}
                         level={md ? 4 : 5}
@@ -201,16 +201,16 @@ const ListPosts = () => {
                       </Typography.Title>
                     </Link>
                     <Typography.Text level={4}>
-                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -{" "}
-                      {FormatVND(job.highestIncome)} /{" "}
+                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
+                      {FormatVND(job.highestIncome)} /{' '}
                       {CalculateDaysLeft(job.applicationSubmitDeadline)}
                     </Typography.Text>
-                    <Typography.Text level={4} style={{ display: "block" }}>
+                    <Typography.Text level={4} style={{ display: 'block' }}>
                       Ngày đăng bài: {formatDate(job.updatedAt)}
                     </Typography.Text>
                   </div>
                 </div>
-                <Link to={`/jobs/job-detail/${job.id}`} target="_blank">
+                <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
                   <Typography.Paragraph
                     ellipsis={{
                       rows: 3,
@@ -223,17 +223,17 @@ const ListPosts = () => {
                 </Link>
                 <div
                   style={{
-                    display: "flex",
-                    padding: "0px 10px",
-                    alignItems: "flex-start",
-                    gap: "15px",
-                    alignSelf: "stretch",
-                    overflow: "auto",
+                    display: 'flex',
+                    padding: '0px 10px',
+                    alignItems: 'flex-start',
+                    gap: '15px',
+                    alignSelf: 'stretch',
+                    overflow: 'auto',
                   }}
                 >
                   {job.skills?.map((skill) => (
                     <Button
-                      type="primary"
+                      type='primary'
                       style={joblist.button}
                       key={skill.id}
                     >
@@ -243,7 +243,8 @@ const ListPosts = () => {
                 </div>
                 <div style={joblist.applied}>
                   <Typography.Title level={5} style={joblist.applied.text}>
-                    {job.applied ? job.applied : 0} ứng tuyển <FileTextFilled />
+                    {job.applied ? job.applied : 0} đã ứng tuyển{' '}
+                    <FileTextFilled />
                   </Typography.Title>
                 </div>
               </div>
@@ -256,7 +257,7 @@ const ListPosts = () => {
           onChange={onChange}
           pageSize={pageSize}
           showSizeChanger={false}
-          style={{ padding: 20, display: "flex", justifyContent: "center" }}
+          style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
         />
       </CustomCard>
     </>

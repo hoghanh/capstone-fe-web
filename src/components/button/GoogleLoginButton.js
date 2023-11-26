@@ -9,7 +9,6 @@ import color from 'styles/color';
 import { post } from 'utils/APICaller';
 import useAuthActions from 'recoil/action';
 
-
 const GoogleLoginButton = ({ onLogin }) => {
   const { login } = useAuthActions();
   const { pathname } = useLocation();
@@ -41,8 +40,8 @@ const GoogleLoginButton = ({ onLogin }) => {
     })
       .then((response) => {
         login(response.data.token);
-        if (!page.startsWith("jobs/job-detail/")) {
-          navigate("/jobs/recommended");
+        if (!page.startsWith('jobs/job-detail/')) {
+          navigate('/home');
         }
         notification.success({ message: response.data.message });
       })

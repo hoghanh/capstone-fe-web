@@ -249,6 +249,7 @@ const PostJob = () => {
             >
               <Upload.Dragger
                 name="file-upload"
+                accept='.pdf'
                 maxCount={1}
                 beforeUpload={() => false}
               >

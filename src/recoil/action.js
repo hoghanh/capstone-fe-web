@@ -1,4 +1,4 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import LocalStorageUtils from '../utils/LocalStorageUtils';
 import { authState } from './atom';
 import jwtDecode from 'jwt-decode';

@@ -10,63 +10,42 @@ import {
   Pagination,
   Grid,
   Spin,
+  Row,
+  Col,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
+
 import joblist from 'styles/joblist';
 import { get, post, remove } from 'utils/APICaller';
-import {
-  CalculateDaysLeft,
-  FormatVND,
-  formatDate,
-} from 'components/formatter/format';
-import { BookMark, BookMarkOutlined } from 'components/icon/Icon';
+import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 import { useRecoilValue } from 'recoil';
 import { authState } from 'recoil/atom';
+import { BookMark, BookMarkOutlined } from 'components/icon/Icon';
 
 const JobList = () => {
   const { useBreakpoint } = Grid;
   const { sm, md } = useBreakpoint();
 
-  const auth = useRecoilValue(authState);
-  const { subCateId, subCateName } = useParams();
-
   const [limit, setLimit] = useState(10);
-  const [limitRecommended, setLimitRecommended] = useState(10);
   const [page, setPage] = useState(1);
-  const [pageRecommended, setPageRecommended] = useState(1);
   const [jobList, setJobList] = useState([]);
-  const [recommendedList, setRecommendedList] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-  const [totalItemsRecommended, setTotalItemsRecommended] = useState(0);
+  const [sortOption, setSortOption] = useState('Latest');
   const [openSelect, setOpenSelect] = useState();
   const [favoriteList, setFavoriteList] = useState([]);
-
-  const [sortOption, setSortOption] = useState(
-    auth.id ? 'Recommend' : 'Latest'
-  );
   const [isLoading, setIsLoading] = useState(false);
+  const auth = useRecoilValue(authState);
+  const { subCateId, subCateName } = useParams();
 
   useEffect(() => {
     changePage(page);
     if (auth.role === 'freelancer') {
       getFavorite();
-      get({
-        endpoint: `/job/recommended/${auth.id}?limit=${limitRecommended}&page=${pageRecommended}`,
-      })
-        .then((res) => {
-          setRecommendedList(res.data.recommendeds);
-          setTotalItemsRecommended(res.data.pagination.totalItems);
-        })
-        .catch((error) => {
-          notification.error({
-            message: error.response.data.message,
-          });
-        });
     } else {
       setFavoriteList([]);
     }
-  }, [auth, page, subCateId, subCateName, pageRecommended]);
+  }, [page, subCateId, subCateName, auth]);
 
   function changePage(page) {
     if (subCateId) {
@@ -151,72 +130,24 @@ const JobList = () => {
 
   const handleFavoriteChange = (id) => {
     setIsLoading(true);
-    switch (auth.role) {
-      case 'freelancer':
-        if (!favoriteList.includes(id)) {
-          addFavorite(id);
-        } else {
-          removeFavorite(id);
-        }
-        break;
-      case 'client':
-        notification.error('Bạn không thể thêm hoặc xóa job yêu thích');
-        setIsLoading(false);
-        break;
-      default:
-        notification.error('Hãy đăng nhập!');
-        setIsLoading(false);
-        break;
+
+    if (!favoriteList.includes(id)) {
+      addFavorite(id);
+    } else {
+      removeFavorite(id);
     }
   };
 
   const onChange = (pageNumber) => {
-    if (sortOption === 'Recommend') {
-
-
-
-      setPageRecommended(pageNumber);
-    } else {
-      setPage(pageNumber);
-    }
+    setPage(pageNumber);
   };
 
   const handleChange = (value) => {
+    console.log(`selected ${value}`);
     setSortOption(value);
   };
 
-  const options = [
-    {
-      value: 'Recommend',
-      label: 'Đề xuất',
-    },
-    {
-      value: 'Latest',
-      label: 'Mới Nhất',
-    },
-    {
-      value: 'Oldest',
-      label: 'Cũ Nhất',
-    },
-    {
-      value: 'Lowest Price',
-      label: 'Giá Thấp',
-    },
-    {
-      value: 'Highest Price',
-      label: 'Giá Cao',
-    },
-    {
-      value: 'Most Applications',
-      label: 'Nhiều Lượt Đăng Ký',
-    },
-    {
-      value: 'Lest Applications',
-      label: 'Ít Lượt Đăng Ký',
-    },
-  ];
-
-  let sortedJobList = [...jobList];
+  const sortedJobList = [...jobList];
 
   if (sortOption === 'Latest') {
     sortedJobList.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
@@ -230,8 +161,6 @@ const JobList = () => {
     sortedJobList.sort((a, b) => b.applied - a.applied);
   } else if (sortOption === 'Lest Applications') {
     sortedJobList.sort((a, b) => a.applied - b.applied);
-  } else if (sortOption === 'Recommend') {
-    recommendedList.sort((a, b) => b.point - a.point);
   }
 
   return (
@@ -258,28 +187,14 @@ const JobList = () => {
               }}
             >
               <Typography.Title level={md ? 3 : 5}>
-                {sortOption !== 'Recommend'
-                  ? 'Kết quả tìm kiếm'
-                  : 'Đề xuất phù hợp'}
+                Kết quả hàng đầu
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
-                {sortOption !== 'Recommend'
-                  ? md
-                    ? totalItems > 0
-                      ? `${limit * (page - 1) + 1} - ${
-                          limit * page < totalItems ? limit * page : totalItems
-                        } của ${totalItems} kết quả`
-                      : `0 kết quả`
-                    : ''
-                  : md
-                  ? totalItemsRecommended > 0
-                    ? `${limit * (page - 1) + 1} - ${
-                        limit * page < totalItemsRecommended
-                          ? limit * page
-                          : totalItemsRecommended
-                      } của ${totalItemsRecommended} kết quả`
-                    : `0 kết quả`
-                  : ''}
+                {totalItems > 0
+                  ? `${limit * (page - 1) + 1} - ${
+                      limit * page < totalItems ? limit * page : totalItems
+                    } của ${totalItems} kết quả `
+                  : `0 kết quả`}
               </Typography.Text>
             </div>
           }
@@ -311,14 +226,35 @@ const JobList = () => {
                   }}
                   bordered={false}
                   onChange={handleChange}
-                  defaultValue={auth.id ? 'Recommend' : 'Latest'}
+                  defaultValue='Latest'
                   open={openSelect}
                   onClick={() => setOpenSelect(!openSelect)}
-                  options={
-                    auth.id
-                      ? options
-                      : options.filter((option) => option.value !== 'Recommend')
-                  }
+                  options={[
+                    {
+                      value: 'Latest',
+                      label: 'Mới Nhất',
+                    },
+                    {
+                      value: 'Oldest',
+                      label: 'Cũ Nhất',
+                    },
+                    {
+                      value: 'Lowest Price',
+                      label: 'Giá Thấp',
+                    },
+                    {
+                      value: 'Highest Price',
+                      label: 'Giá Cao',
+                    },
+                    {
+                      value: 'Most Applications',
+                      label: 'Nhiều Lượt Đăng Ký',
+                    },
+                    {
+                      value: 'Lest Applications',
+                      label: 'Ít Lượt Đăng Ký',
+                    },
+                  ]}
                 />
                 {md ? null : (
                   <MenuUnfoldOutlined
@@ -329,257 +265,133 @@ const JobList = () => {
             </div>
           }
         >
-          {sortOption !== 'Recommend'
-            ? sortedJobList?.map((job) => (
+          {sortedJobList?.map((job) => (
+            <Row
+              key={job.id}
+              style={{
+                display: ' flex',
+                alignItems: 'center',
+                padding: 10,
+                borderBottom: '0.5px solid #000',
+              }}
+            >
+              <Col
+                span={5}
+                style={{
+                  display: md ? 'flex' : 'none',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  gap: 5,
+                  padding: 30,
+                  height: 209,
+                }}
+              >
+                <Image
+                  width={100}
+                  src={job.clients?.accounts?.image}
+                  alt='Apofoitisi logo'
+                  preview={false}
+                  style={{ borderRadius: '50%' }}
+                />
+                <Typography.Title
+                  level={4}
+                  style={{ width: 144, margin: 0, textAlign: 'center' }}
+                >
+                  {job.clients?.accounts?.name.toUpperCase()}
+                </Typography.Title>
+              </Col>
+              <Col
+                span={24}
+                md={{ span: 19 }}
+                style={{ padding: 10, overflow: 'auto' }}
+              >
                 <div
-                  key={job.id}
                   style={{
                     display: ' flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: 10,
-                    borderBottom: '0.5px solid #000',
+                    gap: 15,
                   }}
                 >
-                  <div
-                    style={{
-                      cursor: 'pointer',
-                      alignSelf: md ? ' ' : 'flex-start',
-                      display: 'flex',
-                    }}
-                  >
-                    <Image
-                      width={100}
-                      src={job.clients?.accounts?.image}
-                      alt='Apofoitisi logo'
-                      preview={false}
-                      style={{ borderRadius: '50%' }}
-                    />
-                    <Typography.Title
-                      level={4}
-                      style={{ width: 144, margin: 0, textAlign: 'center' }}
-                    >
-                      {job.clients?.accounts?.name.toUpperCase()}
-                    </Typography.Title>
-                  </div>
-                  <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
-                    <div
-                      style={{
-                        display: ' flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: 10,
-                        gap: 15,
-                      }}
-                    >
-                      <div>
-                        <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
-                          <Typography.Title
-                            style={{ margin: 0 }}
-                            level={md ? 4 : 5}
-                          >
-                            {job.title}
-                          </Typography.Title>
-                        </Link>
-                        <Typography.Text level={4}>
-                          Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
-                          {FormatVND(job.highestIncome)} /{' '}
-                          {CalculateDaysLeft(job.applicationSubmitDeadline)}
-                        </Typography.Text>
-                        <Typography.Text level={4} style={{ display: 'block' }}>
-                          Ngày đăng bài: {formatDate(job.updatedAt)}
-                        </Typography.Text>
-                      </div>
-                      <div
-                        style={{
-                          cursor: 'pointer',
-                          alignSelf: md ? ' ' : 'flex-start',
-                          display: 'flex',
-                        }}
-                        onClick={() => handleFavoriteChange(job.id)}
-                      >
-                        {isLoading ? (
-                          <Spin />
-                        ) : favoriteList.includes(job.id) ? (
-                          <BookMark />
-                        ) : (
-                          <BookMarkOutlined />
-                        )}
-                      </div>
-                    </div>
+                  <div>
                     <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
-                      <Typography.Paragraph
-                        ellipsis={{
-                          rows: 3,
-                          expandable: false,
-                        }}
-                        style={joblist.des}
+                      <Typography.Title
+                        style={{ margin: 0 }}
+                        level={md ? 4 : 5}
                       >
-                        {job.description}
-                      </Typography.Paragraph>
+                        {job.title}
+                      </Typography.Title>
                     </Link>
+                    <Typography.Text level={4}>
+                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
+                      {FormatVND(job.highestIncome)} /{' '}
+                      {CalculateDaysLeft(job.proposalSubmitDeadline)}
+                    </Typography.Text>
+                  </div>
+                  {auth.role === 'freelancer' ? (
                     <div
                       style={{
+                        cursor: 'pointer',
+                        alignSelf: md ? ' ' : 'flex-start',
                         display: 'flex',
-                        padding: '0px 10px',
-                        alignItems: 'flex-start',
-                        gap: '15px',
-                        alignSelf: 'stretch',
-                        overflow: 'auto',
                       }}
+                      onClick={() => handleFavoriteChange(job.id)}
                     >
-                      {job.skills?.map((skill) => (
-                        <Button
-                          type='primary'
-                          style={joblist.button}
-                          key={skill.id}
-                        >
-                          {skill.name}
-                        </Button>
-                      ))}
+                      {isLoading ? (
+                        <Spin />
+                      ) : favoriteList.includes(job.id) ? (
+                        <BookMark />
+                      ) : (
+                        <BookMarkOutlined />
+                      )}
                     </div>
-                    <div style={joblist.applied}>
-                      <Typography.Title level={5} style={joblist.applied.text}>
-                        {job.applied ? job.applied : 0} ứng tuyển{' '}
-                        <FileTextFilled />
-                      </Typography.Title>
-                    </div>
-                  </div>
+                  ) : null}
                 </div>
-              ))
-            : recommendedList?.map((job) => (
+                <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
+                  <Typography.Paragraph
+                    ellipsis={{
+                      rows: 3,
+                      expandable: false,
+                    }}
+                    style={joblist.des}
+                  >
+                    {job.description}
+                  </Typography.Paragraph>
+                </Link>
                 <div
-                  key={job.jobs.id}
                   style={{
-                    display: ' flex',
-                    alignItems: 'center',
-                    padding: 10,
-                    borderBottom: '0.5px solid #000',
+                    display: 'flex',
+                    padding: '0px 10px',
+                    alignItems: 'flex-start',
+                    gap: '15px',
+                    alignSelf: 'stretch',
+                    overflow: 'auto',
                   }}
                 >
-                  <div
-                    style={{
-                      display: md ? 'flex' : 'none',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'column',
-                      gap: 5,
-                      padding: 30,
-                      height: 209,
-                    }}
-                  >
-                    <Image
-                      width={100}
-                      src={job.jobs.clients?.accounts?.image}
-                      alt='Apofoitisi logo'
-                      preview={false}
-                      style={{ borderRadius: '50%' }}
-                    />
-                    <Typography.Title
-                      level={4}
-                      style={{ width: 144, margin: 0, textAlign: 'center' }}
+                  {job.skills?.map((skill) => (
+                    <Button
+                      type='primary'
+                      style={joblist.button}
+                      key={skill.id}
                     >
-                      {job.jobs.clients?.accounts?.name.toUpperCase()}
-                    </Typography.Title>
-                  </div>
-                  <div style={{ padding: 10, overflow: 'auto', width: '100%' }}>
-                    <div
-                      style={{
-                        display: ' flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: 10,
-                        gap: 15,
-                      }}
-                    >
-                      <div>
-                        <Link
-                          to={`/jobs/job-detail/${job.jobs.id}`}
-                          target='_blank'
-                        >
-                          <Typography.Title
-                            style={{ margin: 0 }}
-                            level={md ? 4 : 5}
-                          >
-                            {job.jobs.title}
-                          </Typography.Title>
-                        </Link>
-                        <Typography.Text level={4}>
-                          Lương thoả thuận: {FormatVND(job.jobs.lowestIncome)} -{' '}
-                          {FormatVND(job.jobs.highestIncome)} /{' '}
-                          {CalculateDaysLeft(
-                            job.jobs.applicationSubmitDeadline
-                          )}
-                        </Typography.Text>
-                        <Typography.Text level={4} style={{ display: 'block' }}>
-                          Ngày đăng bài: {formatDate(job.jobs.updatedAt)}
-                        </Typography.Text>
-                      </div>
-                      <div
-                        style={{
-                          cursor: 'pointer',
-                          alignSelf: md ? ' ' : 'flex-start',
-                          display: 'flex',
-                        }}
-                        onClick={() => handleFavoriteChange(job.jobs.id)}
-                      >
-                        {isLoading ? (
-                          <Spin />
-                        ) : favoriteList.includes(job.jobs.id) ? (
-                          <BookMark />
-                        ) : (
-                          <BookMarkOutlined />
-                        )}
-                      </div>
-                    </div>
-                    <Link
-                      to={`/jobs/job-detail/${job.jobs.id}`}
-                      target='_blank'
-                    >
-                      <Typography.Paragraph
-                        ellipsis={{
-                          rows: 3,
-                          expandable: false,
-                        }}
-                        style={joblist.des}
-                      >
-                        {job.jobs.description}
-                      </Typography.Paragraph>
-                    </Link>
-                    <div
-                      style={{
-                        display: 'flex',
-                        padding: '0px 10px',
-                        alignItems: 'flex-start',
-                        gap: '15px',
-                        alignSelf: 'stretch',
-                        overflow: 'auto',
-                      }}
-                    >
-                      {job.jobs.skills?.map((skill) => (
-                        <Button
-                          type='primary'
-                          style={joblist.button}
-                          key={skill.id}
-                        >
-                          {skill.name}
-                        </Button>
-                      ))}
-                    </div>
-                    <div style={joblist.applied}>
-                      <Typography.Title level={5} style={joblist.applied.text}>
-                        {job.jobs.applied ? job.jobs.applied : 0} ứng tuyển{' '}
-                        <FileTextFilled />
-                      </Typography.Title>
-                    </div>
-                  </div>
+                      {skill.name}
+                    </Button>
+                  ))}
                 </div>
-              ))}
+                <div style={joblist.applied}>
+                  <Typography.Title level={5} style={joblist.applied.text}>
+                    {job.applied ? job.applied : 0} đã ứng tuyển{' '}
+                    <FileTextFilled />
+                  </Typography.Title>
+                </div>
+              </Col>
+            </Row>
+          ))}
           <Pagination
             current={1}
-            total={
-              sortOption === 'Recommend' ? totalItemsRecommended : totalItems
-            }
+            total={totalItems}
             onChange={onChange}
             showSizeChanger={false}
             style={{ padding: 20, display: 'flex', justifyContent: 'center' }}
