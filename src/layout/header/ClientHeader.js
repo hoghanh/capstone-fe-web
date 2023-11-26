@@ -50,7 +50,10 @@ function ClientHeader({ name, subName, onPress }) {
     if (auth) {
       socket?.emit('newUser', auth.id);
       socket.on('getNotification', (data) => {
-        notification.info({ message: data.notification.description });
+        notification.info({
+          message:
+            data.notification.name + ': ' + data.notification.description,
+        });
         changeNotification();
       });
 

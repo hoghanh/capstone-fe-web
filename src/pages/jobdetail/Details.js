@@ -58,8 +58,8 @@ const SubmitApplication = ({ status, setStatus }) => {
   let { id } = useParams();
 
   const notificationData = {
-    notificationName: 'Đơn ứng tuyển mới',
-    notificationDescription: `${auth.name} ứng tuyển từ ${jobDetail.title}`,
+    notificationName: 'Đơn ứng tuyển mới:',
+    notificationDescription: `${auth.name} ứng tuyển ${jobDetail.title}`,
   };
 
   const showModal = () => {
@@ -161,7 +161,7 @@ const SubmitApplication = ({ status, setStatus }) => {
   const props = {
     name: 'files',
     maxCount: 1,
-    accept:'.pdf',
+    accept: '.pdf',
     beforeUpload: () => false,
   };
 

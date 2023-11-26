@@ -40,7 +40,7 @@ export const routes = [
     layout: 'breadcrumb',
   },
   {
-    path: '/recommended',
+    path: '/home',
     element: lazy(() => import('pages/joblist/RecommendJobs')),
     name: 'recommended',
     layout: 'breadcrumb',
@@ -157,7 +157,7 @@ export const routes = [
     name: 'applications',
     // role: ['freelancer'],
   },
-  
+
   {
     path: '/client/applications/freelancer-profile/:id',
     element: lazy(() => import('pages/profile/Profile')),

@@ -22,7 +22,14 @@ import useAuthActions from 'recoil/action';
 import { categoriesNavbarState, authState, otp } from 'recoil/atom';
 import { GoogleLogout } from 'react-google-login';
 import { CLIENTID } from 'config';
-import { Company, Heart, Job, Logout, Manage, User } from 'components/icon/Icon';
+import {
+  Company,
+  Heart,
+  Job,
+  Logout,
+  Manage,
+  User,
+} from 'components/icon/Icon';
 import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { post } from 'utils/APICaller';
@@ -41,7 +48,6 @@ const Search = () => {
   const { md, lg } = useBreakpoint();
   const [results, setResults] = useState([]);
   const auth = useRecoilValue(authState);
-
 
   const onSearch = (value) => {
     post({
@@ -63,35 +69,35 @@ const Search = () => {
 
   const items = results.length
     ? results.map((result, index) => ({
-      label: (
-        <Link
-          to={
-            result.tag === 'freelancer'
-              ? `/profile/${result.id}`
-              : result.tag === 'client'
+        label: (
+          <Link
+            to={
+              result.tag === 'freelancer'
+                ? `/profile/${result.id}`
+                : result.tag === 'client'
                 ? `/profile-client/${result.id}`
                 : `/jobs/job-detail/${result.id}`
-          }
-          state={{
-            clientId: result.tag === 'client' ? result.referId : null,
-          }}
-        >
-          <Typography.Text style={{ padding: 10 }}>
-            {result.name || result.title}{' '}
-            {result.id === auth.id ? '(Bạn)' : ''}
-          </Typography.Text>
-        </Link>
-      ),
-      key: index,
-      icon:
-        result.tag === 'freelancer' ? (
-          <User />
-        ) : result.tag === 'client' ? (
-          <Company />
-        ) : (
-          <Job />
+            }
+            state={{
+              clientId: result.tag === 'client' ? result.referId : null,
+            }}
+          >
+            <Typography.Text style={{ padding: 10 }}>
+              {result.name || result.title}{' '}
+              {result.id === auth.id ? '(Bạn)' : ''}
+            </Typography.Text>
+          </Link>
         ),
-    }))
+        key: index,
+        icon:
+          result.tag === 'freelancer' ? (
+            <User />
+          ) : result.tag === 'client' ? (
+            <Company />
+          ) : (
+            <Job />
+          ),
+      }))
     : [{ label: <Empty />, key: '1' }];
 
   return (
@@ -434,7 +440,7 @@ function SearchBar() {
           </div>
         </Col>
         <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to={auth.role === 'freelancer' ? '/recommended' : '/'}>
+          <Link to={'/'}>
             <Image
               width={34}
               src='/icon/logo.svg'
@@ -444,7 +450,7 @@ function SearchBar() {
           </Link>
         </Col>
         <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to={auth.role === 'freelancer' ? '/recommended' : '/'}>
+          <Link to={'/'}>
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>
@@ -458,19 +464,14 @@ function SearchBar() {
         {auth.email ? (
           <>
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
-              {/* <Dropdown
-                menu={{ notifications, handleNotification }}
-                style={{ height: 200 }}
-              >
-                <ReactSVG
-                  style={{ height: 40 }}
-                  src='/icon/notification.svg'
-                  beforeInjection={(svg) => {
-                    svg.setAttribute('width', '32');
-                    svg.setAttribute('height', '32');
-                  }}
-                />
-              </Dropdown> */}
+              <ReactSVG
+                style={{ height: 40 }}
+                src='/icon/notification.svg'
+                beforeInjection={(svg) => {
+                  svg.setAttribute('width', '32');
+                  svg.setAttribute('height', '32');
+                }}
+              />
             </Col>
             <Col xs={7} sm={5} md={4} lg={4} xl={3}>
               <Dropdown menu={{ items, onClick }}>
