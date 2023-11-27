@@ -36,13 +36,9 @@ import { ModalPrimary } from 'components/Modal/Modal';
 import { post, put, get } from 'utils/APICaller';
 import OTPModal from './OTPModal';
 
-const onSuccess = () => {
-  console.log('Logout success');
-};
+const onSuccess = () => {};
 
-const onFail = () => {
-  console.log('Fail');
-};
+const onFail = () => {};
 
 const Search = () => {
   const { useBreakpoint } = Grid;
@@ -403,7 +399,7 @@ function SearchBar() {
           ),
         }));
 
-        if (res.data.notification) {
+        if (arr.length > 0) {
           setNotifications(arr);
           setCount(res.data.unreadNotifications);
         } else {
@@ -556,8 +552,8 @@ function SearchBar() {
                   onClick={toggleMenuVisibility}
                   src='/icon/notification.svg'
                   beforeInjection={(svg) => {
-                    svg.setAttribute('width', '32');
-                    svg.setAttribute('height', '32');
+                    svg.setAttribute('width', '35');
+                    svg.setAttribute('height', '35');
                   }}
                 />
                 {menuVisible && (

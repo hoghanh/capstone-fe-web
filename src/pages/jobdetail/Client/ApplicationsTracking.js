@@ -22,7 +22,12 @@ import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { clientProfile, valueSearchState } from 'recoil/atom';
+import {
+  authState,
+  clientProfile,
+  profileState,
+  valueSearchState,
+} from 'recoil/atom';
 import { Link, useParams } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post, put } from 'utils/APICaller';
@@ -31,6 +36,7 @@ import { checkIfIsUrl, formatDate } from 'components/formatter/format';
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
+import socket from 'config';
 
 const tabList = [
   {
@@ -100,13 +106,7 @@ const Interview = ({
     const { address } = values;
     let location = null;
     let link = null;
-    console.log({
-      location,
-      link,
-      time: timeBooking,
-      clientId: user.id,
-      applicationId: isIdItem,
-    });
+
     if (checkIfIsUrl(address)) {
       location = null;
       link = address;
@@ -159,7 +159,7 @@ const Interview = ({
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form form={form} name="bookingInterview">
+        <Form form={form} name='bookingInterview'>
           <Row gutter={[0, 10]}>
             <Col span={24}>
               <CustomRow gutter={[0, 10]}>
@@ -170,7 +170,7 @@ const Interview = ({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="address"
+                    name='address'
                     rules={[
                       {
                         required: true,
@@ -178,7 +178,7 @@ const Interview = ({
                       },
                     ]}
                   >
-                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
+                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -188,7 +188,7 @@ const Interview = ({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="time"
+                    name='time'
                     rules={[
                       {
                         required: true,
@@ -254,13 +254,13 @@ const DeclineInterview = ({
   return (
     <>
       <ModalPrimary
-        title="Từ chối"
+        title='Từ chối'
         open={isModalDecline}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Từ chối"
-        okType="danger"
+        okText='Từ chối'
+        okType='danger'
       >
         Bạn có chắc muốn từ chối hồ sơ này?
       </ModalPrimary>
@@ -273,7 +273,11 @@ const Approved = ({
   setIsModalApproved,
   isIdItem,
   setIsIdItem,
+  accountId,
 }) => {
+  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(profileState);
+
   const approved = () => {
     put({
       endpoint: `/application/approve/${isIdItem}`,
@@ -281,9 +285,24 @@ const Approved = ({
       .then((res) => {
         setIsIdItem(null);
         notification.success({
-          message: 'Nhận việc thành công',
+          message: 'Nhận ứng viên thành công',
         });
         setIsModalApproved(false);
+
+        let notificationData = {
+          notificationName: 'Thay đổi số dư',
+          notificationDescription: res.data.message,
+        };
+
+        //Gửi notification [thông tin] - đến [accountID người nhận]
+        socket.emit('sendNotification', notificationData, auth.id);
+
+        //Gửi thông tin đến freelancer
+        notificationData = {
+          notificationName: 'Công việc được nhận ',
+          notificationDescription: `${user.name} vừa nhận đơn ứng tuyển của bạn`,
+        };
+        socket.emit('sendNotification', notificationData, accountId);
       })
       .catch((error) => {
         notification.error({
@@ -303,19 +322,18 @@ const Approved = ({
   return (
     <>
       <ModalPrimary
-        title="Đồng ý"
+        title='Đồng ý'
         open={isModalApproved}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Đồng ý"
+        okText='Đồng ý'
       >
         Bạn có chắc muốn nhận hồ sơ này?
       </ModalPrimary>
     </>
   );
 };
-
 
 const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
@@ -329,6 +347,7 @@ const TabSent = ({ activeTabKey, value }) => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
+  const [accountId, setAccountId] = useState();
   const { id } = useParams();
 
   useEffect(() => {
@@ -405,13 +424,15 @@ const TabSent = ({ activeTabKey, value }) => {
     if (checkAction.includes('decline')) {
       setIsIdItem(id);
       setIsModalDecline(true);
+      setAccountId(accountId);
     } else if (checkAction.includes('interview')) {
       setIsIdItem(id);
       setIsModalInterview(true);
+      setAccountId(accountId);
     } else if (checkAction.includes('approved')) {
-      console.log(id)
       setIsIdItem(id);
       setIsModalApproved(true);
+      setAccountId(accountId);
     }
   };
 
@@ -461,7 +482,7 @@ const TabSent = ({ activeTabKey, value }) => {
                           <Image
                             width={72}
                             src={application?.freelancers.accounts.image}
-                            alt="avatar user"
+                            alt='avatar user'
                             preview={true}
                             style={{ borderRadius: '50%' }}
                           />
@@ -480,7 +501,7 @@ const TabSent = ({ activeTabKey, value }) => {
                                   {application?.hired ? (
                                     <Tag
                                       style={{ marginLeft: 10 }}
-                                      color="green"
+                                      color='green'
                                     >
                                       Nhân lực cũ
                                     </Tag>
@@ -515,7 +536,10 @@ const TabSent = ({ activeTabKey, value }) => {
                                       application?.freelancers.applications[0].id.toString(),
                                   })),
                             onClick: ({ key }) => {
-                              onClick(application?.freelancers.applications[0].id, key);
+                              onClick(
+                                application?.freelancers.applications[0].id,
+                                key
+                              );
                             },
                           }}
                         >
@@ -572,7 +596,7 @@ const TabSent = ({ activeTabKey, value }) => {
                       {application.freelancers.applications[0]?.fileAttach ? (
                         <Typography.Link
                           href={application.fileAttach}
-                          target="_blank"
+                          target='_blank'
                           underline={true}
                           style={{
                             fontWeight: 700,
@@ -689,7 +713,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <Search
-            placeholder="Tìm kiếm..."
+            placeholder='Tìm kiếm...'
             allowClear
             onSearch={onSearch}
             style={{
@@ -709,7 +733,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <RangePicker
-            timezone="UTC"
+            timezone='UTC'
             value={dates || value}
             disabledDate={disabledDate}
             onCalendarChange={(val) => {
@@ -722,9 +746,9 @@ const ApplicationsTracking = () => {
             onOpenChange={onOpenChange}
             changeOnBlur
             locale={locale}
-            />
+          />
         </Col>
-        <Col className="trackingJobs" span={24}>
+        <Col className='trackingJobs' span={24}>
           <Card
             style={{
               width: '100%',

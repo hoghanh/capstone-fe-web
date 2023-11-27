@@ -252,7 +252,6 @@ const ClientJobManagement = () => {
     const end = start + pageSize;
     return filteredJobList.slice(start, end);
   };
- console.log(getPagedList());
 
   return (
     <>
@@ -260,10 +259,10 @@ const ClientJobManagement = () => {
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className="card-jobs"
+          className='card-jobs'
           headStyle={{ paddingLeft: 0 }}
           title={
-            <div className="trackingJobs">
+            <div className='trackingJobs'>
               <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
                 Bài viết đã đăng
               </Typography.Title>
@@ -277,7 +276,7 @@ const ClientJobManagement = () => {
           }
           extra={
             <Link to={`/client/jobs-management/post-job`}>
-              <Button type="primary" size="large">
+              <Button type='primary' size='large'>
                 Đăng bài
               </Button>
             </Link>
@@ -309,7 +308,7 @@ const ClientJobManagement = () => {
                   <div>
                     <Link
                       to={`/client/jobs-management/job-detail/${job.id}`}
-                      target="_blank"
+                      target='_blank'
                     >
                       <Typography.Title
                         style={{ margin: 0 }}
@@ -371,34 +370,34 @@ const ClientJobManagement = () => {
           />
         </Card>
         <ModalPrimary
-          title="Hoàn thành công việc"
+          title='Hoàn thành công việc'
           open={isModalDelete}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleDelete}
           onCancel={handleCancelDeleteModal}
-          okText="Xoá"
-          okType="danger"
+          okText='Xoá'
+          okType='danger'
         >
           Bạn có chắc muốn xoá công việc
         </ModalPrimary>
         <ModalPrimary
-          title="Đóng công việc"
+          title='Đóng công việc'
           open={isModalClose}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleClose}
           onCancel={handleCancelCloseModal}
-          okText="Đóng công việc"
-          okType="danger"
+          okText='Đóng công việc'
+          okType='danger'
         >
           Bạn có chắc muốn đóng công việc
         </ModalPrimary>
         <ModalPrimary
-          title="Gia hạn công việc"
+          title='Gia hạn công việc'
           open={isModalExtend}
           bodyStyle={{ paddingTop: 20 }}
           onOk={handleExtend}
           onCancel={handleCancelExtendModal}
-          okText="Gia hạn công việc"
+          okText='Gia hạn công việc'
         >
           Bạn có chắc muốn gia hạn công việc
         </ModalPrimary>

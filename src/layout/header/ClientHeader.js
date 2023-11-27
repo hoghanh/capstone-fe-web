@@ -102,7 +102,7 @@ function ClientHeader({ name, subName, onPress }) {
           ),
         }));
 
-        if (res.data.notification) {
+        if (arr.length > 0) {
           setNotifications(arr);
           setCount(res.data.unreadNotifications);
         } else {

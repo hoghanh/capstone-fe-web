@@ -58,7 +58,7 @@ const SubmitApplication = ({ status, setStatus }) => {
   let { id } = useParams();
 
   const notificationData = {
-    notificationName: 'Đơn ứng tuyển mới:',
+    notificationName: 'Đơn ứng tuyển mới',
     notificationDescription: `${auth.name} ứng tuyển ${jobDetail.title}`,
   };
 
