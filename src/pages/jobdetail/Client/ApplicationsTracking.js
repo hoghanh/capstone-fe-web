@@ -429,7 +429,7 @@ const TabSent = ({ activeTabKey, value }) => {
     <Row>
       {list.length === 0 || list === null ? (
         <Col span={24}>
-          <Empty />
+          <Empty description={<span>Dữ liệu trống</span>} />
         </Col>
       ) : (
         getPagedList()?.map((application, index) => {

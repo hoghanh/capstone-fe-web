@@ -168,7 +168,7 @@ const ListPosts = () => {
       >
         {sortedJobList.length === 0 || sortedJobList === null ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Empty />
+            <Empty description={<span>Dữ liệu trống</span>} />
           </div>
         ) : (
           getPagedList()?.map((job) => (

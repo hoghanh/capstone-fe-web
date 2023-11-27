@@ -176,7 +176,7 @@ function ClientHeader({ name, subName, onPress }) {
             <Job />
           ),
       }))
-    : [{ label: <Empty />, key: '1' }];
+    : [{ label: <Empty description={<span>Dữ liệu trống</span>} />, key: '1' }];
 
   return (
     <>

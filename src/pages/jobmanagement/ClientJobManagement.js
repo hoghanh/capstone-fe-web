@@ -286,7 +286,7 @@ const ClientJobManagement = () => {
           {isLoading && <Loading />}
           {getPagedList().length === 0 || getPagedList() === null ? (
             <div>
-              <Empty />
+              <Empty description={<span>Dữ liệu trống</span>} />
             </div>
           ) : (
             getPagedList()?.map((job) => (
