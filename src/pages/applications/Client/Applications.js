@@ -1,24 +1,26 @@
 import { Layout } from 'antd';
 import React, { useEffect } from 'react';
 import ApplicationsTracking from './ApplicationsTracking';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { get } from 'utils/APICaller';
-import { applicationListState } from 'recoil/atom';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
+import { applicationListState, clientProfile } from 'recoil/atom';
 
 const Applications = () => {
-  const [, setApplications] = useRecoilState(applicationListState);
-  const client= LocalStorageUtils.getItem('profile');
+  const setApplications = useSetRecoilState(applicationListState);
+  const user = useRecoilValue(clientProfile);
 
   useEffect(() => {
     getApplications();
   }, []);
 
   const getApplications = async () => {
-    get({ endpoint: `/application/client/${client.id}` })
+    get({ endpoint: `/application/client/${user.id}` })
       .then((response) => {
         const data = response.data;
-        let applications = data.filter((application) => application.jobId !== null && application.jobs !== null);
+        let applications = data.filter(
+          (application) =>
+            application.jobId !== null && application.jobs !== null
+        );
         setApplications(applications);
       })
       .catch((error) => {

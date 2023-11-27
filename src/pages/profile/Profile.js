@@ -1,27 +1,37 @@
 import { Layout } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { get } from "utils/APICaller";
-import Overview from "./Overview";
 import Certificates from "./Certificates";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {  useRecoilValue, useSetRecoilState } from "recoil";
 import {
   applicationListState,
   authState,
   freelancerState,
 } from "recoil/atom";
+import Overview from "./Overview";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
-  const [, setFreelancer] = useRecoilState(freelancerState);
-  const [, setApplications] = useRecoilState(applicationListState);
+  const setFreelancer = useSetRecoilState(freelancerState);
+  const setApplications = useSetRecoilState(applicationListState);
+  const { id, profileId } = useParams();
 
   const auth = useRecoilValue(authState);
 
   useEffect(() => {
-    getFreelancer();
-  }, []);
+    let freelancerId = '';
+    if (auth.role === 'freelancer' && auth.id === profileId) {
+      freelancerId = auth.id;
+    } else if (auth.role === 'freelancer' && auth.id !== profileId) {
+      freelancerId = profileId;
+    } else if (auth.role === 'client') {
+      freelancerId = id;
+    }
+    getFreelancer(freelancerId);
+  }, [profileId, auth, id]);
 
-  const getFreelancer = () => {
-    get({ endpoint: `/freelancer/profile/${auth.id}` })
+  const getFreelancer = (freelancerId) => {
+    get({ endpoint: `/freelancer/profile/${freelancerId}` })
       .then((response) => {
         const data = response.data;
         setFreelancer(data);
@@ -36,7 +46,9 @@ const Profile = () => {
     get({ endpoint: `/application/freelancer/${freelancerId}` })
       .then((response) => {
         const data = response.data;
-        let applications = data.filter(application => application.status === 'approved')
+        let applications = data.filter(
+          (application) => application.status === "approved"
+        );
         setApplications(applications);
       })
       .catch((error) => {

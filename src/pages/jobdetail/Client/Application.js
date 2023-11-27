@@ -1,6 +1,6 @@
 import { Card, Col, Row, Typography } from 'antd';
 import { CustomCard, CustomCol, CustomRow } from 'components/customize/Layout';
-import { File, User } from 'components/icon/Icon';
+import { User } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import color from 'styles/color';
@@ -34,39 +34,35 @@ const HeaderSection = () => {
 const BodySection = () => {
   const [countTotal, setCountTotal] = useState(0);
   const [countSent, setCountSent] = useState(0);
+  const [countInterview, setInterview] = useState(0);
   const [countApproved, setCountApproved] = useState(0);
-  const [countDeclined, setCountDeclined] = useState(0);
   const { id } = useParams();
-  console.log(id);
-  useEffect(() => {
-    getApplications();
-  }, []);
 
-  // console.log(countTotal)
-  const getApplications = async () => {
-    await get({ endpoint: `/application/job/${id}` })
+  useEffect(() => {
+    getApplications(id);
+    console.log(id)
+  }, [id]);
+
+  const getApplications = (id) => {
+    get({ endpoint: `/application/job/${id}` })
       .then((response) => {
-        const data = response.data;
-        let applications = data.filter(
-          (application) =>
-            application.jobId !== null && application.jobs !== null
-        );
+        let applications = response.data;
         setCountTotal(applications.length);
         let listSent = applications.filter(
           (application) =>
-            application.status !== null && application.status === 'Sent'
+            application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'sent'
         );
         setCountSent(listSent.length);
+        let listInterview = applications.filter(
+          (application) =>
+          application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'interview'
+        );
+        setInterview(listInterview.length);
         let listApproved = applications.filter(
           (application) =>
-            application.status !== null && application.status === 'approved'
+          application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'approved'
         );
         setCountApproved(listApproved.length);
-        let listDeclined = applications.filter(
-          (application) =>
-            application.status !== null && application.status === 'declined'
-        );
-        setCountDeclined(listDeclined.length);
       })
       .catch((error) => {
         console.log(error);
@@ -79,7 +75,7 @@ const BodySection = () => {
       gutter={[40, 40]}
       style={{ padding: '5px 20px 20px' }}
     >
-      <Col span={24} sm={{ span: 6 }}>
+      <Col span={24} sm={{ span: 8 }}>
         <Card
           style={{
             padding: 20,
@@ -101,13 +97,13 @@ const BodySection = () => {
                 level={5}
                 style={{ margin: 0, textAlign: 'center' }}
               >
-                {countTotal} người phù hợp với mô tả công việc
+                Ứng tuyển: {countSent}
               </Typography.Title>
             </Col>
           </Row>
         </Card>
       </Col>
-      <Col span={24} sm={{ span: 6 }}>
+      <Col span={24} sm={{ span: 8 }}>
         <Card
           style={{
             padding: 20,
@@ -129,13 +125,13 @@ const BodySection = () => {
                 level={5}
                 style={{ margin: 0, textAlign: 'center' }}
               >
-                {countSent} người đã ứng tuyển
+                Phỏng vấn: {countInterview}
               </Typography.Title>
             </Col>
           </Row>
         </Card>
       </Col>
-      <Col span={24} sm={{ span: 6 }}>
+      <Col span={24} sm={{ span: 8 }}>
         <Card
           style={{
             padding: 20,
@@ -157,35 +153,7 @@ const BodySection = () => {
                 level={5}
                 style={{ margin: 0, textAlign: 'center' }}
               >
-                {countDeclined} người được phỏng vấn
-              </Typography.Title>
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-      <Col span={24} sm={{ span: 6 }}>
-        <Card
-          style={{
-            padding: 20,
-            borderRadius: 20,
-            backgroundColor: color.colorLightGray,
-            minHeight: 155,
-          }}
-        >
-          <Row
-            align={'middle'}
-            gutter={[0, 10]}
-            style={{ flexDirection: 'column' }}
-          >
-            <Col>
-              <User color={color.colorBlack} size={'50'} />
-            </Col>
-            <Col>
-              <Typography.Title
-                level={5}
-                style={{ margin: 0, textAlign: 'center' }}
-              >
-                {countApproved} người được nhận việc
+                Nhận việc: {countApproved}
               </Typography.Title>
             </Col>
           </Row>
@@ -199,9 +167,7 @@ const Applications = () => {
   return (
     <>
       <CustomCard style={{ padding: 0, marginBottom: 20 }}>
-        {/* Header section */}
         <HeaderSection />
-        {/* Body Section */}
         <BodySection />
       </CustomCard>
     </>

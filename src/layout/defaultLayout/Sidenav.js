@@ -111,7 +111,7 @@ function Sidenav({ color }) {
         style={{
           position: 'absolute',
           width: 300,
-          zIndex: 100,
+          zIndex: 1,
         }}
       />
     </>

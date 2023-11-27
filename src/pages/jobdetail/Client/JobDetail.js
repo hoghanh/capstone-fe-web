@@ -2,39 +2,24 @@ import React, { useEffect } from 'react';
 import { Layout, notification } from 'antd';
 import Details from './Details';
 import { get } from 'utils/APICaller';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { authState, clientProfile, jobDetailState } from 'recoil/atom';
+import { useSetRecoilState } from 'recoil';
+import { jobDetailState } from 'recoil/atom';
 import { useParams } from 'react-router-dom';
 import Application from './Application';
 
 const JobDetail = () => {
-  const [, setJobDetail] = useRecoilState(jobDetailState);
-  const [, setClient] = useRecoilState(clientProfile);
-  const auth = useRecoilValue(authState);
+  const setJobDetail = useSetRecoilState(jobDetailState);
   let { id } = useParams();
+  
   useEffect(() => {
-    getJobDetail();
-    getClient();
-  }, []);
+    if(id){ getJobDetail(id); }
+  }, [id]);
 
-  const getJobDetail = async () => {
-    await get({ endpoint: `/job/detail/${id}` })
+  const getJobDetail = (id) => {
+    get({ endpoint: `/job/detail/${id}` })
       .then((response) => {
         const data = response.data;
         setJobDetail(data);
-      })
-      .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
-      });
-  };
-
-  const getClient = async () => {
-    await get({ endpoint: `/client/profile/${auth.id}` })
-      .then((response) => {
-        const data = response.data;
-        setClient(data);
       })
       .catch((error) => {
         notification.error({

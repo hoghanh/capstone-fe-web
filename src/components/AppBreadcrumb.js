@@ -28,8 +28,8 @@ const AppBreadcrumb = () => {
     const breadcrumbs = [];
     if (!location.includes('/client')) {
       breadcrumbs.push({
-        path: '/',
-        element: lazy(() => import('../pages/home/HomePage')),
+        path: '/home',
+        element: lazy(() => import('../pages/joblist/RecommendJobs')),
         name: 'Home',
         title: <HomeFilled />,
       });

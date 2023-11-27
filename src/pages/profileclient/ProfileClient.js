@@ -1,18 +1,15 @@
 import {  Layout } from 'antd'
-import React, { useEffect, useState } from 'react'
-import JobStatus from './JobStatus'
-import ApplicationsStatus from './ApplicationsStatus'
+import React from 'react'
+import Overview from './Overview';
+import ListPosts from './ListPosts.js';
 
+const ProfileClient = () => {
 
-
-
-const JobManagement = () => {
-  
   return (
     <>
     <Layout.Content className={'containerBody'} style={styles.containerBody}>
-      <JobStatus/>
-      <ApplicationsStatus/>
+      <Overview/>
+      <ListPosts/>
     </Layout.Content>
   </>
   )
@@ -24,4 +21,4 @@ const styles = {
 
 
 
-export default JobManagement;
+export default ProfileClient;

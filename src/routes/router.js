@@ -40,6 +40,14 @@ export const routes = [
     layout: 'breadcrumb',
   },
   {
+    path: '/home',
+    element: lazy(() => import('pages/joblist/RecommendJobs')),
+    name: 'recommended',
+    layout: 'breadcrumb',
+    title: 'Danh sách đề xuất',
+    role: ['freelancer'],
+  },
+  {
     path: '/jobs/job-detail',
     element: lazy(() => import('pages/jobdetail/JobDetail')),
     name: 'jobdetail',
@@ -52,11 +60,22 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
   },
+  // {
+  //   path: '/profile',
+  //   element: lazy(() => import('pages/profile/Profile')),
+  //   name: 'profile',
+  //   role: ['freelancer'],
+  // },
   {
-    path: '/profile',
+    path: '/profile/:profileId',
     element: lazy(() => import('pages/profile/Profile')),
     name: 'profile',
     role: ['freelancer'],
+  },
+  {
+    path: '/profile-client/:id',
+    element: lazy(() => import('pages/profileclient/ProfileClient')),
+    name: 'profile-client',
   },
   {
     path: '/client',
@@ -84,7 +103,7 @@ export const routes = [
     element: lazy(() => import('pages/profile/Client/EditProfileClient')),
     name: 'edit-profile',
     title: 'Sửa hồ sơ cá nhân',
-    // role: ['client'],
+    role: ['client'],
   },
   {
     path: '/client/jobs-management',
@@ -140,18 +159,11 @@ export const routes = [
   },
 
   {
-    path: '/job-management',
-    element: lazy(() => import('pages/jobmanagement/JobManagement')),
-    name: 'jobmanagement',
-    // role: ['client'],
-  },
-  
-  {
-    path: '/client/applications/freelancer-profile',
-    element: lazy(() => import('pages/profile/Client/FreelancerProfile')),
+    path: '/client/applications/freelancer-profile/:id',
+    element: lazy(() => import('pages/profile/Profile')),
     name: 'freelancerProfile',
-    title: 'Hồ sơ ứng cử viên',
-    // role: ['client'],
+    title: 'Hồ sơ freelancer',
+    role: ['client'],
   },
   {
     path: '/client/applications',

@@ -1,6 +1,60 @@
 // recoilAtoms.js
 import { atom } from 'recoil';
 
+const jobskill = {
+  jobSkillId: 0,
+  createdAt: '',
+  updatedAt: '',
+  jobId: 0,
+  skillId: 0,
+};
+
+const skills = {
+  id: '',
+  name: '',
+  description: '',
+  jobskill: jobskill,
+};
+
+const accounts = {
+  id: 0,
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  image: '',
+  password: '',
+  role: '',
+  currency: 0,
+  status: false,
+  createdAt: '',
+  updatedAt: '',
+};
+
+const clients = {
+  accountId: 0,
+  accounts: accounts,
+  companyWebsite: '',
+  id: 0,
+  status: '',
+  taxCode: null,
+  applied: 0,
+  createAt: '',
+  updateAt: '',
+};
+
+const applications = {
+  id: '',
+  description: '',
+  fileAttach: '',
+  sendDate: '',
+  status: '',
+  createdAt: '',
+  updatedAt: '',
+  freelancerId: '',
+  jobId: '',
+};
+
 export const categoriesNavbarState = atom({
   key: 'categoriesNavbarState',
   default: [],
@@ -34,63 +88,6 @@ export const profileState = atom({
   },
 });
 
-const accounts = {
-  id: 0,
-  name: '',
-  phone: '',
-  email: '',
-  address: '',
-  image: '',
-  password: '',
-  role: '',
-  currency: 0,
-  status: false,
-  createdAt: '',
-  updatedAt: '',
-};
-
-const jobskill = {
-  jobSkillId: 0,
-  createdAt: '',
-  updatedAt: '',
-  jobId: 0,
-  skillId: 0,
-};
-
-const skills = {
-  id: '',
-  name: '',
-  description: '',
-  jobskill: jobskill,
-};
-
-const clients = {
-  accountId: 0,
-  accounts: accounts,
-  companyWebsite: '',
-  id: 0,
-  status: '',
-  taxCode: null,
-  applied: 0,
-  createAt: '',
-  updateAt: '',
-};
-
-const applications = {
-  id: "",
-  description: "",
-  fileAttach: "",
-  sendDate: "",
-  status: "",
-  createdAt: "",
-  updatedAt: "",
-  freelancerId: "",
-  jobId: "",
-};
-
-
-
-
 export const jobDetailState = atom({
   key: 'jobDetailState',
   default: {
@@ -113,37 +110,37 @@ export const jobDetailState = atom({
 });
 
 const language = {
-  id: "",
-  name: "",
-  level: "",
+  id: '',
+  name: '',
+  level: '',
   freelancerId: 0,
 };
 
 const certificates = {
-  name: "",
-  issuingOrganization: "",
-  issueDate: "",
-  expirationDate: "",
-  credentialId: "",
-  credentialUrl: "",
+  name: '',
+  issuingOrganization: '',
+  issueDate: '',
+  expirationDate: '',
+  credentialId: '',
+  credentialUrl: '',
 };
 
 export const freelancerState = atom({
-  key: "freelancerState",
+  key: 'freelancerState',
   default: {
-    id: "",
-    status: "",
-    cvFile: "",
-    hoursPerWeek: "",
+    id: '',
+    status: '',
+    cvFile: '',
+    hoursPerWeek: '',
     language: [],
     certificates: [],
     skills: [],
-    introduction: "",
-    major: "",
-    title: "",
-    createdAt: "",
-    updatedAt: "",
-    accountId: "",
+    introduction: '',
+    major: '',
+    title: '',
+    createdAt: '',
+    updatedAt: '',
+    accountId: '',
     accounts: accounts,
   },
 });
@@ -161,7 +158,7 @@ const clientAccounts = {
   status: true,
   createdAt: '',
   updatedAt: '',
-}
+};
 
 export const clientProfile = atom({
   key: 'clientProfile',
@@ -192,23 +189,20 @@ export const listSkillsState = atom({
 
 export const authState = atom({
   key: 'auth',
-  default: {
-    token: null,
-    id: '',
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
-    image: '',
-    password: '',
-    role: '',
-    currency: '',
-    status: 0,
-    exp: 0,
-  },
+  default: {},
 });
 
 export const appoinmentState = atom({
   key: 'appointmentList',
   default: [],
+});
+
+export const otp = atom({
+  key: 'otp',
+  default: '',
+});
+
+export const registerInfo = atom({
+  key: 'registerInfo',
+  default: {},
 });

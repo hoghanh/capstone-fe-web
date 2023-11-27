@@ -21,16 +21,19 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, put, remove } from 'utils/APICaller';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
-import locale from "antd/es/date-picker/locale/vi_VN";
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
+import { useRecoilValue } from 'recoil';
+import { authState, clientProfile } from 'recoil/atom';
+import dayjs from 'dayjs';
+
+
 
 const EditJob = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
   const [remainingCharacters, setRemainingCharacters] = useState(5000);
   const [progresspercent, setProgresspercent] = useState(0);
-  const clientId = LocalStorageUtils.getItem('profile').id;
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,11 +43,15 @@ const EditJob = () => {
     defaultFileList: [],
   });
 
+  const user = useRecoilValue(clientProfile);
+
   useEffect(() => {
-    getJob();
-    getCategory();
-    getSkill();
-  }, []);
+    if (user) {
+      getJob();
+      getCategory();
+      getSkill();
+    }
+  }, [user]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,7 +59,6 @@ const EditJob = () => {
   const [form] = Form.useForm();
 
   const normFile = (e) => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -73,7 +79,7 @@ const EditJob = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `jobs/client-${clientId}/${file.name}`);
+    const storageRef = ref(storage, `jobs/client-${user.id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -137,8 +143,8 @@ const EditJob = () => {
         applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
-        clientId: clientId,
-        status: true,
+        clientId: user.id,
+        status: 'open',
         subCategory: values.category,
         skill: values.skills,
       },
@@ -198,7 +204,7 @@ const EditJob = () => {
             from: res.data.lowestIncome,
             to: res.data.highestIncome,
           },
-          deadline: moment(res.data.applicationSubmitDeadline),
+          deadline: dayjs(res.data.applicationSubmitDeadline),
         });
         setIsLoading(false);
       })
@@ -261,16 +267,16 @@ const EditJob = () => {
   ) : (
     <>
       <Layout.Content
-        className='edit-job'
+        className="edit-job"
         style={{ maxWidth: 1080, margin: '0 auto' }}
       >
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className='card-jobs'
+          className="card-jobs"
           headStyle={{ paddingLeft: 0 }}
           title={
-            <div className='trackingJobs'>
+            <div className="trackingJobs">
               <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
                 Chỉnh sửa bài viết
               </Typography.Title>
@@ -279,14 +285,14 @@ const EditJob = () => {
         >
           <Form
             form={form}
-            name='control-hooks'
+            name="control-hooks"
             onFinish={onFinish}
             style={{ padding: '20px 30px' }}
-            layout='vertical'
+            layout="vertical"
             initialValues={initialValues}
           >
             <Form.Item
-              name='title'
+              name="title"
               label={<Typography.Title level={4}>Tiêu đề</Typography.Title>}
               rules={[
                 {
@@ -300,13 +306,13 @@ const EditJob = () => {
               ]}
             >
               <Input
-                placeholder='Nhập tiêu đề cho dự án của bạn'
+                placeholder="Nhập tiêu đề cho dự án của bạn"
                 bordered={false}
                 style={{ borderBottom: '1px solid #000', borderRadius: 0 }}
               />
             </Form.Item>
             <Form.Item
-              name='description'
+              name="description"
               label={
                 <Typography.Title level={4}>Chi tiết dự án</Typography.Title>
               }
@@ -327,36 +333,37 @@ const EditJob = () => {
               }
             >
               <Input.TextArea
-                placeholder='Nhập thông tin chi tiết cho dự án của bạn'
+                placeholder="Nhập thông tin chi tiết cho dự án của bạn"
                 style={{ height: 100, border: '1px solid #000' }}
                 onChange={handleTextAreaChange}
               />
             </Form.Item>
             <Form.Item
-              name='files'
-              valuePropName='fileList'
+              name="files"
+              valuePropName="fileList"
               getValueFromEvent={normFile}
             >
               <Upload.Dragger
                 {...props}
-                name='file-upload'
+                name="file-upload"
+                accept='.pdf'
                 maxCount={1}
                 beforeUpload={() => false}
               >
-                <p className='ant-upload-drag-icon'>
+                <p className="ant-upload-drag-icon">
                   <PaperClipOutlined />
                 </p>
-                <p className='ant-upload-text'>
+                <p className="ant-upload-text">
                   Kéo và thả bất kỳ hình ảnh hoặc tài liệu nào có thể hữu ích
                   trong việc giải thích tóm tắt của bạn tại đây
                 </p>
-                <p className='ant-upload-hint'>
+                <p className="ant-upload-hint">
                   (Kích thước tệp tối đa: 25 MB)
                 </p>
               </Upload.Dragger>
             </Form.Item>
             <Form.Item
-              name='category'
+              name="category"
               label={
                 <Typography.Title level={4}>Phân loại dự án</Typography.Title>
               }
@@ -370,27 +377,27 @@ const EditJob = () => {
                   ),
                 },
               ]}
-              extra='Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những phân loại này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất.'
+              extra="Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những phân loại này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất."
             >
               <Select
-                mode='multiple'
-                size='large'
-                placeholder='Chọn phân loại'
+                mode="multiple"
+                size="large"
+                placeholder="Chọn phân loại"
                 style={{ width: '100%' }}
                 options={category}
               ></Select>
             </Form.Item>
             <Form.Item
-              name='skills'
+              name="skills"
               label={
                 <Typography.Title level={4}>Kĩ năng cần thiết</Typography.Title>
               }
-              extra='Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất.'
+              extra="Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất."
             >
               <Select
-                mode='tags'
-                size='large'
-                placeholder='Nhập hoặc chọn kĩ năng'
+                mode="tags"
+                size="large"
+                placeholder="Nhập hoặc chọn kĩ năng"
                 style={{ width: '100%' }}
                 options={skills}
                 tokenSeparators={[',']}
@@ -400,7 +407,7 @@ const EditJob = () => {
               <Typography.Title level={4}>Khoảng lương</Typography.Title>
               <Form.Item
                 name={['paymentRange', 'from']}
-                label='Từ: '
+                label="Từ: "
                 rules={[
                   {
                     required: true,
@@ -413,17 +420,18 @@ const EditJob = () => {
                 ]}
               >
                 <InputNumber
-                  placeholder='000,000'
-                  addonAfter='VNĐ'
+                  placeholder="000,000"
+                  addonAfter="VNĐ"
                   min={0}
                   formatter={(value) =>
                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
+                  step={10000}
                 />
               </Form.Item>
               <Form.Item
                 name={['paymentRange', 'to']}
-                label='Đến: '
+                label="Đến: "
                 dependencies={['paymentRange', 'from']}
                 rules={[
                   {
@@ -449,8 +457,8 @@ const EditJob = () => {
                 ]}
               >
                 <InputNumber
-                  placeholder='000, 000'
-                  addonAfter='VNĐ'
+                  placeholder="000, 000"
+                  addonAfter="VNĐ"
                   min={0}
                   formatter={(value) =>
                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -459,7 +467,7 @@ const EditJob = () => {
               </Form.Item>
             </div>
             <Form.Item
-              name='deadline'
+              name="deadline"
               label={
                 <Typography.Title level={4}>Ngày hết hạn</Typography.Title>
               }
@@ -475,24 +483,31 @@ const EditJob = () => {
               ]}
             >
               <DatePicker
+                timezone="UTC"
                 showTime
-                size='large'
-                format='YYYY-MM-DD HH:mm:ss'
-                placeholder='Chọn ngày giờ'
+                size="large"
+                format="YYYY-MM-DD HH:mm:ss"
+                placeholder="Chọn ngày giờ"
                 locale={locale}
+                showNow={false}
+                disabledDate={(current) => {
+                  return (
+                    current && current.isBefore(dayjs().endOf('day'))
+                  );
+                }}
               />
             </Form.Item>
             <Form.Item style={{ textAlign: 'right' }}>
               <Button
-                type='primary'
-                size='large'
+                type="primary"
+                size="large"
                 danger
                 style={{ marginRight: 10 }}
                 onClick={(e) => removeItem()}
               >
                 Xoá bài
               </Button>
-              <Button type='primary' size='large' htmlType='submit'>
+              <Button type="primary" size="large" htmlType="submit">
                 Cập nhật bài viết
               </Button>
             </Form.Item>

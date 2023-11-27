@@ -1,3 +1,5 @@
+import io from 'socket.io-client';
+
 const config = {
   FPTSEP: 'https://fpt-sep.onrender.com',
   TOKEN: 'token',
@@ -6,3 +8,7 @@ const config = {
 };
 
 export const { FPTSEP, TOKEN, CLIENTID } = config;
+
+const socket = io(FPTSEP);
+
+export default socket;

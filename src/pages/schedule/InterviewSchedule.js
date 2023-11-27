@@ -6,20 +6,28 @@ import {
   Dropdown,
   Grid,
   Layout,
-  Menu,
   Typography,
   notification,
+  Row,
+  Col,
+  Table,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
-import LocalStorageUtils from 'utils/LocalStorageUtils';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { get, put } from 'utils/APICaller';
 import { formatDateTime } from 'components/formatter/format';
 import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
 import Loading from 'components/loading/loading';
 import EditScheduleModal from './EditScheduleModal';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+import { useRecoilValue } from 'recoil';
+import { clientProfile } from 'recoil/atom';
+
+// Cài đặt ngôn ngữ tiếng Việt cho Day.js
+dayjs.locale('vi');
 
 const actions = [
   {
@@ -56,19 +64,18 @@ const getMonthData = (value) => {
 const InterviewSchedule = () => {
   const { useBreakpoint } = Grid;
   const { md } = useBreakpoint();
-
-  const clientId = LocalStorageUtils.getItem('profile').id;
+  const user = useRecoilValue(clientProfile);
   const { pathname } = useLocation();
   const page = pathname.replace('/', '');
   const [isLoading, setIsLoading] = useState(true);
-  const [jobList, setJobList] = useState([]);
-  const [jobListColor, setJobListColor] = useState([]);
   const [appointmentTime, setAppointmentTime] = useState('');
   const [appointmentLocation, setAppointmentLocation] = useState('');
   const [id, setId] = useState('');
   let statusApplication = '';
 
   const [openModal, setOpenModal] = useState(false);
+
+  const [dataTable, setDataTable] = useState([]);
 
   const showModal = (id, time, location) => {
     setOpenModal(true);
@@ -85,13 +92,12 @@ const InterviewSchedule = () => {
     setOpenModal(false);
   };
 
-  const onClick = (e, time, applicationId, appoinmentId, location) => {
+  const onClick = (e, time, applicationId, appointmentId, location) => {
     const checkAction = e.key.toString();
-    const appoinmentTime = new Date(time);
+    const appointmentTime = new Date(time);
     const today = new Date();
-    const timeDifference = appoinmentTime - today;
+    const timeDifference = appointmentTime - today;
 
-    checkStatusApplication(applicationId);
     setIsLoading(true);
     setTimeout(() => {
       if (checkAction.includes('start') || checkAction.includes('decline')) {
@@ -114,14 +120,14 @@ const InterviewSchedule = () => {
           statusApplication = '';
         } else {
           if (checkAction.includes('start')) {
-            approveAplication(applicationId);
+            approveApplication(applicationId);
           } else {
-            declineAplication(applicationId);
+            declineApplication(applicationId);
           }
         }
       } else if (checkAction.includes('edit')) {
         if (timeDifference > 24 * 60 * 60 * 1000) {
-          showModal(appoinmentId, time, location);
+          showModal(appointmentId, time, location);
         } else if (
           timeDifference <= 24 * 60 * 60 * 1000 &&
           timeDifference > 0
@@ -140,18 +146,7 @@ const InterviewSchedule = () => {
     }, 3000);
   };
 
-  const checkStatusApplication = (id) => {
-    get({ endpoint: `/application/detail/${id}` })
-      .then((res) => {
-        statusApplication = res.data.status;
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
-  };
-
-  function approveAplication(id) {
+  function approveApplication(id) {
     put({ endpoint: `/application/approve/${id}` })
       .then((res) => {
         notification.success({
@@ -165,7 +160,7 @@ const InterviewSchedule = () => {
       });
   }
 
-  function declineAplication(id) {
+  function declineApplication(id) {
     put({ endpoint: `/application/decline/${id}` })
       .then((res) => {
         notification.success({
@@ -180,20 +175,21 @@ const InterviewSchedule = () => {
   }
 
   useEffect(() => {
-    getInterviewSchedule();
-  }, []);
+    if (user) {
+      getInterviewSchedule();
+    }
+  }, [user]);
 
   function getInterviewSchedule() {
     setIsLoading(true);
     get({
-      endpoint: `/job/appointment/${clientId}`,
+      endpoint: `/job/appointment/${user.id}`,
     })
       .then((res) => {
-        const data = generateJobs(res.data);
-        console.log(data);
-
-        setJobList(data[0]);
-        setJobListColor(data[1]);
+        setDataTable(res.data);
+        // const data = generateJobs(res.data);
+        // setJobList(data[0]);
+        // setJobListColor(data[1]);
         setTimeout(() => {
           setIsLoading(false);
         }, [500]);
@@ -207,20 +203,19 @@ const InterviewSchedule = () => {
 
   const getListData = (value) => {
     let listData = [];
-    jobListColor.forEach((item) => {
-      const time = new Date(item.time);
-      time.setHours(time.getHours() - 7, 0, 0);
-      if (time.getMonth() === value.month()) {
-        if (time.getDate() === value.date()) {
-          const checkDuplicate = listData.filter(
-            (listData) => listData.color === item.color
-          );
-          if (checkDuplicate.length === 0) {
-            listData.push(item);
-          }
-        }
-      }
-    });
+    // jobListColor.forEach((item) => {
+    //   const time = new Date(item.time);
+    //   if (time.getMonth() === value.month()) {
+    //     if (time.getDate() === value.date()) {
+    //       const checkDuplicate = listData.filter(
+    //         (listData) => listData.color === item.color
+    //       );
+    //       if (checkDuplicate.length === 0) {
+    //         listData.push(item);
+    //       }
+    //     }
+    //   }
+    // });
     return listData;
   };
 
@@ -267,7 +262,9 @@ const InterviewSchedule = () => {
         >
           <ArrowLeft />
         </button>
-        <div className='text-month'>{value.format('MMMM')}</div>
+        <div className='text-month'>
+          {capitalizeFirstLetter(value.format('MMMM'))}
+        </div>
         <button
           className='btn-month'
           onClick={() => onChange(value.clone().add(1, 'month'))}
@@ -387,8 +384,77 @@ const InterviewSchedule = () => {
       itemChildren = [];
     });
     setIsLoading(false);
-    return [items, coloritems];
+    return [items];
   }
+
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  const renderAppointments = (appointments) => {
+    const appointmentColumns = [
+      {
+        title: 'Người phỏng vấn',
+        dataIndex: 'freelancers.accounts.name',
+        key: 'name',
+        render: (text, record) => record.freelancers.accounts.name,
+      },
+      {
+        title: 'Thời gian',
+        dataIndex: 'appointments.time',
+        key: 'time',
+        render: (text, record) => formatDateTime(record.appointments[0].time),
+      },
+      {
+        title: 'Địa điểm',
+        dataIndex: 'appointments.location',
+        key: 'location',
+        render: (text, record) => record.appointments[0].location,
+      },
+      {
+        title: 'Thao tác',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: (text, record) => (
+          <Dropdown
+            menu={{
+              items: actions.map((action) => ({
+                ...action,
+                key: action.key + '_' + record?.id,
+                onClick: () =>
+                  onClick(
+                    action,
+                    record.appointments[0]?.time,
+                    record?.id,
+                    record?.appointments[0]?.appointmentId,
+                    record.appointments[0]?.location.length > 0
+                      ? record.appointments[0]?.location
+                      : record.appointments[0]?.link
+                  ),
+              })),
+            }}
+          >
+            <EllipsisOutlined />
+          </Dropdown>
+        ),
+      },
+    ];
+
+    return (
+      <Table
+        columns={appointmentColumns}
+        dataSource={appointments}
+        pagination={false}
+        rowKey={(record) => record.appointmentId}
+      />
+    );
+  };
+
+  const expandedRowRender = (record) => {
+    return renderAppointments(record.applications);
+  };
+
+  const columns = [{ title: 'Công việc', dataIndex: 'title', key: 'name' }];
 
   return isLoading ? (
     <Loading />
@@ -426,36 +492,44 @@ const InterviewSchedule = () => {
           }
           extra={page === 'client/schedule' ? '' : <Link>Xem chi tiết</Link>}
         >
-          <Calendar
-            locale={{
-              lang: {
-                locale: 'en',
-                monthFormat: 'MMMM',
-                weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-                weekdaysShort: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-              },
-            }}
-            fullscreen={false}
-            headerRender={({ value, onChange, type, onTypeChange }) => {
-              if (type === 'month') {
-                return monthHeader(value, onChange);
-              } else {
-                onTypeChange('month');
-                return null;
-              }
-            }}
-            className='calendar'
-            cellRender={cellRender}
-            style={{ margin: 30 }}
-          />
-          <Menu
-            onClick={onClick}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode='inline'
-            items={jobList}
-            className='appoinment-list'
-          />
+          <Row>
+            <Col span={10}>
+              <Calendar
+                locale={{
+                  lang: {
+                    locale: 'vi',
+                    monthFormat: 'MMMM',
+                  },
+                }}
+                fullscreen={false}
+                headerRender={({ value, onChange, type, onTypeChange }) => {
+                  if (type === 'month') {
+                    return monthHeader(value, onChange);
+                  } else {
+                    onTypeChange('month');
+                    return null;
+                  }
+                }}
+                className='calendar'
+                cellRender={cellRender}
+                style={{ margin: 30 }}
+              />
+            </Col>
+            <Col span={14}>
+              <Table
+                columns={columns}
+                expandable={{
+                  expandedRowRender,
+                  defaultExpandedRowKeys: dataTable.map((record) =>
+                    record.id.toString()
+                  ),
+                }}
+                dataSource={dataTable}
+                rowKey={(record) => record.id}
+                pagination={false}
+              />
+            </Col>
+          </Row>
         </Card>
       </Layout.Content>
     </>

@@ -9,6 +9,7 @@ import {
   Skeleton,
   notification,
   Spin,
+  Grid,
 } from 'antd';
 import {
   CustomCard,
@@ -38,16 +39,28 @@ import TextArea from 'antd/es/input/TextArea';
 import { get, post, remove } from 'utils/APICaller';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'config/firebase';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import socket from 'config';
 
 const { Dragger } = Upload;
 
-const SubmitApplication = () => {
-  const freelancer = useRecoilValue(freelancerState);
+const SubmitApplication = ({ status, setStatus }) => {
+  const { useBreakpoint } = Grid;
+  const { lg } = useBreakpoint();
   const [form] = Form.useForm();
+
+  const freelancer = useRecoilValue(freelancerState);
+  const jobDetail = useRecoilValue(jobDetailState);
+  const auth = useRecoilValue(authState);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setProgresspercent] = useState(0);
   let { id } = useParams();
+
+  const notificationData = {
+    notificationName: 'Đơn ứng tuyển mới:',
+    notificationDescription: `${auth.name} ứng tuyển ${jobDetail.title}`,
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -57,10 +70,8 @@ const SubmitApplication = () => {
     const file = event.dragger[0].originFileObj;
 
     if (!file) return;
-
     const storageRef = ref(storage, `applications/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -80,10 +91,9 @@ const SubmitApplication = () => {
     );
   };
 
-  const createApplication = async (values, url) => {
+  const createApplication = (values, url) => {
     const { description } = values;
     const time = new Date();
-    console.log(url, description, time, freelancer.id, id);
     post({
       endpoint: `/application`,
       body: {
@@ -95,9 +105,20 @@ const SubmitApplication = () => {
       },
     })
       .then((res) => {
+        //Gửi notification [thông tin] - đến [accountID người nhận]
+        socket.emit(
+          'sendNotification',
+          notificationData,
+          jobDetail.clients.accounts.id
+        );
+
         notification.success({
           message: 'Ứng tuyển thành công',
         });
+
+        return () => {
+          socket.disconnect();
+        };
       })
       .catch((error) => {
         notification.error({
@@ -110,7 +131,15 @@ const SubmitApplication = () => {
     form
       .validateFields()
       .then((values) => {
-        uploadFile(values);
+        if (
+          values.dragger !== undefined &&
+          values.dragger !== null &&
+          values.dragger !== ''
+        ) {
+          uploadFile(values);
+        } else {
+          createApplication(values);
+        }
         setIsModalOpen(false);
       })
       .catch((error) => {
@@ -132,12 +161,15 @@ const SubmitApplication = () => {
   const props = {
     name: 'files',
     maxCount: 1,
+    accept: '.pdf',
     beforeUpload: () => false,
   };
 
   return (
     <>
-      <ButtonPrimary onClick={showModal}>Gửi CV/Resume</ButtonPrimary>
+      <ButtonPrimary style={{ fontSize: lg ? 16 : 11 }} onClick={showModal}>
+        Gửi CV/Resume
+      </ButtonPrimary>
       <ModalPrimary
         title={'Chi tiết ứng tuyển'}
         open={isModalOpen}
@@ -193,7 +225,6 @@ const SubmitApplication = () => {
                     name='dragger'
                     valuePropName='fileList'
                     getValueFromEvent={normFile}
-                    rules={[{ required: true, message: 'Xin hãy tải tệp lên' }]}
                   >
                     <Dragger {...props}>
                       <p className='ant-upload-drag-icon'>
@@ -217,6 +248,7 @@ const HeaderArticle = () => {
   const [favoriteList, setFavoriteList] = useState([]);
   const auth = useRecoilValue(authState);
   const [isLoading, setIsLoading] = useState(false);
+  const jobDetail = useRecoilValue(jobDetailState);
 
   useEffect(() => {
     if (auth.role === 'freelancer') {
@@ -233,9 +265,7 @@ const HeaderArticle = () => {
         setFavoriteList(idList);
       })
       .catch((error) => {
-        notification.error({
-          message: error.response.data.message,
-        });
+        console.log(error);
       });
   };
 
@@ -298,7 +328,6 @@ const HeaderArticle = () => {
     }
   };
 
-  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <>
       <Row>
@@ -429,6 +458,7 @@ const DescriptionsArticle = ({ description }) => {
 
 //Attachment
 const AttachmentArticle = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
   return (
     <CustomRow>
       <Col span={24}>
@@ -438,18 +468,39 @@ const AttachmentArticle = () => {
       </Col>
       <CustomCol span={24} style={{ display: 'flex' }}>
         <PaperClipOutlined />
-        <Typography.Text
-          underline={true}
-          style={{ fontWeight: 700, fontSize: 14, marginLeft: 5 }}
-        >
-          fileAttachName.doc
-        </Typography.Text>
+        {jobDetail.fileAttachment ? (
+          <Typography.Link
+            href={jobDetail.fileAttachment}
+            target='_blank'
+            underline={true}
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: color.colorPrimary,
+              cursor: 'pointer',
+            }}
+          >
+            Tệp đính kèm
+          </Typography.Link>
+        ) : (
+          <Typography.Text
+            style={{
+              fontWeight: 700,
+              fontSize: 14,
+              marginLeft: 5,
+              color: '#ccc',
+              cursor: 'not-allowed',
+            }}
+          >
+            Tệp đính kèm
+          </Typography.Text>
+        )}
       </CustomCol>
     </CustomRow>
   );
 };
 
-//Skill
 const SkillArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
   const SkeletonSkills = () => {
@@ -523,34 +574,21 @@ const AboutCustomer = () => {
         <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
           Công ty
         </Typography.Text>
-        <Typography.Title
-          className={css.titleAboutCustomer}
-          level={5}
-          style={{
-            margin: '0 0 10px 0',
-            textAlign: 'center',
-          }}
+        <Link
+          to={`/profile-client/${jobDetail?.clients.accountId}`}
+          state={{ clientId: jobDetail?.clientId }}
         >
-          {jobDetail.clients.accounts.name.toUpperCase()}
-        </Typography.Title>
-      </CustomCol>
-      <CustomCol
-        span={24}
-        style={{ display: 'flex', gap: 10, flexDirection: 'column' }}
-      >
-        <Typography.Text style={{ fontSize: 14, color: color.colorDeactivate }}>
-          Bài viết đã đăng
-        </Typography.Text>
-        <Typography.Title
-          className={css.titleAboutCustomer}
-          level={5}
-          style={{
-            margin: '0 0 10px 0',
-            textAlign: 'center',
-          }}
-        >
-          3 bài viết đã đăng
-        </Typography.Title>
+          <Typography.Title
+            className={css.titleAboutCustomer}
+            level={5}
+            style={{
+              margin: '0 0 10px 0',
+              textAlign: 'center',
+            }}
+          >
+            {jobDetail?.clients?.accounts?.name.toUpperCase()}
+          </Typography.Title>
+        </Link>
       </CustomCol>
     </CustomRow>
   );
@@ -571,8 +609,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.address != null
-            ? jobDetail.clients.accounts.address
+          {jobDetail?.clients?.accounts?.address != null
+            ? jobDetail?.clients?.accounts?.address
             : 'Chưa xác minh'}
         </Typography.Text>
       </Col>
@@ -581,8 +619,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.email != null
-            ? jobDetail.clients.accounts.email
+          {jobDetail.clients.accounts?.email != null
+            ? jobDetail.clients.accounts?.email
             : 'Chưa xác minh'}
         </Typography.Text>
       </Col>
@@ -591,8 +629,8 @@ const ContactInfo = () => {
         <Typography.Text
           style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
         >
-          {jobDetail.clients.accounts.phone != null
-            ? jobDetail.clients.accounts.phone
+          {jobDetail.clients.accounts?.phone != null
+            ? jobDetail.clients.accounts?.phone
             : 'Chưa xác minh'}
         </Typography.Text>
       </Col>
@@ -620,7 +658,7 @@ const ArticleLeft = () => {
   );
 };
 
-const InformationRight = ({ showModalLogin }) => {
+const InformationRight = ({ showModalLogin, status, setStatus }) => {
   const auth = useRecoilValue(authState);
   return (
     <Col
@@ -633,40 +671,37 @@ const InformationRight = ({ showModalLogin }) => {
     >
       <Row style={{ justifyContent: 'center' }}>
         {/* Đăng nhập và phân quyền nếu đăng nhập  */}
-        <Col
-          style={{
-            margin: '20px 0',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {auth.email ? (
-            <SubmitApplication />
-          ) : (
-            <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
-          )}
-        </Col>
-        {/* Sau khi được nhận việc  */}
-        {/* <Col style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Row>
-            <Col span={24}>
-              <Typography.Title level={5} style={styles.titleSection}>
-                Hợp đồng
-              </Typography.Title>
-            </Col>
-            <CustomCol span={24} style={{ display: 'flex' }}>
-              <PaperClipOutlined />
-              <Typography.Text
-                underline={false}
-                style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
+        {auth.email ? (
+          status ? null : (
+            <>
+              <Col
+                style={{
+                  margin: '20px 0',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
               >
-                HopDongLamViec.pdf
-              </Typography.Text>
-            </CustomCol>
-          </Row>
-        </Col> */}
-        <CustomDivider />
+                <SubmitApplication status={status} setStatus={setStatus} />
+              </Col>
+              <CustomDivider />
+            </>
+          )
+        ) : (
+          <>
+            <Col
+              style={{
+                margin: '20px 0',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+            </Col>
+            <CustomDivider />
+          </>
+        )}
         <AboutCustomer />
         <CustomDivider />
         <ContactInfo />
@@ -693,26 +728,6 @@ const InformationResponsive = ({ showModalLogin }) => {
         className={css.containerInfoRes}
         style={{ justifyContent: 'center' }}
       >
-        {/* Sau khi được nhận việc  */}
-        {/* <Col className={css.cardContract} style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Row>
-                  <Col span={24}>
-                    <Typography.Title level={5} style={styles.titleSection}>
-                      Hợp đồng
-                    </Typography.Title>
-                  </Col>
-                  <CustomCol span={24} style={{ display: 'flex' }}>
-                    <PaperClipOutlined />
-                    <Typography.Text
-                      underline={false}
-                      style={{ fontWeight: 700, fontSize: 14, marginLeft: 5, color: color.colorPrimary }}
-                    >
-                      HopDongLamViec.pdf
-                    </Typography.Text>
-                  </CustomCol>
-                </Row>
-              </Col> */}
-        {/* <CustomDivider /> */}
         <AboutCustomer />
         <CustomDivider />
         <ContactInfo />
@@ -721,15 +736,18 @@ const InformationResponsive = ({ showModalLogin }) => {
   );
 };
 
-const Details = () => {
+const Details = ({ status, setStatus }) => {
   const jobDetail = useRecoilValue(jobDetailState);
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const auth = useRecoilValue(authState);
+  const { useBreakpoint } = Grid;
+  const { md } = useBreakpoint();
 
   const showModalLogin = () => {
     setOpenLogin(true);
   };
+
   const handleOkLogin = () => {
     setLoading(false);
     setTimeout(() => {
@@ -737,6 +755,7 @@ const Details = () => {
       setOpenLogin(false);
     }, 3000);
   };
+
   const handleCancelLogin = () => {
     setOpenLogin(false);
   };
@@ -755,27 +774,60 @@ const Details = () => {
       <CustomCard style={{ marginBottom: 30 }}>
         <CustomRow gutter={[20, 0]}>
           <ArticleLeft jobDetail={jobDetail} />
-          <InformationRight showModalLogin={showModalLogin} />
+          <InformationRight
+            showModalLogin={showModalLogin}
+            status={status}
+            setStatus={setStatus}
+          />
         </CustomRow>
       </CustomCard>
       <InformationResponsive />
-
-      {/* Đăng nhập và phân quyền nếu đăng nhập  */}
-      <div
-        className={css.buttonLogin}
-        style={{
-          margin: '20px 0',
-          display: 'none',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        }}
-      >
-        {auth.email ? (
-          <SubmitApplication />
+      {!md ? (
+        auth.email ? (
+          status ? null : (
+            <>
+              <Col
+                style={{
+                  margin: '20px 0',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <SubmitApplication status={status} setStatus={setStatus} />
+              </Col>
+            </>
+          )
         ) : (
-          <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
-        )}
-      </div>
+          <>
+            <Col
+              style={{
+                margin: '20px 0',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <SubmitApplication status={status} setStatus={setStatus} />
+            </Col>
+            <CustomDivider />
+          </>
+        )
+      ) : (
+        <>
+          <Col
+            style={{
+              margin: '20px 0',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
+          </Col>
+          <CustomDivider />
+        </>
+      )}
     </>
   );
 };
@@ -783,7 +835,6 @@ const Details = () => {
 const styles = {
   titlePost: { padding: '10px 30px', margin: '20px 0' },
 
-  //Article Right
   headerRight: {
     display: 'flex',
     flexDirection: 'column',
