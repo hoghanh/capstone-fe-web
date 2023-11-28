@@ -381,7 +381,7 @@ const JobList = () => {
                 </div>
                 <div style={joblist.applied}>
                   <Typography.Title level={5} style={joblist.applied.text}>
-                    {job.applied ? job.applied : 0} đã ứng tuyển{' '}
+                    {job.applied ? job.applied : 0} ứng tuyển{' '}
                     <FileTextFilled />
                   </Typography.Title>
                 </div>

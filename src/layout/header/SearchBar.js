@@ -42,7 +42,7 @@ const onFail = () => {};
 
 const Search = () => {
   const { useBreakpoint } = Grid;
-  const { md, lg } = useBreakpoint();
+  const { md, lg, sm } = useBreakpoint();
   const [results, setResults] = useState([]);
   const auth = useRecoilValue(authState);
 
@@ -77,39 +77,40 @@ const Search = () => {
             }
             state={{
               clientId: result.tag === 'client' ? result.referId : null,
-            }}
-          >
-            <Typography.Text style={{ padding: 10 }}>
-              {result.name || result.title}{' '}
-              {result.id === auth.id ? '(Bạn)' : ''}
-            </Typography.Text>
-          </Link>
-        ),
-        key: index,
-        icon:
-          result.tag === 'freelancer' ? (
-            <User />
-          ) : result.tag === 'client' ? (
-            <Company />
-          ) : (
-            <Job />
-          ),
+          }}
+        >
+          <Typography.Text style={{display:'flex', alignItems: 'center', textWrap: 'nowrap' }}>
+            {result.tag === 'freelancer' ? (
+              <span style={{ paddingRight: 10 }}><User /></span>
+            ) : result.tag === 'client' ? (
+              <span style={{ paddingRight: 10 }}><Company /></span>
+            ) : (
+              <span style={{ paddingRight: 10 }}><Job /></span>)}
+            {result.name || result.title}{' '}
+            {result.id === auth.id ? '(Bạn)' : ''}
+          </Typography.Text>
+        </Link>
+      ),
+      key: index,
       }))
     : [{ label: <Empty description={<span>Dữ liệu trống</span>} />, key: '1' }];
 
   return (
     <Dropdown
       overlayStyle={{
-        maxHeight: '300px',
+        maxHeight: 300,
         overflow: 'auto',
         boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
         borderRadius: 10,
         border: '1px solid #ccc',
+        width: lg ? 700 : md ? 700 : sm ? 500 : 300,
+        overflowX: 'hidden',
       }}
       menu={{
         items,
       }}
       trigger={['click']}
+      placement="bottom"
     >
       <Input.Search
         placeholder='Tìm kiếm'
@@ -117,7 +118,7 @@ const Search = () => {
         style={{
           padding: 10,
           borderRadius: 8,
-          width: lg ? 477 : md ? 325 : 250,
+          width: lg ? 477 : md ? 325 : sm ? 250 : 150,
         }}
       />
     </Dropdown>
@@ -506,7 +507,7 @@ function SearchBar() {
           margin: '0 auto',
         }}
       >
-        <Col xs={6} sm={2} md={2} lg={1} xl={0}>
+        <Col xs={3} sm={3} md={3} lg={1} xl={0}>
           <div>
             <MenuOutlined onClick={toggleCollapsed} />
             <Menu
@@ -522,8 +523,8 @@ function SearchBar() {
             />
           </div>
         </Col>
-        <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to={'/'}>
+        <Col xs={3} sm={3} md={1} lg={1} xl={1}>
+          <Link to={auth.role === 'freelancer' ? '/home' : '/'}>
             <Image
               width={34}
               src='/icon/logo.svg'
@@ -532,21 +533,21 @@ function SearchBar() {
             />
           </Link>
         </Col>
-        <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to={'/'}>
+        <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+          <Link to={auth.role === 'freelancer' ? '/home' : '/'}>
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>
           </Link>
         </Col>
 
-        <Col xs={0} sm={12} md={11} lg={13} xl={13}>
+        <Col xs={12} sm={12} md={10} lg={13} xl={14} style={{display:'flex', justifyContent:'center'}}>
           <Search />
         </Col>
 
         {auth.email ? (
           <>
-            <Col xs={0} sm={0} md={3} lg={3} xl={3} style={{ display: 'flex' }}>
+            <Col xs={3} sm={3} md={3} lg={3} xl={3} style={{ display: 'flex' }}>
               <Badge count={count}>
                 <ReactSVG
                   onClick={toggleMenuVisibility}
@@ -574,7 +575,7 @@ function SearchBar() {
                 )}
               </Badge>
             </Col>
-            <Col xs={7} sm={5} md={4} lg={4} xl={3}>
+            <Col xs={3} sm={3} md={3} lg={3} xl={3}>
               <Dropdown menu={{ items, onClick }}>
                 <div>
                   <ReactSVG

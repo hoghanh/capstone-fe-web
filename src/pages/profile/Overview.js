@@ -1596,7 +1596,7 @@ const BodySectionLeft = () => {
 };
 
 const BodySectionLeftResponsive = () => {
-  const informationUser = useRecoilValue(profileState);
+  const informationUser = useRecoilValue(freelancerState);
   const auth = useRecoilValue(authState);
 
   return (
@@ -1609,7 +1609,7 @@ const BodySectionLeftResponsive = () => {
         marginBottom: 30,
         boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
         borderRadius: 20,
-        backgroundColor: color.colorWhitegq,
+        backgroundColor: color.colorWhite,
       }}
     >
       <Row gutter={[0, 10]}>
@@ -1643,7 +1643,11 @@ const BodySectionLeftResponsive = () => {
                 </Col>
                 <Col span={24}>
                   <Typography.Text style={{ letterSpacing: 1 }}>
-                    {informationUser?.phone}
+                    {' '}
+                    {informationUser?.accounts.phone != null &&
+                      informationUser?.accounts.phone !== ''
+                      ? informationUser?.accounts.phone
+                      : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -1660,7 +1664,10 @@ const BodySectionLeftResponsive = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>{informationUser?.address}</Typography.Text>
+                {informationUser?.accounts.address != null &&
+                    informationUser?.accounts.address !== ''
+                      ? informationUser?.accounts.address
+                      : 'Chưa có thông tin'}
                 </Col>
               </Row>
             </CustomCol>
@@ -1695,7 +1702,10 @@ const BodySectionLeftResponsive = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>More than 30hrs/weeks</Typography.Text>
+                  <Typography.Text> {informationUser?.hoursPerWeek != null &&
+                    informationUser?.hoursPerWeek !== ''
+                    ? informationUser?.hoursPerWeek
+                    : 'Chưa có thông tin'}</Typography.Text>
                 </Col>
               </Row>
             </CustomCol>
@@ -1722,22 +1732,16 @@ const BodySectionLeftResponsive = () => {
                     ) : null}
                   </Row>
                 </Col>
-                <Col span={24}>
-                  <Typography.Text>
-                    <Typography.Text strong style={{ marginRight: 20 }}>
-                      Tiếng Anh:
+                {informationUser?.language.map((language) => (
+                  <Col key={language.id} span={24}>
+                    <Typography.Text>
+                      <Typography.Text strong style={{ marginRight: 20 }}>
+                        {language.name}:
+                      </Typography.Text>
+                      {language.level}
                     </Typography.Text>
-                    Giao tiếp
-                  </Typography.Text>
-                </Col>
-                <Col>
-                  <Typography.Text>
-                    <Typography.Text strong style={{ marginRight: 20 }}>
-                      Tiếng Nhật:
-                    </Typography.Text>
-                    Giao tiếp
-                  </Typography.Text>
-                </Col>
+                  </Col>
+                ))}
               </Row>
             </CustomCol>
             {/* Left 3 */}
@@ -1751,15 +1755,21 @@ const BodySectionLeftResponsive = () => {
                       </Typography.Title>
                     </Col>
                     <Col>
-                      <ButtonIcon>
-                        <Plus />
-                      </ButtonIcon>
+                    {auth.role === 'freelancer' &&
+                    auth.id === informationUser?.accountId ? (
+                      <Col>
+                        <EditMajor />
+                      </Col>
+                    ) : null}
                     </Col>
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>
-                    Kỹ thuật phần mềm · (2019 - 2023)
+                <Typography.Text>
+                    {informationUser?.major != null &&
+                    informationUser?.major !== ''
+                      ? informationUser?.major
+                      : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -1818,7 +1828,7 @@ const ListWithLoadMore = ({ items }) => {
       )}
       footer={
         <div style={{ margin: 'auto', width: '20%' }}>
-          {visible < 3 ? (
+          {items.length <= 3 ? null : (visible < 3 ? (
             <Typography.Text
               style={{ cursor: 'pointer' }}
               onClick={showMoreItems}
@@ -1832,7 +1842,7 @@ const ListWithLoadMore = ({ items }) => {
             >
               Thu gọn
             </Typography.Text>
-          )}
+          ))}
         </div>
       }
     />
@@ -2037,10 +2047,7 @@ const BodySectionRight = () => {
                 </Col>
               </Row>
             </Col>
-            <Col
-              span={24}
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
+            <Col span={24} >
               <ListWithLoadMore items={applications} />
             </Col>
           </Row>
