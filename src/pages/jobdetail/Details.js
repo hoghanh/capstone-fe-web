@@ -774,24 +774,19 @@ const Details = ({ status, setStatus }) => {
       <CustomCard style={{ marginBottom: 30 }}>
         <CustomRow gutter={[20, 0]}>
           <ArticleLeft jobDetail={jobDetail} />
-          <InformationRight
-            showModalLogin={showModalLogin}
-            status={status}
-            setStatus={setStatus}
-          />
+          <InformationRight showModalLogin={showModalLogin} status={status} setStatus={setStatus} />
         </CustomRow>
       </CustomCard>
       <InformationResponsive />
-      {!md ? (
-        auth.email ? (
+      {!md ? (auth.email ? (
           status ? null : (
             <>
               <Col
                 style={{
-                  margin: '20px 0',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  margin: "20px 0",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <SubmitApplication status={status} setStatus={setStatus} />
@@ -802,32 +797,16 @@ const Details = ({ status, setStatus }) => {
           <>
             <Col
               style={{
-                margin: '20px 0',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                margin: "20px 0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <SubmitApplication status={status} setStatus={setStatus} />
+              <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
             </Col>
-            <CustomDivider />
           </>
-        )
-      ) : (
-        <>
-          <Col
-            style={{
-              margin: '20px 0',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <ButtonPrimary onClick={showModalLogin}>Đăng nhập</ButtonPrimary>
-          </Col>
-          <CustomDivider />
-        </>
-      )}
+        )): null}
     </>
   );
 };

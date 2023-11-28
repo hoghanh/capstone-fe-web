@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
 import Details from "./Details";
 import { get } from "utils/APICaller";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authState, freelancerState, jobDetailState } from "recoil/atom";
 import { useParams } from "react-router-dom";
 
 const JobDetail = () => {
-  const [, setJobDetail] = useRecoilState(jobDetailState);
-  const [, setFreelancer] = useRecoilState(freelancerState);
+  const setJobDetail = useSetRecoilState(jobDetailState);
+  const setFreelancer= useSetRecoilState(freelancerState);
   const [ status, setStatus] = useState(false);
   const auth = useRecoilValue(authState);
   let { id } = useParams();
@@ -16,9 +16,12 @@ const JobDetail = () => {
   useEffect(() => {
     if (id){
       getJobDetail();
-      getFreelancer();
     }
   }, [id]);
+
+  useEffect(() => {
+    getFreelancer(auth.id);
+  }, [auth]);
 
   const getJobDetail = () => {
     get({ endpoint: `/job/detail/${id}` })
@@ -36,8 +39,8 @@ const JobDetail = () => {
       });
   };
 
-  const getFreelancer = () => {
-    get({ endpoint: `/freelancer/profile/${auth.id}` })
+  const getFreelancer = (id) => {
+    get({ endpoint: `/freelancer/profile/${id}` })
       .then((response) => {
         const data = response.data;
         setFreelancer(data);
