@@ -141,11 +141,13 @@ const InterviewSchedule = () => {
           notificationName: 'Công việc được nhận ',
           notificationDescription: `${user.accounts.name} vừa nhận đơn ứng tuyển của bạn`,
         };
+
+        //Gửi notification [thông tin] - đến [accountID người nhận]
         socket.emit('sendNotification', notificationData, freelancerAccountId);
       })
       .catch((error) => {
         notification.error({
-          message: 'Có lỗi xảy ra! Vui lòng thử lại',
+          message: error.message,
         });
       });
   }
@@ -262,17 +264,17 @@ const InterviewSchedule = () => {
           maxWidth: 1080,
           margin: '0 auto',
         }}
-          className='schedule-interview'
-        >
-          <EditScheduleModal
-            open={openModal}
-            onCancel={handleCancelModal}
-            setId={setId} 
-            setOpenModal={setOpenModal}
-            appointmentTime={appointmentTime}
-            appointmentLocation={appointmentLocation}
-            id={id}
-          />
+        className='schedule-interview'
+      >
+        <EditScheduleModal
+          open={openModal}
+          onCancel={handleCancelModal}
+          setId={setId}
+          setOpenModal={setOpenModal}
+          appointmentTime={appointmentTime}
+          appointmentLocation={appointmentLocation}
+          id={id}
+        />
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={{

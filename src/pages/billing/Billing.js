@@ -84,7 +84,7 @@ function Billing() {
     Object.fromEntries(queryParams.entries());
 
   useEffect(() => {
-    if (user) {
+    if (user.id) {
       setIsLoading(true);
       if (!vnp_Amount) {
         get({
@@ -158,7 +158,7 @@ function Billing() {
   ) : (
     <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
       <ModalTopup
-        open={openModal}
+        visible={openModal}
         onCancel={handleCancelModal}
         onOk={handleOkModal}
         id={user.id}
@@ -166,10 +166,10 @@ function Billing() {
       <Card
         bodyStyle={{ padding: 'unset' }}
         style={joblist.card}
-        className="card-jobs"
+        className='card-jobs'
         headStyle={{ paddingLeft: 0 }}
         title={
-          <div className="trackingJobs">
+          <div className='trackingJobs'>
             <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
               Tra cứu giao dịch
             </Typography.Title>
@@ -181,13 +181,13 @@ function Billing() {
         extra={
           <>
             <DatePicker
-              timezone="UTC"
+              timezone='UTC'
               style={{ marginRight: 20 }}
               onChange={filterDate}
-              size="middle"
+              size='middle'
               locale={locale}
             />
-            <Button size="large" type="primary" onClick={showModal}>
+            <Button size='large' type='primary' onClick={showModal}>
               Nạp tiền
             </Button>
           </>

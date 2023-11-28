@@ -40,11 +40,12 @@ function EditScheduleModal({
           },
         })
           .then((res) => {
-            setOpenModal(false);
             notification.success({
               message: 'Đã chỉnh sửa thành công',
             });
-            setId(null)
+            setOpenModal(false);
+            setId(null);
+            window.location.reload();
           })
           .catch((err) => {
             notification.error({
@@ -73,7 +74,7 @@ function EditScheduleModal({
       >
         <Form
           form={form}
-          name="editInterview"
+          name='editInterview'
           initialValues={{
             remember: true,
           }}
@@ -88,7 +89,7 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="address"
+                    name='address'
                     initialValue={appointmentLocation}
                     rules={[
                       {
@@ -97,7 +98,7 @@ function EditScheduleModal({
                       },
                     ]}
                   >
-                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
+                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -107,7 +108,7 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="time"
+                    name='time'
                     initialValue={dayjs(appointmentTime)}
                     rules={[
                       {
@@ -117,7 +118,7 @@ function EditScheduleModal({
                     ]}
                   >
                     <DatePicker
-                      timezone="UTC"
+                      timezone='UTC'
                       locale={locale}
                       style={{ with: '100%' }}
                       showTime
