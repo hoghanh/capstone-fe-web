@@ -329,9 +329,13 @@ body {
     margin-left: 10px !important;
     margin-right: 10px !important;
   }
+  .ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels{
+  flex-direction: column !important;
+ }
 }
 
 
 /* Đối với màn hình có độ rộng < 576px */
 @media (max-width: 575.98px) {
 }
+

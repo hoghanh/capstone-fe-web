@@ -595,7 +595,7 @@ function SearchBar() {
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
               <Button onClick={showModalRegister}>Đăng kí</Button>
             </Col>
-            <Col xs={7} sm={5} md={4} lg={4} xl={3}>
+            <Col xs={6} sm={6} md={3} lg={3} xl={3}>
               <Button onClick={showModalLogin}>Đăng nhập</Button>
             </Col>
           </>

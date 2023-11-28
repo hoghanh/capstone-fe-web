@@ -60,12 +60,6 @@ export const routes = [
     name: 'jobdetail',
     layout: 'breadcrumb',
   },
-  // {
-  //   path: '/profile',
-  //   element: lazy(() => import('pages/profile/Profile')),
-  //   name: 'profile',
-  //   role: ['freelancer'],
-  // },
   {
     path: '/profile/:profileId',
     element: lazy(() => import('pages/profile/Profile')),
@@ -155,7 +149,7 @@ export const routes = [
     path: '/applications',
     element: lazy(() => import('pages/applications/Applications')),
     name: 'applications',
-    // role: ['freelancer'],
+    role: ['freelancer'],
   },
 
   {
