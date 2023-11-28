@@ -130,7 +130,6 @@ const JobList = () => {
 
   const handleFavoriteChange = (id) => {
     setIsLoading(true);
-
     if (!favoriteList.includes(id)) {
       addFavorite(id);
     } else {

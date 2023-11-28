@@ -65,7 +65,7 @@ const Search = () => {
   };
 
   const items = results.length
-    ? results.map((result, index) => ({
+    ? results?.map((result, index) => ({
         label: (
           <Link
             to={
@@ -427,7 +427,7 @@ function SearchBar() {
     <Layout.Header style={{ background: '#FFFFFF', padding: '0 20px' }}>
       {/* Modal Register */}
       <RegisterModal
-        visible={openRegister}
+        open={openRegister}
         onCancel={handleCancelRegister}
         onOk={handleOkRegister}
         handleMove={handleMove}
@@ -435,7 +435,7 @@ function SearchBar() {
 
       {/* Modal Login */}
       <LoginModal
-        visible={openLogin}
+        open={openLogin}
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
         handleMove={handleMove}
@@ -443,7 +443,7 @@ function SearchBar() {
       />
 
       <OTPModal
-        visible={openOTP}
+        open={openOTP}
         onCancel={handleCancelOTPModal}
         onOk={handleOkOTPModal}
         handleMove={handleMove}
@@ -452,7 +452,7 @@ function SearchBar() {
       {/* Handle forgot password */}
       <ModalPrimary
         title={'Quên mật khẩu'}
-        visible={forgotPasswordVisible}
+        open={forgotPasswordVisible}
         onOk={sendMailForgotPassword}
         onCancel={closeForgotPasswordModal}
         okText='Gửi'
@@ -470,7 +470,7 @@ function SearchBar() {
 
       <ModalPrimary
         title={'Nhập OTP của bạn'}
-        visible={OTPVisible}
+        open={OTPVisible}
         onOk={checkOTP}
         onCancel={closeOTPModal}
         okText='Gửi'

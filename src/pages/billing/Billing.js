@@ -158,7 +158,7 @@ function Billing() {
   ) : (
     <Layout.Content style={{ maxWidth: 1080, margin: '0 auto' }}>
       <ModalTopup
-        visible={openModal}
+        open={openModal}
         onCancel={handleCancelModal}
         onOk={handleOkModal}
         id={user.id}

@@ -64,11 +64,7 @@ const InterviewSchedule = () => {
     setAppointmentLocation(location);
     setAppointmentTime(time);
   };
-  const handleOkModal = () => {
-    setTimeout(() => {
-      setOpenModal(false);
-    }, 3000);
-  };
+
   const handleCancelModal = () => {
     setOpenModal(false);
   };
@@ -169,12 +165,10 @@ const InterviewSchedule = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      getInterviewSchedule();
-    }
-  }, [user]);
+    getInterviewSchedule(user);
+  }, [user, id]);
 
-  function getInterviewSchedule() {
+  function getInterviewSchedule(user) {
     setIsLoading(true);
     get({
       endpoint: `/job/appointment/${user.id}`,
@@ -268,16 +262,17 @@ const InterviewSchedule = () => {
           maxWidth: 1080,
           margin: '0 auto',
         }}
-        className='schedule-interview'
-      >
-        <EditScheduleModal
-          visible={openModal}
-          onCancel={handleCancelModal}
-          onOk={handleOkModal}
-          appointmentTime={appointmentTime}
-          appointmentLocation={appointmentLocation}
-          id={id}
-        />
+          className='schedule-interview'
+        >
+          <EditScheduleModal
+            open={openModal}
+            onCancel={handleCancelModal}
+            setId={setId} 
+            setOpenModal={setOpenModal}
+            appointmentTime={appointmentTime}
+            appointmentLocation={appointmentLocation}
+            id={id}
+          />
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={{

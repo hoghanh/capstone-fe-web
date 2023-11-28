@@ -1297,21 +1297,9 @@ const EditCV = () => {
                         cursor: 'pointer',
                       }}
                     >
-                      fileCV.pdf
+                      CV.pdf
                     </Typography.Link>
-                  ) : (
-                    <Typography.Text
-                      style={{
-                        fontWeight: 700,
-                        fontSize: 14,
-                        marginLeft: 5,
-                        color: '#ccc',
-                        cursor: 'not-allowed',
-                      }}
-                    >
-                      fileCV.pdf
-                    </Typography.Text>
-                  )}
+                  ) : null}
                 </Col>
               </CustomRow>
             </Col>
@@ -1392,21 +1380,9 @@ const HeaderSection = () => {
                     cursor: 'pointer',
                   }}
                 >
-                  fileCV.pdf
+                  CV.pdf
                 </Typography.Link>
-              ) : (
-                <Typography.Text
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 14,
-                    marginLeft: 5,
-                    color: '#ccc',
-                    cursor: 'not-allowed',
-                  }}
-                >
-                  fileCV.pdf
-                </Typography.Text>
-              )}
+              ) : null}
             </Col>
           )}
         </Row>

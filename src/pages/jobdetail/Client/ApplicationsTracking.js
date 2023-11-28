@@ -578,8 +578,8 @@ const TabSent = ({ activeTabKey, value }) => {
                     ellipsis={
                       ellipsis
                         ? {
-                            rows: 3,
-                          }
+                          rows: 3,
+                        }
                         : false
                     }
                     onClick={() => setEllipsis(!ellipsis)}
@@ -587,13 +587,13 @@ const TabSent = ({ activeTabKey, value }) => {
                     {application.freelancers.applications[0].description}
                   </Typography.Paragraph>
                 </Col>
-                <Col span={24}>
-                  <CustomRow align={'middle'}>
-                    <Col>
-                      <PaperClipOutlined />
-                    </Col>
-                    <Col>
-                      {application.freelancers.applications[0]?.fileAttach ? (
+                {application.freelancers.applications[0]?.fileAttach ? (
+                  <Col span={24}>
+                    <CustomRow align={'middle'}>
+                      <Col>
+                        <PaperClipOutlined />
+                      </Col>
+                      <Col>
                         <Typography.Link
                           href={application.fileAttach}
                           target='_blank'
@@ -606,24 +606,12 @@ const TabSent = ({ activeTabKey, value }) => {
                             cursor: 'pointer',
                           }}
                         >
-                          fileCV.pdf
+                          CV.pdf
                         </Typography.Link>
-                      ) : (
-                        <Typography.Text
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: '#ccc',
-                            cursor: 'not-allowed',
-                          }}
-                        >
-                          fileCV.pdf
-                        </Typography.Text>
-                      )}
-                    </Col>
-                  </CustomRow>
-                </Col>
+                      </Col>
+                    </CustomRow>
+                  </Col>
+                ) : null}
               </Row>
               <CustomDivider />
             </Col>

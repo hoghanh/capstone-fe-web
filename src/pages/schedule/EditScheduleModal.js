@@ -10,15 +10,16 @@ import {
 } from 'antd';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { CustomRow } from 'components/customize/Layout';
-import moment from 'moment';
 import { put } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import dayjs from 'dayjs';
 
 function EditScheduleModal({
-  visible,
+  open,
   onCancel,
+  setId,
+  setOpenModal,
   id,
   appointmentTime,
   appointmentLocation,
@@ -39,9 +40,11 @@ function EditScheduleModal({
           },
         })
           .then((res) => {
+            setOpenModal(false);
             notification.success({
               message: 'Đã chỉnh sửa thành công',
             });
+            setId(null)
           })
           .catch((err) => {
             notification.error({
@@ -63,7 +66,7 @@ function EditScheduleModal({
     <>
       <ModalPrimary
         title={'Chỉnh sửa lịch hẹn'}
-        open={visible}
+        open={open}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={onCancel}

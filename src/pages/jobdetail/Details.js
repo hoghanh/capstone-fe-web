@@ -111,7 +111,7 @@ const SubmitApplication = ({ status, setStatus }) => {
           notificationData,
           jobDetail.clients.accounts.id
         );
-
+        setStatus(true)
         notification.success({
           message: 'Ứng tuyển thành công',
         });
@@ -309,22 +309,10 @@ const HeaderArticle = () => {
 
   const handleFavoriteChange = (id) => {
     setIsLoading(true);
-    switch (auth.role) {
-      case 'freelancer':
-        if (!favoriteList.includes(id)) {
-          addFavorite(id);
-        } else {
-          removeFavorite(id);
-        }
-        break;
-      case 'client':
-        notification.error('Bạn không thể thêm hoặc xóa job yêu thích');
-        setIsLoading(false);
-        break;
-      default:
-        notification.error('Hãy đăng nhập!');
-        setIsLoading(false);
-        break;
+    if (!favoriteList.includes(id)) {
+      addFavorite(id);
+    } else {
+      removeFavorite(id);
     }
   };
 
@@ -361,7 +349,7 @@ const HeaderArticle = () => {
                 </Typography.Text>
               </div>
             </CustomCol>
-            <Col
+            {auth.email ? <Col
               span={2}
               style={{
                 display: 'flex',
@@ -378,7 +366,7 @@ const HeaderArticle = () => {
               ) : (
                 <BookMarkOutlined />
               )}
-            </Col>
+            </Col> : null}
           </CustomRow>
         </Col>
         <Col sm={{ span: 0 }} xs={{ span: 24 }}>
@@ -413,7 +401,7 @@ const HeaderArticle = () => {
                 </Col>
               </Row>
             </CustomCol>
-            <Col
+            {auth.email ? <Col
               span={2}
               style={{
                 display: 'flex',
@@ -431,7 +419,7 @@ const HeaderArticle = () => {
               ) : (
                 <BookMarkOutlined />
               )}
-            </Col>
+            </Col> : null}
           </CustomRow>
         </Col>
       </Row>
@@ -468,7 +456,6 @@ const AttachmentArticle = () => {
       </Col>
       <CustomCol span={24} style={{ display: 'flex' }}>
         <PaperClipOutlined />
-        {jobDetail.fileAttachment ? (
           <Typography.Link
             href={jobDetail.fileAttachment}
             target='_blank'
@@ -483,19 +470,6 @@ const AttachmentArticle = () => {
           >
             Tệp đính kèm
           </Typography.Link>
-        ) : (
-          <Typography.Text
-            style={{
-              fontWeight: 700,
-              fontSize: 14,
-              marginLeft: 5,
-              color: '#ccc',
-              cursor: 'not-allowed',
-            }}
-          >
-            Tệp đính kèm
-          </Typography.Text>
-        )}
       </CustomCol>
     </CustomRow>
   );
@@ -651,8 +625,12 @@ const ArticleLeft = () => {
       <CustomDivider />
       <DescriptionsArticle description={jobDetail.description} />
       <CustomDivider />
-      <AttachmentArticle />
-      <CustomDivider />
+      {jobDetail.fileAttachment ? (
+        <>
+          <AttachmentArticle />
+          <CustomDivider />
+        </>
+      ) : null}
       <SkillArticle />
     </Col>
   );
@@ -763,7 +741,7 @@ const Details = ({ status, setStatus }) => {
   return (
     <>
       <LoginModal
-        visible={openLogin}
+        open={openLogin}
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
         // handleMove={handleMove}
