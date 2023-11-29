@@ -340,7 +340,7 @@ const Approved = ({
   );
 };
 
-const TabSent = ({ activeTabKey, value }) => {
+const TabSent = ({ activeTabKey, value, page, setPage }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
@@ -348,7 +348,6 @@ const TabSent = ({ activeTabKey, value }) => {
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
-  const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
   const [accountId, setAccountId] = useState();
@@ -684,8 +683,11 @@ const ApplicationsTracking = () => {
   const [value, setValue] = useState(null);
   const { RangePicker } = DatePicker;
   const { Search } = Input;
+  const [page, setPage] = useState(1);
+
 
   const onTabChange = (key) => {
+    setPage(1);
     setActiveTabKey(key);
   };
 
@@ -779,7 +781,7 @@ const ApplicationsTracking = () => {
             activeTabKey={activeTabKey}
             onTabChange={onTabChange}
           >
-            <TabSent activeTabKey={activeTabKey} value={value} />
+            <TabSent activeTabKey={activeTabKey} value={value} page={page} setPage={setPage}/>
           </Card>
         </Col>
       </Row>
