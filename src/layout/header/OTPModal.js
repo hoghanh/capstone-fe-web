@@ -46,6 +46,10 @@ function OTPModal({ visible, onCancel, onOk, handleMove }) {
       onCancel={onCancel}
       okText='Gửi'
     >
+      <Typography.Text>
+        Chúng tôi vừa gửi 1 OTP về email của bạn, vui lòng kiểm tra email và
+        điền vào bên dưới!
+      </Typography.Text>
       <Input
         type='number'
         className='otp'

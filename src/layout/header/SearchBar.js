@@ -77,21 +77,34 @@ const Search = () => {
             }
             state={{
               clientId: result.tag === 'client' ? result.referId : null,
-          }}
-        >
-          <Typography.Text style={{display:'flex', alignItems: 'center', textWrap: 'nowrap' }}>
-            {result.tag === 'freelancer' ? (
-              <span style={{ paddingRight: 10 }}><User /></span>
-            ) : result.tag === 'client' ? (
-              <span style={{ paddingRight: 10 }}><Company /></span>
-            ) : (
-              <span style={{ paddingRight: 10 }}><Job /></span>)}
-            {result.name || result.title}{' '}
-            {result.id === auth.id ? '(Bạn)' : ''}
-          </Typography.Text>
-        </Link>
-      ),
-      key: index,
+            }}
+          >
+            <Typography.Text
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                textWrap: 'nowrap',
+              }}
+            >
+              {result.tag === 'freelancer' ? (
+                <span style={{ paddingRight: 10 }}>
+                  <User />
+                </span>
+              ) : result.tag === 'client' ? (
+                <span style={{ paddingRight: 10 }}>
+                  <Company />
+                </span>
+              ) : (
+                <span style={{ paddingRight: 10 }}>
+                  <Job />
+                </span>
+              )}
+              {result.name || result.title}{' '}
+              {result.id === auth.id ? '(Bạn)' : ''}
+            </Typography.Text>
+          </Link>
+        ),
+        key: index,
       }))
     : [{ label: <Empty description={<span>Dữ liệu trống</span>} />, key: '1' }];
 
@@ -110,7 +123,7 @@ const Search = () => {
         items,
       }}
       trigger={['click']}
-      placement="bottom"
+      placement='bottom'
     >
       <Input.Search
         placeholder='Tìm kiếm'
@@ -359,7 +372,7 @@ function SearchBar() {
         socket.disconnect();
       };
     }
-  }, [auth]);
+  }, [auth, socket]);
 
   const handleMenuClick = ({ key }) => {
     put({ endpoint: `/notification/${key}` })
@@ -420,6 +433,7 @@ function SearchBar() {
   };
 
   const toggleMenuVisibility = () => {
+    changeNotification();
     setMenuVisible(!menuVisible);
   };
 
@@ -427,7 +441,7 @@ function SearchBar() {
     <Layout.Header style={{ background: '#FFFFFF', padding: '0 20px' }}>
       {/* Modal Register */}
       <RegisterModal
-        open={openRegister}
+        visible={openRegister}
         onCancel={handleCancelRegister}
         onOk={handleOkRegister}
         handleMove={handleMove}
@@ -435,7 +449,7 @@ function SearchBar() {
 
       {/* Modal Login */}
       <LoginModal
-        open={openLogin}
+        visible={openLogin}
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
         handleMove={handleMove}
@@ -443,7 +457,7 @@ function SearchBar() {
       />
 
       <OTPModal
-        open={openOTP}
+        visible={openOTP}
         onCancel={handleCancelOTPModal}
         onOk={handleOkOTPModal}
         handleMove={handleMove}
@@ -541,7 +555,14 @@ function SearchBar() {
           </Link>
         </Col>
 
-        <Col xs={12} sm={12} md={10} lg={13} xl={14} style={{display:'flex', justifyContent:'center'}}>
+        <Col
+          xs={12}
+          sm={12}
+          md={10}
+          lg={13}
+          xl={14}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
           <Search />
         </Col>
 

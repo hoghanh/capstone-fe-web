@@ -61,7 +61,7 @@ function ClientHeader({ name, subName, onPress }) {
         socket.disconnect();
       };
     }
-  }, [auth]);
+  }, [auth, socket]);
 
   const handleMenuClick = ({ key }) => {
     put({ endpoint: `/notification/${key}` })
@@ -122,6 +122,7 @@ function ClientHeader({ name, subName, onPress }) {
   };
 
   const toggleMenuVisibility = () => {
+    changeNotification();
     setMenuVisible(!menuVisible);
   };
 
