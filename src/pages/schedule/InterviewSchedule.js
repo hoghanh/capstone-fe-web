@@ -294,17 +294,17 @@ const InterviewSchedule = () => {
         }}
       />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : record['link'].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
+    onFilter: (value, record) => {
+      const dataIndexArray = dataIndex.split('.');
+      let nestedValue = record;
+
+      for (const prop of dataIndexArray) {
+        nestedValue = nestedValue[prop];
       }
+
+      return nestedValue
+        ? nestedValue.toString().toLowerCase().includes(value.toLowerCase())
+        : record['link'].toString().toLowerCase().includes(value.toLowerCase());
     },
     render: (text) =>
       searchedColumn === dataIndex ? (
@@ -324,9 +324,18 @@ const InterviewSchedule = () => {
 
   const appointmentColumns = [
     {
+      title: 'Công việc',
+      dataIndex: 'applications.jobs.title',
+      key: 'job',
+      width: '30%',
+      ...getColumnSearchProps('applications.jobs.title'),
+      render: (text, record) => record.applications.jobs.title,
+    },
+    {
       title: 'Ứng viên',
       dataIndex: 'applications.freelancers.accounts.name',
       key: 'name',
+      ...getColumnSearchProps('applications.freelancers.accounts.name'),
       render: (text, record) => record.applications.freelancers.accounts.name,
     },
     {
@@ -340,6 +349,7 @@ const InterviewSchedule = () => {
       title: 'Địa điểm',
       dataIndex: 'location',
       key: 'location',
+      width: '30%',
       ...getColumnSearchProps('location'),
       render: (text, record) =>
         record.location || (
