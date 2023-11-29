@@ -6,11 +6,14 @@ import {
   Typography,
   notification,
   Table,
+  Input,
+  Button,
+  Space,
 } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, SearchOutlined } from '@ant-design/icons';
 import { get, put } from 'utils/APICaller';
 import { formatDateTime } from 'components/formatter/format';
 import Loading from 'components/loading/loading';
@@ -21,6 +24,8 @@ import { useRecoilValue } from 'recoil';
 import { authState, clientProfile } from 'recoil/atom';
 import MeetingCalendar from './MeetingCalendar';
 import socket from 'config';
+import Highlighter from 'react-highlight-words';
+import moment from 'moment';
 
 // Cài đặt ngôn ngữ tiếng Việt cho Day.js
 dayjs.locale('vi');
@@ -173,7 +178,7 @@ const InterviewSchedule = () => {
   function getInterviewSchedule(user) {
     setIsLoading(true);
     get({
-      endpoint: `/job/appointment/${user.id}`,
+      endpoint: `/appointment/client/${user.id}`,
     })
       .then((res) => {
         setDataTable(res.data);
@@ -188,94 +193,195 @@ const InterviewSchedule = () => {
       });
   }
 
-  const renderAppointments = (appointments) => {
-    const appointmentColumns = [
-      {
-        title: 'Ứng viên',
-        dataIndex: 'freelancers.accounts.name',
-        key: 'name',
-        render: (text, record) => record.freelancers.accounts.name,
-      },
-      {
-        title: 'Thời gian',
-        dataIndex: 'appointments.time',
-        key: 'time',
-        render: (text, record) => formatDateTime(record.appointments[0].time),
-      },
-      {
-        title: 'Địa điểm',
-        dataIndex: 'appointments.location',
-        key: 'location',
-        render: (text, record) =>
-          record.appointments[0].location || (
-            <Typography.Link href={record.appointments[0].link}>
-              {record.appointments[0].link}
-            </Typography.Link>
-          ),
-      },
-      {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        key: 'location',
-        render: (text, record) =>
-          record.status === 'approve' ? (
-            <Typography.Text type='success'>Đã nhận</Typography.Text>
-          ) : record.status === 'interview' ? (
-            <Typography.Text type='warning'>Đang phỏng vấn</Typography.Text>
-          ) : (
-            <Typography.Text type='danger'>Đã từ chối</Typography.Text>
-          ),
-      },
-      {
-        title: 'Thao tác',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: (text, record) => (
-          <Dropdown
-            menu={{
-              items: actions.map((action) => ({
-                ...action,
-                key: action.key + '_' + record?.id,
-                onClick: () =>
-                  onClick(
-                    action,
-                    record?.appointments[0]?.time,
-                    record?.id,
-                    record?.appointments[0]?.appointmentId,
-                    record?.appointments[0]?.location.length > 0
-                      ? record.appointments[0]?.location
-                      : record.appointments[0]?.link,
-                    record?.status,
-                    record?.freelancers?.accounts.id
-                  ),
-              })),
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Tìm kiếm ...`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type='primary'
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size='small'
+            style={{
+              width: 90,
             }}
           >
-            <EllipsisOutlined />
-          </Dropdown>
-        ),
-      },
-    ];
-
-    return (
-      <Table
-        columns={appointmentColumns}
-        dataSource={appointments}
-        pagination={false}
-        rowKey={(record) => record.appointmentId}
+            Tìm
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size='small'
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type='link'
+            size='small'
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Lọc
+          </Button>
+          <Button
+            type='link'
+            size='small'
+            onClick={() => {
+              close();
+            }}
+          >
+            Đóng
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1677ff' : undefined,
+        }}
       />
-    );
-  };
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        : record['link'].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
 
-  const expandedRowRender = (record) => {
-    return renderAppointments(record.applications);
-  };
-
-  const columns = [
+  const appointmentColumns = [
     {
-      title: 'Danh sách công việc có lịch phỏng vấn',
-      dataIndex: 'title',
+      title: 'Ứng viên',
+      dataIndex: 'applications.freelancers.accounts.name',
       key: 'name',
+      render: (text, record) => record.applications.freelancers.accounts.name,
+    },
+    {
+      title: 'Thời gian',
+      dataIndex: 'time',
+      key: 'time',
+      sorter: (a, b) => (moment(a.time).isAfter(b.time) ? 1 : -1),
+      render: (text, record) => formatDateTime(record.time),
+    },
+    {
+      title: 'Địa điểm',
+      dataIndex: 'location',
+      key: 'location',
+      ...getColumnSearchProps('location'),
+      render: (text, record) =>
+        record.location || (
+          <Typography.Link href={record.link}>{record.link}</Typography.Link>
+        ),
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'applications.status',
+      key: 'status',
+      filters: [
+        { text: 'Đã nhận', value: 'approved' },
+        { text: 'Đang phỏng vấn', value: 'interview' },
+        { text: 'Đã từ chối', value: 'declined' },
+      ],
+      onFilter: (value, record) => record.applications.status === value,
+      render: (text, record) =>
+        record.applications.status === 'approved' ? (
+          <Typography.Text type='success'>Đã nhận</Typography.Text>
+        ) : record.applications.status === 'interview' ? (
+          <Typography.Text type='warning'>Đang phỏng vấn</Typography.Text>
+        ) : (
+          <Typography.Text type='danger'>Đã từ chối</Typography.Text>
+        ),
+    },
+    {
+      title: 'Thao tác',
+      dataIndex: 'operation',
+      key: 'operation',
+      render: (text, record) => (
+        <Dropdown
+          menu={{
+            items: actions.map((action) => ({
+              ...action,
+              key: action.key + '_' + record?.id,
+              onClick: () =>
+                onClick(
+                  action,
+                  record?.time,
+                  record?.applicationId,
+                  record?.appointmentId,
+                  record?.location ? record?.location : record?.link,
+                  record?.status,
+                  record?.applications?.freelancers.accounts.id
+                ),
+            })),
+          }}
+        >
+          <EllipsisOutlined />
+        </Dropdown>
+      ),
     },
   ];
 
@@ -318,16 +424,10 @@ const InterviewSchedule = () => {
         >
           <MeetingCalendar />
           <Table
-            columns={columns}
-            expandable={{
-              expandedRowRender,
-              defaultExpandedRowKeys: dataTable.map((record) =>
-                record.id.toString()
-              ),
-            }}
+            columns={appointmentColumns}
             dataSource={dataTable}
-            rowKey={(record) => record.id}
             pagination={false}
+            rowKey={(record) => record.appointmentId}
             style={{ padding: 30 }}
           />
         </Card>
