@@ -344,7 +344,6 @@ const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(true);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
@@ -601,18 +600,15 @@ const TabSent = ({ activeTabKey, value }) => {
                       cursor: 'pointer',
                       textAlign: 'justify',
                     }}
-                    ellipsis={
-                      ellipsis
-                        ? {
-                            rows: 3,
-                          }
-                        : false
-                    }
-                    onClick={() => setEllipsis(!ellipsis)}
+                    ellipsis={{
+                      rows: 3,
+                      expandable: true,
+                      symbol: 'Xem thêm',
+                    }}
                   >
                     {application.description}
                   </Typography.Paragraph>
-                </Col> 
+                </Col>
                 {application?.fileAttach ? (
                   <Col span={24}>
                     <CustomRow align={'middle'}>
@@ -620,7 +616,6 @@ const TabSent = ({ activeTabKey, value }) => {
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-
                         <Typography.Link
                           href={application.fileAttach}
                           target='_blank'
@@ -635,10 +630,10 @@ const TabSent = ({ activeTabKey, value }) => {
                         >
                           CV.pdf
                         </Typography.Link>
-
                       </Col>
                     </CustomRow>
-                  </Col>) : null}
+                  </Col>
+                ) : null}
               </Row>
               <CustomDivider />
             </Col>

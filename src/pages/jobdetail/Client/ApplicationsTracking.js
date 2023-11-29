@@ -343,7 +343,6 @@ const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(false);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
@@ -589,14 +588,12 @@ const TabSent = ({ activeTabKey, value }) => {
                       cursor: 'pointer',
                       textAlign: 'justify',
                     }}
-                    ellipsis={
-                      ellipsis
-                        ? {
-                          rows: 3,
-                        }
-                        : false
-                    }
-                    onClick={() => setEllipsis(!ellipsis)}
+                    e
+                    ellipsis={{
+                      rows: 3,
+                      expandable: true,
+                      symbol: 'Xem thêm',
+                    }}
                   >
                     {application.freelancers.applications[0].description}
                   </Typography.Paragraph>

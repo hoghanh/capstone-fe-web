@@ -44,7 +44,6 @@ const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(freelancerState);
@@ -168,7 +167,7 @@ const TabSent = ({ activeTabKey, value }) => {
                         <Col span={24}>
                           <Link
                             to={`/jobs/job-detail/${application.jobId}`}
-                            target="_blank"
+                            target='_blank'
                           >
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               {application.jobs.title}
@@ -199,14 +198,11 @@ const TabSent = ({ activeTabKey, value }) => {
                       cursor: 'pointer',
                       textAlign: 'justify',
                     }}
-                    ellipsis={
-                      ellipsis
-                        ? {
-                            rows: 3,
-                          }
-                        : false
-                    }
-                    onClick={() => setEllipsis(!ellipsis)}
+                    ellipsis={{
+                      rows: 3,
+                      expandable: true,
+                      symbol: 'Xem thêm',
+                    }}
                   >
                     {application.description}
                   </Typography.Paragraph>
@@ -220,7 +216,7 @@ const TabSent = ({ activeTabKey, value }) => {
                       <Col>
                         <Typography.Link
                           href={application.fileAttach}
-                          target="_blank"
+                          target='_blank'
                           underline={true}
                           style={{
                             fontWeight: 700,
@@ -305,7 +301,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <Search
-            placeholder="Tìm kiếm..."
+            placeholder='Tìm kiếm...'
             allowClear
             onSearch={onSearch}
             style={{
@@ -325,7 +321,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <RangePicker
-            timezone="UTC"
+            timezone='UTC'
             value={dates || value}
             disabledDate={disabledDate}
             onCalendarChange={(val) => {
@@ -340,7 +336,7 @@ const ApplicationsTracking = () => {
             locale={locale}
           />
         </Col>
-        <Col className="trackingJobs" span={24}>
+        <Col className='trackingJobs' span={24}>
           <Card
             style={{
               width: '100%',
