@@ -51,6 +51,10 @@ const tabList = [
     key: 'approved',
     label: 'Nhận việc',
   },
+  {
+    key: 'declined',
+    label: 'Từ chối',
+  },
 ];
 
 const sentItems = [
@@ -380,6 +384,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.freelancers.applications[0].status === 'approved'
             : item.freelancers.accounts.name.toLowerCase().includes(search) &&
                 item.freelancers.applications[0].status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.status === 'declined'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'declined';
         }
         return true;
       });
@@ -401,6 +410,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.freelancers.applications[0].status === 'approved'
             : item.freelancers.accounts.name.toLowerCase().includes(search) &&
                 item.freelancers.applications[0].status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.status === 'declined'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'declined';
         }
         return true;
       });
