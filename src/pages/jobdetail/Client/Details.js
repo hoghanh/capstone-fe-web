@@ -188,7 +188,7 @@ const AttachmentArticle = () => {
               cursor: "pointer",
             }}
           >
-            fileCV.pdf
+            Tệp đính kèm
           </Typography.Link>
         ) : (
           <Typography.Text
@@ -200,7 +200,7 @@ const AttachmentArticle = () => {
               cursor: "not-allowed",
             }}
           >
-            fileCV.pdf
+            Tệp đính kèm
           </Typography.Text>
         )}
       </CustomCol>
@@ -272,8 +272,12 @@ const ArticleLeft = () => {
       <CustomDivider />
       <DescriptionsArticle description={jobDetail.description} />
       <CustomDivider />
-      <AttachmentArticle />
-      <CustomDivider />
+      {jobDetail.fileAttachment ? (
+        <>
+          <AttachmentArticle />
+          <CustomDivider />
+        </>
+      ) : null}
       <SkillArticle />
     </Col>
   );

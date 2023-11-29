@@ -101,7 +101,7 @@ body {
   content: none !important;
 }
 
-:where(.css-dev-only-do-not-override-1651f0q).ant-card .ant-card-body{
+.ant-card .ant-card-body{
   padding: 0px !important;
 }
 
@@ -329,9 +329,13 @@ body {
     margin-left: 10px !important;
     margin-right: 10px !important;
   }
+  .ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels{
+  flex-direction: column !important;
+ }
 }
 
 
 /* Đối với màn hình có độ rộng < 576px */
 @media (max-width: 575.98px) {
 }
+

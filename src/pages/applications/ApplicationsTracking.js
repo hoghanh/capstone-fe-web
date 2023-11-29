@@ -146,7 +146,7 @@ const TabSent = ({ activeTabKey, value }) => {
     <Row>
       {list.length === 0 || list === null ? (
         <Col span={24}>
-          <Empty />
+          <Empty description={<span>Dữ liệu trống</span>} />
         </Col>
       ) : (
         getPagedList().map((application, index) => {
@@ -211,13 +211,13 @@ const TabSent = ({ activeTabKey, value }) => {
                     {application.description}
                   </Typography.Paragraph>
                 </Col>
-                <Col span={24}>
-                  <CustomRow align={'middle'}>
-                    <Col>
-                      <PaperClipOutlined />
-                    </Col>
-                    <Col>
-                      {application.fileAttach ? (
+                {application.fileAttach ? (
+                  <Col span={24}>
+                    <CustomRow align={'middle'}>
+                      <Col>
+                        <PaperClipOutlined />
+                      </Col>
+                      <Col>
                         <Typography.Link
                           href={application.fileAttach}
                           target="_blank"
@@ -230,24 +230,12 @@ const TabSent = ({ activeTabKey, value }) => {
                             cursor: 'pointer',
                           }}
                         >
-                          fileCV.pdf
+                          CV.pdf
                         </Typography.Link>
-                      ) : (
-                        <Typography.Text
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: '#ccc',
-                            cursor: 'not-allowed',
-                          }}
-                        >
-                          fileCV.pdf
-                        </Typography.Text>
-                      )}
-                    </Col>
-                  </CustomRow>
-                </Col>
+                      </Col>
+                    </CustomRow>
+                  </Col>
+                ) : null}
               </Row>
               <CustomDivider />
             </Col>

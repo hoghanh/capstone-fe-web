@@ -10,15 +10,16 @@ import {
 } from 'antd';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { CustomRow } from 'components/customize/Layout';
-import moment from 'moment';
 import { put } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import dayjs from 'dayjs';
 
 function EditScheduleModal({
-  visible,
+  open,
   onCancel,
+  setId,
+  setOpenModal,
   id,
   appointmentTime,
   appointmentLocation,
@@ -42,6 +43,9 @@ function EditScheduleModal({
             notification.success({
               message: 'Đã chỉnh sửa thành công',
             });
+            setOpenModal(false);
+            setId(null);
+            window.location.reload();
           })
           .catch((err) => {
             notification.error({
@@ -63,14 +67,14 @@ function EditScheduleModal({
     <>
       <ModalPrimary
         title={'Chỉnh sửa lịch hẹn'}
-        open={visible}
+        open={open}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={onCancel}
       >
         <Form
           form={form}
-          name="editInterview"
+          name='editInterview'
           initialValues={{
             remember: true,
           }}
@@ -85,7 +89,7 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="address"
+                    name='address'
                     initialValue={appointmentLocation}
                     rules={[
                       {
@@ -94,7 +98,7 @@ function EditScheduleModal({
                       },
                     ]}
                   >
-                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
+                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -104,7 +108,7 @@ function EditScheduleModal({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="time"
+                    name='time'
                     initialValue={dayjs(appointmentTime)}
                     rules={[
                       {
@@ -114,7 +118,7 @@ function EditScheduleModal({
                     ]}
                   >
                     <DatePicker
-                      timezone="UTC"
+                      timezone='UTC'
                       locale={locale}
                       style={{ with: '100%' }}
                       showTime

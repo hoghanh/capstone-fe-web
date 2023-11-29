@@ -61,7 +61,7 @@ function ClientHeader({ name, subName, onPress }) {
         socket.disconnect();
       };
     }
-  }, [auth]);
+  }, [auth, socket]);
 
   const handleMenuClick = ({ key }) => {
     put({ endpoint: `/notification/${key}` })
@@ -102,7 +102,7 @@ function ClientHeader({ name, subName, onPress }) {
           ),
         }));
 
-        if (res.data.notification) {
+        if (arr.length > 0) {
           setNotifications(arr);
           setCount(res.data.unreadNotifications);
         } else {
@@ -122,6 +122,7 @@ function ClientHeader({ name, subName, onPress }) {
   };
 
   const toggleMenuVisibility = () => {
+    changeNotification();
     setMenuVisible(!menuVisible);
   };
 
@@ -176,7 +177,7 @@ function ClientHeader({ name, subName, onPress }) {
             <Job />
           ),
       }))
-    : [{ label: <Empty />, key: '1' }];
+    : [{ label: <Empty description={<span>Dữ liệu trống</span>} />, key: '1' }];
 
   return (
     <>

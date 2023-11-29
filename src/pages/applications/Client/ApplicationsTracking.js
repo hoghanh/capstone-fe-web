@@ -22,7 +22,12 @@ import { PaperClipOutlined } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { clientProfile, valueSearchState } from 'recoil/atom';
+import {
+  authState,
+  clientProfile,
+  profileState,
+  valueSearchState,
+} from 'recoil/atom';
 import { Link } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post, put } from 'utils/APICaller';
@@ -31,6 +36,7 @@ import { checkIfIsUrl, formatDate } from 'components/formatter/format';
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
+import socket from 'config';
 
 const tabList = [
   {
@@ -68,6 +74,7 @@ const Interview = ({
   setIsModalInterview,
   isIdItem,
   setIsIdItem,
+  accountId,
 }) => {
   const [timeBooking, setTimeBooking] = useState('');
   const user = useRecoilValue(clientProfile);
@@ -152,7 +159,7 @@ const Interview = ({
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form form={form} name="bookingInterview">
+        <Form form={form} name='bookingInterview'>
           <Row gutter={[0, 10]}>
             <Col span={24}>
               <CustomRow gutter={[0, 10]}>
@@ -163,7 +170,7 @@ const Interview = ({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="address"
+                    name='address'
                     rules={[
                       {
                         required: true,
@@ -171,7 +178,7 @@ const Interview = ({
                       },
                     ]}
                   >
-                    <Input placeholder="Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1" />
+                    <Input placeholder='Ví dụ: Công ty ABC, toà nhà 123, Phường Đa Kao, Quận 1' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
@@ -181,7 +188,7 @@ const Interview = ({
                 </Col>
                 <Col span={24}>
                   <Form.Item
-                    name="time"
+                    name='time'
                     rules={[
                       {
                         required: true,
@@ -190,7 +197,7 @@ const Interview = ({
                     ]}
                   >
                     <DatePicker
-                      timezone="UTC"
+                      timezone='UTC'
                       style={{ with: '100%' }}
                       showTime
                       showNow={false}
@@ -248,13 +255,13 @@ const DeclineInterview = ({
   return (
     <>
       <ModalPrimary
-        title="Từ chối"
+        title='Từ chối'
         open={isModalDecline}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Từ chối"
-        okType="danger"
+        okText='Từ chối'
+        okType='danger'
       >
         Bạn có chắc muốn từ chối hồ sơ này?
       </ModalPrimary>
@@ -267,7 +274,11 @@ const Approved = ({
   setIsModalApproved,
   isIdItem,
   setIsIdItem,
+  accountId,
 }) => {
+  const auth = useRecoilValue(authState);
+  const user = useRecoilValue(profileState);
+
   const approved = () => {
     put({
       endpoint: `/application/approve/${isIdItem}`,
@@ -275,9 +286,24 @@ const Approved = ({
       .then((res) => {
         setIsIdItem(null);
         notification.success({
-          message: 'Nhận việc thành công',
+          message: 'Nhận ứng viên thành công',
         });
         setIsModalApproved(false);
+
+        let notificationData = {
+          notificationName: 'Thay đổi số dư',
+          notificationDescription: res.data.message,
+        };
+
+        //Gửi notification [thông tin] - đến [accountID người nhận]
+        socket.emit('sendNotification', notificationData, auth.id);
+
+        //Gửi thông tin đến freelancer
+        notificationData = {
+          notificationName: 'Công việc được nhận ',
+          notificationDescription: `${user.name} vừa nhận đơn ứng tuyển của bạn`,
+        };
+        socket.emit('sendNotification', notificationData, accountId);
       })
       .catch((error) => {
         notification.error({
@@ -297,12 +323,12 @@ const Approved = ({
   return (
     <>
       <ModalPrimary
-        title="Đồng ý"
+        title='Đồng ý'
         open={isModalApproved}
         bodyStyle={{ paddingTop: 20 }}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Đồng ý"
+        okText='Đồng ý'
       >
         Bạn có chắc muốn nhận hồ sơ này?
       </ModalPrimary>
@@ -314,7 +340,7 @@ const TabSent = ({ activeTabKey, value }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(false);
+  const [ellipsis, setEllipsis] = useState(true);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
@@ -322,6 +348,7 @@ const TabSent = ({ activeTabKey, value }) => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
+  const [accountId, setAccountId] = useState();
 
   useEffect(() => {
     if (user) {
@@ -396,17 +423,20 @@ const TabSent = ({ activeTabKey, value }) => {
       });
   };
 
-  const onClick = (id, key) => {
+  const onClick = (id, key, accountId) => {
     const checkAction = key.toString();
     if (checkAction.includes('decline')) {
       setIsIdItem(id);
       setIsModalDecline(true);
+      setAccountId(accountId);
     } else if (checkAction.includes('interview')) {
       setIsIdItem(id);
       setIsModalInterview(true);
+      setAccountId(accountId);
     } else if (checkAction.includes('approved')) {
       setIsIdItem(id);
       setIsModalApproved(true);
+      setAccountId(accountId);
     }
   };
 
@@ -456,7 +486,7 @@ const TabSent = ({ activeTabKey, value }) => {
                           <Image
                             width={72}
                             src={application?.freelancers.accounts.image}
-                            alt="Apofoitisi logo"
+                            alt='Apofoitisi logo'
                             preview={true}
                             style={{ borderRadius: '50%' }}
                           />
@@ -475,7 +505,7 @@ const TabSent = ({ activeTabKey, value }) => {
                                   {application?.freelancers.hired ? (
                                     <Tag
                                       style={{ marginLeft: 10 }}
-                                      color="green"
+                                      color='green'
                                     >
                                       Nhân lực cũ
                                     </Tag>
@@ -510,7 +540,11 @@ const TabSent = ({ activeTabKey, value }) => {
                                       application.id.toString(),
                                   })),
                             onClick: ({ key }) => {
-                              onClick(application.id, key);
+                              onClick(
+                                application.id,
+                                key,
+                                application?.freelancers.accounts.id
+                              );
                             },
                           }}
                         >
@@ -564,17 +598,18 @@ const TabSent = ({ activeTabKey, value }) => {
                   >
                     {application.description}
                   </Typography.Paragraph>
-                </Col>
-                <Col span={24}>
-                  <CustomRow align={'middle'}>
-                    <Col>
-                      <PaperClipOutlined />
-                    </Col>
-                    <Col>
-                      {application?.fileAttach ? (
+                </Col> 
+                {application?.fileAttach ? (
+                  <Col span={24}>
+                    <CustomRow align={'middle'}>
+                      <Col>
+                        <PaperClipOutlined />
+                      </Col>
+                      <Col>
+
                         <Typography.Link
                           href={application.fileAttach}
-                          target="_blank"
+                          target='_blank'
                           underline={true}
                           style={{
                             fontWeight: 700,
@@ -584,24 +619,12 @@ const TabSent = ({ activeTabKey, value }) => {
                             cursor: 'pointer',
                           }}
                         >
-                          fileCV.pdf
+                          CV.pdf
                         </Typography.Link>
-                      ) : (
-                        <Typography.Text
-                          style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            marginLeft: 5,
-                            color: '#ccc',
-                            cursor: 'not-allowed',
-                          }}
-                        >
-                          fileCV.pdf
-                        </Typography.Text>
-                      )}
-                    </Col>
-                  </CustomRow>
-                </Col>
+
+                      </Col>
+                    </CustomRow>
+                  </Col>) : null}
               </Row>
               <CustomDivider />
             </Col>
@@ -613,12 +636,14 @@ const TabSent = ({ activeTabKey, value }) => {
         setIsModalInterview={setIsModalInterview}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
+        accountId={accountId}
       />
       <DeclineInterview
         isModalDecline={isModalDecline}
         setIsModalDecline={setIsModalDecline}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
+        accountId={accountId}
       />
 
       <Approved
@@ -626,6 +651,7 @@ const TabSent = ({ activeTabKey, value }) => {
         setIsModalApproved={setIsModalApproved}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
+        accountId={accountId}
       />
 
       <Col span={24}>
@@ -691,7 +717,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <Search
-            placeholder="Tìm kiếm..."
+            placeholder='Tìm kiếm...'
             allowClear
             onSearch={onSearch}
             style={{
@@ -711,7 +737,7 @@ const ApplicationsTracking = () => {
           }}
         >
           <RangePicker
-            timezone="UTC"
+            timezone='UTC'
             value={dates || value}
             disabledDate={disabledDate}
             onCalendarChange={(val) => {
@@ -726,7 +752,7 @@ const ApplicationsTracking = () => {
             locale={locale}
           />
         </Col>
-        <Col className="trackingJobs" span={24}>
+        <Col className='trackingJobs' span={24}>
           <Card
             style={{
               width: '100%',

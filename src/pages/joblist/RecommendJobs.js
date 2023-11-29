@@ -221,11 +221,11 @@ const JobList = () => {
                       alignSelf: md ? ' ' : 'flex-start',
                       display: 'flex',
                     }}
-                    onClick={() => handleFavoriteChange(job.id)}
+                    onClick={() => handleFavoriteChange(job.jobs.id)}
                   >
                     {isLoading ? (
                       <Spin />
-                    ) : favoriteList.includes(job.id) ? (
+                    ) : favoriteList.includes(job.jobs.id) ? (
                       <BookMark />
                     ) : (
                       <BookMarkOutlined />

@@ -46,7 +46,6 @@ function ClientLayout({ children }) {
         breakpoint='lg'
         collapsedWidth='0'
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
         }}
         width={250}
         className={`sider-primary ant-layout-sider-primary ${

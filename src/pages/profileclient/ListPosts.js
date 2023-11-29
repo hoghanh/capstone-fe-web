@@ -168,7 +168,7 @@ const ListPosts = () => {
       >
         {sortedJobList.length === 0 || sortedJobList === null ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Empty />
+            <Empty description={<span>Dữ liệu trống</span>} />
           </div>
         ) : (
           getPagedList()?.map((job) => (
@@ -243,7 +243,7 @@ const ListPosts = () => {
                 </div>
                 <div style={joblist.applied}>
                   <Typography.Title level={5} style={joblist.applied.text}>
-                    {job.applied ? job.applied : 0} đã ứng tuyển{' '}
+                    {job.applied ? job.applied : 0} ứng tuyển{' '}
                     <FileTextFilled />
                   </Typography.Title>
                 </div>

@@ -36,17 +36,13 @@ import { ModalPrimary } from 'components/Modal/Modal';
 import { post, put, get } from 'utils/APICaller';
 import OTPModal from './OTPModal';
 
-const onSuccess = () => {
-  console.log('Logout success');
-};
+const onSuccess = () => {};
 
-const onFail = () => {
-  console.log('Fail');
-};
+const onFail = () => {};
 
 const Search = () => {
   const { useBreakpoint } = Grid;
-  const { md, lg } = useBreakpoint();
+  const { md, lg, sm } = useBreakpoint();
   const [results, setResults] = useState([]);
   const auth = useRecoilValue(authState);
 
@@ -69,7 +65,7 @@ const Search = () => {
   };
 
   const items = results.length
-    ? results.map((result, index) => ({
+    ? results?.map((result, index) => ({
         label: (
           <Link
             to={
@@ -83,37 +79,51 @@ const Search = () => {
               clientId: result.tag === 'client' ? result.referId : null,
             }}
           >
-            <Typography.Text style={{ padding: 10 }}>
+            <Typography.Text
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                textWrap: 'nowrap',
+              }}
+            >
+              {result.tag === 'freelancer' ? (
+                <span style={{ paddingRight: 10 }}>
+                  <User />
+                </span>
+              ) : result.tag === 'client' ? (
+                <span style={{ paddingRight: 10 }}>
+                  <Company />
+                </span>
+              ) : (
+                <span style={{ paddingRight: 10 }}>
+                  <Job />
+                </span>
+              )}
               {result.name || result.title}{' '}
               {result.id === auth.id ? '(Bạn)' : ''}
             </Typography.Text>
           </Link>
         ),
         key: index,
-        icon:
-          result.tag === 'freelancer' ? (
-            <User />
-          ) : result.tag === 'client' ? (
-            <Company />
-          ) : (
-            <Job />
-          ),
       }))
-    : [{ label: <Empty />, key: '1' }];
+    : [{ label: <Empty description={<span>Dữ liệu trống</span>} />, key: '1' }];
 
   return (
     <Dropdown
       overlayStyle={{
-        maxHeight: '300px',
+        maxHeight: 300,
         overflow: 'auto',
         boxShadow: '2px 6px 4px 0px rgba(0, 0, 0, 0.25)',
         borderRadius: 10,
         border: '1px solid #ccc',
+        width: lg ? 700 : md ? 700 : sm ? 500 : 300,
+        overflowX: 'hidden',
       }}
       menu={{
         items,
       }}
       trigger={['click']}
+      placement='bottom'
     >
       <Input.Search
         placeholder='Tìm kiếm'
@@ -121,7 +131,7 @@ const Search = () => {
         style={{
           padding: 10,
           borderRadius: 8,
-          width: lg ? 477 : md ? 325 : 250,
+          width: lg ? 477 : md ? 325 : sm ? 250 : 150,
         }}
       />
     </Dropdown>
@@ -362,7 +372,7 @@ function SearchBar() {
         socket.disconnect();
       };
     }
-  }, [auth]);
+  }, [auth, socket]);
 
   const handleMenuClick = ({ key }) => {
     put({ endpoint: `/notification/${key}` })
@@ -403,7 +413,7 @@ function SearchBar() {
           ),
         }));
 
-        if (res.data.notification) {
+        if (arr.length > 0) {
           setNotifications(arr);
           setCount(res.data.unreadNotifications);
         } else {
@@ -423,6 +433,7 @@ function SearchBar() {
   };
 
   const toggleMenuVisibility = () => {
+    changeNotification();
     setMenuVisible(!menuVisible);
   };
 
@@ -455,7 +466,7 @@ function SearchBar() {
       {/* Handle forgot password */}
       <ModalPrimary
         title={'Quên mật khẩu'}
-        visible={forgotPasswordVisible}
+        open={forgotPasswordVisible}
         onOk={sendMailForgotPassword}
         onCancel={closeForgotPasswordModal}
         okText='Gửi'
@@ -473,7 +484,7 @@ function SearchBar() {
 
       <ModalPrimary
         title={'Nhập OTP của bạn'}
-        visible={OTPVisible}
+        open={OTPVisible}
         onOk={checkOTP}
         onCancel={closeOTPModal}
         okText='Gửi'
@@ -510,7 +521,7 @@ function SearchBar() {
           margin: '0 auto',
         }}
       >
-        <Col xs={6} sm={2} md={2} lg={1} xl={0}>
+        <Col xs={3} sm={3} md={3} lg={1} xl={0}>
           <div>
             <MenuOutlined onClick={toggleCollapsed} />
             <Menu
@@ -526,8 +537,8 @@ function SearchBar() {
             />
           </div>
         </Col>
-        <Col xs={2} sm={2} md={1} lg={1} xl={1}>
-          <Link to={'/'}>
+        <Col xs={3} sm={3} md={1} lg={1} xl={1}>
+          <Link to={auth.role === 'freelancer' ? '/home' : '/'}>
             <Image
               width={34}
               src='/icon/logo.svg'
@@ -536,28 +547,35 @@ function SearchBar() {
             />
           </Link>
         </Col>
-        <Col xs={5} sm={3} md={2} lg={2} xl={4}>
-          <Link to={'/'}>
+        <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+          <Link to={auth.role === 'freelancer' ? '/home' : '/'}>
             <Typography.Title level={3} style={{ margin: 0 }}>
               SEP
             </Typography.Title>
           </Link>
         </Col>
 
-        <Col xs={0} sm={12} md={11} lg={13} xl={13}>
+        <Col
+          xs={12}
+          sm={12}
+          md={10}
+          lg={13}
+          xl={14}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
           <Search />
         </Col>
 
         {auth.email ? (
           <>
-            <Col xs={0} sm={0} md={3} lg={3} xl={3} style={{ display: 'flex' }}>
+            <Col xs={3} sm={3} md={3} lg={3} xl={3} style={{ display: 'flex' }}>
               <Badge count={count}>
                 <ReactSVG
                   onClick={toggleMenuVisibility}
                   src='/icon/notification.svg'
                   beforeInjection={(svg) => {
-                    svg.setAttribute('width', '32');
-                    svg.setAttribute('height', '32');
+                    svg.setAttribute('width', '35');
+                    svg.setAttribute('height', '35');
                   }}
                 />
                 {menuVisible && (
@@ -578,7 +596,7 @@ function SearchBar() {
                 )}
               </Badge>
             </Col>
-            <Col xs={7} sm={5} md={4} lg={4} xl={3}>
+            <Col xs={3} sm={3} md={3} lg={3} xl={3}>
               <Dropdown menu={{ items, onClick }}>
                 <div>
                   <ReactSVG
@@ -598,7 +616,7 @@ function SearchBar() {
             <Col xs={0} sm={0} md={3} lg={3} xl={3}>
               <Button onClick={showModalRegister}>Đăng kí</Button>
             </Col>
-            <Col xs={7} sm={5} md={4} lg={4} xl={3}>
+            <Col xs={6} sm={6} md={3} lg={3} xl={3}>
               <Button onClick={showModalLogin}>Đăng nhập</Button>
             </Col>
           </>

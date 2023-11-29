@@ -69,6 +69,7 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
         handleMove('otp');
       })
       .catch((error) => {
+        setOTP('');
         notification.error({
           message: 'Đăng ký không thành công, vui lòng thử lại sau',
         });

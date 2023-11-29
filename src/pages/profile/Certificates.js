@@ -634,7 +634,7 @@ const BodySection = () => {
     <Row style={{ marginRight: 30, marginLeft: 30 }}>
       {certificates.length === 0 || certificates === null ? (
         <Col span={24}>
-          <Empty />
+          <Empty description={<span>Dữ liệu trống</span>} />
         </Col>
       ):(certificates.map((certificate, index) => (
         <div key={certificate.id} style={{ width: '100%' }}>

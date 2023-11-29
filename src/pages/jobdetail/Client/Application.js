@@ -40,7 +40,6 @@ const BodySection = () => {
 
   useEffect(() => {
     getApplications(id);
-    console.log(id)
   }, [id]);
 
   const getApplications = (id) => {
@@ -50,17 +49,20 @@ const BodySection = () => {
         setCountTotal(applications.length);
         let listSent = applications.filter(
           (application) =>
-            application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'sent'
+            application.freelancers.applications[0].status !== null &&
+            application.freelancers.applications[0].status === 'sent'
         );
         setCountSent(listSent.length);
         let listInterview = applications.filter(
           (application) =>
-          application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'interview'
+            application.freelancers.applications[0].status !== null &&
+            application.freelancers.applications[0].status === 'interview'
         );
         setInterview(listInterview.length);
         let listApproved = applications.filter(
           (application) =>
-          application.freelancers.applications[0].status !== null && application.freelancers.applications[0].status === 'approved'
+            application.freelancers.applications[0].status !== null &&
+            application.freelancers.applications[0].status === 'approved'
         );
         setCountApproved(listApproved.length);
       })
