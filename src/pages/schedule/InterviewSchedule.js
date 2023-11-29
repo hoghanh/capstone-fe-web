@@ -191,7 +191,7 @@ const InterviewSchedule = () => {
   const renderAppointments = (appointments) => {
     const appointmentColumns = [
       {
-        title: 'Người phỏng vấn',
+        title: 'Ứng viên',
         dataIndex: 'freelancers.accounts.name',
         key: 'name',
         render: (text, record) => record.freelancers.accounts.name,
@@ -206,7 +206,25 @@ const InterviewSchedule = () => {
         title: 'Địa điểm',
         dataIndex: 'appointments.location',
         key: 'location',
-        render: (text, record) => record.appointments[0].location,
+        render: (text, record) =>
+          record.appointments[0].location || (
+            <Typography.Link href={record.appointments[0].link}>
+              {record.appointments[0].link}
+            </Typography.Link>
+          ),
+      },
+      {
+        title: 'Trạng thái',
+        dataIndex: 'status',
+        key: 'location',
+        render: (text, record) =>
+          record.status === 'approve' ? (
+            <Typography.Text type='success'>Đã nhận</Typography.Text>
+          ) : record.status === 'interview' ? (
+            <Typography.Text type='warning'>Đang phỏng vấn</Typography.Text>
+          ) : (
+            <Typography.Text type='danger'>Đã từ chối</Typography.Text>
+          ),
       },
       {
         title: 'Thao tác',
@@ -253,7 +271,13 @@ const InterviewSchedule = () => {
     return renderAppointments(record.applications);
   };
 
-  const columns = [{ title: 'Công việc', dataIndex: 'title', key: 'name' }];
+  const columns = [
+    {
+      title: 'Danh sách công việc có lịch phỏng vấn',
+      dataIndex: 'title',
+      key: 'name',
+    },
+  ];
 
   return isLoading ? (
     <Loading />
