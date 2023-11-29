@@ -133,22 +133,31 @@ const InterviewSchedule = () => {
           message: 'Nhận ứng viên thành công',
         });
 
-        let notificationData = {
-          notificationName: 'Thay đổi số dư',
-          notificationDescription: res.data.message,
-        };
+        let notificationData;
 
-        //Gửi notification [thông tin] - đến [accountID người nhận]
-        socket.emit('sendNotification', notificationData, auth.id);
+        setTimeout(() => {
+          notificationData = {
+            notificationName: 'Thay đổi số dư',
+            notificationDescription: res.data.message,
+          };
 
-        //Gửi thông tin đến freelancer
-        notificationData = {
-          notificationName: 'Công việc được nhận ',
-          notificationDescription: `${user.accounts.name} vừa nhận đơn ứng tuyển của bạn`,
-        };
+          //Gửi notification [thông tin] - đến [accountID người nhận]
+          socket.emit('sendNotification', notificationData, auth.id);
 
-        //Gửi notification [thông tin] - đến [accountID người nhận]
-        socket.emit('sendNotification', notificationData, freelancerAccountId);
+          //Gửi thông tin đến freelancer
+          notificationData = {
+            notificationName: 'Công việc được nhận ',
+            notificationDescription: `${user.accounts.name} vừa nhận đơn ứng tuyển của bạn`,
+          };
+
+          //Gửi notification [thông tin] - đến [accountID người nhận]
+          socket.emit(
+            'sendNotification',
+            notificationData,
+            freelancerAccountId
+          );
+        }, 1000);
+        window.location.reload();
       })
       .catch((error) => {
         notification.error({
