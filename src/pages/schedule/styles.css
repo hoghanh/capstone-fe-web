@@ -55,6 +55,8 @@
 .schedule-interview .calendar .ant-badge.ant-badge-status .ant-badge-status-dot {
     width: 12px;
     height: 12px;
+    top: -5px;
+    left: 6px;
 }
 
 .schedule-interview .btn-month {

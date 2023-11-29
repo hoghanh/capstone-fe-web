@@ -2,92 +2,67 @@ import React, { useEffect, useState } from 'react';
 import {
   Badge,
   Calendar,
-  Card,
-  Dropdown,
-  Grid,
-  Layout,
-  Typography,
   notification,
-  Row,
-  Col,
-  Table,
 } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
 import './styles.css';
-import { EllipsisOutlined } from '@ant-design/icons';
-import { get, put } from 'utils/APICaller';
-import { formatDateTime } from 'components/formatter/format';
+import { get } from 'utils/APICaller';
 import { ArrowLeft, ArrowRight } from 'components/icon/Icon';
-import Loading from 'components/loading/loading';
-import EditScheduleModal from './EditScheduleModal';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { useRecoilValue } from 'recoil';
 import { clientProfile } from 'recoil/atom';
+import moment from 'moment';
 
 // Cài đặt ngôn ngữ tiếng Việt cho Day.js
 dayjs.locale('vi');
 
-function getItem(label, key, icon, children, type) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
-
-const getMonthData = (value) => {
-  if (value.month() === 8) {
-    return 1394;
-  }
-};
-
 const MeetingCalendar = () => {
-  const getListData = (value) => {
-    let listData = [];
-    // jobListColor.forEach((item) => {
-    //   const time = new Date(item.time);
-    //   if (time.getMonth() === value.month()) {
-    //     if (time.getDate() === value.date()) {
-    //       const checkDuplicate = listData.filter(
-    //         (listData) => listData.color === item.color
-    //       );
-    //       if (checkDuplicate.length === 0) {
-    //         listData.push(item);
-    //       }
-    //     }
-    //   }
-    // });
-    return listData;
-  };
+  const user = useRecoilValue(clientProfile);
+  const [dataCalendar, setDataCalendar] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const monthCellRender = (value) => {
-    const num = getMonthData(value);
-    return num ? (
-      <div className='notes-month'>
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null;
-  };
-  const dateCellRender = (value) => {
-    const listData = getListData(value);
-    return (
-      <ul className='events'>
-        {listData.map((item) => (
-          <li key={item.color + item.time}>
-            <Badge status='default' color={item.color} />
-          </li>
-        ))}
-      </ul>
+  useEffect(() => {
+    setIsLoading(true);
+    get({
+      endpoint: `/appointment/client/${user.id}`,
+    })
+      .then((res) => {
+        setDataCalendar(res.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, [500]);
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  }, []);
+
+  console.log('dataCalender', dataCalendar);
+
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+
+   // Hàm kiểm tra xem một ngày có cuộc hẹn không
+   const hasAppointment = (date) => {
+    return dataCalendar.some(
+      (appointment) =>
+        moment(appointment.time).format('YYYY-MM-DD') === date
     );
   };
-  const cellRender = (current, info) => {
-    if (info.type === 'date') return dateCellRender(current);
-    if (info.type === 'month') return monthCellRender(current);
-    return info.originNode;
+
+  // Hàm render cell của Calendar
+  const cellRender = (value) => {
+    const date = new Date(value)
+    const showBadge = hasAppointment(formatDate(date));
+
+    return showBadge ? <Badge status="success" /> : null;
   };
 
   const monthHeader = (value, onChange) => {
