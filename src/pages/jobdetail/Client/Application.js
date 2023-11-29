@@ -36,6 +36,7 @@ const BodySection = () => {
   const [countSent, setCountSent] = useState(0);
   const [countInterview, setInterview] = useState(0);
   const [countApproved, setCountApproved] = useState(0);
+  const [countDeclined, setCountDeclined] = useState(0);
   const { id } = useParams();
 
   useEffect(() => {
@@ -65,6 +66,12 @@ const BodySection = () => {
             application.freelancers.applications[0].status === 'approved'
         );
         setCountApproved(listApproved.length);
+        let listDeclined = applications.filter(
+          (application) =>
+            application.freelancers.applications[0].status !== null &&
+            application.freelancers.applications[0].status === 'declined'
+        );
+        setCountDeclined(listDeclined.length);
       })
       .catch((error) => {
         console.log(error);
@@ -77,7 +84,7 @@ const BodySection = () => {
       gutter={[40, 40]}
       style={{ padding: '5px 20px 20px' }}
     >
-      <Col span={24} sm={{ span: 8 }}>
+      <Col xs={24} sm={12} md={6} lg={6} xl={6}>
         <Card
           style={{
             padding: 20,
@@ -105,7 +112,7 @@ const BodySection = () => {
           </Row>
         </Card>
       </Col>
-      <Col span={24} sm={{ span: 8 }}>
+      <Col xs={24} sm={12} md={6} lg={6} xl={6}>
         <Card
           style={{
             padding: 20,
@@ -133,7 +140,7 @@ const BodySection = () => {
           </Row>
         </Card>
       </Col>
-      <Col span={24} sm={{ span: 8 }}>
+      <Col xs={24} sm={12} md={6} lg={6} xl={6}>
         <Card
           style={{
             padding: 20,
@@ -156,6 +163,34 @@ const BodySection = () => {
                 style={{ margin: 0, textAlign: 'center' }}
               >
                 Nhận việc: {countApproved}
+              </Typography.Title>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+      <Col xs={24} sm={12} md={6} lg={6} xl={6}>
+        <Card
+          style={{
+            padding: 20,
+            borderRadius: 20,
+            backgroundColor: color.colorLightGray,
+            minHeight: 155,
+          }}
+        >
+          <Row
+            align={'middle'}
+            gutter={[0, 10]}
+            style={{ flexDirection: 'column' }}
+          >
+            <Col>
+              <User color={color.colorBlack} size={'50'} />
+            </Col>
+            <Col>
+              <Typography.Title
+                level={5}
+                style={{ margin: 0, textAlign: 'center' }}
+              >
+                Từ chối: {countDeclined}
               </Typography.Title>
             </Col>
           </Row>

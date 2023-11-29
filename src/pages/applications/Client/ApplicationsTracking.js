@@ -51,6 +51,10 @@ const tabList = [
     key: 'approved',
     label: 'Đã tuyển',
   },
+  {
+    key: 'declined',
+    label: 'Từ chối',
+  },
 ];
 
 const sentItems = [
@@ -336,16 +340,14 @@ const Approved = ({
   );
 };
 
-const TabSent = ({ activeTabKey, value }) => {
+const TabSent = ({ activeTabKey, value, page, setPage }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(true);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
-  const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
   const [accountId, setAccountId] = useState();
@@ -380,6 +382,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.status === 'approved'
             : item.jobs?.title.toLowerCase().includes(search) &&
                 item.status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.status === 'declined'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'declined';
         }
         return true;
       });
@@ -401,6 +408,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.status === 'approved'
             : item.jobs?.title.toLowerCase().includes(search) &&
                 item.status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.status === 'declined'
+            : item.jobs.title.toLowerCase().includes(search) &&
+                item.status === 'declined';
         }
         return true;
       });
@@ -587,18 +599,15 @@ const TabSent = ({ activeTabKey, value }) => {
                       cursor: 'pointer',
                       textAlign: 'justify',
                     }}
-                    ellipsis={
-                      ellipsis
-                        ? {
-                            rows: 3,
-                          }
-                        : false
-                    }
-                    onClick={() => setEllipsis(!ellipsis)}
+                    ellipsis={{
+                      rows: 3,
+                      expandable: true,
+                      symbol: 'Xem thêm',
+                    }}
                   >
                     {application.description}
                   </Typography.Paragraph>
-                </Col> 
+                </Col>
                 {application?.fileAttach ? (
                   <Col span={24}>
                     <CustomRow align={'middle'}>
@@ -606,7 +615,6 @@ const TabSent = ({ activeTabKey, value }) => {
                         <PaperClipOutlined />
                       </Col>
                       <Col>
-
                         <Typography.Link
                           href={application.fileAttach}
                           target='_blank'
@@ -621,10 +629,10 @@ const TabSent = ({ activeTabKey, value }) => {
                         >
                           CV.pdf
                         </Typography.Link>
-
                       </Col>
                     </CustomRow>
-                  </Col>) : null}
+                  </Col>
+                ) : null}
               </Row>
               <CustomDivider />
             </Col>
@@ -675,8 +683,11 @@ const ApplicationsTracking = () => {
   const [value, setValue] = useState(null);
   const { RangePicker } = DatePicker;
   const { Search } = Input;
+  const [page, setPage] = useState(1);
+
 
   const onTabChange = (key) => {
+    setPage(1);
     setActiveTabKey(key);
   };
 
@@ -770,7 +781,7 @@ const ApplicationsTracking = () => {
             activeTabKey={activeTabKey}
             onTabChange={onTabChange}
           >
-            <TabSent activeTabKey={activeTabKey} value={value} />
+            <TabSent activeTabKey={activeTabKey} value={value} page={page} setPage={setPage}/>
           </Card>
         </Col>
       </Row>

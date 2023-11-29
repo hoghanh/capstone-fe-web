@@ -51,6 +51,10 @@ const tabList = [
     key: 'approved',
     label: 'Nhận việc',
   },
+  {
+    key: 'declined',
+    label: 'Từ chối',
+  },
 ];
 
 const sentItems = [
@@ -335,16 +339,14 @@ const Approved = ({
   );
 };
 
-const TabSent = ({ activeTabKey, value }) => {
+const TabSent = ({ activeTabKey, value, page, setPage }) => {
   const [applicationList, setApplicationList] = useState([]);
   const search = useRecoilValue(valueSearchState);
   const [list, setList] = useState([]);
-  const [ellipsis, setEllipsis] = useState(false);
   const [isModalInterview, setIsModalInterview] = useState(false);
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
-  const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
   const [accountId, setAccountId] = useState();
@@ -380,6 +382,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.freelancers.applications[0].status === 'approved'
             : item.freelancers.accounts.name.toLowerCase().includes(search) &&
                 item.freelancers.applications[0].status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.freelancers.applications[0].status === 'declined'
+            : item.freelancers.accounts.name.toLowerCase().includes(search) &&
+            item.freelancers.applications[0].status === 'declined';
         }
         return true;
       });
@@ -401,6 +408,11 @@ const TabSent = ({ activeTabKey, value }) => {
             ? item.freelancers.applications[0].status === 'approved'
             : item.freelancers.accounts.name.toLowerCase().includes(search) &&
                 item.freelancers.applications[0].status === 'approved';
+        } else if (activeTabKey === 'declined') {
+          return search === ''
+            ? item.freelancers.applications[0].status === 'declined'
+            : item.freelancers.accounts.name.toLowerCase().includes(search) &&
+            item.freelancers.applications[0].status === 'declined';
         }
         return true;
       });
@@ -575,14 +587,12 @@ const TabSent = ({ activeTabKey, value }) => {
                       cursor: 'pointer',
                       textAlign: 'justify',
                     }}
-                    ellipsis={
-                      ellipsis
-                        ? {
-                          rows: 3,
-                        }
-                        : false
-                    }
-                    onClick={() => setEllipsis(!ellipsis)}
+                    e
+                    ellipsis={{
+                      rows: 3,
+                      expandable: true,
+                      symbol: 'Xem thêm',
+                    }}
                   >
                     {application.freelancers.applications[0].description}
                   </Typography.Paragraph>
@@ -659,8 +669,11 @@ const ApplicationsTracking = () => {
   const [value, setValue] = useState(null);
   const { RangePicker } = DatePicker;
   const { Search } = Input;
+  const [page, setPage] = useState(1);
+
 
   const onTabChange = (key) => {
+    setPage(1)
     setActiveTabKey(key);
   };
 
@@ -754,7 +767,7 @@ const ApplicationsTracking = () => {
             activeTabKey={activeTabKey}
             onTabChange={onTabChange}
           >
-            <TabSent activeTabKey={activeTabKey} value={value} />
+            <TabSent activeTabKey={activeTabKey} value={value} page={page} setPage={setPage} />
           </Card>
         </Col>
       </Row>

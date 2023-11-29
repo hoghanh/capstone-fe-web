@@ -91,6 +91,7 @@ const ClientJobManagement = () => {
   const navigate = useNavigate();
 
   const onTabChange = (key) => {
+    setPage(1);
     setActiveTabKey(key);
   };
 
