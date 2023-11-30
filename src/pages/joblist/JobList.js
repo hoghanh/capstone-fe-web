@@ -388,7 +388,7 @@ const JobList = () => {
             </Row>
           ))}
           <Pagination
-            current={1}
+            current={page}
             total={totalItems}
             onChange={onChange}
             showSizeChanger={false}

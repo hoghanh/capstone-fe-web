@@ -47,6 +47,8 @@ import { formatDate } from 'components/formatter/format';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'config/firebase';
 import { PlusOutlined } from '@ant-design/icons';
+import { useParams } from "react-router-dom";
+
 
 const EditPersonalInformation = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
@@ -717,7 +719,7 @@ const EditIntroduction = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const onChange = (e) => {};
+  const onChange = (e) => { };
   return (
     <>
       <ButtonIcon onClick={showModal}>
@@ -939,7 +941,6 @@ const EditNameAvatar = () => {
 
   const uploadFile = (event) => {
     const file = event.image[0].originFileObj;
-    console.log(file);
     if (!file) return;
 
     const storageRef = ref(storage, `images/avatars/${file.name}`);
@@ -1336,7 +1337,7 @@ const HeaderSection = () => {
               <Col>
                 <Typography.Title level={2} style={styles.nameUser}>
                   {informationUser?.accounts.name != null &&
-                  informationUser?.accounts.name !== '' ? (
+                    informationUser?.accounts.name !== '' ? (
                     informationUser?.accounts.name
                   ) : (
                     <Skeleton.Input size={'large'} />
@@ -1345,7 +1346,7 @@ const HeaderSection = () => {
               </Col>
               <Col>
                 {auth.role === 'freelancer' &&
-                auth.id === informationUser?.accountId ? (
+                  auth.id === informationUser?.accountId ? (
                   <Col>
                     <EditNameAvatar />
                   </Col>
@@ -1361,7 +1362,7 @@ const HeaderSection = () => {
       >
         <Row gutter={[20, 0]}>
           {auth.role === 'freelancer' &&
-          auth.id === informationUser?.accountId ? (
+            auth.id === informationUser?.accountId ? (
             <Col>
               <EditCV />
             </Col>
@@ -1391,6 +1392,7 @@ const HeaderSection = () => {
   );
 };
 
+
 const BodySectionLeft = () => {
   const informationUser = useRecoilValue(freelancerState);
   const auth = useRecoilValue(authState);
@@ -1412,7 +1414,7 @@ const BodySectionLeft = () => {
                   </Typography.Title>
                 </Col>
                 {auth.role === 'freelancer' &&
-                auth.id === informationUser?.accountId ? (
+                  auth.id === informationUser?.accountId ? (
                   <Col>
                     <EditPersonalInformation />
                   </Col>
@@ -1432,10 +1434,34 @@ const BodySectionLeft = () => {
                 </Col>
                 <Col span={24}>
                   <Typography.Text style={{ letterSpacing: 1 }}>
-                    {' '}
                     {informationUser?.accounts.phone != null &&
-                    informationUser?.accounts.phone !== ''
-                      ? informationUser?.accounts.phone
+                      informationUser?.accounts.phone !== ''
+                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
+                        ? informationUser?.accounts.phone
+                        : `*******${hideSensitiveData(informationUser?.accounts.phone)}`
+                      : 'Chưa có thông tin'}
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            <CustomCol span={24}>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col span={24}>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Email
+                      </Typography.Title>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text style={{ letterSpacing: 1 }}>
+                    {informationUser?.accounts.email != null &&
+                      informationUser?.accounts.email !== ''
+                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
+                        ? informationUser?.accounts.email
+                        : `*******${hideSensitiveData(informationUser?.accounts.email)}`
                       : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
@@ -1453,12 +1479,12 @@ const BodySectionLeft = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <Typography.Text>
-                    {informationUser?.accounts.address != null &&
+                  {informationUser?.accounts.address != null &&
                     informationUser?.accounts.address !== ''
+                    ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
                       ? informationUser?.accounts.address
-                      : 'Chưa có thông tin'}
-                  </Typography.Text>
+                      : `*******${hideSensitiveData(informationUser?.accounts.address)}`
+                    : 'Chưa có thông tin'}
                 </Col>
               </Row>
             </CustomCol>
@@ -1485,17 +1511,17 @@ const BodySectionLeft = () => {
                       </Typography.Title>
                     </Col>
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <EditWorkingTime />
                       </Col>
                     ) : null}
                   </Row>
                 </Col>
-                <Col>
+                <Col span={24}>
                   <Typography.Text>
                     {informationUser?.hoursPerWeek != null &&
-                    informationUser?.hoursPerWeek !== ''
+                      informationUser?.hoursPerWeek !== ''
                       ? informationUser?.hoursPerWeek
                       : 'Chưa có thông tin'}
                   </Typography.Text>
@@ -1512,29 +1538,29 @@ const BodySectionLeft = () => {
                       </Typography.Title>
                     </Col>
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <AddLanguage />
                       </Col>
                     ) : null}
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <EditLanguages />
                       </Col>
                     ) : null}
                   </Row>
                 </Col>
-                {informationUser?.language.map((language) => (
-                  <Col key={language.id} span={24}>
-                    <Typography.Text>
+                <Col span={24}>
+                  {informationUser?.language !== null && informationUser?.language.length !== 0 ? informationUser?.language.map((language) => (
+                    <Typography.Text key={language.id}>
                       <Typography.Text strong style={{ marginRight: 20 }}>
                         {language.name}:
                       </Typography.Text>
                       {language.level}
                     </Typography.Text>
-                  </Col>
-                ))}
+                  )) : 'Chưa có thông tin'}
+                </Col>
               </Row>
             </CustomCol>
             <CustomCol>
@@ -1547,7 +1573,7 @@ const BodySectionLeft = () => {
                       </Typography.Title>
                     </Col>
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <EditMajor />
                       </Col>
@@ -1557,7 +1583,7 @@ const BodySectionLeft = () => {
                 <Col span={24}>
                   <Typography.Text>
                     {informationUser?.major != null &&
-                    informationUser?.major !== ''
+                      informationUser?.major !== ''
                       ? informationUser?.major
                       : 'Chưa có thông tin'}
                   </Typography.Text>
@@ -1570,6 +1596,21 @@ const BodySectionLeft = () => {
     </Col>
   );
 };
+
+const hideSensitiveData = (data) => {
+  // Kiểm tra xem data có chứa số không
+  if (/\d{10}/.test(data)) {
+    // Nếu có, hiển thị 3 số cuối
+    return data.slice(-3);
+  } else if(/\w+@\w+\.\w+/.test(data)) {
+    // Nếu không, hiển thị đuôi sau @
+    const [user, domain] = data.split('@');
+    return '****@' + domain;
+  } else{
+    return '**********'
+  }
+};
+
 
 const BodySectionLeftResponsive = () => {
   const informationUser = useRecoilValue(freelancerState);
@@ -1599,7 +1640,7 @@ const BodySectionLeftResponsive = () => {
                   </Typography.Title>
                 </Col>
                 {auth.role === 'freelancer' &&
-                auth.id === informationUser?.accountId ? (
+                  auth.id === informationUser?.accountId ? (
                   <Col>
                     <EditPersonalInformation />
                   </Col>
@@ -1619,10 +1660,34 @@ const BodySectionLeftResponsive = () => {
                 </Col>
                 <Col span={24}>
                   <Typography.Text style={{ letterSpacing: 1 }}>
-                    {' '}
                     {informationUser?.accounts.phone != null &&
                       informationUser?.accounts.phone !== ''
-                      ? informationUser?.accounts.phone
+                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
+                        ? informationUser?.accounts.phone
+                        : `*******${hideSensitiveData(informationUser?.accounts.phone)}`
+                      : 'Chưa có thông tin'}
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </CustomCol>
+            <CustomCol span={24}>
+              <Row gutter={[0, 15]}>
+                <Col>
+                  <Row align={'middle'} gutter={[30, 10]}>
+                    <Col span={24}>
+                      <Typography.Title level={4} style={{ margin: 0 }}>
+                        Email
+                      </Typography.Title>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text style={{ letterSpacing: 1 }}>
+                    {informationUser?.accounts.email != null &&
+                      informationUser?.accounts.email !== ''
+                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
+                        ? informationUser?.accounts.email
+                        : `*******${hideSensitiveData(informationUser?.accounts.email)}`
                       : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
@@ -1640,10 +1705,12 @@ const BodySectionLeftResponsive = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                {informationUser?.accounts.address != null &&
+                  {informationUser?.accounts.address != null &&
                     informationUser?.accounts.address !== ''
+                    ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
                       ? informationUser?.accounts.address
-                      : 'Chưa có thông tin'}
+                      : `*******${hideSensitiveData(informationUser?.accounts.address)}`
+                    : 'Chưa có thông tin'}
                 </Col>
               </Row>
             </CustomCol>
@@ -1670,7 +1737,7 @@ const BodySectionLeftResponsive = () => {
                       </Typography.Title>
                     </Col>
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <EditWorkingTime />
                       </Col>
@@ -1695,29 +1762,29 @@ const BodySectionLeftResponsive = () => {
                       </Typography.Title>
                     </Col>
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <AddLanguage />
                       </Col>
                     ) : null}
                     {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
+                      auth.id === informationUser?.accountId ? (
                       <Col>
                         <EditLanguages />
                       </Col>
                     ) : null}
                   </Row>
                 </Col>
-                {informationUser?.language.map((language) => (
-                  <Col key={language.id} span={24}>
-                    <Typography.Text>
+                <Col span={24}>
+                  {informationUser?.language !== null && informationUser?.language.length !== 0 ? informationUser?.language.map((language) => (
+                    <Typography.Text key={language.id}>
                       <Typography.Text strong style={{ marginRight: 20 }}>
                         {language.name}:
                       </Typography.Text>
                       {language.level}
                     </Typography.Text>
-                  </Col>
-                ))}
+                  )) : 'Chưa có thông tin'}
+                </Col>
               </Row>
             </CustomCol>
             {/* Left 3 */}
@@ -1731,19 +1798,19 @@ const BodySectionLeftResponsive = () => {
                       </Typography.Title>
                     </Col>
                     <Col>
-                    {auth.role === 'freelancer' &&
-                    auth.id === informationUser?.accountId ? (
-                      <Col>
-                        <EditMajor />
-                      </Col>
-                    ) : null}
+                      {auth.role === 'freelancer' &&
+                        auth.id === informationUser?.accountId ? (
+                        <Col>
+                          <EditMajor />
+                        </Col>
+                      ) : null}
                     </Col>
                   </Row>
                 </Col>
                 <Col span={24}>
-                <Typography.Text>
+                  <Typography.Text>
                     {informationUser?.major != null &&
-                    informationUser?.major !== ''
+                      informationUser?.major !== ''
                       ? informationUser?.major
                       : 'Chưa có thông tin'}
                   </Typography.Text>
@@ -1900,13 +1967,13 @@ const BodySectionRight = () => {
                     style={{ margin: 0, paddingRight: 30 }}
                   >
                     {informationUser?.title != null &&
-                    informationUser?.title !== ''
+                      informationUser?.title !== ''
                       ? informationUser?.title
                       : 'Chưa có thông tin'}
                   </Typography.Title>
                 </Col>
                 {auth.role === 'freelancer' &&
-                auth.id === informationUser?.accountId ? (
+                  auth.id === informationUser?.accountId ? (
                   <Col>
                     <EditIntroduction />
                   </Col>
@@ -1916,7 +1983,7 @@ const BodySectionRight = () => {
             <Col span={24} style={{ padding: 20 }}>
               <Typography.Text>
                 {informationUser?.introduction != null &&
-                informationUser?.introduction !== ''
+                  informationUser?.introduction !== ''
                   ? informationUser?.introduction
                   : 'Chưa có thông tin'}
               </Typography.Text>
@@ -1937,7 +2004,7 @@ const BodySectionRight = () => {
                   </Typography.Title>
                 </Col>
                 {auth.role === 'freelancer' &&
-                auth.id === informationUser?.accountId ? (
+                  auth.id === informationUser?.accountId ? (
                   <Col>
                     <EditSkills
                       skillList={skillList}

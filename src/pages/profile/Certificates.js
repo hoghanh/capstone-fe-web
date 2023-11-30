@@ -336,6 +336,7 @@ const AddCertifications = () => {
                       width: '100%',
                       backgroundColor: '#FFFFFF',
                       border: '0.5px solid',
+                      height: 50,
                     }}
                     bordered={false}
                     onChange={handleChange}
@@ -900,6 +901,7 @@ const BodySection = () => {
                       width: '100%',
                       backgroundColor: '#FFFFFF',
                       border: '0.5px solid',
+                      height: 50,
                     }}
                     bordered={false}
                     onChange={handleChange}
