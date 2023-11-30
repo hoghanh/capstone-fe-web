@@ -46,9 +46,18 @@ const Dashboard = () => {
               <MeetingCalendar />
             </Card>
           </Col>
+          <Col sm={24} md={12}>
+            <Card
+              style={{
+                height: 595,
+                overflowY: 'auto',
+                background: 'none',
+              }}
+            >
+              <Billing />
+            </Card>
+          </Col>
         </Row>
-
-        <Billing />
       </Layout.Content>
     </>
   );
