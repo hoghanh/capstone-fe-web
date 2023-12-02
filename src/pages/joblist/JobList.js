@@ -11,7 +11,7 @@ import {
   Grid,
   Spin,
   Row,
-  Col,
+  Col,Empty,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
@@ -263,7 +263,11 @@ const JobList = () => {
             </div>
           }
         >
-          {sortedJobList?.map((job) => (
+          {sortedJobList.length === 0 || sortedJobList === null ? (
+            <div>
+              <Empty description={<span>Dữ liệu trống</span>} />
+            </div>
+          ) : (sortedJobList?.map((job) => (
             <Row
               key={job.id}
               style={{
@@ -386,7 +390,7 @@ const JobList = () => {
                 </div>
               </Col>
             </Row>
-          ))}
+          )))}
           <Pagination
             current={page}
             total={totalItems}
