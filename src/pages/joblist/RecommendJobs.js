@@ -246,7 +246,7 @@ const JobList = () => {
                 <div
                   style={{
                     display: 'flex',
-                    padding: '0px 10px',
+                    padding: '0px 10px 10px',
                     alignItems: 'flex-start',
                     gap: '15px',
                     alignSelf: 'stretch',

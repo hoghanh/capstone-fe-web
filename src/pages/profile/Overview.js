@@ -34,20 +34,17 @@ import {
 } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import color from 'styles/color';
-import css from './profile.module.css';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   applicationListState,
   authState,
   freelancerState,
-  profileState,
 } from 'recoil/atom';
 import { get, post, put, remove } from 'utils/APICaller';
 import { formatDate } from 'components/formatter/format';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'config/firebase';
 import { PlusOutlined } from '@ant-design/icons';
-import { useParams } from "react-router-dom";
 
 
 const EditPersonalInformation = () => {
@@ -60,11 +57,12 @@ const EditPersonalInformation = () => {
 
   const updateFreelancerInfo = (values) => {
     const { phone, address } = values;
+    console.log(informationUser?.id, phone, address)
     put({
       endpoint: `/freelancer/basicInfo/${informationUser?.id}`,
       body: {
-        phone: phone,
-        address: address,
+        phone,
+        address,
       },
     })
       .then((res) => {
@@ -1435,10 +1433,8 @@ const BodySectionLeft = () => {
                 <Col span={24}>
                   <Typography.Text style={{ letterSpacing: 1 }}>
                     {informationUser?.accounts.phone != null &&
-                      informationUser?.accounts.phone !== ''
-                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
-                        ? informationUser?.accounts.phone
-                        : `*******${hideSensitiveData(informationUser?.accounts.phone)}`
+                     informationUser?.accounts.phone !== ''
+                     ? informationUser?.accounts.phone
                       : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
@@ -1459,9 +1455,7 @@ const BodySectionLeft = () => {
                   <Typography.Text style={{ letterSpacing: 1 }}>
                     {informationUser?.accounts.email != null &&
                       informationUser?.accounts.email !== ''
-                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
-                        ? informationUser?.accounts.email
-                        : `*******${hideSensitiveData(informationUser?.accounts.email)}`
+                      ? informationUser?.accounts.email
                       : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
@@ -1481,9 +1475,7 @@ const BodySectionLeft = () => {
                 <Col span={24}>
                   {informationUser?.accounts.address != null &&
                     informationUser?.accounts.address !== ''
-                    ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
                       ? informationUser?.accounts.address
-                      : `*******${hideSensitiveData(informationUser?.accounts.address)}`
                     : 'Chưa có thông tin'}
                 </Col>
               </Row>
@@ -1530,7 +1522,7 @@ const BodySectionLeft = () => {
             </CustomCol>
             <CustomCol>
               <Row gutter={[0, 15]}>
-                <Col>
+                <Col span={24}>
                   <Row align={'middle'} gutter={[30, 10]}>
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0 }}>
@@ -1551,16 +1543,16 @@ const BodySectionLeft = () => {
                     ) : null}
                   </Row>
                 </Col>
-                <Col span={24}>
-                  {informationUser?.language !== null && informationUser?.language.length !== 0 ? informationUser?.language.map((language) => (
-                    <Typography.Text key={language.id}>
+                {informationUser?.language.length > 0 ? informationUser?.language.map((language) => (
+                  <Col key={language.id} span={24}>
+                    <Typography.Text>
                       <Typography.Text strong style={{ marginRight: 20 }}>
                         {language.name}:
                       </Typography.Text>
                       {language.level}
                     </Typography.Text>
-                  )) : 'Chưa có thông tin'}
-                </Col>
+                  </Col>
+                )) : <Col span={24}>Chưa có thông tin</Col>}
               </Row>
             </CustomCol>
             <CustomCol>
@@ -1596,21 +1588,6 @@ const BodySectionLeft = () => {
     </Col>
   );
 };
-
-const hideSensitiveData = (data) => {
-  // Kiểm tra xem data có chứa số không
-  if (/\d{10}/.test(data)) {
-    // Nếu có, hiển thị 3 số cuối
-    return data.slice(-3);
-  } else if(/\w+@\w+\.\w+/.test(data)) {
-    // Nếu không, hiển thị đuôi sau @
-    const [user, domain] = data.split('@');
-    return '****@' + domain;
-  } else{
-    return '**********'
-  }
-};
-
 
 const BodySectionLeftResponsive = () => {
   const informationUser = useRecoilValue(freelancerState);
@@ -1662,9 +1639,7 @@ const BodySectionLeftResponsive = () => {
                   <Typography.Text style={{ letterSpacing: 1 }}>
                     {informationUser?.accounts.phone != null &&
                       informationUser?.accounts.phone !== ''
-                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
                         ? informationUser?.accounts.phone
-                        : `*******${hideSensitiveData(informationUser?.accounts.phone)}`
                       : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
@@ -1685,9 +1660,7 @@ const BodySectionLeftResponsive = () => {
                   <Typography.Text style={{ letterSpacing: 1 }}>
                     {informationUser?.accounts.email != null &&
                       informationUser?.accounts.email !== ''
-                      ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
                         ? informationUser?.accounts.email
-                        : `*******${hideSensitiveData(informationUser?.accounts.email)}`
                       : 'Chưa có thông tin'}
                   </Typography.Text>
                 </Col>
@@ -1707,9 +1680,7 @@ const BodySectionLeftResponsive = () => {
                 <Col span={24}>
                   {informationUser?.accounts.address != null &&
                     informationUser?.accounts.address !== ''
-                    ? auth.role === 'freelancer' && auth.id === informationUser?.accountId
                       ? informationUser?.accounts.address
-                      : `*******${hideSensitiveData(informationUser?.accounts.address)}`
                     : 'Chưa có thông tin'}
                 </Col>
               </Row>
@@ -1776,7 +1747,7 @@ const BodySectionLeftResponsive = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  {informationUser?.language !== null && informationUser?.language.length !== 0 ? informationUser?.language.map((language) => (
+                  {informationUser?.language !== '' && informationUser?.language.length !== 0 ? informationUser?.language.map((language) => (
                     <Typography.Text key={language.id}>
                       <Typography.Text strong style={{ marginRight: 20 }}>
                         {language.name}:
