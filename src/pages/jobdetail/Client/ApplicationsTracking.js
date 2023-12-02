@@ -73,6 +73,18 @@ const sentItems = [
   },
 ];
 
+const interviewItems = [
+  {
+    key: 'approved',
+    label: 'Nhận việc',
+  },
+  {
+    key: 'decline',
+    label: 'Từ chối',
+    danger: true,
+  },
+];
+
 const Interview = ({
   isModalInterview,
   setIsModalInterview,
@@ -431,11 +443,22 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
       });
   };
 
-  const onClick = (id, key) => {
+  const onClick = (id, key, accountId, appointments) => {
     const checkAction = key.toString();
+    const appointmentTime = new Date(appointments?.time);
+    const today = new Date();
+    const timeDifference = appointmentTime - today;
     if (checkAction.includes('decline')) {
       setIsIdItem(id);
-      setIsModalDecline(true);
+      if (timeDifference > 0) {
+        notification.error({
+          message:
+            'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
+        });
+      } else {
+        console.log('hi')
+        setIsModalDecline(true);
+      }
       setAccountId(accountId);
     } else if (checkAction.includes('interview')) {
       setIsIdItem(id);
@@ -443,7 +466,15 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
       setAccountId(accountId);
     } else if (checkAction.includes('approved')) {
       setIsIdItem(id);
-      setIsModalApproved(true);
+      setIsIdItem(id);
+      if (timeDifference > 0) {
+        notification.error({
+          message:
+            'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
+        });
+      } else {
+        setIsModalDecline(true);
+      }
       setAccountId(accountId);
     }
   };
@@ -526,31 +557,35 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                       </Row>
                     </Col>
                     <Col>
-                      {activeTabKey === 'sent' ? (
+                      {activeTabKey === 'sent' || activeTabKey === 'interview' ? (
                         <Dropdown
-                          menu={{
-                            items:
-                              application?.hired !== true
-                                ? sentItems
-                                    .filter((item) => item.key !== 'approved')
-                                    .map((item) => ({
-                                      ...item,
-                                      key:
-                                        item.key +
-                                        '_' +
-                                        application?.freelancers.applications[0].id.toString(),
-                                    }))
-                                : sentItems.map((item) => ({
-                                    ...item,
-                                    key:
-                                      item.key +
-                                      '_' +
-                                      application?.freelancers.applications[0].id.toString(),
-                                  })),
+                        menu={{
+                          items:
+                            activeTabKey === 'sent' ? application?.freelancers.hired !== true
+                              ? sentItems.filter((item) => item.key !== 'approved')
+                                .map((item) => ({
+                                  ...item,
+                                  key:
+                                    item.key +
+                                    '_' +
+                                    application?.freelancers.applications[0].id.toString(),
+                                }))
+                              : sentItems.map((item) => ({
+                                ...item,
+                                key:
+                                  item.key +
+                                  '_' +
+                                  application?.freelancers.applications[0].id.toString(),
+                              })) : interviewItems.map((item) => ({
+                                ...item,
+                                key: item.key + '_' + application?.freelancers.applications[0].id.toString(),
+                              })),
                             onClick: ({ key }) => {
                               onClick(
                                 application?.freelancers.applications[0].id,
-                                key
+                                key,
+                                application?.freelancers.accounts.id,
+                                application?.freelancers.applications[0].appointments,
                               );
                             },
                           }}
@@ -587,7 +622,6 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                       cursor: 'pointer',
                       textAlign: 'justify',
                     }}
-                    e
                     ellipsis={{
                       rows: 3,
                       expandable: true,
@@ -633,12 +667,14 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
         setIsModalInterview={setIsModalInterview}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
+        accountId={accountId}
       />
       <DeclineInterview
         isModalDecline={isModalDecline}
         setIsModalDecline={setIsModalDecline}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
+        accountId={accountId}
       />
 
       <Approved
@@ -646,6 +682,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
         setIsModalApproved={setIsModalApproved}
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
+        accountId={accountId}
       />
 
       <Col span={24}>

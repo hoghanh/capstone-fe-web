@@ -449,7 +449,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
 
   const onClick = (id, key, accountId, appointments) => {
     const checkAction = key.toString();
-    const appointmentTime = new Date(appointments[0]?.time);
+    const appointmentTime = new Date(appointments?.time);
     const today = new Date();
     const timeDifference = appointmentTime - today;
     if (checkAction.includes('decline')) {
@@ -477,7 +477,6 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
             'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
         });
       } else {
-        console.log('hi')
         setIsModalDecline(true);
       }
       setAccountId(accountId);
