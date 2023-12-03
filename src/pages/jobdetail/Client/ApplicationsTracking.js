@@ -365,9 +365,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    if (user) {
-      getApplications(id);
-    }
+    getApplications(id);
   }, [user, isIdItem, id]);
 
   useEffect(() => {
