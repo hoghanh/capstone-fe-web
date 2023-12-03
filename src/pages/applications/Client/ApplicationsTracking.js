@@ -460,7 +460,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
             'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
         });
       } else {
-        console.log('hi')
+        console.log('hi');
         setIsModalDecline(true);
       }
       setAccountId(accountId);
@@ -497,7 +497,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
     <Row>
       {list.length === 0 || list === null ? (
         <Col span={24}>
-          <Empty description={'Không có dữ liệu'}/>
+          <Empty description={'Không có dữ liệu'} />
         </Col>
       ) : (
         getPagedList()?.map((application, index) => {
@@ -528,7 +528,10 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                         >
                           <Image
                             width={72}
-                            src={application?.freelancers.accounts.image}
+                            src={
+                              application?.freelancers.accounts.image ||
+                              '/icon/logo.svg'
+                            }
                             alt='Apofoitisi logo'
                             preview={true}
                             style={{ borderRadius: '50%' }}
@@ -561,35 +564,42 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                       </Row>
                     </Col>
                     <Col>
-                      {activeTabKey === 'sent' || activeTabKey === 'interview' ? (
+                      {activeTabKey === 'sent' ||
+                      activeTabKey === 'interview' ? (
                         <Dropdown
                           menu={{
                             items:
-                              activeTabKey === 'sent' ? application?.freelancers.hired !== true
-                                ? sentItems.filter((item) => item.key !== 'approved')
-                                  .map((item) => ({
+                              activeTabKey === 'sent'
+                                ? application?.freelancers.hired !== true
+                                  ? sentItems
+                                      .filter((item) => item.key !== 'approved')
+                                      .map((item) => ({
+                                        ...item,
+                                        key:
+                                          item.key +
+                                          '_' +
+                                          application.id.toString(),
+                                      }))
+                                  : sentItems.map((item) => ({
+                                      ...item,
+                                      key:
+                                        item.key +
+                                        '_' +
+                                        application.id.toString(),
+                                    }))
+                                : interviewItems.map((item) => ({
                                     ...item,
                                     key:
                                       item.key +
                                       '_' +
                                       application.id.toString(),
-                                  }))
-                                : sentItems.map((item) => ({
-                                  ...item,
-                                  key:
-                                    item.key +
-                                    '_' +
-                                    application.id.toString(),
-                                })) : interviewItems.map((item) => ({
-                                  ...item,
-                                  key: item.key + '_' + application.id.toString(),
-                                })),
+                                  })),
                             onClick: ({ key }) => {
                               onClick(
                                 application?.id,
                                 key,
                                 application?.freelancers.accounts.id,
-                                application?.appointments,
+                                application?.appointments
                               );
                             },
                           }}
@@ -719,7 +729,6 @@ const ApplicationsTracking = () => {
   const { Search } = Input;
   const [page, setPage] = useState(1);
 
-
   const onTabChange = (key) => {
     setPage(1);
     setActiveTabKey(key);
@@ -815,7 +824,12 @@ const ApplicationsTracking = () => {
             activeTabKey={activeTabKey}
             onTabChange={onTabChange}
           >
-            <TabSent activeTabKey={activeTabKey} value={value} page={page} setPage={setPage}/>
+            <TabSent
+              activeTabKey={activeTabKey}
+              value={value}
+              page={page}
+              setPage={setPage}
+            />
           </Card>
         </Col>
       </Row>

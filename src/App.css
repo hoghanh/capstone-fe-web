@@ -114,6 +114,11 @@ body {
   height: auto
 }
 
+.ant-image img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
 /* Scroll */
 
 .skillSlider {

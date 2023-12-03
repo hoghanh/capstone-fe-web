@@ -11,7 +11,8 @@ import {
   Grid,
   Spin,
   Row,
-  Col,Empty,
+  Col,
+  Empty,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled, MenuUnfoldOutlined } from '@ant-design/icons';
@@ -267,130 +268,132 @@ const JobList = () => {
             <div>
               <Empty description={<span>Dữ liệu trống</span>} />
             </div>
-          ) : (sortedJobList?.map((job) => (
-            <Row
-              key={job.id}
-              style={{
-                display: ' flex',
-                alignItems: 'center',
-                padding: 10,
-                borderBottom: '0.5px solid #000',
-              }}
-            >
-              <Col
-                span={5}
+          ) : (
+            sortedJobList?.map((job) => (
+              <Row
+                key={job.id}
                 style={{
-                  display: md ? 'flex' : 'none',
+                  display: ' flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  gap: 5,
-                  padding: 30,
-                  height: 209,
+                  padding: 10,
+                  borderBottom: '0.5px solid #000',
                 }}
               >
-                <Image
-                  width={100}
-                  src={job.clients?.accounts?.image}
-                  alt='Apofoitisi logo'
-                  preview={false}
-                  style={{ borderRadius: '50%' }}
-                />
-                <Typography.Title
-                  level={4}
-                  style={{ width: 144, margin: 0, textAlign: 'center' }}
-                >
-                  {job.clients?.accounts?.name.toUpperCase()}
-                </Typography.Title>
-              </Col>
-              <Col
-                span={24}
-                md={{ span: 19 }}
-                style={{ padding: 10, overflow: 'auto' }}
-              >
-                <div
+                <Col
+                  span={5}
                   style={{
-                    display: ' flex',
+                    display: md ? 'flex' : 'none',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: 10,
-                    gap: 15,
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    gap: 5,
+                    padding: 30,
+                    height: 209,
                   }}
                 >
-                  <div>
-                    <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
-                      <Typography.Title
-                        style={{ margin: 0 }}
-                        level={md ? 4 : 5}
-                      >
-                        {job.title}
-                      </Typography.Title>
-                    </Link>
-                    <Typography.Text level={4}>
-                      Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
-                      {FormatVND(job.highestIncome)} /{' '}
-                      {CalculateDaysLeft(job.proposalSubmitDeadline)}
-                    </Typography.Text>
-                  </div>
-                  {auth.role === 'freelancer' ? (
-                    <div
-                      style={{
-                        cursor: 'pointer',
-                        alignSelf: md ? ' ' : 'flex-start',
-                        display: 'flex',
-                      }}
-                      onClick={() => handleFavoriteChange(job.id)}
-                    >
-                      {isLoading ? (
-                        <Spin />
-                      ) : favoriteList.includes(job.id) ? (
-                        <BookMark />
-                      ) : (
-                        <BookMarkOutlined />
-                      )}
-                    </div>
-                  ) : null}
-                </div>
-                <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
-                  <Typography.Paragraph
-                    ellipsis={{
-                      rows: 3,
-                      expandable: false,
-                    }}
-                    style={joblist.des}
+                  <Image
+                    width={100}
+                    src={job.clients?.accounts?.image || '/icon/logo.svg'}
+                    alt='Apofoitisi logo'
+                    preview={false}
+                    style={{ borderRadius: '50%' }}
+                  />
+                  <Typography.Title
+                    level={4}
+                    style={{ width: 144, margin: 0, textAlign: 'center' }}
                   >
-                    {job.description}
-                  </Typography.Paragraph>
-                </Link>
-                <div
-                  style={{
-                    display: 'flex',
-                    padding: '0px 10px 10px',
-                    alignItems: 'flex-start',
-                    gap: '15px',
-                    alignSelf: 'stretch',
-                    overflow: 'auto',
-                  }}
-                >
-                  {job.skills?.map((skill) => (
-                    <Button
-                      type='primary'
-                      style={joblist.button}
-                      key={skill.id}
-                    >
-                      {skill.name}
-                    </Button>
-                  ))}
-                </div>
-                <div style={joblist.applied}>
-                  <Typography.Title level={5} style={joblist.applied.text}>
-                    {job.applied ? job.applied : 0} ứng tuyển{' '}
-                    <FileTextFilled />
+                    {job.clients?.accounts?.name.toUpperCase()}
                   </Typography.Title>
-                </div>
-              </Col>
-            </Row>
-          )))}
+                </Col>
+                <Col
+                  span={24}
+                  md={{ span: 19 }}
+                  style={{ padding: 10, overflow: 'auto' }}
+                >
+                  <div
+                    style={{
+                      display: ' flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: 10,
+                      gap: 15,
+                    }}
+                  >
+                    <div>
+                      <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
+                        <Typography.Title
+                          style={{ margin: 0 }}
+                          level={md ? 4 : 5}
+                        >
+                          {job.title}
+                        </Typography.Title>
+                      </Link>
+                      <Typography.Text level={4}>
+                        Lương thoả thuận: {FormatVND(job.lowestIncome)} -{' '}
+                        {FormatVND(job.highestIncome)} /{' '}
+                        {CalculateDaysLeft(job.proposalSubmitDeadline)}
+                      </Typography.Text>
+                    </div>
+                    {auth.role === 'freelancer' ? (
+                      <div
+                        style={{
+                          cursor: 'pointer',
+                          alignSelf: md ? ' ' : 'flex-start',
+                          display: 'flex',
+                        }}
+                        onClick={() => handleFavoriteChange(job.id)}
+                      >
+                        {isLoading ? (
+                          <Spin />
+                        ) : favoriteList.includes(job.id) ? (
+                          <BookMark />
+                        ) : (
+                          <BookMarkOutlined />
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                  <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
+                    <Typography.Paragraph
+                      ellipsis={{
+                        rows: 3,
+                        expandable: false,
+                      }}
+                      style={joblist.des}
+                    >
+                      {job.description}
+                    </Typography.Paragraph>
+                  </Link>
+                  <div
+                    style={{
+                      display: 'flex',
+                      padding: '0px 10px 10px',
+                      alignItems: 'flex-start',
+                      gap: '15px',
+                      alignSelf: 'stretch',
+                      overflow: 'auto',
+                    }}
+                  >
+                    {job.skills?.map((skill) => (
+                      <Button
+                        type='primary'
+                        style={joblist.button}
+                        key={skill.id}
+                      >
+                        {skill.name}
+                      </Button>
+                    ))}
+                  </div>
+                  <div style={joblist.applied}>
+                    <Typography.Title level={5} style={joblist.applied.text}>
+                      {job.applied ? job.applied : 0} ứng tuyển{' '}
+                      <FileTextFilled />
+                    </Typography.Title>
+                  </div>
+                </Col>
+              </Row>
+            ))
+          )}
           <Pagination
             current={page}
             total={totalItems}
