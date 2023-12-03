@@ -357,12 +357,16 @@ function SearchBar() {
   };
 
   const validateEmailFormat = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (emailRegex.test(email)) {
-      setEmail(email);
-      setError(null);
+    if(email.length > 0) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailRegex.test(email)) {
+        setEmail(email);
+        setError(null);
+      } else {
+        setError('Email không hợp lệ');
+      }
     } else {
-      setError('Email không hợp lệ');
+      setError(null);
     }
   };
 
