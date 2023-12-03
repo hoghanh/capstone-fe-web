@@ -36,16 +36,18 @@ function App() {
     }
 
     gapi.load('client:auth2', start);
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    if (auth) {
+    setIsLoading(true);
+    setTimeout(() => {
       fetchProfile(auth);
-    }
-  }, [auth]);
+      setIsLoading(false);
+    }, 1500);
+  }, []);
 
   function fetchProfile(auth) {
+    setIsLoading(true);
     get({ endpoint: `/client/profile/${auth.id}` })
       .then((response) => {
         setUser(response.data);
