@@ -9,7 +9,7 @@ import {
   Pagination,
   Grid,
   Spin,
-  Row, Col,
+  Row, Col, Empty
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
@@ -149,7 +149,11 @@ const JobList = () => {
             </div>
           }
         >
-          {recommendedList?.map((job) => (
+          {recommendedList.length === 0 || recommendedList === null ? (
+            <div>
+              <Empty description={<span>Dữ liệu trống</span>} />
+            </div>
+          ) : (recommendedList?.map((job) => (
             <Row
               key={job.jobs.id}
               style={{
@@ -246,7 +250,7 @@ const JobList = () => {
                 <div
                   style={{
                     display: 'flex',
-                    padding: '0px 10px',
+                    padding: '0px 10px 10px',
                     alignItems: 'flex-start',
                     gap: '15px',
                     alignSelf: 'stretch',
@@ -271,7 +275,7 @@ const JobList = () => {
                 </div>
               </Col>
             </Row>
-          ))}
+          )))}
           <Pagination
             current={1}
             total={totalItems}

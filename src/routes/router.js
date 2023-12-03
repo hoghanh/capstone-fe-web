@@ -164,6 +164,7 @@ export const routes = [
     element: lazy(() => import('pages/applications/Client/Applications')),
     name: 'applications',
     title: 'Danh sách ứng tuyển',
+    role: ['client'],
   },
   {
     path: '/client/billing',

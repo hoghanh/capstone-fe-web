@@ -12,31 +12,31 @@ const Footer = () => {
   return (
     <Layout.Footer style={footer}>
       <Row style={footer.firstrow}>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>Về Chúng Tôi</Typography.Text>
         </Col>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>Hỗ Trợ</Typography.Text>
         </Col>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>
             Chính Sách Cookie
           </Typography.Text>
         </Col>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>
             Điều Khoản Dịch Vụ
           </Typography.Text>
         </Col>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>Phản Hồi</Typography.Text>
         </Col>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>
             Chính Sách Bảo Mật
           </Typography.Text>
         </Col>
-        <Col span={6}>
+        <Col md={6} sm={8} xs={12} >
           <Typography.Text style={footer.text}>Cài Đặt Cookie</Typography.Text>
         </Col>
       </Row>

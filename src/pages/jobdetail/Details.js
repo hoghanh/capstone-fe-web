@@ -326,7 +326,7 @@ const HeaderArticle = () => {
                 Chi tiết dự án
               </Typography.Title>
               <Typography.Text style={styles.headerTextRight}>
-                {jobDetail.applied} Freelancer đã ứng tuyển
+                {jobDetail?.applied === '' || jobDetail?.applied === null ? '0' : jobDetail?.applied } Freelancer đã ứng tuyển
               </Typography.Text>
             </CustomCol>
             <CustomCol
@@ -579,34 +579,52 @@ const ContactInfo = () => {
         </Typography.Title>
       </Col>
       <Col span={24} style={{ display: 'flex' }}>
-        <MapMarkerAlt />
-        <Typography.Text
-          style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
-        >
-          {jobDetail?.clients?.accounts?.address != null
-            ? jobDetail?.clients?.accounts?.address
-            : 'Chưa xác minh'}
-        </Typography.Text>
+        <Row>
+          <Col span={2}>
+            <MapMarkerAlt />
+          </Col>          
+          <Col span={22}>
+            <Typography.Text
+              style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
+            >
+              {jobDetail?.clients?.accounts?.address != null
+                ? jobDetail?.clients?.accounts?.address
+                : 'Chưa xác minh'}
+            </Typography.Text>
+          </Col>
+        </Row>
       </Col>
       <Col span={24} style={{ display: 'flex' }}>
-        <Envelope />
-        <Typography.Text
-          style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
-        >
-          {jobDetail.clients.accounts?.email != null
-            ? jobDetail.clients.accounts?.email
-            : 'Chưa xác minh'}
-        </Typography.Text>
+        <Row gutter={[10, 10]}>
+          <Col span={2}>
+            <Envelope />
+          </Col>
+          <Col span={22}>
+            <Typography.Text
+              style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
+            >
+              {jobDetail.clients.accounts?.email != null
+                ? jobDetail.clients.accounts?.email
+                : 'Chưa xác minh'}
+            </Typography.Text>
+          </Col>
+        </Row>
       </Col>
       <Col span={24} style={{ display: 'flex' }}>
-        <PhoneAlt />
-        <Typography.Text
-          style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
-        >
-          {jobDetail.clients.accounts?.phone != null
-            ? jobDetail.clients.accounts?.phone
-            : 'Chưa xác minh'}
-        </Typography.Text>
+        <Row>
+          <Col span={2}>
+            <PhoneAlt />
+          </Col>
+          <Col span={22}>
+            <Typography.Text
+              style={{ fontWeight: 400, fontSize: 14, marginLeft: 10 }}
+            >
+              {jobDetail.clients.accounts?.phone != null
+                ? jobDetail.clients.accounts?.phone
+                : 'Chưa xác minh'}
+            </Typography.Text>
+          </Col>
+        </Row>
       </Col>
     </CustomRow>
   );
@@ -723,6 +741,7 @@ const Details = ({ status, setStatus }) => {
   const { md } = useBreakpoint();
 
   const showModalLogin = () => {
+    console.log('hey')
     setOpenLogin(true);
   };
 
@@ -741,7 +760,7 @@ const Details = ({ status, setStatus }) => {
   return (
     <>
       <LoginModal
-        open={openLogin}
+        visible={openLogin}
         onCancel={handleCancelLogin}
         onOk={handleOkLogin}
         // handleMove={handleMove}

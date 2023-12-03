@@ -312,6 +312,10 @@ body {
   border-bottom-right-radius: 20px !important;
 }
 
+.mb-24 {
+  margin-bottom: 24px;
+}
+
 /* responsive */
 
 

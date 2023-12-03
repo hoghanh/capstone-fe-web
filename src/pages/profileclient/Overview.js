@@ -2,7 +2,7 @@ import { Col, Grid, Image, Row, Typography } from "antd";
 // import confirm from 'antd/es/modal/confirm';
 import { CustomCard, CustomCol } from "components/customize/Layout";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { get } from "utils/APICaller";
 
 const Overview = () => {
@@ -181,9 +181,11 @@ const Overview = () => {
                         </Row>
                       </Col>
                       <Col>
-                        <Typography.Text style={{ letterSpacing: 1 }}>
-                          {clientAccount?.companyWebsite}
-                        </Typography.Text>
+                        <Link to={clientAccount?.companyWebsite} target='_blank'>
+                          <Typography.Text style={{ letterSpacing: 1 }}>
+                            {clientAccount?.companyWebsite}
+                          </Typography.Text>
+                        </Link>
                       </Col>
                     </Row>
                   </CustomCol>

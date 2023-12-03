@@ -44,6 +44,9 @@ const EditJob = () => {
   });
 
   const user = useRecoilValue(clientProfile);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
 
   useEffect(() => {
     if (user) {
@@ -52,11 +55,6 @@ const EditJob = () => {
       getSkill();
     }
   }, [user]);
-
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const [form] = Form.useForm();
 
   const normFile = (e) => {
     if (Array.isArray(e)) {
