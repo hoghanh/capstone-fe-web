@@ -136,7 +136,7 @@ const JobList = () => {
               }}
             >
               <Typography.Title level={md ? 3 : 5}>
-                Đề xuất phù hợp
+                Đề xuất
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
                 {totalItems > 0
@@ -174,13 +174,13 @@ const JobList = () => {
                   height: 209,
                 }}
               >
-                <Image
-                  width={100}
-                  src={job.jobs.clients?.accounts?.image}
-                  alt="Doanh nghiệp logo"
-                  preview={false}
-                  style={{ borderRadius: '50%' }}
-                />
+               <Image
+                    width={100}
+                    src={job.jobs.clients?.accounts?.image ? job.jobs.clients?.accounts?.image : 'https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/images%2Favatars%2Favatar.png?alt=media&token=2b0c05dc-cde2-49bc-a280-a101c5216fc8'}
+                    alt='logo'
+                    preview={false}
+                    style={{ borderRadius: '50%', aspectRatio: 1, objectFit: 'cover' }}
+                    />
                 <Typography.Title
                   level={4}
                   style={{ width: 144, margin: 0, textAlign: 'center' }}

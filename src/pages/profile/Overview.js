@@ -1314,11 +1314,11 @@ const HeaderSection = () => {
           >
             <Image
               width={72}
-              src={informationUser?.accounts.image}
+              src={informationUser?.accounts.image ? informationUser?.accounts.image : 'https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/images%2Favatars%2Favatar.png?alt=media&token=2b0c05dc-cde2-49bc-a280-a101c5216fc8'}
               alt='Apofoitisi logo'
-              preview={true}
-              style={{ borderRadius: '50%' }}
-            />
+              preview={false}
+              style={{ borderRadius: '50%', aspectRatio: 1, objectFit: 'cover' }}
+              />
           </Col>
           <CustomCol
             style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}

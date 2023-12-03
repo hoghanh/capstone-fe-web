@@ -524,10 +524,10 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                         >
                           <Image
                             width={72}
-                            src={application?.freelancers.accounts.image}
-                            alt='avatar user'
-                            preview={true}
-                            style={{ borderRadius: '50%' }}
+                            src={application?.freelancers.accounts.image ? application?.freelancers.accounts.image : 'https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/images%2Favatars%2Favatar.png?alt=media&token=2b0c05dc-cde2-49bc-a280-a101c5216fc8'}
+                            alt='Avatar Freelancer'
+                            preview={false}
+                            style={{ borderRadius: '50%', aspectRatio: 1, objectFit: 'cover' }}
                           />
                         </Col>
                         <CustomCol>
@@ -547,6 +547,14 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                                       color='green'
                                     >
                                       Nhân lực cũ
+                                    </Tag>
+                                  ) : null}
+                                  {application?.point > 0 ? (
+                                    <Tag
+                                      style={{ marginLeft: 10 }}
+                                      color='#ccc'
+                                    >
+                                      Đề xuất
                                     </Tag>
                                   ) : null}
                                 </Typography.Title>

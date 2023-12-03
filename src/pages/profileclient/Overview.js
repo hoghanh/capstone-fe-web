@@ -64,11 +64,11 @@ const Overview = () => {
                   >
                     <Image
                       width={100}
-                      src={clientAccount?.accounts.image}
+                      src={clientAccount?.accounts.image ? clientAccount?.accounts.image : 'https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/images%2Favatars%2Favatar.png?alt=media&token=2b0c05dc-cde2-49bc-a280-a101c5216fc8'}
                       alt="Apofoitisi logo"
                       preview={true}
-                      style={{ borderRadius: "50%" }}
-                    />
+                      style={{ borderRadius: '50%', aspectRatio: 1, objectFit: 'cover' }}
+                      />
                   </Col>
                   <CustomCol
                     span={19}

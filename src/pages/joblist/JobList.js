@@ -290,12 +290,12 @@ const JobList = () => {
                 }}
               >
                 <Image
-                  width={100}
-                  src={job.clients?.accounts?.image}
-                  alt='Apofoitisi logo'
-                  preview={false}
-                  style={{ borderRadius: '50%' }}
-                />
+                    width={100}
+                    src={job.clients?.accounts?.image ? job.clients?.accounts?.image : 'https://firebasestorage.googleapis.com/v0/b/fpt-sep-fe-eb227.appspot.com/o/images%2Favatars%2Favatar.png?alt=media&token=2b0c05dc-cde2-49bc-a280-a101c5216fc8'}
+                    alt='logo'
+                    preview={false}
+                    style={{ borderRadius: '50%', aspectRatio: 1, objectFit: 'cover' }}
+                    />
                 <Typography.Title
                   level={4}
                   style={{ width: 144, margin: 0, textAlign: 'center' }}
