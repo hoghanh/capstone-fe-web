@@ -36,15 +36,14 @@ function App() {
         });
     }
     if (auth.id) {
-      setIsLoading(true);
       fetchProfile(auth);
     }
+    setIsLoading(false);
     gapi.load('client:auth2', start);
   }, []);
 
   useEffect(() => {
     if (auth.id) {
-      setIsLoading(true);
       fetchProfile(auth);
     }
   }, [auth]);

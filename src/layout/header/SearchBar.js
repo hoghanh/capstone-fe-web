@@ -342,13 +342,13 @@ function SearchBar() {
     })
       .then((res) => {
         setOTP(res.data.otp);
+        closeForgotPasswordModal();
+        setOTPVisible(true);
       })
       .catch((err) => {
         console.log(err);
+        notification.error({ message: err.response.data.message });
       });
-
-    closeForgotPasswordModal();
-    setOTPVisible(true);
   };
 
   const validatePasswordFormat = (password) => {
@@ -357,7 +357,7 @@ function SearchBar() {
   };
 
   const validateEmailFormat = (email) => {
-    if(email.length > 0) {
+    if (email.length > 0) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (emailRegex.test(email)) {
         setEmail(email);
@@ -613,7 +613,8 @@ function SearchBar() {
                       flexDirection: 'column',
                       gap: '2px',
                       background: '#F7F8F9',
-                      boxShadow: 'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px'
+                      boxShadow:
+                        'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px',
                     }}
                   ></Menu>
                 )}
