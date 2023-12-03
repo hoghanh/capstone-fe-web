@@ -210,14 +210,16 @@ function ClientHeader({ name, subName, onPress }) {
                     position: 'absolute',
                     top: 40,
                     width: 350,
+                    maxHeight: '500px',
                     right: 10,
-                    zIndex: 1,
+                    zIndex: 999,
                     border: '1px solid #f5f5f5',
                     borderRadius: '10px',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '2px',
                     background: '#F7F8F9',
+                    overflow: 'auto',
                     boxShadow: 'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px'
                   }}
                 ></Menu>
