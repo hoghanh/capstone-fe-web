@@ -91,7 +91,6 @@ const ClientJobManagement = () => {
   const navigate = useNavigate();
 
   const onTabChange = (key) => {
-    setPage(1);
     setActiveTabKey(key);
   };
 
@@ -170,6 +169,7 @@ const ClientJobManagement = () => {
         });
         getJobList();
         setActiveTabKey('closing');
+        setPage(1);
       })
       .catch((err) => {
         notification.error({
@@ -186,6 +186,7 @@ const ClientJobManagement = () => {
         });
         getJobList();
         setActiveTabKey('hiring');
+        setPage(1);
       })
       .catch((err) => {
         notification.error({

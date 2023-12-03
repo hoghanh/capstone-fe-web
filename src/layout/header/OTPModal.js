@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Typography, Input } from 'antd';
 import { notification } from 'antd';
 import { useRecoilValue } from 'recoil';
-import { registerInfo } from 'recoil/atom';
+import { registerInfo, registerToken } from 'recoil/atom';
 import { post } from 'utils/APICaller';
 import { ModalPrimary } from 'components/Modal/Modal';
 
@@ -10,6 +10,7 @@ function OTPModal({ visible, onCancel, onOk, handleMove }) {
   const [OTPInput, setOTPInput] = useState('');
   const [error, setError] = useState(null);
   const registerInformation = useRecoilValue(registerInfo);
+  const token = useRecoilValue(registerToken);
 
   const handleOk = () => {
     onOk();
@@ -25,6 +26,7 @@ function OTPModal({ visible, onCancel, onOk, handleMove }) {
         body: {
           email: registerInformation.email,
           otp: OTPInput,
+          token: token,
         },
       })
         .then((res) => {

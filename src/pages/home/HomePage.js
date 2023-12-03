@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Typography, Button, Grid, Layout, Card, List } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Typography, Button, Grid, Layout, Card, List, notification } from 'antd';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
@@ -15,6 +15,8 @@ import { home } from 'styles/homepage';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'App.css';
+import { get } from 'utils/APICaller';
+import { Link } from 'react-router-dom';
 
 const data = [
   {
@@ -34,6 +36,23 @@ const data = [
 const HomePage = () => {
   const { useBreakpoint } = Grid;
   const { sm, md, xl } = useBreakpoint();
+  const [client, setClient] = useState();
+
+  useEffect(() => {
+    get({
+      endpoint: `/client/`,
+    })
+      .then((res) => {
+        const data = res.data.filter((i)=> i.status)
+        data.sort((a, b) => b.currency - a.currency);
+        setClient(data.slice(0, 6));
+      })
+      .catch((error) => {
+        notification.error({
+          message: error.response.data.message,
+        });
+      });
+  }, []);
 
   const CustomNextButton = ({ onClick }) => (
     <Button
@@ -112,42 +131,17 @@ const HomePage = () => {
           }}
           spaceBetween={30}
           slidesPerView={xl ? 5 : md ? 4 : 2}
-          // onSlideChange={() => console.log('slide change')}
-          // onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log('slide change')}
+        // onSwiper={(swiper) => console.log(swiper)}
         >
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
-          <SwiperSlide style={home.jobpopular.swipper}>
-            <Card hoverable style={home.jobpopular.card}></Card>
-          </SwiperSlide>
+          {client?.map((item) => (
+            <SwiperSlide key={item.id} style={home.jobpopular.swipper}>
+              <Link to={`/profile-client/${item.accounts?.id}`} state={{
+                clientId: item.id,
+              }}>
+                <Card hoverable style={{ backgroundImage: `url('${item.accounts?.image}')`, ...home.jobpopular.card }} />
+              </Link>
+            </SwiperSlide>))}
           <Row style={{ display: sm ? 'flex' : 'none' }}>
             <div className='swiper-button-next'>
               <CustomNextButton />

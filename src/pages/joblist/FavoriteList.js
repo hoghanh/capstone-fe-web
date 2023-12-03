@@ -82,10 +82,10 @@ const FavoriteList = () => {
   const { useBreakpoint } = Grid;
   const { sm, md } = useBreakpoint();
   const [page, setPage] = useState(1);
-  const [jobList, setJobList] = useState([])
+  const [jobList, setJobList] = useState([]);
   const [sortOption, setSortOption] = useState('Latest');
   const [openSelect, setOpenSelect] = useState();
-  const [pageSize,] = useState(10);
+  const [pageSize] = useState(10);
   const { subCateId, subCateName } = useParams();
   const auth = useRecoilValue(authState);
 
@@ -258,7 +258,7 @@ const FavoriteList = () => {
                 >
                   <Image
                     width={100}
-                    src={job.clients?.accounts?.image}
+                    src={job.clients?.accounts?.image || '/icon/logo.svg'}
                     alt='Apofoitisi logo'
                     preview={false}
                     style={{ borderRadius: '50%' }}
@@ -330,7 +330,8 @@ const FavoriteList = () => {
                   </div>
                   <div style={joblist.applied}>
                     <Typography.Title level={5} style={joblist.applied.text}>
-                      {job.applied ? job.applied : 0} ứng tuyển <FileTextFilled />
+                      {job.applied ? job.applied : 0} ứng tuyển{' '}
+                      <FileTextFilled />
                     </Typography.Title>
                   </div>
                 </div>

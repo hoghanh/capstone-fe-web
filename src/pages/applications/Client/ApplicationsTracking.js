@@ -73,6 +73,18 @@ const sentItems = [
   },
 ];
 
+const interviewItems = [
+  {
+    key: 'approved',
+    label: 'Nhận việc',
+  },
+  {
+    key: 'decline',
+    label: 'Từ chối',
+    danger: true,
+  },
+];
+
 const Interview = ({
   isModalInterview,
   setIsModalInterview,
@@ -435,11 +447,22 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
       });
   };
 
-  const onClick = (id, key, accountId) => {
+  const onClick = (id, key, accountId, appointments) => {
     const checkAction = key.toString();
+    const appointmentTime = new Date(appointments?.time);
+    const today = new Date();
+    const timeDifference = appointmentTime - today;
     if (checkAction.includes('decline')) {
       setIsIdItem(id);
-      setIsModalDecline(true);
+      if (timeDifference > 0) {
+        notification.error({
+          message:
+            'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
+        });
+      } else {
+        console.log('hi');
+        setIsModalDecline(true);
+      }
       setAccountId(accountId);
     } else if (checkAction.includes('interview')) {
       setIsIdItem(id);
@@ -447,7 +470,15 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
       setAccountId(accountId);
     } else if (checkAction.includes('approved')) {
       setIsIdItem(id);
-      setIsModalApproved(true);
+      setIsIdItem(id);
+      if (timeDifference > 0) {
+        notification.error({
+          message:
+            'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
+        });
+      } else {
+        setIsModalDecline(true);
+      }
       setAccountId(accountId);
     }
   };
@@ -466,7 +497,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
     <Row>
       {list.length === 0 || list === null ? (
         <Col span={24}>
-          <Empty />
+          <Empty description={'Không có dữ liệu'} />
         </Col>
       ) : (
         getPagedList()?.map((application, index) => {
@@ -497,7 +528,10 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                         >
                           <Image
                             width={72}
-                            src={application?.freelancers.accounts.image}
+                            src={
+                              application?.freelancers.accounts.image ||
+                              '/icon/logo.svg'
+                            }
                             alt='Apofoitisi logo'
                             preview={true}
                             style={{ borderRadius: '50%' }}
@@ -530,21 +564,30 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                       </Row>
                     </Col>
                     <Col>
-                      {activeTabKey === 'sent' ? (
+                      {activeTabKey === 'sent' ||
+                      activeTabKey === 'interview' ? (
                         <Dropdown
                           menu={{
                             items:
-                              application?.freelancers.hired !== true
-                                ? sentItems
-                                    .filter((item) => item.key !== 'approved')
-                                    .map((item) => ({
+                              activeTabKey === 'sent'
+                                ? application?.freelancers.hired !== true
+                                  ? sentItems
+                                      .filter((item) => item.key !== 'approved')
+                                      .map((item) => ({
+                                        ...item,
+                                        key:
+                                          item.key +
+                                          '_' +
+                                          application.id.toString(),
+                                      }))
+                                  : sentItems.map((item) => ({
                                       ...item,
                                       key:
                                         item.key +
                                         '_' +
                                         application.id.toString(),
                                     }))
-                                : sentItems.map((item) => ({
+                                : interviewItems.map((item) => ({
                                     ...item,
                                     key:
                                       item.key +
@@ -553,9 +596,10 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                                   })),
                             onClick: ({ key }) => {
                               onClick(
-                                application.id,
+                                application?.id,
                                 key,
-                                application?.freelancers.accounts.id
+                                application?.freelancers.accounts.id,
+                                application?.appointments
                               );
                             },
                           }}
@@ -685,7 +729,6 @@ const ApplicationsTracking = () => {
   const { Search } = Input;
   const [page, setPage] = useState(1);
 
-
   const onTabChange = (key) => {
     setPage(1);
     setActiveTabKey(key);
@@ -781,7 +824,12 @@ const ApplicationsTracking = () => {
             activeTabKey={activeTabKey}
             onTabChange={onTabChange}
           >
-            <TabSent activeTabKey={activeTabKey} value={value} page={page} setPage={setPage}/>
+            <TabSent
+              activeTabKey={activeTabKey}
+              value={value}
+              page={page}
+              setPage={setPage}
+            />
           </Card>
         </Col>
       </Row>

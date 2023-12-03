@@ -9,7 +9,9 @@ import {
   Pagination,
   Grid,
   Spin,
-  Row, Col,
+  Row,
+  Col,
+  Empty,
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
@@ -127,7 +129,7 @@ const JobList = () => {
         <Card
           bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className="card-jobs"
+          className='card-jobs'
           title={
             <div
               style={{
@@ -140,138 +142,150 @@ const JobList = () => {
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
                 {totalItems > 0
-                  ? `${limit * (page - 1) + 1} - ${limit * page < totalItems
-                    ? limit * page
-                    : totalItems
-                  } của ${totalItems} kết quả`
+                  ? `${limit * (page - 1) + 1} - ${
+                      limit * page < totalItems ? limit * page : totalItems
+                    } của ${totalItems} kết quả`
                   : `0 kết quả`}
               </Typography.Text>
             </div>
           }
         >
-          {recommendedList?.map((job) => (
-            <Row
-              key={job.jobs.id}
-              style={{
-                display: ' flex',
-                alignItems: 'center',
-                padding: 10,
-                borderBottom: '0.5px solid #000',
-              }}
-            >
-              <Col span={5}
+          {recommendedList.length === 0 || recommendedList === null ? (
+            <div>
+              <Empty description={<span>Dữ liệu trống</span>} />
+            </div>
+          ) : (
+            recommendedList?.map((job) => (
+              <Row
+                key={job.jobs.id}
                 style={{
-                  display: md ? 'flex' : 'none',
+                  display: ' flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  gap: 5,
-                  padding: 30,
-                  height: 209,
+                  padding: 10,
+                  borderBottom: '0.5px solid #000',
                 }}
               >
-                <Image
-                  width={100}
-                  src={job.jobs.clients?.accounts?.image}
-                  alt="Doanh nghiệp logo"
-                  preview={false}
-                  style={{ borderRadius: '50%' }}
-                />
-                <Typography.Title
-                  level={4}
-                  style={{ width: 144, margin: 0, textAlign: 'center' }}
-                >
-                  {job.jobs.clients?.accounts?.name.toUpperCase()}
-                </Typography.Title>
-              </Col>
-              <Col span={24} md={{ span: 19 }} style={{ padding: 10, overflow: 'auto', width: '100%' }}>
-                <div
+                <Col
+                  span={5}
                   style={{
-                    display: ' flex',
+                    display: md ? 'flex' : 'none',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: 10,
-                    gap: 15,
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    gap: 5,
+                    padding: 30,
+                    height: 209,
                   }}
                 >
-                  <div>
-                    <Link
-                      to={`/jobs/job-detail/${job.jobs.id}`}
-                      target="_blank"
-                    >
-                      <Typography.Title
-                        style={{ margin: 0 }}
-                        level={md ? 4 : 5}
-                      >
-                        {job.jobs.title}
-                      </Typography.Title>
-                    </Link>
-                    <Typography.Text level={4}>
-                      Lương thoả thuận: {FormatVND(job.jobs.lowestIncome)} -{' '}
-                      {FormatVND(job.jobs.highestIncome)} /{' '}
-                      {CalculateDaysLeft(job.jobs.applicationSubmitDeadline)}
-                    </Typography.Text>
-                    <Typography.Text level={4} style={{ display: 'block' }}>
-                      Ngày đăng bài: {formatDate(job.jobs.updatedAt)}
-                    </Typography.Text>
-                  </div>
-                  {auth.role === 'freelancer' ? <div
-                    style={{
-                      cursor: 'pointer',
-                      alignSelf: md ? ' ' : 'flex-start',
-                      display: 'flex',
-                    }}
-                    onClick={() => handleFavoriteChange(job.jobs.id)}
+                  <Image
+                    width={100}
+                    src={job.jobs.clients?.accounts?.image || '/icon/logo.svg'}
+                    alt='Doanh nghiệp logo'
+                    preview={false}
+                    style={{ borderRadius: '50%' }}
+                  />
+                  <Typography.Title
+                    level={4}
+                    style={{ width: 144, margin: 0, textAlign: 'center' }}
                   >
-                    {isLoading ? (
-                      <Spin />
-                    ) : favoriteList.includes(job.jobs.id) ? (
-                      <BookMark />
-                    ) : (
-                      <BookMarkOutlined />
-                    )}
-                  </div> : null}
-                </div>
-                <Link to={`/jobs/job-detail/${job.jobs.id}`} target="_blank">
-                  <Typography.Paragraph
-                    ellipsis={{
-                      rows: 3,
-                      expandable: false,
-                    }}
-                    style={joblist.des}
-                  >
-                    {job.jobs.description}
-                  </Typography.Paragraph>
-                </Link>
-                <div
-                  style={{
-                    display: 'flex',
-                    padding: '0px 10px',
-                    alignItems: 'flex-start',
-                    gap: '15px',
-                    alignSelf: 'stretch',
-                    overflow: 'auto',
-                  }}
-                >
-                  {job.jobs.skills?.map((skill) => (
-                    <Button
-                      type="primary"
-                      style={joblist.button}
-                      key={skill.id}
-                    >
-                      {skill.name}
-                    </Button>
-                  ))}
-                </div>
-                <div style={joblist.applied}>
-                  <Typography.Title level={5} style={joblist.applied.text}>
-                    {job.jobs.applied ? job.jobs.applied : 0} ứng tuyển{' '}
-                    <FileTextFilled />
+                    {job.jobs.clients?.accounts?.name.toUpperCase()}
                   </Typography.Title>
-                </div>
-              </Col>
-            </Row>
-          ))}
+                </Col>
+                <Col
+                  span={24}
+                  md={{ span: 19 }}
+                  style={{ padding: 10, overflow: 'auto', width: '100%' }}
+                >
+                  <div
+                    style={{
+                      display: ' flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: 10,
+                      gap: 15,
+                    }}
+                  >
+                    <div>
+                      <Link
+                        to={`/jobs/job-detail/${job.jobs.id}`}
+                        target='_blank'
+                      >
+                        <Typography.Title
+                          style={{ margin: 0 }}
+                          level={md ? 4 : 5}
+                        >
+                          {job.jobs.title}
+                        </Typography.Title>
+                      </Link>
+                      <Typography.Text level={4}>
+                        Lương thoả thuận: {FormatVND(job.jobs.lowestIncome)} -{' '}
+                        {FormatVND(job.jobs.highestIncome)} /{' '}
+                        {CalculateDaysLeft(job.jobs.applicationSubmitDeadline)}
+                      </Typography.Text>
+                      <Typography.Text level={4} style={{ display: 'block' }}>
+                        Ngày đăng bài: {formatDate(job.jobs.updatedAt)}
+                      </Typography.Text>
+                    </div>
+                    {auth.role === 'freelancer' ? (
+                      <div
+                        style={{
+                          cursor: 'pointer',
+                          alignSelf: md ? ' ' : 'flex-start',
+                          display: 'flex',
+                        }}
+                        onClick={() => handleFavoriteChange(job.jobs.id)}
+                      >
+                        {isLoading ? (
+                          <Spin />
+                        ) : favoriteList.includes(job.jobs.id) ? (
+                          <BookMark />
+                        ) : (
+                          <BookMarkOutlined />
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                  <Link to={`/jobs/job-detail/${job.jobs.id}`} target='_blank'>
+                    <Typography.Paragraph
+                      ellipsis={{
+                        rows: 3,
+                        expandable: false,
+                      }}
+                      style={joblist.des}
+                    >
+                      {job.jobs.description}
+                    </Typography.Paragraph>
+                  </Link>
+                  <div
+                    style={{
+                      display: 'flex',
+                      padding: '0px 10px 10px',
+                      alignItems: 'flex-start',
+                      gap: '15px',
+                      alignSelf: 'stretch',
+                      overflow: 'auto',
+                    }}
+                  >
+                    {job.jobs.skills?.map((skill) => (
+                      <Button
+                        type='primary'
+                        style={joblist.button}
+                        key={skill.id}
+                      >
+                        {skill.name}
+                      </Button>
+                    ))}
+                  </div>
+                  <div style={joblist.applied}>
+                    <Typography.Title level={5} style={joblist.applied.text}>
+                      {job.jobs.applied ? job.jobs.applied : 0} ứng tuyển{' '}
+                      <FileTextFilled />
+                    </Typography.Title>
+                  </div>
+                </Col>
+              </Row>
+            ))
+          )}
           <Pagination
             current={1}
             total={totalItems}

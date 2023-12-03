@@ -1,9 +1,9 @@
-import { Col, Grid, Image, Row, Typography } from "antd";
+import { Col, Grid, Image, Row, Typography } from 'antd';
 // import confirm from 'antd/es/modal/confirm';
-import { CustomCard, CustomCol } from "components/customize/Layout";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { get } from "utils/APICaller";
+import { CustomCard, CustomCol } from 'components/customize/Layout';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { get } from 'utils/APICaller';
 
 const Overview = () => {
   const { useBreakpoint } = Grid;
@@ -39,7 +39,7 @@ const Overview = () => {
           marginBottom: 30,
         }}
       >
-        <Row justify={"space-between"}>
+        <Row justify={'space-between'}>
           <Col
             span={24}
             lg={{ span: 14 }}
@@ -57,22 +57,22 @@ const Overview = () => {
                   <Col
                     span={4}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
+                      display: 'flex',
+                      alignItems: 'center',
                       marginRight: 10,
                     }}
                   >
                     <Image
                       width={100}
-                      src={clientAccount?.accounts.image}
-                      alt="Apofoitisi logo"
+                      src={clientAccount?.accounts.image || '/icon/logo.svg'}
+                      alt='Apofoitisi logo'
                       preview={true}
-                      style={{ borderRadius: "50%" }}
+                      style={{ borderRadius: '50%' }}
                     />
                   </Col>
                   <CustomCol
                     span={19}
-                    style={{ display: "flex", alignItems: "center" }}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   >
                     <Typography.Title level={2} style={styles.name}>
                       {clientAccount?.accounts.name}
@@ -114,7 +114,7 @@ const Overview = () => {
             lg={{ span: 10 }}
             sm={{ span: 11 }}
             style={{
-              borderLeft: sm ? "1px solid #656565" : "",
+              borderLeft: sm ? '1px solid #656565' : '',
               paddingTop: 30,
               paddingBottom: 30,
               paddingRight: 20,
@@ -125,7 +125,7 @@ const Overview = () => {
               <Col>
                 <Row gutter={[0, 10]}>
                   <Col>
-                    <Row align={"middle"} gutter={[30, 10]}>
+                    <Row align={'middle'} gutter={[30, 10]}>
                       <Col>
                         <Typography.Title level={3} style={{ margin: 0 }}>
                           Thông tin cá nhân
@@ -136,7 +136,7 @@ const Overview = () => {
                   <CustomCol span={24}>
                     <Row gutter={[15, 15]}>
                       <Col>
-                        <Row align={"middle"} gutter={[30, 10]}>
+                        <Row align={'middle'} gutter={[30, 10]}>
                           <Col>
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               Email
@@ -154,7 +154,7 @@ const Overview = () => {
                   <CustomCol span={24}>
                     <Row gutter={[15, 15]}>
                       <Col>
-                        <Row align={"middle"} gutter={[30, 10]}>
+                        <Row align={'middle'} gutter={[30, 10]}>
                           <Col>
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               Số điện thoại
@@ -172,7 +172,7 @@ const Overview = () => {
                   <CustomCol span={24}>
                     <Row gutter={[15, 15]}>
                       <Col>
-                        <Row align={"middle"} gutter={[30, 10]}>
+                        <Row align={'middle'} gutter={[30, 10]}>
                           <Col>
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               Website
@@ -181,16 +181,21 @@ const Overview = () => {
                         </Row>
                       </Col>
                       <Col>
-                        <Typography.Text style={{ letterSpacing: 1 }}>
-                          {clientAccount?.companyWebsite}
-                        </Typography.Text>
+                        <Link
+                          to={clientAccount?.companyWebsite}
+                          target='_blank'
+                        >
+                          <Typography.Text style={{ letterSpacing: 1 }}>
+                            {clientAccount?.companyWebsite}
+                          </Typography.Text>
+                        </Link>
                       </Col>
                     </Row>
                   </CustomCol>
                   <CustomCol span={24}>
                     <Row gutter={[15, 15]}>
                       <Col>
-                        <Row align={"middle"} gutter={[30, 10]}>
+                        <Row align={'middle'} gutter={[30, 10]}>
                           <Col span={24}>
                             <Typography.Title level={4} style={{ margin: 0 }}>
                               Địa chỉ
@@ -221,7 +226,7 @@ const styles = {
   },
 
   address: {
-    color: "#656565",
+    color: '#656565',
     paddingRight: 10,
     paddingLeft: 10,
     paddingBottom: 10,

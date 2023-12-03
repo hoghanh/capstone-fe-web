@@ -86,7 +86,7 @@ function ClientProfile() {
                 {user?.accounts.phone}
               </Descriptions.Item>
               <Descriptions.Item label="Website">
-                {user?.companyWebsite}
+                <Link to={user?.companyWebsite} target='_blank'>{user?.companyWebsite}</Link>
               </Descriptions.Item>
               <Descriptions.Item label="Địa chỉ">
                 {user?.accounts.address}

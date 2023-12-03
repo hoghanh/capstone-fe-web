@@ -134,7 +134,8 @@ const HeaderArticle = () => {
                 <Col style={{ cursor: 'pointer' }}>
                   <Trash color={'red'} />
                 </Col>
-                <Link to={`/client/jobs-management/edit-job/${id}`}>
+                <Link to={`/client/jobs-management/edit-job/${id}`}
+                >
                   <Col style={{ cursor: 'pointer' }}>
                     <Pen size={24} />
                   </Col>

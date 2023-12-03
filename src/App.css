@@ -114,6 +114,11 @@ body {
   height: auto
 }
 
+.ant-image img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
 /* Scroll */
 
 .skillSlider {
@@ -312,6 +317,10 @@ body {
   border-bottom-right-radius: 20px !important;
 }
 
+.mb-24 {
+  margin-bottom: 24px;
+}
+
 /* responsive */
 
 
@@ -337,5 +346,15 @@ body {
 
 /* Đối với màn hình có độ rộng < 576px */
 @media (max-width: 575.98px) {
+}
+
+.notification.ant-menu-vertical >.ant-menu-item {
+  background-color: #fff;
+}
+
+.notification.ant-menu-vertical >.ant-menu-item:not(:last-child) {
+  margin-inline: unset;
+  margin-block: unset;
+  margin: 4px 4px 0 4px;
 }
 

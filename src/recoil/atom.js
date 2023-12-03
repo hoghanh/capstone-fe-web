@@ -206,3 +206,8 @@ export const registerInfo = atom({
   key: 'registerInfo',
   default: {},
 });
+
+export const registerToken = atom({
+  key: 'registerToken',
+  default: '',
+});
