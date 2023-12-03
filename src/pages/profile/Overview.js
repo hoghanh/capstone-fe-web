@@ -919,14 +919,6 @@ const EditSkills = ({ skillList }) => {
   );
 };
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-
 const EditNameAvatar = () => {
   const [informationUser, setInformationUser] = useRecoilState(freelancerState);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -1987,6 +1979,14 @@ const BodySectionRight = () => {
             </Col>
             <Col span={24} style={{ padding: 20 }}>
               <Row className='skillArticle' gutter={[0, 10]}>
+                {auth.role === 'freelancer' &&
+                  auth.id === informationUser?.accountId ? (
+                  <Col span={24}>
+                    <Typography.Text style={{ margin: 0, fontStyle: 'italic' }}>
+                      - Nhấn vào thẻ để thay đổi mức độ kỹ năng
+                    </Typography.Text>
+                  </Col>
+                ) : null}
                 <CustomCol span={24}>
                   <List
                     style={{ overflowX: 'auto' }}
