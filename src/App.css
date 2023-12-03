@@ -358,3 +358,7 @@ body {
   margin: 4px 4px 0 4px;
 }
 
+.notification :where(.css-dev-only-do-not-override-1651f0q).ant-menu-inline .ant-menu-item, :where(.css-dev-only-do-not-override-1651f0q).ant-menu-vertical .ant-menu-item, :where(.css-dev-only-do-not-override-1651f0q).ant-menu-inline .ant-menu-submenu-title, :where(.css-dev-only-do-not-override-1651f0q).ant-menu-vertical .ant-menu-submenu-title {
+  overflow: unset;
+}
+
