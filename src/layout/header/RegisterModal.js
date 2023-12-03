@@ -6,8 +6,8 @@ import { home } from 'styles/homepage';
 import GoogleLoginButton from 'components/button/GoogleLoginButton';
 import Link from 'antd/es/typography/Link';
 import { post } from 'utils/APICaller';
-import { useSetRecoilState } from 'recoil';
-import { otp, registerInfo } from 'recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { otp, registerInfo, registerToken } from 'recoil/atom';
 
 function RegisterModal({ visible, onCancel, onOk, handleMove }) {
   const [email, setEmail] = useState('');
@@ -16,6 +16,7 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
   const [name, setName] = useState('');
   const setRegisterInfo = useSetRecoilState(registerInfo);
   const setOTP = useSetRecoilState(otp);
+  const [token, setToken] = useRecoilState(registerToken);
 
   const handleOk = () => {
     setTimeout(() => {
@@ -52,6 +53,7 @@ function RegisterModal({ visible, onCancel, onOk, handleMove }) {
     })
       .then((res) => {
         setOTP(res.data.otp);
+        setToken(res.data.token);
 
         onCancel();
 
