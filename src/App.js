@@ -20,6 +20,7 @@ function App() {
   const setUser = useSetRecoilState(clientProfile);
 
   useEffect(() => {
+    setIsLoading(true);
     autoLogin();
     function start() {
       gapi.auth2
@@ -34,17 +35,19 @@ function App() {
           console.error('Không thể khởi tạo gapi.auth2:', error);
         });
     }
-
+    if (auth.id) {
+      setIsLoading(true);
+      fetchProfile(auth);
+    }
     gapi.load('client:auth2', start);
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
+    if (auth.id) {
+      setIsLoading(true);
       fetchProfile(auth);
-      setIsLoading(false);
-    }, 1500);
-  }, []);
+    }
+  }, [auth]);
 
   function fetchProfile(auth) {
     setIsLoading(true);
