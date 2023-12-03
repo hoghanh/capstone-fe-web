@@ -320,7 +320,20 @@ function SearchBar() {
     setOTP('');
   };
 
+  const validateForm = () => {
+    if (email.trim() === '') {
+      notification.error({ message: 'Vui lòng nhập email.' });
+      return false;
+    }
+
+    return true;
+  };
+
   const sendMailForgotPassword = () => {
+    if (!validateForm()) {
+      return;
+    }
+    
     post({
       endpoint: `/accounts/forgot_password`,
       body: {
