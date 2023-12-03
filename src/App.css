@@ -348,3 +348,13 @@ body {
 @media (max-width: 575.98px) {
 }
 
+.notification.ant-menu-vertical >.ant-menu-item {
+  background-color: #fff;
+}
+
+.notification.ant-menu-vertical >.ant-menu-item:not(:last-child) {
+  margin-inline: unset;
+  margin-block: unset;
+  margin: 4px 4px 0 4px;
+}
+
