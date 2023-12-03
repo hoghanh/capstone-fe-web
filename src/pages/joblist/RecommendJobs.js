@@ -136,7 +136,7 @@ const JobList = () => {
               }}
             >
               <Typography.Title level={md ? 3 : 5}>
-                Đề xuất phù hợp
+                Đề xuất
               </Typography.Title>
               <Typography.Text style={joblist.textResult}>
                 {totalItems > 0

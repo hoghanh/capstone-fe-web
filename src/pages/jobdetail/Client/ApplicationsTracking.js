@@ -518,6 +518,14 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                                       Nhân lực cũ
                                     </Tag>
                                   ) : null}
+                                  {application?.point > 0 ? (
+                                    <Tag
+                                      style={{ marginLeft: 10 }}
+                                      color='#ccc'
+                                    >
+                                      Đề xuất
+                                    </Tag>
+                                  ) : null}
                                 </Typography.Title>
                               </Link>
                             </Col>
