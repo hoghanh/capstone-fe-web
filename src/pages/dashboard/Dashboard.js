@@ -56,7 +56,7 @@ const Dashboard = () => {
       .then((res) => {
         setApplications(res.data);
         setTotalApplications(res.data.length);
-        setTotalApproved((res.data.map((item)=> item.status === 'interview').length))
+        setTotalApproved((res.data.map((item)=> item.status === 'approved').length))
       })
       .catch((error) => {
         notification.error({
