@@ -12,7 +12,7 @@ function EChart({jobList}) {
 
   const jobsByMonth = [];
   for (let month = 0; month < 12; month++) {
-    const jobsInMonth = jobList.filter((job) => {
+    const jobsInMonth = jobList?.filter((job) => {
       const createdAt = new Date(job.createdAt);
       const monthOfCreatedAt = createdAt.getMonth();
       return monthOfCreatedAt === month;

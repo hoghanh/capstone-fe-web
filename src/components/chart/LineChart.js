@@ -1,31 +1,17 @@
 import ReactApexChart from "react-apexcharts";
-import { Typography } from "antd";
 
 function LineChart({revenue}) {
-  
-  
-  const { Title, Paragraph } = Typography;
-
-
-  function sum(numbers) {
-    let total = 0;
-    for (const number of numbers) {
-      total += number;
-    }
-    return total;
-  }
-
 
   const revenuesByMonth = [];
   for (let month = 0; month < 12; month++) {
-    const revenuesInMonth = revenue.filter((revenue) => {
-      const createdAt = new Date(revenue.createdAt);
+    const revenuesInMonth = revenue?.filter((revenue) => {
+      const createdAt = new Date(revenue?.createdAt);
       const monthOfCreatedAt = createdAt.getMonth();
       return monthOfCreatedAt === month;
     });
     let totalRevenueForMonth = 0;
     for (const revenue of revenuesInMonth) {
-      totalRevenueForMonth += revenue.amount;
+      totalRevenueForMonth += revenue?.amount;
     }
   
     revenuesByMonth.push(totalRevenueForMonth);

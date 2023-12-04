@@ -1738,16 +1738,16 @@ const BodySectionLeftResponsive = () => {
                     ) : null}
                   </Row>
                 </Col>
-                <Col span={24}>
-                  {informationUser?.language !== '' && informationUser?.language.length !== 0 ? informationUser?.language.map((language) => (
-                    <Typography.Text key={language.id}>
+                {informationUser?.language.length > 0 ? informationUser?.language.map((language) => (
+                  <Col key={language.id} span={24}>
+                    <Typography.Text>
                       <Typography.Text strong style={{ marginRight: 20 }}>
                         {language.name}:
                       </Typography.Text>
                       {language.level}
                     </Typography.Text>
-                  )) : 'Chưa có thông tin'}
-                </Col>
+                  </Col>
+                )) : <Col span={24}>Chưa có thông tin</Col>}
               </Row>
             </CustomCol>
             {/* Left 3 */}

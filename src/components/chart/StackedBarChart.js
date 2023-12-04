@@ -18,14 +18,14 @@ function StackedBarChart({ applications }) {
 
 
    for (let month = 0; month < 12; month++) {
-      const applicationsInMonth = applications.filter((application) => {
+      const applicationsInMonth = applications?.filter((application) => {
          const createdAt = new Date(application.sendDate);
          const monthOfSendDate = createdAt.getMonth();
          return monthOfSendDate === month;
       });
       applicationByMonth.push(applicationsInMonth.length);
 
-      const interviewApplicationsInMonth = applications.filter((application) => {
+      const interviewApplicationsInMonth = applications?.filter((application) => {
          const createdAt = new Date(application.sendDate);
          const monthOfSendDate = createdAt.getMonth();
          return (
@@ -35,7 +35,7 @@ function StackedBarChart({ applications }) {
       });
       interviewApplicationsByMonth.push(interviewApplicationsInMonth.length);
 
-      const declinedApplicationsInMonth = applications.filter((application) => {
+      const declinedApplicationsInMonth = applications?.filter((application) => {
          const createdAt = new Date(application.sendDate);
          const monthOfSendDate = createdAt.getMonth();
          return (
@@ -45,7 +45,7 @@ function StackedBarChart({ applications }) {
       });
       declinedApplicationsByMonth.push(declinedApplicationsInMonth.length);
 
-      const approvedApplicationsInMonth = applications.filter((application) => {
+      const approvedApplicationsInMonth = applications?.filter((application) => {
          const createdAt = new Date(application.sendDate);
          const monthOfSendDate = createdAt.getMonth();
          return (
@@ -55,7 +55,7 @@ function StackedBarChart({ applications }) {
       });
       approvedApplicationsByMonth.push(approvedApplicationsInMonth.length);
 
-      const sentApplicationsInMonth = applications.filter((application) => {
+      const sentApplicationsInMonth = applications?.filter((application) => {
          const createdAt = new Date(application.sendDate);
          const monthOfSendDate = createdAt.getMonth();
          return (

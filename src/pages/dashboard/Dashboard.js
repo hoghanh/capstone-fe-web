@@ -89,22 +89,22 @@ const Dashboard = () => {
   const count = [
     {
       today: 'Tổng bài đăng',
-      title: `${totalJobs}`,
+      title: `${totalJobs ? totalJobs : '0'}`,
       icon: <ListItem />,
     },
     {
       today: 'Tổng đơn ứng tuyển',
-      title: `${totalApplications}`,
+      title: `${totalApplications ? totalApplications : '0'}`,
       icon:  <Documents color='#fff' />,
     },
     {
       today: 'Nhận việc',
-      title: `${totalApproved}`,
+      title: `${totalApproved ? totalApproved : '0'}`,
       icon: <User color='#fff' />,
     },
     {
       today: 'Tổng tiền nạp vào',
-      title: `${FormatVND(totalTransaction, '')}`,
+      title: `${FormatVND(totalTransaction, '') ? FormatVND(totalTransaction, '') : '0'}`,
       per: 'VNĐ',
       icon: <Money size={46} />,
     },
