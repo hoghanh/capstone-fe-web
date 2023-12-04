@@ -56,7 +56,7 @@ const Dashboard = () => {
       .then((res) => {
         setApplications(res.data);
         setTotalApplications(res.data.length);
-        setTotalApproved((res.data.map((item)=> item.status === 'approved').length))
+        setTotalApproved((res.data.filter((item)=> item.status === 'approved')).length)
       })
       .catch((error) => {
         notification.error({
@@ -103,7 +103,7 @@ const Dashboard = () => {
       icon: <User color='#fff' />,
     },
     {
-      today: 'Tổng tiền nạp vào',
+      today: 'Số dư',
       title: `${FormatVND(totalTransaction, '') ? FormatVND(totalTransaction, '') : '0'}`,
       per: 'VNĐ',
       icon: <Money size={46} />,
