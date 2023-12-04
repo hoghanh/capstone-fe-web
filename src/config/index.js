@@ -2,6 +2,7 @@ import io from 'socket.io-client';
 
 const config = {
   FPTSEP: 'https://fpt-sep.onrender.com',
+  // FPTSEP: 'http://localhost:3001',
   TOKEN: 'token',
   CLIENTID:
     '673221908635-es5j9jeudmcsgg7d3navnhcvknsdm3s7.apps.googleusercontent.com',

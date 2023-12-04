@@ -81,7 +81,8 @@ const InterviewSchedule = () => {
     appointmentId,
     location,
     appointmentStatus,
-    freelancerAccountId
+    freelancerAccountId,
+    jobId
   ) => {
     const checkAction = e.key.toString();
     const appointmentTime = new Date(time);
@@ -105,7 +106,7 @@ const InterviewSchedule = () => {
         });
       } else {
         if (checkAction.includes('start')) {
-          approveApplication(applicationId, freelancerAccountId);
+          approveApplication(applicationId, freelancerAccountId, jobId);
         } else {
           declineApplication(applicationId);
         }
@@ -126,7 +127,7 @@ const InterviewSchedule = () => {
     }
   };
 
-  function approveApplication(id, freelancerAccountId) {
+  function approveApplication(id, freelancerAccountId, jobId) {
     put({ endpoint: `/application/approve/${id}` })
       .then((res) => {
         notification.success({
@@ -139,6 +140,7 @@ const InterviewSchedule = () => {
           notificationData = {
             notificationName: 'Thay đổi số dư',
             notificationDescription: res.data.message,
+            context: 'payment',
           };
 
           //Gửi notification [thông tin] - đến [accountID người nhận]
@@ -148,6 +150,7 @@ const InterviewSchedule = () => {
           notificationData = {
             notificationName: 'Công việc được nhận ',
             notificationDescription: `${user.accounts.name} vừa nhận đơn ứng tuyển của bạn`,
+            context: jobId,
           };
 
           //Gửi notification [thông tin] - đến [accountID người nhận]
@@ -156,8 +159,8 @@ const InterviewSchedule = () => {
             notificationData,
             freelancerAccountId
           );
+          window.location.reload();
         }, 1000);
-        window.location.reload();
       })
       .catch((error) => {
         notification.error({
@@ -392,8 +395,9 @@ const InterviewSchedule = () => {
                   record?.applicationId,
                   record?.appointmentId,
                   record?.location ? record?.location : record?.link,
-                  record?.status,
-                  record?.applications?.freelancers.accounts.id
+                  record?.applications?.status,
+                  record?.applications?.freelancers.accounts.id,
+                  record?.applications?.jobId
                 ),
             })),
           }}
