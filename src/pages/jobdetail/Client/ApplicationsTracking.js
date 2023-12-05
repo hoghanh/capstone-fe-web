@@ -471,7 +471,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
             'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
         });
       } else {
-        setIsModalDecline(true);
+        setIsModalApproved(true);
       }
       setAccountId(accountId);
     }
@@ -527,7 +527,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                               '/icon/logo.svg'
                             }
                             alt='avatar user'
-                            preview={true}
+                            preview={false}
                             style={{ borderRadius: '50%' }}
                           />
                         </Col>
@@ -553,7 +553,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                                   {application?.point > 0 ? (
                                     <Tag
                                       style={{ marginLeft: 10 }}
-                                      color='#ccc'
+                                      color='#87d068'
                                     >
                                       Đề xuất
                                     </Tag>

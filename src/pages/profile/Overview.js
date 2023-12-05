@@ -1316,7 +1316,7 @@ const HeaderSection = () => {
               width={72}
               src={informationUser?.accounts.image}
               alt='Apofoitisi logo'
-              preview={true}
+              preview={false}
               style={{ borderRadius: '50%' }}
             />
           </Col>

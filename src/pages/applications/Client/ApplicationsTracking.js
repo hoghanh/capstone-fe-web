@@ -477,7 +477,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
             'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
         });
       } else {
-        setIsModalDecline(true);
+        setIsModalApproved(true);
       }
       setAccountId(accountId);
     }
@@ -533,7 +533,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                               '/icon/logo.svg'
                             }
                             alt='Apofoitisi logo'
-                            preview={true}
+                            preview={false}
                             style={{ borderRadius: '50%' }}
                           />
                         </Col>

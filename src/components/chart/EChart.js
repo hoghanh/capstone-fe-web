@@ -25,10 +25,10 @@ function EChart({jobList}) {
     let result = '';
     if (difference > 0) {
       const c = difference;
-      result = <Typography.Text>Nhiều hơn tháng trước {<span style={{color:'#00e396'}}>+{c}</span>}</Typography.Text>;
+      result = <Typography.Text>Nhiều hơn tháng trước <span style={{color:'#00e396', fontWeight: 'bolder' }}>{c}</span> bài</Typography.Text>;
     } else if (difference < 0) {
-      const c = difference;
-      result = <Typography.Text>Ít hơn tháng trước <span style={{ color: 'red' }}>{c}</span></Typography.Text>;
+      const c = -difference;
+      result = <Typography.Text>Ít hơn tháng trước <span style={{ color: 'red', fontWeight: 'bolder' }}>{c}</span> bài</Typography.Text>;
     } else {
       result = <Typography.Text>Bằng tháng trước</Typography.Text>;
     }

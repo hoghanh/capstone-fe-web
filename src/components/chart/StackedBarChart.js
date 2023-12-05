@@ -72,10 +72,10 @@ function StackedBarChart({ applications }) {
       let result = '';
       if (difference > 0) {
          const c = difference;
-         result = <Typography.Text>Nhiều hơn tháng trước {<span style={{color:'#00e396'}}>+{c}</span>}</Typography.Text>;
+         result = <Typography.Text>Nhiều hơn tháng trước {<span style={{color:'#00e396', fontWeight: 'bolder' }}>{c}</span>} đơn</Typography.Text>;
       } else if (difference < 0) {
-         const c = difference;
-         result = <Typography.Text>Ít hơn tháng trước <span style={{ color: 'red' }}>{c}</span></Typography.Text>;
+         const c = -difference;
+         result = <Typography.Text>Ít hơn tháng trước <span style={{ color: 'red', fontWeight: 'bolder' }}>{c}</span> đơn</Typography.Text>;
       } else {
          result = <Typography.Text>Bằng tháng trước</Typography.Text>;
       }
@@ -231,7 +231,7 @@ function StackedBarChart({ applications }) {
       },
       {
          Amount: sum(approvedApplicationsByMonth),
-         status: "Chấp thuận",
+         status: "Nhận việc",
       },
       {
          Amount: sum(declinedApplicationsByMonth),

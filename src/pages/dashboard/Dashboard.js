@@ -103,7 +103,7 @@ const Dashboard = () => {
       icon: <User color='#fff' />,
     },
     {
-      today: 'Số dư',
+      today: 'Số dư trong ví',
       title: `${FormatVND(totalTransaction, '') ? FormatVND(totalTransaction, '') : '0'}`,
       per: 'VNĐ',
       icon: <Money size={46} />,

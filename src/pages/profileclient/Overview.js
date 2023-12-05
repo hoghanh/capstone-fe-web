@@ -66,7 +66,7 @@ const Overview = () => {
                       width={100}
                       src={clientAccount?.accounts.image || '/icon/logo.svg'}
                       alt='Apofoitisi logo'
-                      preview={true}
+                      preview={false}
                       style={{ borderRadius: '50%' }}
                     />
                   </Col>
