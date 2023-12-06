@@ -80,13 +80,21 @@ function Billing() {
   const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
-  const { vnp_Amount, vnp_BankTranNo, vnp_PayDate, vnp_TransactionNo } =
-    Object.fromEntries(queryParams.entries());
+  const {
+    vnp_Amount,
+    vnp_BankTranNo,
+    vnp_PayDate,
+    vnp_TransactionNo,
+    amount,
+    partnerCode,
+    orderId,
+    resultCode,
+  } = Object.fromEntries(queryParams.entries());
 
   useEffect(() => {
     if (user.id) {
       setIsLoading(true);
-      if (!vnp_Amount) {
+      if (!vnp_Amount && !amount) {
         get({
           endpoint: `/payment/client/${user.id}`,
         })
@@ -101,17 +109,17 @@ function Billing() {
           });
       } else {
         setIsLoading(true);
-        let amount = parseFloat(vnp_Amount) / 100;
+        let amountIn = vnp_Amount ? parseFloat(vnp_Amount) / 100 : amount;
         post({
           endpoint: `/payment`,
           body: {
             status: 'success',
-            name: vnp_BankTranNo,
-            description: 'Giao dịch ' + vnp_BankTranNo,
-            amount: amount.toString(),
-            orderId: vnp_TransactionNo,
-            transDate: vnp_PayDate,
-            transType: '02',
+            name: vnp_BankTranNo || partnerCode,
+            description: 'Giao dịch ' + orderId,
+            amount: amountIn.toString(),
+            orderId: vnp_TransactionNo || orderId,
+            transDate: vnp_PayDate || Date().toString(),
+            transType: resultCode,
             type: '+',
             clientId: user.id,
           },
@@ -126,7 +134,7 @@ function Billing() {
           });
       }
     }
-  }, [vnp_Amount, user]);
+  }, [vnp_Amount, user, amount]);
 
   function filterDate(date, dateString) {
     if (dateString) {
