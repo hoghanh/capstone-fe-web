@@ -102,7 +102,7 @@ const InterviewSchedule = () => {
         notification.error({
           message:
             (appointmentStatus === 'approved' ? 'Đã nhận. ' : 'Đã từ chối. ') +
-            'Vui lòng xem chi tiết tại danh sách ứng tuyển ',
+            'Vui lòng xem chi tiết tại danh sách ứng tuyển',
         });
       } else {
         if (checkAction.includes('start')) {
@@ -178,7 +178,7 @@ const InterviewSchedule = () => {
       })
       .catch((error) => {
         notification.error({
-          message: 'Có lỗi xảy ra! Vui lòng thử lại',
+          message: 'Có lỗi xảy ra trong quá trình',
         });
       });
   }

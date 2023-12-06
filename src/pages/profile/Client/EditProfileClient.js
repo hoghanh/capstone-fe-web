@@ -486,8 +486,6 @@ const ChangePassword = () => {
         navigate(-1);
       })
       .catch(error => {
-        console.log(error.response.data.message);
-
         if (error.response.status === 403) {
           notification.error({
             message: error.response.data.message,
@@ -520,7 +518,6 @@ const ChangePassword = () => {
                 type="password"
                 placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
                 controls={false}
-
               />
             </Form.Item>
           </Col>
@@ -533,6 +530,16 @@ const ChangePassword = () => {
                   required: true,
                   message: 'Không được để trống ô này!',
                 },
+                { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự!' },
+                { pattern: /^\S+$/, message: 'Mật khẩu không được chứa khoảng trống!' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') !== value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Mật khẩu mới không được trùng với mật khẩu cũ'));
+                  },
+                }),
               ]}
             >
               <Input.Password
@@ -559,6 +566,14 @@ const ChangePassword = () => {
                       return Promise.resolve();
                     }
                     return Promise.reject(new Error('Mật khẩu mới không khớp'));
+                  },
+                }),
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') !== value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Mật khẩu mới không được trùng với mật khẩu cũ'));
                   },
                 }),
               ]}
