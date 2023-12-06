@@ -19,9 +19,10 @@ import { CustomCard } from 'components/customize/Layout';
 import Loading from 'components/loading/loading';
 import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useRecoilState } from 'recoil';
+import useAuthActions from 'recoil/action';
 import { clientProfile } from 'recoil/atom';
 import color from 'styles/color';
 import { put, remove } from 'utils/APICaller';
@@ -86,7 +87,6 @@ const BasicInformation = () => {
     const {
       name,
       introduction,
-      email,
       phone,
       address,
       companyWebsite,
@@ -101,7 +101,6 @@ const BasicInformation = () => {
         account: {
           name,
           phone,
-          email,
           address,
           image,
         },
@@ -117,7 +116,6 @@ const BasicInformation = () => {
             ...informationUser.accounts,
             name,
             phone,
-            email,
             address,
             image,
           },
@@ -208,9 +206,6 @@ const BasicInformation = () => {
           name: informationUser?.accounts?.name
             ? informationUser.accounts.name
             : 'Chưa có thông tin',
-          email: informationUser?.accounts?.email
-            ? informationUser.accounts.email
-            : 'Chưa có thông tin',
           phone: informationUser?.accounts?.phone
             ? informationUser.accounts.phone
             : 'Chưa có thông tin',
@@ -299,30 +294,13 @@ const BasicInformation = () => {
                 allowClear={true}
                 minLength={100}
                 maxLength={1000}
-                style={{
-                  minHeight: 120,
-                  resize: 'none',
-                }}
+                rows={5}
                 placeholder="textarea"
               />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Row gutter={20}>
-              <Col span={12}>
-                <Typography.Title level={4}>Email</Typography.Title>
-                <Form.Item
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Không được để trống ô này!',
-                    },
-                  ]}
-                >
-                  <Input placeholder="VD: foody@gmail.com" />
-                </Form.Item>
-              </Col>
               <Col span={12}>
                 <Typography.Title level={4}>Số điện thoại</Typography.Title>
                 <Form.Item
@@ -345,21 +323,21 @@ const BasicInformation = () => {
                   />
                 </Form.Item>
               </Col>
+              <Col span={12}>
+                <Typography.Title level={4}>Địa chỉ</Typography.Title>
+                <Form.Item
+                  name={'address'}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Không được để trống ô này!',
+                    },
+                  ]}
+                >
+                  <Input placeholder="VD: Lầu G, Tòa nhà Jabes 1, số 244 đường Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam" />
+                </Form.Item>
+              </Col>
             </Row>
-          </Col>
-          <Col span={24}>
-            <Typography.Title level={4}>Địa chỉ</Typography.Title>
-            <Form.Item
-              name={'address'}
-              rules={[
-                {
-                  required: true,
-                  message: 'Không được để trống ô này!',
-                },
-              ]}
-            >
-              <Input placeholder="VD: Lầu G, Tòa nhà Jabes 1, số 244 đường Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam" />
-            </Form.Item>
           </Col>
           <Col span={24}>
             <Row gutter={20}>
@@ -421,6 +399,8 @@ const RemoveAlert = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const user = useRecoilValue(clientProfile);
+  const { logout } = useAuthActions();
+
 
   const removeItem = () => {
     remove({ endpoint: `/accounts/profile/${user.id}` })
@@ -428,7 +408,8 @@ const RemoveAlert = () => {
         notification.success({
           message: 'Tài khoản đã bị xóa',
         });
-        navigate('/');
+        logout();
+        navigate('/')
       })
       .catch(error => {
         notification.error({
@@ -534,11 +515,12 @@ const ChangePassword = () => {
                 },
               ]}
             >
-              <Input
+              <Input.Password
                 style={{ width: '100%' }}
                 type="password"
                 placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
                 controls={false}
+
               />
             </Form.Item>
           </Col>
@@ -553,7 +535,7 @@ const ChangePassword = () => {
                 },
               ]}
             >
-              <Input
+              <Input.Password
                 style={{ width: '100%' }}
                 type="password"
                 placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
@@ -581,7 +563,7 @@ const ChangePassword = () => {
                 }),
               ]}
             >
-              <Input
+              <Input.Password
                 style={{ width: '100%' }}
                 type="password"
                 placeholder="Giống với mật khẩu mới"
@@ -634,8 +616,6 @@ const getItems = panelStyle => [
 
 const EditProfileClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {}, []);
 
   const panelStyle = {
     marginBottom: 24,

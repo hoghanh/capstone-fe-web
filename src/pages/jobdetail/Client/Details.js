@@ -247,7 +247,7 @@ const SkillArticle = () => {
                   whiteSpace: 'nowrap',
                 }}
               >
-                {item.name}
+                {item.name} - {item.jobskill.level}
               </List.Item>
             )}
           />

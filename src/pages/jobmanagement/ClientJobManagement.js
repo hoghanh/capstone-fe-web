@@ -201,6 +201,7 @@ const ClientJobManagement = () => {
         notification.success({
           message: 'Xoá bài viết thành công',
         });
+        getJobList();
       })
       .catch((error) => {
         notification.error({

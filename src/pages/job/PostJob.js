@@ -33,6 +33,10 @@ const PostJob = () => {
   const [progresspercent, setProgresspercent] = useState(0);
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [basic, setBasic] = useState([]);
+  const [intermediate, setIntermediate] = useState([]);
+  const [high, setHigh] = useState([]);
+
 
   const user = useRecoilValue(clientProfile);
 
@@ -62,6 +66,27 @@ const PostJob = () => {
     form.setFieldsValue({ description: textAreaValue });
     setRemainingCharacters(remainingChars);
   };
+
+  let list = []
+  if (basic) {
+    for (const skill of basic) {
+      list.push({ name: skill, level: 'Cơ bản' })
+    }
+  }
+  if (intermediate) {
+    for (const skill of intermediate) {
+      list.push({ name: skill, level: 'Trung cấp' })
+    }
+  }
+  if (high) {
+    for (const skill of high) {
+      list.push({ name: skill, level: 'Thông thạo' })
+    }
+  }
+
+  let array = [...basic, ...intermediate, ...high]
+
+  const filteredOptions = skills.filter((o) => !array.includes(o.value));
 
   const handleUpload = (event) => {
     const file = event.files[0].originFileObj;
@@ -119,7 +144,7 @@ const PostJob = () => {
         clientId: user.id,
         status: 'open',
         subCategory: values.category,
-        skill: values.skills,
+        skill: list,
       },
     })
       .then((res) => {
@@ -291,9 +316,43 @@ const PostJob = () => {
               ></Select>
             </Form.Item>
             <Form.Item
-              name="skills"
+              name="highSkills"
               label={
-                <Typography.Title level={4}>Kĩ năng cần thiết</Typography.Title>
+                <Typography.Title level={4}>Kĩ năng thông thạo</Typography.Title>
+              }
+            >
+              <Select
+                mode="tags"
+                size="large"
+                placeholder="Nhập hoặc chọn kĩ năng"
+                style={{ width: "100%" }}
+                options={filteredOptions}
+                value={high}
+                onChange={setHigh}
+                tokenSeparators={[","]}
+              />
+            </Form.Item>
+            <Form.Item
+              name="intermediateSkills"
+              label={
+                <Typography.Title level={4}>Kĩ năng trung cấp</Typography.Title>
+              }
+            >
+              <Select
+                mode="tags"
+                size="large"
+                placeholder="Nhập hoặc chọn kĩ năng"
+                style={{ width: "100%" }}
+                options={filteredOptions}
+                value={intermediate}
+                onChange={setIntermediate}
+                tokenSeparators={[","]}
+              />
+            </Form.Item>
+            <Form.Item
+              name="basicSkills"
+              label={
+                <Typography.Title level={4}>Kĩ năng cơ bản</Typography.Title>
               }
               extra="Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất."
             >
@@ -302,9 +361,11 @@ const PostJob = () => {
                 size="large"
                 placeholder="Nhập hoặc chọn kĩ năng"
                 style={{ width: "100%" }}
-                options={skills}
+                options={filteredOptions}
+                value={basic}
+                onChange={setBasic}
                 tokenSeparators={[","]}
-              ></Select>
+              />
             </Form.Item>
             <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
               <Typography.Title level={4}>Khoảng lương</Typography.Title>
@@ -366,6 +427,7 @@ const PostJob = () => {
                   formatter={(value) =>
                     ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }
+                  step={10000}
                 />
               </Form.Item>
             </div>

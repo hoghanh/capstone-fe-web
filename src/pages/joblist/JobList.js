@@ -380,7 +380,7 @@ const JobList = () => {
                         style={joblist.button}
                         key={skill.id}
                       >
-                        {skill.name}
+                        {skill.name} - {skill.jobskill.level}
                       </Button>
                     ))}
                   </div>
