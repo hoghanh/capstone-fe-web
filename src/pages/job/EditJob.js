@@ -16,7 +16,6 @@ import {
 import Loading from 'components/loading/loading';
 import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import joblist from 'styles/joblist';
@@ -24,7 +23,7 @@ import { get, put, remove } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import { useRecoilValue } from 'recoil';
-import { authState, clientProfile } from 'recoil/atom';
+import { clientProfile } from 'recoil/atom';
 import dayjs from 'dayjs';
 
 
@@ -37,7 +36,6 @@ const EditJob = () => {
   const [category, setCategory] = useState([]);
   const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [url, setUrl] = useState('');
   const [initialValues, setInitialValues] = useState([]);
   const [props, setProps] = useState({
     defaultFileList: [],
@@ -217,7 +215,7 @@ const EditJob = () => {
 
         setBasic(basicList)
         setIntermediate(intermediateList)
-        setHigh(intermediateList)
+        setHigh(highList)
         setInitialValues({
           title: res.data.title,
           description: res.data.description,

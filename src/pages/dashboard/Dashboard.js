@@ -70,13 +70,7 @@ const Dashboard = () => {
       endpoint: `/payment/client/${user.id}`,
     })
       .then((res) => {
-        let balance = 0;
-        for (const transaction of res.data.payment) {
-          if (transaction.type === "+") {
-            balance += transaction.amount;
-          }
-        }
-        setTotalTransaction(balance)
+        setTotalTransaction(res.data.clientCurrency)
       })
       .catch((error) => {
         notification.error({
@@ -102,7 +96,7 @@ const Dashboard = () => {
       icon: <User color='#fff' />,
     },
     {
-      today: 'Tổng tiền đã nạp',
+      today: 'Số dư',
       title: `${FormatVND(totalTransaction, '') ? FormatVND(totalTransaction, '') : '0'}`,
       per: 'VNĐ',
       icon: <Money size={46} />,
