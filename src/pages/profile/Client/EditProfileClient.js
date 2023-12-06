@@ -19,9 +19,10 @@ import { CustomCard } from 'components/customize/Layout';
 import Loading from 'components/loading/loading';
 import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useRecoilState } from 'recoil';
+import useAuthActions from 'recoil/action';
 import { clientProfile } from 'recoil/atom';
 import color from 'styles/color';
 import { put, remove } from 'utils/APICaller';
@@ -299,10 +300,7 @@ const BasicInformation = () => {
                 allowClear={true}
                 minLength={100}
                 maxLength={1000}
-                style={{
-                  minHeight: 120,
-                  resize: 'none',
-                }}
+                rows={5}
                 placeholder="textarea"
               />
             </Form.Item>
@@ -421,6 +419,8 @@ const RemoveAlert = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const user = useRecoilValue(clientProfile);
+  const { logout } = useAuthActions();
+
 
   const removeItem = () => {
     remove({ endpoint: `/accounts/profile/${user.id}` })
@@ -428,7 +428,8 @@ const RemoveAlert = () => {
         notification.success({
           message: 'Tài khoản đã bị xóa',
         });
-        navigate('/');
+        logout();
+        navigate('/')
       })
       .catch(error => {
         notification.error({
@@ -534,11 +535,12 @@ const ChangePassword = () => {
                 },
               ]}
             >
-              <Input
+              <Input.Password
                 style={{ width: '100%' }}
                 type="password"
                 placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
                 controls={false}
+
               />
             </Form.Item>
           </Col>
@@ -553,7 +555,7 @@ const ChangePassword = () => {
                 },
               ]}
             >
-              <Input
+              <Input.Password
                 style={{ width: '100%' }}
                 type="password"
                 placeholder="Mật khẩu dài hơn 8 ký tự, ít nhất 1 chữ cái in hoa và 1 chứ cái thường"
@@ -581,7 +583,7 @@ const ChangePassword = () => {
                 }),
               ]}
             >
-              <Input
+              <Input.Password
                 style={{ width: '100%' }}
                 type="password"
                 placeholder="Giống với mật khẩu mới"
@@ -634,8 +636,6 @@ const getItems = panelStyle => [
 
 const EditProfileClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {}, []);
 
   const panelStyle = {
     marginBottom: 24,

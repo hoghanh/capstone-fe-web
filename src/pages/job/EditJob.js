@@ -42,6 +42,9 @@ const EditJob = () => {
   const [props, setProps] = useState({
     defaultFileList: [],
   });
+  const [basic, setBasic] = useState([]);
+  const [intermediate, setIntermediate] = useState([]);
+  const [high, setHigh] = useState([]);
 
   const user = useRecoilValue(clientProfile);
   const { id } = useParams();
@@ -71,6 +74,27 @@ const EditJob = () => {
     form.setFieldsValue({ description: textAreaValue });
     setRemainingCharacters(remainingChars);
   };
+
+  let list = []
+  if (basic) {
+    for (const skill of basic) {
+      list.push({ name: skill, level: 'Cơ bản' })
+    }
+  }
+  if (intermediate) {
+    for (const skill of intermediate) {
+      list.push({ name: skill, level: 'Trung cấp' })
+    }
+  }
+  if (high) {
+    for (const skill of high) {
+      list.push({ name: skill, level: 'Thông thạo' })
+    }
+  }
+
+  let array = [...basic, ...intermediate, ...high]
+
+  const filteredOptions = skills.filter((o) => !array.includes(o.value));
 
   const handleUpload = (event) => {
     const file = event.files[0].originFileObj;
@@ -144,7 +168,7 @@ const EditJob = () => {
         clientId: user.id,
         status: 'open',
         subCategory: values.category,
-        skill: values.skills,
+        skill: list,
       },
     })
       .then((res) => {
@@ -187,6 +211,13 @@ const EditJob = () => {
           });
         }
         setRemainingCharacters(5000 - res.data.description.length);
+        let basicList = res.data.skills.filter((skill) => skill.jobskill.level === "Cơ bản").map((skill) => skill.name)
+        let intermediateList = res.data.skills.filter((skill) => skill.jobskill.level === "Trung cấp").map((skill) => skill.name)
+        let highList = res.data.skills.filter((skill) => skill.jobskill.level === "Thông thạo").map((skill) => skill.name)
+
+        setBasic(basicList)
+        setIntermediate(intermediateList)
+        setHigh(intermediateList)
         setInitialValues({
           title: res.data.title,
           description: res.data.description,
@@ -194,10 +225,9 @@ const EditJob = () => {
             label: category.name,
             value: category.name,
           })),
-          skills: res.data.skills.map((skill) => ({
-            label: skill.name,
-            value: skill.name,
-          })),
+          basicSkills: basicList,
+          intermediateSkills: intermediateList,
+          highSkills: highList,
           paymentRange: {
             from: res.data.lowestIncome,
             to: res.data.highestIncome,
@@ -210,6 +240,7 @@ const EditJob = () => {
         console.log(err);
       });
   }
+  console.log(basic)
 
   function getCategory() {
     get({
@@ -386,9 +417,43 @@ const EditJob = () => {
               ></Select>
             </Form.Item>
             <Form.Item
-              name="skills"
+              name="highSkills"
               label={
-                <Typography.Title level={4}>Kĩ năng cần thiết</Typography.Title>
+                <Typography.Title level={4}>Kĩ năng thông thạo</Typography.Title>
+              }
+            >
+              <Select
+                mode="tags"
+                size="large"
+                placeholder="Nhập hoặc chọn kĩ năng"
+                style={{ width: "100%" }}
+                options={filteredOptions}
+                value={high}
+                onChange={setHigh}
+                tokenSeparators={[","]}
+              />
+            </Form.Item>
+            <Form.Item
+              name="intermediateSkills"
+              label={
+                <Typography.Title level={4}>Kĩ năng trung cấp</Typography.Title>
+              }
+            >
+              <Select
+                mode="tags"
+                size="large"
+                placeholder="Nhập hoặc chọn kĩ năng"
+                style={{ width: "100%" }}
+                options={filteredOptions}
+                value={intermediate}
+                onChange={setIntermediate}
+                tokenSeparators={[","]}
+              />
+            </Form.Item>
+            <Form.Item
+              name="basicSkills"
+              label={
+                <Typography.Title level={4}>Kĩ năng cơ bản</Typography.Title>
               }
               extra="Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất."
             >
@@ -396,10 +461,12 @@ const EditJob = () => {
                 mode="tags"
                 size="large"
                 placeholder="Nhập hoặc chọn kĩ năng"
-                style={{ width: '100%' }}
-                options={skills}
-                tokenSeparators={[',']}
-              ></Select>
+                style={{ width: "100%" }}
+                options={filteredOptions}
+                value={basic}
+                onChange={setBasic}
+                tokenSeparators={[","]}
+              />
             </Form.Item>
             <div style={{ display: 'flex', gap: 30, alignItems: 'center' }}>
               <Typography.Title level={4}>Khoảng lương</Typography.Title>

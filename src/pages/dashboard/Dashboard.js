@@ -76,7 +76,6 @@ const Dashboard = () => {
             balance += transaction.amount;
           }
         }
-        console.log(balance)
         setTotalTransaction(balance)
       })
       .catch((error) => {
@@ -103,7 +102,7 @@ const Dashboard = () => {
       icon: <User color='#fff' />,
     },
     {
-      today: 'Số dư trong ví',
+      today: 'Tổng tiền đã nạp',
       title: `${FormatVND(totalTransaction, '') ? FormatVND(totalTransaction, '') : '0'}`,
       per: 'VNĐ',
       icon: <Money size={46} />,
@@ -140,7 +139,7 @@ const Dashboard = () => {
                       </Typography.Title>
                     </Col>
                     <Col xs={6}>
-                      <div style={{ background: "#1890ff", borderRadius: ".5rem", color: "#fff", height: "48px", lineHeight: "55px", marginLeft: "auto", textAlign: "center", width: "48px" }}>{c.icon}</div>
+                      <div style={{ backgroundColor: '#1890ff', borderRadius: 10, height: '48px', lineHeight: '55px', marginLeft: 'auto', textAlign: 'center', width: '48px' }}>{c.icon}</div>
                     </Col>
                   </Row>
                 </div>

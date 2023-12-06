@@ -783,10 +783,7 @@ const EditIntroduction = () => {
                       showCount
                       allowClear={true}
                       maxLength={1000}
-                      style={{
-                        height: 120,
-                        resize: 'none',
-                      }}
+                      rows={5}
                       onChange={onChange}
                       placeholder='textarea'
                     />
