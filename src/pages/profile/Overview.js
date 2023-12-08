@@ -683,7 +683,8 @@ const EditIntroduction = () => {
     form
       .validateFields()
       .then((values) => {
-        const { title, introduction } = values;
+        const { title } = values;
+        let introduction = values.introduction.replace(/\n/g, "<br />");
         put({
           endpoint: `/freelancer/introduction/${informationUser?.id}`,
           body: {
@@ -717,6 +718,9 @@ const EditIntroduction = () => {
     setIsModalOpen(false);
   };
   const onChange = (e) => { };
+
+  let introduction = informationUser?.introduction.replace(/<br \/>/g, '\n')
+
   return (
     <>
       <ButtonIcon onClick={showModal}>
@@ -734,7 +738,7 @@ const EditIntroduction = () => {
           initialValues={{
             remember: true,
             title: informationUser?.title,
-            introduction: informationUser?.introduction,
+            introduction: introduction,
           }}
         >
           <Row gutter={[0, 10]}>
@@ -1940,12 +1944,10 @@ const BodySectionRight = () => {
               </Row>
             </Col>
             <Col span={24} style={{ padding: 20 }}>
-              <Typography.Text>
-                {informationUser?.introduction != null &&
-                  informationUser?.introduction !== ''
-                  ? informationUser?.introduction
-                  : 'Chưa có thông tin'}
-              </Typography.Text>
+              {informationUser?.introduction != null &&
+                informationUser?.introduction !== ''
+                ? <p dangerouslySetInnerHTML={{ __html: informationUser?.introduction }} />
+                : 'Chưa có thông tin'}
             </Col>
           </Row>
         </Col>
