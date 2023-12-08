@@ -139,7 +139,7 @@ const PostJob = () => {
         title: values.title,
         description: description,
         fileAttachment: url,
-        applicationSubmitDeadline: values.deadline,
+        applicationSubmitDeadline: dayjs(values.deadline).endOf('day'),
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
         clientId: user.id,
@@ -155,9 +155,7 @@ const PostJob = () => {
         navigate(`/client/jobs-management`);
       })
       .catch((err) => {
-        notification.error({
-          message: 'Có lỗi xảy ra',
-        });
+        notification.error({ message: err.response.data.message})
       });
   }
 
@@ -450,9 +448,8 @@ const PostJob = () => {
             >
               <DatePicker
                 timezone="UTC"
-                showTime
                 size="large"
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD"
                 placeholder="Chọn ngày giờ"
                 locale={locale}
                 showNow={false}

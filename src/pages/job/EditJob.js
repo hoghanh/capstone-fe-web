@@ -161,7 +161,7 @@ const EditJob = () => {
         title: values.title,
         description: description,
         fileAttachment: url,
-        applicationSubmitDeadline: values.deadline,
+        applicationSubmitDeadline: dayjs(values.deadline).endOf('day'),
         lowestIncome: values.paymentRange.from,
         highestIncome: values.paymentRange.to,
         clientId: user.id,
@@ -547,9 +547,8 @@ const EditJob = () => {
             >
               <DatePicker
                 timezone="UTC"
-                showTime
                 size="large"
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD"
                 placeholder="Chọn ngày giờ"
                 locale={locale}
                 showNow={false}
