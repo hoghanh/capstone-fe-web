@@ -121,7 +121,8 @@ function EditScheduleModal({
                       timezone='UTC'
                       locale={locale}
                       style={{ with: '100%' }}
-                      showTime
+                      showTime={{ format: 'HH:mm' }}
+                      format="YYYY-MM-DD HH:mm"
                       showNow={false}
                       disabledDate={(current) => {
                         return (

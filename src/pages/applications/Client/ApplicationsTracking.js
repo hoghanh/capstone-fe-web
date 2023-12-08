@@ -212,10 +212,12 @@ const Interview = ({
                       },
                     ]}
                   >
-                    <DatePicker
+                     <DatePicker
                       timezone='UTC'
+                      locale={locale}
                       style={{ with: '100%' }}
-                      showTime
+                      showTime={{ format: 'HH:mm' }}
+                      format="YYYY-MM-DD HH:mm"
                       showNow={false}
                       onChange={onChange}
                       disabledDate={(current) => {
@@ -223,7 +225,6 @@ const Interview = ({
                           current && current.isBefore(dayjs().endOf('day'))
                         );
                       }}
-                      locale={locale}
                     />
                   </Form.Item>
                 </Col>

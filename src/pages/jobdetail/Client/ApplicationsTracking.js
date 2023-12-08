@@ -213,8 +213,11 @@ const Interview = ({
                     ]}
                   >
                     <DatePicker
+                      locale={locale}
+                      timezone='UTC'
                       style={{ with: '100%' }}
-                      showTime
+                      showTime={{ format: 'HH:mm' }}
+                      format="YYYY-MM-DD HH:mm"
                       showNow={false}
                       onChange={onChange}
                       disabledDate={(current) => {
@@ -222,7 +225,6 @@ const Interview = ({
                           current && current.isBefore(dayjs().endOf('day'))
                         );
                       }}
-                      locale={locale}
                     />
                   </Form.Item>
                 </Col>
@@ -494,6 +496,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
         </Col>
       ) : (
         getPagedList()?.map((application, index) => {
+          console.log(application)
           return (
             <Col key={index} span={24}>
               <Row
@@ -571,7 +574,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                           menu={{
                             items:
                               activeTabKey === 'sent'
-                                ? application?.freelancers.hired !== true
+                                ? application?.hired !== true
                                   ? sentItems
                                       .filter((item) => item.key !== 'approved')
                                       .map((item) => ({
@@ -600,8 +603,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                                 application?.freelancers.applications[0].id,
                                 key,
                                 application?.freelancers.accounts.id,
-                                application?.freelancers.applications[0]
-                                  .appointments
+                                application?.freelancers.applications[0].appointments
                               );
                             },
                           }}
