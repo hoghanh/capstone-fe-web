@@ -203,7 +203,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                       symbol: 'Xem thêm',
                     }}
                   >
-                    {application.description}
+                    <p dangerouslySetInnerHTML={{ __html: application.description }} />
                   </Typography.Paragraph>
                 </Col>
                 {application.fileAttach ? (

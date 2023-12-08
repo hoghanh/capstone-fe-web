@@ -132,11 +132,12 @@ const PostJob = () => {
   };
 
   function createNewJob(values, url) {
+    let description = values.description.replace(/\n/g, "<br />");
     post({
       endpoint: `/job`,
       body: {
         title: values.title,
-        description: values.description,
+        description: description,
         fileAttachment: url,
         applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,

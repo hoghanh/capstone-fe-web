@@ -156,7 +156,7 @@ const DescriptionsArticle = ({ description }) => {
       <CustomCol span={24}>
         <Row gutter={[0, 20]}>
           <Col span={24}>
-            <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>{description}</Typography.Text>
+            <p style={{ fontSize: 14, fontWeight: 400 }} dangerouslySetInnerHTML={{__html: description}}/>
           </Col>
         </Row>
       </CustomCol>

@@ -57,7 +57,6 @@ const EditPersonalInformation = () => {
 
   const updateFreelancerInfo = (values) => {
     const { phone, address } = values;
-    console.log(informationUser?.id, phone, address)
     put({
       endpoint: `/freelancer/basicInfo/${informationUser?.id}`,
       body: {

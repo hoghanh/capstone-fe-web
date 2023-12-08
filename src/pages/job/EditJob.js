@@ -154,11 +154,12 @@ const EditJob = () => {
   };
 
   function updateJob(values, url) {
+    let description = values.description.replace(/\n/g, "<br />");
     put({
       endpoint: `/job/detail/${id}`,
       body: {
         title: values.title,
-        description: values.description,
+        description: description,
         fileAttachment: url,
         applicationSubmitDeadline: values.deadline,
         lowestIncome: values.paymentRange.from,
@@ -212,13 +213,13 @@ const EditJob = () => {
         let basicList = res.data.skills.filter((skill) => skill.jobskill.level === "Cơ bản").map((skill) => skill.name)
         let intermediateList = res.data.skills.filter((skill) => skill.jobskill.level === "Trung cấp").map((skill) => skill.name)
         let highList = res.data.skills.filter((skill) => skill.jobskill.level === "Thông thạo").map((skill) => skill.name)
-
+        let description = res.data.description.replace(/<br \/>/g, '\n')
         setBasic(basicList)
         setIntermediate(intermediateList)
         setHigh(highList)
         setInitialValues({
           title: res.data.title,
-          description: res.data.description,
+          description: description,
           category: res.data.subcategories.map((category) => ({
             label: category.name,
             value: category.name,
@@ -238,7 +239,6 @@ const EditJob = () => {
         console.log(err);
       });
   }
-  console.log(basic)
 
   function getCategory() {
     get({

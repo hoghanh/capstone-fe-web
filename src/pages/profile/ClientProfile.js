@@ -76,7 +76,7 @@ function ClientProfile() {
             bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
             style={{ padding: 20 }}
           >
-            <p className="text-dark">{user?.introduction}</p>
+            <p className="text-dark" dangerouslySetInnerHTML={{ __html: user?.introduction }} />
             <hr className="my-25" />
             <Descriptions column={1}>
               <Descriptions.Item label="Email">

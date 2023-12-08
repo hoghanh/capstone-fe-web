@@ -86,12 +86,14 @@ const BasicInformation = () => {
   const updateClientInfo = (values, image) => {
     const {
       name,
-      introduction,
       phone,
       address,
       companyWebsite,
       taxCode,
     } = values;
+
+    let introduction = values.introduction.replace(/\n/g, "<br />");
+
     put({
       endpoint: `/client/profile/${informationUser.accountId}`,
       body: {
@@ -190,6 +192,7 @@ const BasicInformation = () => {
       </div>
     </div>
   );
+  let introduction = informationUser?.introduction.replace(/<br \/>/g, '\n')
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -200,8 +203,8 @@ const BasicInformation = () => {
         name="editProfile"
         initialValues={{
           remember: true,
-          introduction: informationUser?.introduction
-            ? informationUser.introduction
+          introduction: introduction
+            ? introduction
             : 'Chưa có thông tin',
           name: informationUser?.accounts?.name
             ? informationUser.accounts.name

@@ -454,7 +454,6 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
             'Chưa tới thời gian phỏng vấn, vui lòng phỏng vấn rồi thực hiện thao tác',
         });
       } else {
-        console.log('hi');
         setIsModalDecline(true);
       }
       setAccountId(accountId);
@@ -645,7 +644,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                       symbol: 'Xem thêm',
                     }}
                   >
-                    {application.freelancers.applications[0].description}
+                    <p dangerouslySetInnerHTML={{ __html: application.freelancers.applications[0].description }} />
                   </Typography.Paragraph>
                 </Col>
                 {application.freelancers.applications[0]?.fileAttach ? (

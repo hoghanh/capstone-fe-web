@@ -92,8 +92,9 @@ const SubmitApplication = ({ status, setStatus }) => {
   };
 
   const createApplication = (values, url) => {
-    const { description } = values;
+    let { description } = values;
     const time = new Date();
+    description = description.replace(/\n/g, "<br />");
     post({
       endpoint: `/application`,
       body: {
@@ -150,6 +151,8 @@ const SubmitApplication = ({ status, setStatus }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const onChange = (e) => {
+  };
 
   const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -204,6 +207,7 @@ const SubmitApplication = ({ status, setStatus }) => {
                     <TextArea
                       className='introText'
                       showCount
+                      onChange={onChange}
                       allowClear={true}
                       maxLength={1000}
                       rows={5}
@@ -434,9 +438,7 @@ const DescriptionsArticle = ({ description }) => {
       <CustomCol span={24}>
         <Row gutter={[0, 20]}>
           <Col span={24}>
-            <Typography.Text style={{ fontSize: 14, fontWeight: 400 }}>
-              {description}
-            </Typography.Text>
+            <p style={{ fontSize: 14, fontWeight: 400 }} dangerouslySetInnerHTML={{__html: description}}/>
           </Col>
         </Row>
       </CustomCol>
@@ -741,7 +743,6 @@ const Details = ({ status, setStatus }) => {
   const { md } = useBreakpoint();
 
   const showModalLogin = () => {
-    console.log('hey')
     setOpenLogin(true);
   };
 
