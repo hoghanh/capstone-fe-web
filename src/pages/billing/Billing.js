@@ -19,15 +19,16 @@ import { useRecoilValue } from 'recoil';
 import { clientProfile } from 'recoil/atom';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
+import ModalAlert from './ModalAlert';
 
 const columns = [
   {
     title: 'Loại',
     key: 'types',
     dataIndex: 'types',
-    render: (_, { type }) => (
-      <Tag color={type === '+' ? 'green' : 'red'} key={type}>
-        {type}
+    render: (_, { type, status }) => (
+      <Tag color={ type === '+' ? 'green' : type === '-' && status === '1' ? 'red' : 'gold'} key={type}>
+        {type === '-' && status === '0' ? '...' : type}
       </Tag>
     ),
   },
@@ -49,14 +50,14 @@ const columns = [
     title: 'Biến động',
     key: 'amounts',
     dataIndex: 'amounts',
-    render: (_, { amount, type }) => (
+    render: (_, { amount, type, status }) => (
       <>
         <Typography
           style={{
-            color: type === '+' ? '#6FCD40' : '#F8797F',
+            color: type === '+' ? '#6FCD40' : type === '-' && status === '1' ? '#F8797F' : '#f5b252',
           }}
         >
-          {type}
+          {type === '-' && status === '0' ? null : type}
           {FormatVND(amount)}
         </Typography>
       </>
@@ -75,6 +76,7 @@ function Billing() {
   const [currency, setCurrency] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalRefund, setOpenModalRefund] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -161,6 +163,18 @@ function Billing() {
     setOpenModal(false);
   };
 
+  const showModalRefund = (id) => {
+    setOpenModalRefund(true);
+  };
+  const handleOkModalRefund = () => {
+    setTimeout(() => {
+      setOpenModalRefund(false);
+    }, 3000);
+  };
+  const handleCancelModalRefund = () => {
+    setOpenModalRefund(false);
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -169,6 +183,12 @@ function Billing() {
         visible={openModal}
         onCancel={handleCancelModal}
         onOk={handleOkModal}
+        id={user.id}
+      />
+      <ModalAlert
+        visible={openModalRefund}
+        onCancel={handleCancelModalRefund}
+        onOk={handleOkModalRefund}
         id={user.id}
       />
       <Card
@@ -195,8 +215,11 @@ function Billing() {
               size='middle'
               locale={locale}
             />
-            <Button size='large' type='primary' onClick={showModal}>
+            <Button style={{ marginRight: 20 }} size='large' type='primary' onClick={showModal}>
               Nạp tiền
+            </Button>
+            <Button size='large' type='primary' onClick={showModalRefund}>
+              Rút tiền
             </Button>
           </>
         }
