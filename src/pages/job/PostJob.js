@@ -21,10 +21,10 @@ import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
-import { useRecoilValue } from 'recoil';
-import { clientProfile } from 'recoil/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { clientProfile, jobPost } from 'recoil/atom';
 import dayjs from 'dayjs';
-
+import ModalTopup from 'pages/billing/ModalTopup';
 
 const PostJob = () => {
   const { useBreakpoint } = Grid;
@@ -36,8 +36,10 @@ const PostJob = () => {
   const [basic, setBasic] = useState([]);
   const [intermediate, setIntermediate] = useState([]);
   const [high, setHigh] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalRefund, setOpenModalRefund] = useState(false);
 
-
+  const setJob = useSetRecoilState(jobPost);
   const user = useRecoilValue(clientProfile);
 
   useEffect(() => {
@@ -67,24 +69,24 @@ const PostJob = () => {
     setRemainingCharacters(remainingChars);
   };
 
-  let list = []
+  let list = [];
   if (basic) {
     for (const skill of basic) {
-      list.push({ name: skill, level: 'Cơ bản' })
+      list.push({ name: skill, level: 'Cơ bản' });
     }
   }
   if (intermediate) {
     for (const skill of intermediate) {
-      list.push({ name: skill, level: 'Trung cấp' })
+      list.push({ name: skill, level: 'Trung cấp' });
     }
   }
   if (high) {
     for (const skill of high) {
-      list.push({ name: skill, level: 'Thông thạo' })
+      list.push({ name: skill, level: 'Thông thạo' });
     }
   }
 
-  let array = [...basic, ...intermediate, ...high]
+  let array = [...basic, ...intermediate, ...high];
 
   const filteredOptions = skills.filter((o) => !array.includes(o.value));
 
@@ -132,7 +134,20 @@ const PostJob = () => {
   };
 
   function createNewJob(values, url) {
-    let description = values.description.replace(/\n/g, "<br />");
+    let description = values.description.replace(/\n/g, '<br />');
+    setJob({
+      title: values.title,
+      description: description,
+      fileAttachment: url,
+      applicationSubmitDeadline: dayjs(values.deadline).endOf('day'),
+      lowestIncome: values.paymentRange.from,
+      highestIncome: values.paymentRange.to,
+      clientId: user.id,
+      status: 'open',
+      subCategory: values.category,
+      skill: list,
+    });
+
     post({
       endpoint: `/job`,
       body: {
@@ -155,7 +170,11 @@ const PostJob = () => {
         navigate(`/client/jobs-management`);
       })
       .catch((err) => {
-        notification.error({ message: err.response.data.message})
+        const errMess = err.response.data.message;
+        notification.error({ message: errMess });
+        if (errMess === 'Không thể đăng bài do không đủ số dư') {
+          showModal(true);
+        }
       });
   }
 
@@ -193,19 +212,37 @@ const PostJob = () => {
       });
   }
 
+  const showModal = (id) => {
+    setOpenModal(true);
+  };
+  const handleOkModal = () => {
+    setTimeout(() => {
+      setOpenModal(false);
+    }, 3000);
+  };
+  const handleCancelModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
       <Layout.Content
-        className="post-job"
-        style={{ maxWidth: 1080, margin: "0 auto" }}
+        className='post-job'
+        style={{ maxWidth: 1080, margin: '0 auto' }}
       >
+        <ModalTopup
+          visible={openModal}
+          onCancel={handleCancelModal}
+          onOk={handleOkModal}
+          id={user.id}
+        />
         <Card
-          bodyStyle={{ padding: "unset" }}
+          bodyStyle={{ padding: 'unset' }}
           style={joblist.card}
-          className="card-jobs"
+          className='card-jobs'
           headStyle={{ paddingLeft: 0 }}
           title={
-            <div className="trackingJobs">
+            <div className='trackingJobs'>
               <Typography.Title level={md ? 3 : 5} style={{ paddingLeft: 30 }}>
                 Đăng bài
               </Typography.Title>
@@ -214,13 +251,13 @@ const PostJob = () => {
         >
           <Form
             form={form}
-            name="control-hooks"
+            name='control-hooks'
             onFinish={onFinish}
-            style={{ padding: "20px 30px" }}
-            layout="vertical"
+            style={{ padding: '20px 30px' }}
+            layout='vertical'
           >
             <Form.Item
-              name="title"
+              name='title'
               label={<Typography.Title level={4}>Tiêu đề</Typography.Title>}
               rules={[
                 {
@@ -234,13 +271,13 @@ const PostJob = () => {
               ]}
             >
               <Input
-                placeholder="Nhập tiêu đề cho dự án của bạn"
+                placeholder='Nhập tiêu đề cho dự án của bạn'
                 bordered={false}
-                style={{ borderBottom: "1px solid #000", borderRadius: 0 }}
+                style={{ borderBottom: '1px solid #000', borderRadius: 0 }}
               />
             </Form.Item>
             <Form.Item
-              name="description"
+              name='description'
               label={
                 <Typography.Title level={4}>Chi tiết dự án</Typography.Title>
               }
@@ -255,42 +292,42 @@ const PostJob = () => {
                 },
               ]}
               extra={
-                <Typography style={{ textAlign: "right" }}>
+                <Typography style={{ textAlign: 'right' }}>
                   {remainingCharacters} kí tự còn lại
                 </Typography>
               }
             >
               <Input.TextArea
-                placeholder="Nhập thông tin chi tiết cho dự án của bạn"
-                style={{ height: 100, border: "1px solid #000" }}
+                placeholder='Nhập thông tin chi tiết cho dự án của bạn'
+                style={{ height: 100, border: '1px solid #000' }}
                 onChange={handleTextAreaChange}
               />
             </Form.Item>
             <Form.Item
-              name="files"
-              valuePropName="fileList"
+              name='files'
+              valuePropName='fileList'
               getValueFromEvent={normFile}
             >
               <Upload.Dragger
-                name="file-upload"
+                name='file-upload'
                 accept='.pdf'
                 maxCount={1}
                 beforeUpload={() => false}
               >
-                <p className="ant-upload-drag-icon">
+                <p className='ant-upload-drag-icon'>
                   <PaperClipOutlined />
                 </p>
-                <p className="ant-upload-text">
+                <p className='ant-upload-text'>
                   Kéo và thả bất kỳ hình ảnh hoặc tài liệu nào có thể hữu ích
                   trong việc giải thích tóm tắt của bạn tại đây
                 </p>
-                <p className="ant-upload-hint">
+                <p className='ant-upload-hint'>
                   (Kích thước tệp tối đa: 25 MB)
                 </p>
               </Upload.Dragger>
             </Form.Item>
             <Form.Item
-              name="category"
+              name='category'
               label={
                 <Typography.Title level={4}>Phân loại dự án</Typography.Title>
               }
@@ -304,73 +341,75 @@ const PostJob = () => {
                   ),
                 },
               ]}
-              extra="Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những phân loại này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất."
+              extra='Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những phân loại này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất.'
             >
               <Select
-                mode="multiple"
-                size="large"
-                placeholder="Chọn phân loại"
-                style={{ width: "100%" }}
+                mode='multiple'
+                size='large'
+                placeholder='Chọn phân loại'
+                style={{ width: '100%' }}
                 options={category}
               ></Select>
             </Form.Item>
             <Form.Item
-              name="highSkills"
+              name='highSkills'
               label={
-                <Typography.Title level={4}>Kĩ năng thông thạo</Typography.Title>
+                <Typography.Title level={4}>
+                  Kĩ năng thông thạo
+                </Typography.Title>
               }
             >
               <Select
-                mode="tags"
-                size="large"
-                placeholder="Nhập hoặc chọn kĩ năng"
-                style={{ width: "100%" }}
+                mode='tags'
+                size='large'
+                placeholder='Nhập hoặc chọn kĩ năng'
+                style={{ width: '100%' }}
                 options={filteredOptions}
                 value={high}
                 onChange={setHigh}
-                tokenSeparators={[","]}
+                tokenSeparators={[',']}
               />
             </Form.Item>
             <Form.Item
-              name="intermediateSkills"
+              name='intermediateSkills'
               label={
                 <Typography.Title level={4}>Kĩ năng trung cấp</Typography.Title>
               }
             >
               <Select
-                mode="tags"
-                size="large"
-                placeholder="Nhập hoặc chọn kĩ năng"
-                style={{ width: "100%" }}
+                mode='tags'
+                size='large'
+                placeholder='Nhập hoặc chọn kĩ năng'
+                style={{ width: '100%' }}
                 options={filteredOptions}
                 value={intermediate}
                 onChange={setIntermediate}
-                tokenSeparators={[","]}
+                tokenSeparators={[',']}
               />
             </Form.Item>
             <Form.Item
-              name="basicSkills"
+              name='basicSkills'
               label={
                 <Typography.Title level={4}>Kĩ năng cơ bản</Typography.Title>
               }
-              extra="Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất."
+              extra='Nhập tối đa 5 danh mục mô tả đúng nhất dự án của bạn. Freelancer sẽ sử dụng những kỹ năng này để tìm ra những dự án mà họ quan tâm và có kinh nghiệm nhất.'
             >
               <Select
-                mode="tags"
-                size="large"
-                placeholder="Nhập hoặc chọn kĩ năng"
-                style={{ width: "100%" }}
+                mode='tags'
+                size='large'
+                placeholder='Nhập hoặc chọn kĩ năng'
+                style={{ width: '100%' }}
                 options={filteredOptions}
                 value={basic}
                 onChange={setBasic}
-                tokenSeparators={[","]}
+                tokenSeparators={[',']}
               />
             </Form.Item>
-            <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
+            <div style={{ display: 'flex', gap: 30, alignItems: 'center' }}>
               <Typography.Title level={4}>Khoảng lương</Typography.Title>
               <Form.Item
-                name={["paymentRange", "from"]}
-                label="Từ: "
+                name={['paymentRange', 'from']}
+                label='Từ: '
                 rules={[
                   {
                     required: true,
@@ -383,19 +422,19 @@ const PostJob = () => {
                 ]}
               >
                 <InputNumber
-                  placeholder="000,000"
-                  addonAfter="VNĐ"
+                  placeholder='000,000'
+                  addonAfter='VNĐ'
                   min={0}
                   formatter={(value) =>
-                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
                   step={10000}
                 />
               </Form.Item>
               <Form.Item
-                name={["paymentRange", "to"]}
-                label="Đến: "
-                dependencies={["paymentRange", "from"]}
+                name={['paymentRange', 'to']}
+                label='Đến: '
+                dependencies={['paymentRange', 'from']}
                 rules={[
                   {
                     required: true,
@@ -407,31 +446,31 @@ const PostJob = () => {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      const fromValue = getFieldValue(["paymentRange", "from"]);
+                      const fromValue = getFieldValue(['paymentRange', 'from']);
                       if (!fromValue || !value) {
                         return Promise.resolve();
                       }
                       if (value >= fromValue) {
                         return Promise.resolve();
                       }
-                      return Promise.reject("Đến phải lớn hơn hoặc bằng Từ");
+                      return Promise.reject('Đến phải lớn hơn hoặc bằng Từ');
                     },
                   }),
                 ]}
               >
                 <InputNumber
-                  placeholder="000, 000"
-                  addonAfter="VNĐ"
+                  placeholder='000, 000'
+                  addonAfter='VNĐ'
                   min={0}
                   formatter={(value) =>
-                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   }
                   step={10000}
                 />
               </Form.Item>
             </div>
             <Form.Item
-              name="deadline"
+              name='deadline'
               label={
                 <Typography.Title level={4}>Ngày hết hạn</Typography.Title>
               }
@@ -447,21 +486,19 @@ const PostJob = () => {
               ]}
             >
               <DatePicker
-                timezone="UTC"
-                size="large"
-                format="YYYY-MM-DD"
-                placeholder="Chọn ngày giờ"
+                timezone='UTC'
+                size='large'
+                format='YYYY-MM-DD'
+                placeholder='Chọn ngày giờ'
                 locale={locale}
                 showNow={false}
                 disabledDate={(current) => {
-                  return (
-                    current && current.isBefore(dayjs().endOf('day'))
-                  );
+                  return current && current.isBefore(dayjs().endOf('day'));
                 }}
               />
             </Form.Item>
-            <Form.Item style={{ textAlign: "right" }}>
-              <Button type="primary" size="large" htmlType="submit">
+            <Form.Item style={{ textAlign: 'right' }}>
+              <Button type='primary' size='large' htmlType='submit'>
                 Đăng bài tuyển dụng
               </Button>
             </Form.Item>

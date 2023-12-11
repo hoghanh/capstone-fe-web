@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, InputNumber, Radio, Row, Col, Image, notification } from 'antd';
 import { ModalPrimary } from 'components/Modal/Modal';
-import { post } from 'utils/APICaller';
+import { get, post } from 'utils/APICaller';
+import { useRecoilValue } from 'recoil';
+import { jobPost } from 'recoil/atom';
+import Loading from 'components/loading/loading';
 
 function ModalTopup({ visible, onCancel, id }) {
   const [form] = Form.useForm();
+
+  const job = useRecoilValue(jobPost);
+  const [fee, setFee] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (job.title !== '') {
+      setIsLoading(true);
+      get({ endpoint: `/systemValue/fee` })
+        .then((res) => {
+          setFee(Number(res.data[1].value));
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setFee(0);
+          console.log(err);
+          setIsLoading(false);
+        });
+    }
+  }, []);
 
   const handleOk = () => {
     form
@@ -57,7 +80,9 @@ function ModalTopup({ visible, onCancel, id }) {
     return Promise.resolve();
   };
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <ModalPrimary
         title={'Nhập số tiền nạp'}
@@ -66,7 +91,13 @@ function ModalTopup({ visible, onCancel, id }) {
         onOk={handleOk}
         onCancel={onCancel}
       >
-        <Form form={form} name='inputMoney'>
+        <Form
+          form={form}
+          name='inputMoney'
+          initialValues={{
+            amount: fee,
+          }}
+        >
           <Form.Item
             name='amount'
             rules={[
