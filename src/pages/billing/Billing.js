@@ -16,11 +16,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import ModalTopup from './ModalTopup';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { clientProfile, jobPost } from 'recoil/atom';
+import { useRecoilValue } from 'recoil';
+import { clientProfile } from 'recoil/atom';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import ModalAlert from './ModalAlert';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const columns = [
   {
@@ -85,7 +86,6 @@ function Billing() {
   const { md } = useBreakpoint();
 
   const user = useRecoilValue(clientProfile);
-  const [job, setJob] = useRecoilState(jobPost);
 
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
@@ -96,6 +96,8 @@ function Billing() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const job = LocalStorageUtils.getItem('jobPost');
 
   const queryParams = new URLSearchParams(location.search);
   const {
@@ -125,31 +127,17 @@ function Billing() {
           .catch((err) => {
             console.log(err);
           });
-      } else {
-        setIsLoading(true);
-        if (job.title !== '') {
+
+        if (job) {
           post({
             endpoint: `/job`,
-            body: {
-              jobPost,
-            },
+            body: job,
           })
             .then((res) => {
               notification.success({
                 message: 'Đăng bài viết mới thành công',
               });
-              setJob({
-                title: '',
-                description: '',
-                fileAttachment: '',
-                applicationSubmitDeadline: '',
-                lowestIncome: 0,
-                highestIncome: 0,
-                clientId: 0,
-                status: 'open',
-                subCategory: [],
-                skill: {},
-              });
+              LocalStorageUtils.removeItem('jobPost');
               setIsLoading(false);
             })
             .catch((err) => {
@@ -157,7 +145,8 @@ function Billing() {
               notification.error({ message: errMess });
             });
         }
-
+      } else {
+        setIsLoading(true);
         let amountIn = vnp_Amount ? parseFloat(vnp_Amount) / 100 : amount;
         post({
           endpoint: `/payment`,

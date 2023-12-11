@@ -211,24 +211,3 @@ export const registerToken = atom({
   key: 'registerToken',
   default: '',
 });
-
-export const jobSkills = atom({
-  key: 'jobSkills',
-  default: {},
-});
-
-export const jobPost = atom({
-  key: 'jobPost',
-  default: {
-    title: '',
-    description: '',
-    fileAttachment: '',
-    applicationSubmitDeadline: '',
-    lowestIncome: 0,
-    highestIncome: 0,
-    clientId: 0,
-    status: 'open',
-    subCategory: [],
-    skill: jobSkills,
-  },
-});

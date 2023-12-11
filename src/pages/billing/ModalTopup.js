@@ -2,24 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Form, InputNumber, Radio, Row, Col, Image, notification } from 'antd';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { get, post } from 'utils/APICaller';
-import { useRecoilValue } from 'recoil';
-import { jobPost } from 'recoil/atom';
 import Loading from 'components/loading/loading';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 function ModalTopup({ visible, onCancel, id }) {
   const [form] = Form.useForm();
 
-  const job = useRecoilValue(jobPost);
-  const [fee, setFee] = useState(0);
+  const job = LocalStorageUtils.getItem('jobPost');
+  const [fee, setFee] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (job.title !== '') {
+    if (job) {
       setIsLoading(true);
       get({ endpoint: `/systemValue/fee` })
         .then((res) => {
           setFee(Number(res.data[1].value));
-          setIsLoading(false);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 1000);
         })
         .catch((err) => {
           setFee(0);
@@ -91,15 +92,10 @@ function ModalTopup({ visible, onCancel, id }) {
         onOk={handleOk}
         onCancel={onCancel}
       >
-        <Form
-          form={form}
-          name='inputMoney'
-          initialValues={{
-            amount: fee,
-          }}
-        >
+        <Form form={form} name='inputMoney'>
           <Form.Item
             name='amount'
+            initialValue={fee}
             rules={[
               {
                 required: true,

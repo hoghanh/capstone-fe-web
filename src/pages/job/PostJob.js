@@ -25,6 +25,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { clientProfile, jobPost } from 'recoil/atom';
 import dayjs from 'dayjs';
 import ModalTopup from 'pages/billing/ModalTopup';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const PostJob = () => {
   const { useBreakpoint } = Grid;
@@ -39,7 +40,6 @@ const PostJob = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openModalRefund, setOpenModalRefund] = useState(false);
 
-  const setJob = useSetRecoilState(jobPost);
   const user = useRecoilValue(clientProfile);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const PostJob = () => {
 
   function createNewJob(values, url) {
     let description = values.description.replace(/\n/g, '<br />');
-    setJob({
+    LocalStorageUtils.setItem('jobPost', {
       title: values.title,
       description: description,
       fileAttachment: url,
