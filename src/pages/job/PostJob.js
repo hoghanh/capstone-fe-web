@@ -22,7 +22,7 @@ import { get, post } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import { useRecoilValue } from 'recoil';
-import { clientProfile } from 'recoil/atom';
+import { authState, clientProfile } from 'recoil/atom';
 import dayjs from 'dayjs';
 import ModalTopup from 'pages/billing/ModalTopup';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
@@ -43,6 +43,7 @@ const PostJob = () => {
   const [fee, setFee] = useState();
 
   const user = useRecoilValue(clientProfile);
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     if (user) {
@@ -186,14 +187,10 @@ const PostJob = () => {
         };
 
         //Gửi notification [thông tin] - đến [accountID người nhận]
-        socket.emit('sendNotification', notificationData, user.id);
+        socket.emit('sendNotification', notificationData, auth.id);
 
         LocalStorageUtils.removeItem('jobPost');
-
-        return () => {
-          socket.disconnect();
-          navigate(`/client/jobs-management`);
-        };
+        navigate(`/client/jobs-management`);
       })
       .catch((err) => {
         const errMess = err.response.data.message;

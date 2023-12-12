@@ -31,7 +31,7 @@ import {
   Manage,
   User,
 } from 'components/icon/Icon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ModalPrimary } from 'components/Modal/Modal';
 import { post, put, get } from 'utils/APICaller';
 import OTPModal from './OTPModal';
@@ -160,6 +160,8 @@ function SearchBar() {
   const [notifications, setNotifications] = useState([]);
   const [menuVisible, setMenuVisible] = useState(false);
   const [count, setCount] = useState(0);
+
+  const navigate = useNavigate();
 
   const items = [
     {
@@ -333,7 +335,7 @@ function SearchBar() {
     if (!validateForm()) {
       return;
     }
-    
+
     post({
       endpoint: `/accounts/forgot_password`,
       body: {
@@ -392,11 +394,27 @@ function SearchBar() {
   }, [auth, socket]);
 
   const handleMenuClick = ({ key }) => {
+    const selectedItem = notifications.find(
+      (item) => item.key.toString() === key
+    );
+    const selectedContext = selectedItem ? selectedItem.context : null;
+
     put({ endpoint: `/notification/${key}` })
       .then((res) => {
         changeNotification();
       })
       .catch((err) => {});
+
+    switch (!isNaN(selectedContext)) {
+      case true:
+        navigate(`/jobs/job-detail/${selectedContext}`);
+        setMenuVisible(false);
+        break;
+      case false:
+        break;
+      default:
+        break;
+    }
   };
 
   const changeNotification = () => {
@@ -428,6 +446,7 @@ function SearchBar() {
               </Typography.Text>
             </div>
           ),
+          context: item.context,
         }));
 
         if (arr.length > 0) {
@@ -615,7 +634,8 @@ function SearchBar() {
                       gap: '2px',
                       background: '#F7F8F9',
                       overflow: 'auto',
-                      boxShadow: 'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px'
+                      boxShadow:
+                        'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px',
                     }}
                   ></Menu>
                 )}
