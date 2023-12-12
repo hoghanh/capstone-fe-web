@@ -7,6 +7,7 @@ import {
   Table,
   Tag,
   Typography,
+  notification,
 } from 'antd';
 import { FormatVND, formatDateTime } from 'components/formatter/format';
 import Loading from 'components/loading/loading';
@@ -20,6 +21,7 @@ import { clientProfile } from 'recoil/atom';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import ModalAlert from './ModalAlert';
+import LocalStorageUtils from 'utils/LocalStorageUtils';
 
 const columns = [
   {
@@ -27,7 +29,16 @@ const columns = [
     key: 'types',
     dataIndex: 'types',
     render: (_, { type, status }) => (
-      <Tag color={ type === '+' ? 'green' : type === '-' && status === '1' ? 'red' : 'gold'} key={type}>
+      <Tag
+        color={
+          type === '+'
+            ? 'green'
+            : type === '-' && status === '1'
+            ? 'red'
+            : 'gold'
+        }
+        key={type}
+      >
         {type === '-' && status === '0' ? '...' : type}
       </Tag>
     ),
@@ -54,7 +65,12 @@ const columns = [
       <>
         <Typography
           style={{
-            color: type === '+' ? '#6FCD40' : type === '-' && status === '1' ? '#F8797F' : '#f5b252',
+            color:
+              type === '+'
+                ? '#6FCD40'
+                : type === '-' && status === '1'
+                ? '#F8797F'
+                : '#f5b252',
           }}
         >
           {type === '-' && status === '0' ? null : type}
@@ -80,6 +96,8 @@ function Billing() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const job = LocalStorageUtils.getItem('jobPost');
 
   const queryParams = new URLSearchParams(location.search);
   const {
@@ -109,6 +127,24 @@ function Billing() {
           .catch((err) => {
             console.log(err);
           });
+
+        if (job) {
+          post({
+            endpoint: `/job`,
+            body: job,
+          })
+            .then((res) => {
+              notification.success({
+                message: 'Đăng bài viết mới thành công',
+              });
+              LocalStorageUtils.removeItem('jobPost');
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              const errMess = err.response.data.message;
+              notification.error({ message: errMess });
+            });
+        }
       } else {
         setIsLoading(true);
         let amountIn = vnp_Amount ? parseFloat(vnp_Amount) / 100 : amount;
@@ -215,7 +251,12 @@ function Billing() {
               size='middle'
               locale={locale}
             />
-            <Button style={{ marginRight: 20 }} size='large' type='primary' onClick={showModal}>
+            <Button
+              style={{ marginRight: 20 }}
+              size='large'
+              type='primary'
+              onClick={showModal}
+            >
               Nạp tiền
             </Button>
             <Button size='large' type='primary' danger onClick={showModalRefund}>
