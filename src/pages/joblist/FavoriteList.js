@@ -88,6 +88,8 @@ const FavoriteList = () => {
   const [pageSize] = useState(10);
   const { subCateId, subCateName } = useParams();
   const auth = useRecoilValue(authState);
+  const [isTruncated, setIsTruncated] = useState(true);
+
 
   useEffect(() => {
     getFavorite();
@@ -235,8 +237,10 @@ const FavoriteList = () => {
               <Empty description={<span>Dữ liệu trống</span>} />
             </Col>
           ) : (
-            getPagedList()?.map((job) => (
-              <div
+            getPagedList()?.map((job) => {
+              const text = job.description;
+              const resultString = isTruncated ? text.slice(0, 300) + '...' : text;
+              return <div
                 key={job.id}
                 style={{
                   display: ' flex',
@@ -298,20 +302,12 @@ const FavoriteList = () => {
                     <RemoveFavorite id={job.id} getFavorite={getFavorite} />
                   </div>
                   <Link to={`/jobs/job-detail/${job.id}`} target='_blank'>
-                    <Typography.Paragraph
-                      ellipsis={{
-                        rows: 3,
-                        expandable: false,
-                      }}
-                      style={joblist.des}
-                    >
-                      {job.description}
-                    </Typography.Paragraph>
+                    <p className='mb-2' style={joblist.des} dangerouslySetInnerHTML={{ __html: resultString }} />
                   </Link>
                   <div
                     style={{
                       display: 'flex',
-                      padding: '0px 10px',
+                      padding: '0px 10px 10px',
                       alignItems: 'flex-start',
                       gap: '15px',
                       alignSelf: 'stretch',
@@ -324,7 +320,7 @@ const FavoriteList = () => {
                         style={joblist.button}
                         key={skill.id}
                       >
-                        {skill.name}
+                        {skill.name} - {skill.jobskill.level}
                       </Button>
                     ))}
                   </div>
@@ -336,7 +332,7 @@ const FavoriteList = () => {
                   </div>
                 </div>
               </div>
-            ))
+            })
           )}
 
           <Pagination

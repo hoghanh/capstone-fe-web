@@ -292,6 +292,7 @@ const Approved = ({
   isIdItem,
   setIsIdItem,
   accountId,
+  jobId,
 }) => {
   const auth = useRecoilValue(authState);
   const user = useRecoilValue(profileState);
@@ -310,6 +311,7 @@ const Approved = ({
         let notificationData = {
           notificationName: 'Thay đổi số dư',
           notificationDescription: res.data.message,
+          context: 'payment',
         };
 
         //Gửi notification [thông tin] - đến [accountID người nhận]
@@ -319,6 +321,7 @@ const Approved = ({
         notificationData = {
           notificationName: 'Công việc được nhận ',
           notificationDescription: `${user.name} vừa nhận đơn ứng tuyển của bạn`,
+          context: jobId,
         };
         socket.emit('sendNotification', notificationData, accountId);
       })
@@ -361,6 +364,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
   const [isModalApproved, setIsModalApproved] = useState(false);
   const [isModalDecline, setIsModalDecline] = useState(false);
   const [isIdItem, setIsIdItem] = useState(null);
+  const [jobId, setJobId] = useState(null);
   const [pageSize] = useState(10);
   const user = useRecoilValue(clientProfile);
   const [accountId, setAccountId] = useState();
@@ -443,7 +447,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
       });
   };
 
-  const onClick = (id, key, accountId, appointments) => {
+  const onClick = (id, key, accountId, appointments, jobId) => {
     const checkAction = key.toString();
     const appointmentTime = new Date(appointments?.time);
     const today = new Date();
@@ -465,7 +469,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
       setAccountId(accountId);
     } else if (checkAction.includes('approved')) {
       setIsIdItem(id);
-      setIsIdItem(id);
+      setJobId(jobId)
       if (timeDifference > 0) {
         notification.error({
           message:
@@ -603,7 +607,8 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
                                 application?.freelancers.applications[0].id,
                                 key,
                                 application?.freelancers.accounts.id,
-                                application?.freelancers.applications[0].appointments
+                                application?.freelancers.applications[0].appointments,
+                                application?.freelancers.applications[0].jobId
                               );
                             },
                           }}
@@ -701,6 +706,7 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
         isIdItem={isIdItem}
         setIsIdItem={setIsIdItem}
         accountId={accountId}
+        jobId={jobId}
       />
 
       <Col span={24}>
