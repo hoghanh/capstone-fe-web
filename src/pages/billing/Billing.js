@@ -153,7 +153,7 @@ function Billing() {
           body: {
             status: 'success',
             name: vnp_BankTranNo || partnerCode,
-            description: 'Giao dịch ' + orderId,
+            description: 'Giao dịch ' + vnp_BankTranNo,
             amount: amountIn.toString(),
             orderId: vnp_TransactionNo || orderId,
             transDate: vnp_PayDate || Date().toString(),
