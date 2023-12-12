@@ -17,7 +17,7 @@ import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import ModalTopup from './ModalTopup';
 import { useRecoilValue } from 'recoil';
-import { clientProfile } from 'recoil/atom';
+import { authState, clientProfile } from 'recoil/atom';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import ModalAlert from './ModalAlert';
@@ -87,6 +87,7 @@ function Billing() {
   const { md } = useBreakpoint();
 
   const user = useRecoilValue(clientProfile);
+  const auth = useRecoilValue(authState);
 
   const [bills, setBills] = useState([]);
   const [filterList, setFilterList] = useState([]);
@@ -165,13 +166,10 @@ function Billing() {
               };
 
               //Gửi notification [thông tin] - đến [accountID người nhận]
-              socket.emit('sendNotification', notificationData, user.id);
+              socket.emit('sendNotification', notificationData, auth.id);
 
-              return () => {
-                socket.disconnect();
-                LocalStorageUtils.removeItem('jobPost');
-                setIsLoading(false);
-              };
+              LocalStorageUtils.removeItem('jobPost');
+              setIsLoading(false);
             })
             .catch((err) => {
               const errMess = err.response.data.message;
