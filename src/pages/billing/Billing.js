@@ -218,7 +218,7 @@ function Billing() {
             <Button style={{ marginRight: 20 }} size='large' type='primary' onClick={showModal}>
               Nạp tiền
             </Button>
-            <Button size='large' type='primary' onClick={showModalRefund}>
+            <Button size='large' type='primary' danger onClick={showModalRefund}>
               Rút tiền
             </Button>
           </>
