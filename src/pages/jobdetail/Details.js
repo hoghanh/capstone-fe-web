@@ -60,6 +60,7 @@ const SubmitApplication = ({ status, setStatus }) => {
   const notificationData = {
     notificationName: 'Đơn ứng tuyển mới',
     notificationDescription: `${auth.name} ứng tuyển ${jobDetail.title}`,
+    context: jobDetail.id,
   };
 
   const showModal = () => {

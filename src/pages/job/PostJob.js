@@ -21,11 +21,12 @@ import joblist from 'styles/joblist';
 import { get, post } from 'utils/APICaller';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { clientProfile, jobPost } from 'recoil/atom';
+import { useRecoilValue } from 'recoil';
+import { clientProfile } from 'recoil/atom';
 import dayjs from 'dayjs';
 import ModalTopup from 'pages/billing/ModalTopup';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
+import socket from 'config';
 
 const PostJob = () => {
   const { useBreakpoint } = Grid;
@@ -39,6 +40,7 @@ const PostJob = () => {
   const [high, setHigh] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openModalRefund, setOpenModalRefund] = useState(false);
+  const [fee, setFee] = useState();
 
   const user = useRecoilValue(clientProfile);
 
@@ -47,6 +49,15 @@ const PostJob = () => {
       getCategory();
       getSkill();
     }
+
+    get({ endpoint: `/systemValue/fee` })
+      .then((res) => {
+        setFee(Number(res.data[1].value));
+      })
+      .catch((err) => {
+        setFee(0);
+        console.log(err);
+      });
   }, [user]);
 
   const navigate = useNavigate();
@@ -167,7 +178,22 @@ const PostJob = () => {
         notification.success({
           message: 'Đăng bài viết mới thành công',
         });
-        navigate(`/client/jobs-management`);
+
+        const notificationData = {
+          notificationName: 'Thay đổi số dư',
+          notificationDescription: `Tính phí bài viết ${values.title} -  ${fee} `,
+          context: 'payment',
+        };
+
+        //Gửi notification [thông tin] - đến [accountID người nhận]
+        socket.emit('sendNotification', notificationData, user.id);
+
+        LocalStorageUtils.removeItem('jobPost');
+
+        return () => {
+          socket.disconnect();
+          navigate(`/client/jobs-management`);
+        };
       })
       .catch((err) => {
         const errMess = err.response.data.message;
