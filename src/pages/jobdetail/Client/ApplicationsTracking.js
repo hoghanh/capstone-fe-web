@@ -96,7 +96,7 @@ const Interview = ({
   const [form] = Form.useForm();
 
   const onChange = (value, dateString) => {
-    setTimeBooking(dateString);
+    setTimeBooking(value.subtract(7, 'hour').format('YYYY-MM-DD HH:mm'));
   };
 
   const interviewApplication = () => {

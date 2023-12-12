@@ -64,11 +64,29 @@ function ClientHeader({ name, subName, onPress }) {
   }, [auth, socket]);
 
   const handleMenuClick = ({ key }) => {
+    const selectedItem = notifications.find(
+      (item) => item.key.toString() === key
+    );
+    const selectedContext = selectedItem ? selectedItem.context : null;
+
     put({ endpoint: `/notification/${key}` })
       .then((res) => {
         changeNotification();
       })
       .catch((err) => {});
+
+    switch (!isNaN(selectedContext)) {
+      case true:
+        navigate(`/client/jobs-management/job-detail/${selectedContext}`);
+        setMenuVisible(false);
+        break;
+      case false:
+        navigate(`/client/billing`);
+        setMenuVisible(false);
+        break;
+      default:
+        break;
+    }
   };
 
   const changeNotification = () => {
@@ -100,6 +118,7 @@ function ClientHeader({ name, subName, onPress }) {
               </Typography.Text>
             </div>
           ),
+          context: item.context,
         }));
 
         if (arr.length > 0) {
@@ -220,7 +239,8 @@ function ClientHeader({ name, subName, onPress }) {
                     gap: '2px',
                     background: '#F7F8F9',
                     overflow: 'auto',
-                    boxShadow: 'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px'
+                    boxShadow:
+                      'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px',
                   }}
                 ></Menu>
               )}

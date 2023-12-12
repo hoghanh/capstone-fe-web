@@ -96,8 +96,8 @@ const Interview = ({
   const user = useRecoilValue(clientProfile);
   const [form] = Form.useForm();
 
-  const onChange = (value, dateString) => {
-    setTimeBooking(dateString);
+  const onChange = (value, dateString) => {    
+    setTimeBooking(value.subtract(7, 'hour').format('YYYY-MM-DD HH:mm'));
   };
 
   const interviewApplication = () => {
@@ -213,7 +213,6 @@ const Interview = ({
                     ]}
                   >
                      <DatePicker
-                      timezone='UTC'
                       locale={locale}
                       style={{ with: '100%' }}
                       showTime={{ format: 'HH:mm' }}
