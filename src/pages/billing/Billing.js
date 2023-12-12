@@ -22,6 +22,7 @@ import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'dayjs/locale/vi';
 import ModalAlert from './ModalAlert';
 import LocalStorageUtils from 'utils/LocalStorageUtils';
+import socket from 'config';
 
 const columns = [
   {
@@ -93,6 +94,7 @@ function Billing() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openModalRefund, setOpenModalRefund] = useState(false);
+  const [fee, setFee] = useState();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -110,6 +112,24 @@ function Billing() {
     orderId,
     resultCode,
   } = Object.fromEntries(queryParams.entries());
+
+  useEffect(() => {
+    if (job) {
+      setIsLoading(true);
+      get({ endpoint: `/systemValue/fee` })
+        .then((res) => {
+          setFee(Number(res.data[1].value));
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 1000);
+        })
+        .catch((err) => {
+          setFee(0);
+          console.log(err);
+          setIsLoading(false);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     if (user.id) {
@@ -137,8 +157,21 @@ function Billing() {
               notification.success({
                 message: 'Đăng bài viết mới thành công',
               });
-              LocalStorageUtils.removeItem('jobPost');
-              setIsLoading(false);
+
+              const notificationData = {
+                notificationName: 'Thay đổi số dư',
+                notificationDescription: `Tính phí bài viết ${job.title} -  ${fee} `,
+                context: 'payment',
+              };
+
+              //Gửi notification [thông tin] - đến [accountID người nhận]
+              socket.emit('sendNotification', notificationData, user.id);
+
+              return () => {
+                socket.disconnect();
+                LocalStorageUtils.removeItem('jobPost');
+                setIsLoading(false);
+              };
             })
             .catch((err) => {
               const errMess = err.response.data.message;
@@ -259,7 +292,12 @@ function Billing() {
             >
               Nạp tiền
             </Button>
-            <Button size='large' type='primary' danger onClick={showModalRefund}>
+            <Button
+              size='large'
+              type='primary'
+              danger
+              onClick={showModalRefund}
+            >
               Rút tiền
             </Button>
           </>
