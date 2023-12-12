@@ -404,9 +404,8 @@ const RemoveAlert = () => {
   const user = useRecoilValue(clientProfile);
   const { logout } = useAuthActions();
 
-
   const removeItem = () => {
-    remove({ endpoint: `/accounts/profile/${user.id}` })
+    remove({ endpoint: `/accounts/profile/${user.accountId}` })
       .then(res => {
         notification.success({
           message: 'Tài khoản đã bị xóa',
@@ -416,7 +415,7 @@ const RemoveAlert = () => {
       })
       .catch(error => {
         notification.error({
-          message: 'Có lỗi xảy ra trong quá trình xoá',
+          message: error.response.data.message,
         });
       });
   };
@@ -426,8 +425,14 @@ const RemoveAlert = () => {
   };
 
   const handleOk = () => {
-    removeItem();
-    setIsModalOpen(false);
+    if (user.currency === 0) {
+      removeItem();
+      setIsModalOpen(false);
+    }else{
+      notification.error({
+        message: 'Tài khoản chỉ vô hiệu hóa khi số dư của bạn về 0',
+      });
+    }
   };
 
   const handleCancel = () => {
