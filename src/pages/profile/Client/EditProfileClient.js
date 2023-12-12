@@ -16,6 +16,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { ModalAlert, ModalPrimary } from 'components/Modal/Modal';
 import { ButtonPrimary } from 'components/customize/GlobalCustomize';
 import { CustomCard } from 'components/customize/Layout';
+import { FormatVND } from 'components/formatter/format';
 import Loading from 'components/loading/loading';
 import { storage } from 'config/firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -425,14 +426,8 @@ const RemoveAlert = () => {
   };
 
   const handleOk = () => {
-    if (user.currency === 0) {
       removeItem();
       setIsModalOpen(false);
-    }else{
-      notification.error({
-        message: 'Tài khoản chỉ vô hiệu hóa khi số dư của bạn về 0',
-      });
-    }
   };
 
   const handleCancel = () => {
@@ -456,7 +451,7 @@ const RemoveAlert = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Typography.Text>Bạn chắc chắn muốn xóa chưa?</Typography.Text>
+        <Typography.Text>{user.currency !== 0 ? `Bạn còn ${FormatVND(user.currency)} trong tài khoản, bạn chắc chắn muốn thực hiện thao tác này?` : 'Bạn chắc chắn muốn thực hiện thao tác này?'}</Typography.Text>
       </ModalAlert>
     </>
   );
