@@ -13,7 +13,7 @@ import {
   Col,
   Empty,
 } from 'antd';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FileTextFilled } from '@ant-design/icons';
 import joblist from 'styles/joblist';
 import { get, post, remove } from 'utils/APICaller';
@@ -38,6 +38,8 @@ const JobList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [favoriteList, setFavoriteList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTruncated, setIsTruncated] = useState(true);
+
 
   useEffect(() => {
     if (auth.role === 'freelancer') {
@@ -155,8 +157,10 @@ const JobList = () => {
               <Empty description={<span>Dữ liệu trống</span>} />
             </div>
           ) : (
-            recommendedList?.map((job) => (
-              <Row
+            recommendedList?.map((job) => {
+              const text = job.jobs.description;
+              const resultString = isTruncated ? text.slice(0, 300) + '...' : text;
+              return <Row
                 key={job.jobs.id}
                 style={{
                   display: ' flex',
@@ -235,9 +239,7 @@ const JobList = () => {
                         }}
                         onClick={() => handleFavoriteChange(job.jobs.id)}
                       >
-                        {isLoading ? (
-                          <Spin />
-                        ) : favoriteList.includes(job.jobs.id) ? (
+                        {favoriteList.includes(job.jobs.id) ? (
                           <BookMark />
                         ) : (
                           <BookMarkOutlined />
@@ -246,15 +248,7 @@ const JobList = () => {
                     ) : null}
                   </div>
                   <Link to={`/jobs/job-detail/${job.jobs.id}`} target='_blank'>
-                    <Typography.Paragraph
-                      ellipsis={{
-                        rows: 3,
-                        expandable: false,
-                      }}
-                      style={joblist.des}
-                    >
-                      {job.jobs.description}
-                    </Typography.Paragraph>
+                    <p className='mb-2' style={joblist.des} dangerouslySetInnerHTML={{ __html: resultString }} />
                   </Link>
                   <div
                     style={{
@@ -272,7 +266,7 @@ const JobList = () => {
                         style={joblist.button}
                         key={skill.id}
                       >
-                        {skill.name}
+                        {skill.name} - {skill.jobskill.level}
                       </Button>
                     ))}
                   </div>
@@ -284,7 +278,7 @@ const JobList = () => {
                   </div>
                 </Col>
               </Row>
-            ))
+            })
           )}
           <Pagination
             current={1}

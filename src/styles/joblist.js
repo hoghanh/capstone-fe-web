@@ -21,6 +21,7 @@ const joblist = {
   },
   des: {
     paddingLeft: 10,
+    color: '#000'
   },
   applied: {
     display: 'flex',
