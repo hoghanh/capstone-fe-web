@@ -205,7 +205,7 @@ const ClientJobManagement = () => {
       })
       .catch((error) => {
         notification.error({
-          message: 'Có lỗi xảy ra trong quá trình xoá',
+          message: error.response.data.message,
         });
       });
   }

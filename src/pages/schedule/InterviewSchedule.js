@@ -178,7 +178,7 @@ const InterviewSchedule = () => {
       })
       .catch((error) => {
         notification.error({
-          message: 'Có lỗi xảy ra trong quá trình',
+          message: error.response.data.message,
         });
       });
   }

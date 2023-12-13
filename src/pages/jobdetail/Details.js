@@ -172,7 +172,7 @@ const SubmitApplication = ({ status, setStatus }) => {
   return (
     <>
       <ButtonPrimary style={{ fontSize: lg ? 16 : 11 }} onClick={showModal}>
-        Gửi CV/Resume
+        Ứng tuyển
       </ButtonPrimary>
       <ModalPrimary
         title={'Chi tiết ứng tuyển'}

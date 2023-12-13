@@ -16,7 +16,6 @@ const Applications = () => {
     get({ endpoint: `/application/job/${id}` })
       .then((response) => {
         const data = response.data;
-        // let applications = data.filter((application) => application.jobId !== null && application.jobs !== null);
         setApplications(data);
       })
       .catch((error) => {

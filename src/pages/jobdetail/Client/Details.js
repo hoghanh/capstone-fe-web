@@ -7,7 +7,7 @@ import color from 'styles/color';
 import '../jobDetail.module.css';
 import { CalculateDaysLeft, FormatVND } from 'components/formatter/format';
 import { useRecoilValue } from 'recoil';
-import { jobDetailState } from 'recoil/atom';
+import { clientProfile, jobDetailState } from 'recoil/atom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ModalAlert } from 'components/Modal/Modal';
 import { remove } from 'utils/APICaller';
@@ -29,7 +29,7 @@ const RemoveAlert = () => {
       })
       .catch((error) => {
         notification.error({
-          message: 'Có lỗi xảy ra trong quá trình xoá',
+          message: error.response.data.message,
         });
       });
   }
@@ -61,6 +61,7 @@ const RemoveAlert = () => {
 //Header Article right
 const HeaderArticle = () => {
   const jobDetail = useRecoilValue(jobDetailState);
+  const user = useRecoilValue(clientProfile);
   const { id } = useParams();
 
   return (
@@ -74,7 +75,7 @@ const HeaderArticle = () => {
               </Typography.Title>
             </CustomCol>
             <CustomCol
-              span={11}
+              span={jobDetail.clientId === user.id ? 11 : 13 }
               style={{
                 ...styles.headerRight,
                 alignItems: 'flex-end',
@@ -90,7 +91,7 @@ const HeaderArticle = () => {
                 </Typography.Text>
               </div>
             </CustomCol>
-            <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            {jobDetail.clientId === user.id ? <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Row gutter={[15, 10]}>
                 <RemoveAlert />
                 <Link to={`/client/jobs-management/edit-job/${id}`}>
@@ -99,7 +100,7 @@ const HeaderArticle = () => {
                   </Col>
                 </Link>
               </Row>
-            </Col>
+            </Col> : null}
           </CustomRow>
         </Col>
         <Col sm={{ span: 0 }} xs={{ span: 24 }}>
@@ -126,22 +127,19 @@ const HeaderArticle = () => {
                 </Col>
               </Row>
             </CustomCol>
-            <Col
-              span={2}
-              style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '10px 0px' }}
-            >
-              <Row gutter={[15, 10]}>
+          {jobDetail.clientId === user.id ? <Col span={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '10px 0px' }}>
+            <Row gutter={[15, 10]}>
+              <Col style={{ cursor: 'pointer' }}>
+                <Trash color={'red'} />
+              </Col>
+              <Link to={`/client/jobs-management/edit-job/${id}`}
+              >
                 <Col style={{ cursor: 'pointer' }}>
-                  <Trash color={'red'} />
+                  <Pen size={24} />
                 </Col>
-                <Link to={`/client/jobs-management/edit-job/${id}`}
-                >
-                  <Col style={{ cursor: 'pointer' }}>
-                    <Pen size={24} />
-                  </Col>
-                </Link>
-              </Row>
-            </Col>
+              </Link>
+            </Row>
+          </Col> : null}
           </CustomRow>
         </Col>
       </Row>

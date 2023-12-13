@@ -3,11 +3,15 @@ import { CustomCard, CustomCol, CustomRow } from 'components/customize/Layout';
 import { User } from 'components/icon/Icon';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { clientProfile, jobDetailState } from 'recoil/atom';
 import color from 'styles/color';
 import { get } from 'utils/APICaller';
 
 // Header section
 const HeaderSection = () => {
+  const jobDetail = useRecoilValue(jobDetailState);
+  const user = useRecoilValue(clientProfile);
   const { id } = useParams();
   return (
     <Row justify={'space-between'} style={{ padding: 25 }}>
@@ -16,7 +20,7 @@ const HeaderSection = () => {
           Danh sách ứng tuyển
         </Typography.Title>
       </CustomCol>
-      <CustomCol>
+      {jobDetail.clientId === user.id ? <CustomCol>
         <Link to={`/client/jobs-management/job-detail/${id}/applications`}>
           <Typography.Title
             level={3}
@@ -25,7 +29,7 @@ const HeaderSection = () => {
             Xem chi tiết
           </Typography.Title>
         </Link>
-      </CustomCol>
+      </CustomCol> : null}
     </Row>
   );
 };

@@ -500,7 +500,6 @@ const TabSent = ({ activeTabKey, value, page, setPage }) => {
         </Col>
       ) : (
         getPagedList()?.map((application, index) => {
-          console.log(application)
           return (
             <Col key={index} span={24}>
               <Row

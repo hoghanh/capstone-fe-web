@@ -178,7 +178,7 @@ const EditJob = () => {
       })
       .catch((err) => {
         notification.error({
-          message: 'Có lỗi xảy ra',
+          message: err.response.data.message,
         });
       });
   }
@@ -284,7 +284,7 @@ const EditJob = () => {
       })
       .catch((error) => {
         notification.error({
-          message: 'Có lỗi xảy ra trong quá trình xoá',
+          message: error.response.data.message,
         });
       });
   }

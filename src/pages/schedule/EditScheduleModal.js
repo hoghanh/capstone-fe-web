@@ -49,7 +49,7 @@ function EditScheduleModal({
           })
           .catch((err) => {
             notification.error({
-              message: 'Có lỗi xảy ra, vui lòng thử lại',
+              message: err.response.data.message,
             });
           });
       })
