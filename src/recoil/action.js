@@ -66,8 +66,7 @@ const useAuthActions = () => {
   };
 
   const logout = () => {
-    LocalStorageUtils.deleteUser();
-    LocalStorageUtils.removeItem('profile');
+    localStorage.clear();
     setAuth({
       token: null,
       id: '',
