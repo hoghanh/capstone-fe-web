@@ -4,7 +4,7 @@ import '@fontsource/montserrat/700.css';
 
 notification.config({
   placement: 'bottomRight',
-  duration: 5,
+  duration: 10,
 });
 
 export default function AntProvider({ children }) {

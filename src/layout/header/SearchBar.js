@@ -633,7 +633,7 @@ function SearchBar() {
                       flexDirection: 'column',
                       gap: '2px',
                       background: '#F7F8F9',
-                      overflow: 'auto',
+                      overflow: 'scroll',
                       boxShadow:
                         'rgba(0, 0, 0, 0.03) 4px 5px 6px 4px, rgba(0, 0, 0, 0.02) 4px 5px 10px 3px, rgba(0, 0, 0, 0.02) 4px 6px 8px 4px',
                     }}
